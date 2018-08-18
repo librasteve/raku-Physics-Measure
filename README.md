@@ -60,13 +60,11 @@ use Physics::Unit;
     my Time $t2 ♎️ '5e1 s';      #50 s
     my Time $t3 ♎️ $t1;          #10 s
     my Time $t4 ♎️ 172;          #10 s
-
 #...and to assign (coerce) from a Real or Str immediate value
     my Time $t5 ♎️ '3e1 s';      #30 s
     my Time $t6 ♎️ 42;           #42 s
-
-    my $t7 = $t1 + $t2;         #60 s
-    my $t8 = $t3 - $t4;         #-162 s
+    my $t7 = $t1 + $t2;          #60 s
+    my $t8 = $t3 - $t4;          #-162 s
     my Duration $d8 = $t8.Duration;
     my Time $t10 ♎️ '2 hours';
 
@@ -76,11 +74,11 @@ use Physics::Unit;
        $d-me3 = $d-fe.in: <m> ;             #3.6576 m alternate form
 
     my Temperature $deg-c ♎️ '39 °C';
-    my $deg-k = $deg-c.in( 'K' );           #312.15 K
+    my $deg-k  = $deg-c.in( 'K' );          #312.15 K
     my $deg-cr = $deg-k.in( '°C' );         #39 °C
 
 #Use arithmetic to get high order or inverse Unit types such as Area, Volume, Frequency, etc.
-    my Area $a-m2   = $d * $d;              #2500 m2
+    my Area  $a-m2  = $d * $d;              #2500 m2
     my Speed $s     = $d / $t6;             #1.19047619047619 m/s
     my Frequency $f = 1  / $t6;             #0.023810 Hz
 
