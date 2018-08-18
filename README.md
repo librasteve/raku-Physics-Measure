@@ -59,7 +59,7 @@ use Physics::Unit;
 #Here's how to us the libra assignment operator ♎️ for Time...
     my Time $t2 ♎️ '5e1 s';      #50 s
     my Time $t3 ♎️ $t1;          #10 s
-    my Time $t4 ♎️ 172;          #10 s
+    my Time $t4 ♎️ 172;          #172 s
 #...and to assign (coerce) from a Real or Str immediate value
     my Time $t5 ♎️ '3e1 s';      #30 s
     my Time $t6 ♎️ 42;           #42 s
