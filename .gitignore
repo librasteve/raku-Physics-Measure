@@ -1,2 +1,4 @@
 .DS_Store
-.precomp/*
+.precomp
+.lib/precomp
+.swp
