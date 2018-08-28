@@ -1,3 +1,4 @@
+#!/usr/bin/env perl6
 #t/10-sap.t 
 #TESTALL$ prove -e "perl6" ./t      [from root]
 use v6;

@@ -1,3 +1,4 @@
+#!/usr/bin/env perl6
 #t/01-new.t 
 #TESTALL$ prove -e "perl6" ./t      [from root]
 use v6;
@@ -20,8 +21,6 @@ my Distance $b .=new(value => 42);
 my Distance $c .=new();
 my Distance $d;
 
-#my $methods = Measure.^methods;
-#dd $methods;
 say "a.value is " ~ $a.value;
 say "a.value is " ~ $a.value.Str;
 
