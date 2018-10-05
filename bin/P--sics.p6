@@ -1,5 +1,6 @@
 #!/usr/bin/env perl6
 #main.p6
+#usage in repl: perl6 -I/path-to-my/perl6-Physics-Measure/lib   then > use Physics::Measure; use Physics::Unit;
 
 use v6;
 use lib '../lib';
@@ -13,6 +14,9 @@ use Physics::Unit;
     my Distance $a .=new(value => 1e4, units => $u);                #'10000 m'
     my Distance $b .=new(value => 42);                              #'42 m' default units
     my Distance $c;
+    
+say "a is " ~ $a;
+say "a.gist is " ~ $a.gist;
 
 #The libra operator ♎️ is a handy way to create instances and to set defaults...
     my $d ♎️ '5e1 m';      #'50 m' (Distance) from Str

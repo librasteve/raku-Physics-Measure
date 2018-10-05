@@ -422,7 +422,8 @@ class Time is Measure is export {
 }
 
 class Unitless           is Measure is export {}
-class Angular            is Measure is export {}
+class Angle              is Measure is export {}
+class Solid-Angle        is Measure is export {}
 class Distance           is Measure is export {}
 #`[[
 #FIXME test this

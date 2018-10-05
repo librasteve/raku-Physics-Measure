@@ -790,70 +790,24 @@ return @pfix-data;
 
 sub load-unit-data() {
 
-
-#FIXME add ['miles per hour',],                                   'miles/hours',
-    
-#`[[[[ with singulars
-my $unit-data = q:to/END-UNIT-DATA/; 
-# Unitless 
-    ['unitless',],                              'core',             # core
-# Distance
-    ['m', 'metre:s', 'meter:s',],               'core',             # core
-    ['foot:feet', 'ft', '′',],                  '.3048 m',          # exact U+2032
-    ['mile:s', 'mi',],                          '5280 feet',        # exact
-    ['yard:s',],                                '3 feet',           # exact
-# Mass
-    ['kg', 'kilogram:s', 'kilogramme:s','kilo:s',], 'core',         # core
-# Time
-    ['s', 'second:s', 'sec:s',],                'core',             # core
-    ['minute:s', 'min:s',],                     '60 s',
-    ['hour:s', 'hr:s',],                        '60 min',
-# Frequency
-    ['Hz', 'Hertz'],                            '1/s',
-    ['cycles',],                                '1 Hz',
-# Speed
-    ['m/s',],                                   'm/s',
-    ['miles/hours',],                           'miles/hours',
-    ['mph',],                                   'miles/hours',
-# Momentum
-    ['kg m/s',],                                'kg m/s',           # exact 
-# Acceleration
-    ['m/s^2',],                                 'm/s^2',            # exact 
-# Force
-    ['N', 'Newton:s'],                          'kg m / s^2',       # exact
-# Area
-    ['m2',],                                    'm2',
-# Volume
-    ['m3',],                                    'm3',
-    ['l', 'litre:s', 'liter:s',],               'm^3/1000',         # exact
-# Power
-    ['W', 'watt:s',],                           'kg m^2 / s^3',
-# Energy
-    ['J', 'Joule:s',],                          'kg m^2 / s^2',     # exact
-# Temperature
-    ['K', 'Kelvin',],                           'core',             # core FIXME >0 
-    ['°C', 'Celsius', 'centigrade',],           'K + 273.15',       # exact
-    ['°F', 'Fahrenheit',],                      '5/9 * K + 459.67', # exact
-END-UNIT-DATA
-
-    #say "gulping $unit-data";
-    return $unit-data;
-}
-#]]]]
-
-#[[[[ #the full monty
-#sub load-unit-data() {
-    #FIXME add Grad
+#`[[ fixme add and test
+    ['alcohol-unit:s',],                        '10 ml',            # of pure alcohol
+    ['deg²',],                                  'deg2',
+    ['sp','spat',],                             '4 pi steradians',  #exact
+    #fixme test conversion Angle <-> Solid-Angle
+#]]
 
 my $unit-data = q:to/END-UNIT-DATA/; 
 # Unitless 
     ['unitless',],                              'core',             # core
-# Angular
+# Angle
     ['radian:s',],                              'core',
-    ['steradian:s', 'sr',],                     '1',
     ['°','degree:s', 'deg',],                   'pi radians / 180',
     ['′','arcminute:s', 'arcmin',],             'deg / 60',         #U+2032
     ['″','arcsecond:s', 'arcsec',],             'arcmin / 60',      #U+2033
+    ['ᵍ','gon',],                               'pi radians / 200',
+# Solid-Angle
+    ['sr','steradian:s',],                      'core',
 # Distance
     ['m', 'metre:s', 'meter:s',],               'core',             # core
     ['foot:feet', 'ft', '′',],                  '.3048 m',          # exact U+2032
@@ -928,6 +882,7 @@ my $unit-data = q:to/END-UNIT-DATA/;
 # Speed
     ['m/s',],                                   'm/s',
     ['mph',],                                   'miles/hr',
+    ['miles per hour',],                        'miles/hr',
     ['kph',],                                   'km/hr',
     ['kps',],                                   'km/s',
     ['fps',],                                   'feet/s',
