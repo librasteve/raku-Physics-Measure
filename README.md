@@ -1,3 +1,4 @@
+```perl6
 #!/usr/bin/env perl6
 #main.p6
 
@@ -125,3 +126,4 @@ use Physics::Unit;
     #x¹ x² x³ x⁴ and x⁻¹ x⁻² x⁻³ x⁻⁴i
 
 #EOF
+```
