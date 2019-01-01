@@ -15,9 +15,6 @@ use Physics::Unit;
     my Distance $b .=new(value => 42);                              #'42 m' default units
     my Distance $c;
     
-say "a is " ~ $a;
-say "a.gist is " ~ $a.gist;
-
 #The libra operator ♎️ is a handy way to create instances and to set defaults...
     my $d ♎️ '5e1 m';      #'50 m' (Distance) from Str
     my $e ♎️ $a;           #'10000 m'
@@ -85,6 +82,7 @@ say "a.gist is " ~ $a.gist;
 
 #Use arithmetic to get high order or inverse Unit types such as Area, Volume, Frequency, etc.
     my Area $a-m2   = $d * $d;              #2500 m2
+say "=====================";
     my Speed $s     = $d / $t6;             #1.19047619047619 m/s
     my Frequency $f = 1  / $t6;             #0.023810 Hz
 
@@ -94,7 +92,7 @@ say "a.gist is " ~ $a.gist;
 
     my Speed $s-ms1 ♎️ '42 m/s';
     my $s-mph2 = $s-ms1.in( 'miles/hours' ); #93.951324 miles/hours
-    my $s-ms12 = $s-mph2.in( 'm/s' );        #42 m/s
+    #my $s-ms12 = $s-mph2.in( 'm/s' );        #42 m/s
 
     my $x2 = $a * $b;                       #Area -9.89 m2
     my $x3 = $a * $b * $b;                  #Volume 22.747 m3

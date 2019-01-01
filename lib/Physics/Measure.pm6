@@ -11,21 +11,18 @@ class Measure is export {
     #(not to be confused with perl6 built-in Scalar type)
 
     has Real $!value;
-    has Unit $!units;
+    has Unit $.units;
 
     submethod BUILD( :$!value, :$!units ) { }
 
     method value( Real $value? ) is rw {
-    	return Proxy.new:
-       		FETCH => sub ( $ ) { return $!value },
-       		STORE => sub ( $, $value )  {
+    	Proxy.new:
+            FETCH => sub ( $ ) { $!value },
+            STORE => sub ( $, $value )  {
                 if $value == 1 || $value == -1 { self.units.set-sing-name } 
                     else                       { self.units.set-plur-name }
                 $!value = $value;
-	   	}
-    }
-    method units( ) {
-        return $!units; 
+            }
     }
 
     my $new-db = 0; #debug
