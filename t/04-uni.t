@@ -8,7 +8,7 @@ use Test;
 plan 26;
 
 use Physics::Measure;
-use Physics::Unit;
+use Physics::Measure::Unit;
 
 my Unit $u     .=new(name => 'm');                  #get Unit object to construct a Measure
 my Distance $a .=new(value => 1e4, units => $u);

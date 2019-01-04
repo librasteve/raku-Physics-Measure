@@ -8,7 +8,7 @@ use Test;
 plan 33; 
 
 use Physics::Measure;
-use Physics::Unit;
+use Physics::Measure::Unit;
 
 #Part 1: Default new Constructor
 

@@ -8,7 +8,7 @@ use Test;
 plan 13; 
 
 use Physics::Measure;
-use Physics::Unit;
+use Physics::Measure::Unit;
 
 my $n ♎️ '4.3 m';
 is $n, '4.3 m',                                                         '$n';

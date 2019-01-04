@@ -1,0 +1,11 @@
+language: perl6
+env:
+perl6:
+  - 2018.01
+before_install:
+install:
+  - rakudobrew build zef
+  - zef -v install SVG
+  - zef -v install SVG::Plot
+  - travis_retry zef install --depsonly .
+sudo: false

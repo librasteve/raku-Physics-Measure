@@ -8,7 +8,7 @@ use Test;
 plan 17; 
 
 use Physics::Measure;
-use Physics::Unit;
+use Physics::Measure::Unit;
 
 my $a ♎️ '4.3 m';
 my $c = $a;

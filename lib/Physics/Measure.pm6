@@ -1,6 +1,6 @@
 #lib/Physics/Measure.pm
 unit module Physics::Measure:ver<0.0.1>:auth<Steve Roe (sroe@furnival.net)>;
-use Physics::Unit;
+use Physics::Measure::Unit;
 
 class Unitless { ... }
 class Time { ... }
