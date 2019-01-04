@@ -1,3 +1,5 @@
+[![Build Status](https://travis-ci.org/p6steve/perl6-Physics-Measure.svg?branch=master)](https://travis-ci.org/p6steve/perl6-Physics-Measure)
+
 ```perl6
 #!/usr/bin/env perl6
 #main.p6
