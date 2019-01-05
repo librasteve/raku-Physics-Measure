@@ -7,5 +7,6 @@ install:
   - rakudobrew build zef
   - zef -v install SVG
   - zef -v install SVG::Plot
+  - zef -v install Math::Polygons 
   - travis_retry zef install --depsonly .
 sudo: false
