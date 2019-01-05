@@ -10,11 +10,9 @@
     "provides" : {
         "Physics::Measure" : "lib/Physics/Measure.pm6",
         "Physics::Measure::Unit" : "lib/Physics/Measure/Unit.pm6",
-        "Math::Polygons" : "lib/Math/Polygons.pm6",
-        "Math::Polygons::Drawing" : "lib/Math/Polygons/Drawing.pm6"
     },
     "depends" : [
-        "SVG","SVG::Plot"
+        "SVG","SVG::Plot","Math::Polygons"
      ],
     "build-depends" : [ ],
     "test-depends" : [ ],
