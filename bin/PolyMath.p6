@@ -17,9 +17,8 @@ my $rectangle = Rectangle.new(
     height => $h, 
 );
 
-$x ♎️ 160;
 my $square = Square.new(
-    origin => Point.new($x, $y),
+    origin => Point.new( ( 2*$x + $w ), $y),
     side => $s, 
 );
 
@@ -27,16 +26,13 @@ my $drawing = Drawing.new( elements => [
     $rectangle,
     $square,
 ]);
-#$drawing.serialize.say;
-#FIXME - No such method 'subst' for invocant of type 'Physics::Measure::Distance'
-#FIXME - Eliminate units from serialize output
-#FIXME - adjust 12-pmp.t
+$drawing.serialize.say;
 
-say "";
-say "Square Side:       {$square.side}";
-say "Square Area:       {$square.area}";
 say "";
 say "Rectangle Width:   {$rectangle.width}";
 say "Rectangle Height:  {$rectangle.height}";
 say "Rectangle Area:    {$rectangle.area}";
+say "";
+say "Square Side:       {$square.side}";
+say "Square Area:       {$square.area}";
 
