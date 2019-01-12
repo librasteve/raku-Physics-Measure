@@ -6,6 +6,7 @@ use v6;
 use lib '../lib';
 use Physics::Measure;
 use Physics::Measure::Unit;
+use Physics::Measure::Lang;
 
 #SYNOPSIS
 

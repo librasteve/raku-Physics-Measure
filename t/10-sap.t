@@ -9,6 +9,7 @@ plan 26;
 
 use Physics::Measure;
 use Physics::Measure::Unit;
+use Physics::Measure::Lang;
 
 my $a0 ♎️ '4.3 m';
 is $a0, '4.3 m',                                                        '$a0-m';

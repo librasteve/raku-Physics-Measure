@@ -9,6 +9,7 @@ plan 72;
 
 use Physics::Measure;
 use Physics::Measure::Unit;
+use Physics::Measure::Lang;
 
 my $x1 ♎️ '1 kg.m.s^2',
 is $x1.WHAT, Physics::Measure::Measure,                                 '$x1.WHAT';

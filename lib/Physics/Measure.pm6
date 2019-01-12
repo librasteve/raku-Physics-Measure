@@ -1,5 +1,5 @@
-#lib/Physics/Measure.pm
-unit module Physics::Measure:ver<0.0.1>:auth<Steve Roe (sroe@furnival.net)>;
+#lib/Physics/Measure.pm6
+unit module Physics::Measure:ver<0.0.2>:auth<Steve Roe (sroe@furnival.net)>;
 use Physics::Measure::Unit;
 
 class Unitless { ... }
@@ -463,6 +463,7 @@ class Charge             is Measure is export {}
 class Pressure           is Measure is export {}
 class Dose               is Measure is export {}
 
+#`[[[
 sub infix-prep( $left, $right ) {
     #clone Measure child object (e.g. Distance) as container for result
     #coerce other arg. to Measure child with new unless already isa
@@ -625,4 +626,4 @@ multi infix:<!=> ( Measure:D $a, Measure:D $b ) is equiv( &infix:<!=> ) is expor
     if $a.cmp( $b) ~~ Same { return False; }
     else { return True; }
 }
-
+#]]]

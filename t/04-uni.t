@@ -9,6 +9,7 @@ plan 26;
 
 use Physics::Measure;
 use Physics::Measure::Unit;
+use Physics::Measure::Lang;
 
 my Unit $u     .=new(name => 'm');                  #get Unit object to construct a Measure
 my Distance $a .=new(value => 1e4, units => $u);

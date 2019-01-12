@@ -9,6 +9,7 @@ plan 17;
 
 use Physics::Measure;
 use Physics::Measure::Unit;
+use Physics::Measure::Lang;
 
 my $a ♎️ '4.3 m';
 my $c = $a;

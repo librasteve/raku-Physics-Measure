@@ -8,6 +8,8 @@ use Test;
 plan 5; 
 
 use Physics::Measure;
+use Physics::Measure::Lang;
+use Math::Polygons::Drawing;
 use Math::Polygons::Drawing;
 
 
