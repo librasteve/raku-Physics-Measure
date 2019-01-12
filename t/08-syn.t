@@ -9,6 +9,7 @@ plan 16;
 
 use Physics::Measure;
 use Physics::Measure::Unit;
+use Physics::Measure::Lang;
 
 #test simple +-*/ diff units 
 my $d1 ♎️ '2 m';

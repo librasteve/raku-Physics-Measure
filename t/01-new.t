@@ -9,6 +9,7 @@ plan 33;
 
 use Physics::Measure;
 use Physics::Measure::Unit;
+use Physics::Measure::Lang;
 
 #Part 1: Default new Constructor
 

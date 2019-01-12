@@ -9,6 +9,7 @@ plan 13;
 
 use Physics::Measure;
 use Physics::Measure::Unit;
+use Physics::Measure::Lang;
 
 my $n ♎️ '4.3 m';
 is $n, '4.3 m',                                                         '$n';

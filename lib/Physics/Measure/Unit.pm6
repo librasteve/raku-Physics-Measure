@@ -1,4 +1,4 @@
-#lib/Physics/Unit.pm 
+#lib/Physics/Measure/Unit.pm6 
 unit module Physics::Unit:ver<0.0.1>:auth<Steve Roe (sroe@furnival.net)>;
 
 our %const-defn is export;

@@ -2,6 +2,8 @@
 
 use lib '../lib';
 use Physics::Measure;
+use Physics::Measure::Lang;
+
 use Math::Polygons;
 use Math::Polygons::Drawing;
 
@@ -11,7 +13,10 @@ my $w ♎️ '120 m';
 my $h ♎️ '80 m';
 my $s ♎️ '100 ft';
 
-my $rectangle = Rectangle.new(
+class MyRectangle is Rectangle does MeasureLang {}
+
+
+my $rectangle = MyRectangle.new(
     origin => Point.new($x, $y),
     width  => $w,
     height => $h, 

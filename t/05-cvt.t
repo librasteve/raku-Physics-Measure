@@ -9,6 +9,7 @@ plan 56;
 
 use Physics::Measure;
 use Physics::Measure::Unit; 
+use Physics::Measure::Lang; 
 
 my Distance $d-me ♎️ '10 m'; 
 is "$d-me", '10 m',                                                         '$d.""';
