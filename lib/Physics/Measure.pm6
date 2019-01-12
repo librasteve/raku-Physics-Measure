@@ -1,5 +1,5 @@
 #lib/Physics/Measure.pm6
-unit module Physics::Measure:ver<0.0.1>:auth<Steve Roe (sroe@furnival.net)>;
+unit module Physics::Measure:ver<0.0.2>:auth<Steve Roe (sroe@furnival.net)>;
 use Physics::Measure::Unit;
 
 class Unitless { ... }

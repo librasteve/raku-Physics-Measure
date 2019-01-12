@@ -1,5 +1,5 @@
 #lib/Physics/Measure/Lang.pm6
-unit module Physics::Measure::Lang:ver<0.0.1>:auth<Steve Roe (sroe@furnival.net)>;
+unit module Physics::Measure::Lang:ver<0.0.2>:auth<Steve Roe (sroe@furnival.net)>;
 
 use Physics::Measure;
 
