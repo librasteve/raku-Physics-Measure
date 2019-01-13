@@ -3,8 +3,6 @@ unit module Physics::Measure::Lang:ver<0.0.2>:auth<Steve Roe (sroe@furnival.net)
 
 use Physics::Measure;
 
-role MeasureLang is export {
-
 sub infix-prep( $left, $right ) {
     #clone Measure child object (e.g. Distance) as container for result
     #coerce other arg. to Measure child with new unless already isa
@@ -168,5 +166,5 @@ multi infix:<!=> ( Measure:D $a, Measure:D $b ) is equiv( &infix:<!=> ) is expor
     else { return True; }
 }
 
-}
+#EOF
 
