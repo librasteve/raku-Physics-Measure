@@ -1,11 +1,10 @@
 #!/usr/bin/env perl6
 
 use lib '../lib';
-use Physics::Measure;
-use Physics::Measure::Lang;
-
 use Math::Polygons;
 use Math::Polygons::Drawing;
+use Physics::Measure;
+use Physics::Measure::Lang;
 
 my $x ♎️ '20 m';
 my $y ♎️ '20 m';
@@ -13,8 +12,7 @@ my $w ♎️ '120 m';
 my $h ♎️ '80 m';
 my $s ♎️ '100 ft';
 
-class MyRectangle is Rectangle does MeasureLang {}
-
+class MyRectangle is Rectangle {}
 
 my $rectangle = MyRectangle.new(
     origin => Point.new($x, $y),

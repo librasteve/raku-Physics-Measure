@@ -4,6 +4,7 @@ use lib '../lib';
 use Math::Polygons;
 use Math::Polygons::Drawing;
 use Physics::Measure;
+use Physics::Measure::Lang;
 
 my $x ♎️ '200 m';
 my $y ♎️ '160 m';
