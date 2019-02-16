@@ -154,6 +154,19 @@ multi infix:</> ( $left, Measure:D $right ) is export {
     return $result.divide( $argument );
 }
 
+multi infix:<**> ( Measure:D $left, Real:D $right where 2..4 ) is equiv( &infix:<**> ) is export { 
+    # 2(square),3(cube),4(fourth) e.g. T**4 for Boltzmann constant
+    my $result   = $left.clone; 
+    my $argument = $right;
+    return $result.power( $argument );
+}
+multi infix:<**> ( Measure:D $left, Rat:D $right where (<1/2>,<1/3>,<1/4>).one ) is equiv( &infix:<**> ) is export { 
+    # 1/2 (sqrt), 1/3 (curt), 1/4 (fort) - NB also method sqrt() defined in Measure Class
+    my $result   = $left.clone; 
+    my $argument = ( 1 / $right ).Int;
+    return $result.root( $argument );
+}
+
 multi infix:<cmp> ( Measure:D $a, Measure:D $b ) is equiv( &infix:<cmp> ) is export { 
     return $a.cmp( $b );
 }
@@ -163,8 +176,7 @@ multi infix:<==> ( Measure:D $a, Measure:D $b ) is equiv( &infix:<==> ) is expor
 }
 multi infix:<!=> ( Measure:D $a, Measure:D $b ) is equiv( &infix:<!=> ) is export { 
     if $a.cmp( $b) ~~ Same { return False; }
-    else { return True; }
-}
+    else { return True; } }
 
 #EOF
 

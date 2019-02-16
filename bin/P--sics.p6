@@ -82,11 +82,14 @@ use Physics::Measure::Lang;
     my $deg-cr = $deg-k.in( '°C' );         #39 °C
 
 #Use arithmetic to get high order or inverse Unit types such as Area, Volume, Frequency, etc.
-    my Area $a-m2   = $d * $d;              #2500 m2
-say "=====================";
-    my Speed $s     = $d / $t6;             #1.19047619047619 m/s
-    my Frequency $f = 1  / $t6;             #0.023810 Hz
+    my Area    $a-m2 = $d * $d;              #2500 m2
+    my Speed      $s = $d / $t6;             #1.19047619047619 m/s
+    my Frequency  $f = 1  / $t6;             #0.023810 Hz
+#Use powers & roots in a similar way
+    my Volume  $v-m3 = $d ** 3;              #125000 m3
+    my Distance $a-m = $v-m3 ** <1/3>;       #50 m -- <1/3> is a fraction(Rat)
 
+say "=====================";
 #Conversion of high order or inverse Units of same Type also uses .in() 
     my Volume $v-y31 ♎️ '7 yards3';
     my $v-m31 = $v-y31.in( 'm3' );          #5.35188400589 m3
@@ -127,6 +130,6 @@ say "=====================";
 
 #Colloquial terms or unicode superscripts can be used for powers in unitname declarations 
     #square, sq, squared, cubic, cubed
-    #x¹ x² x³ x⁴ and x⁻¹ x⁻² x⁻³ x⁻⁴i
+    #x¹ x² x³ x⁴ and x⁻¹ x⁻² x⁻³ x⁻⁴
 
 #EOF

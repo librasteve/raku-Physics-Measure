@@ -635,6 +635,22 @@ class Unit is export {
             return 1, $nuo;
         }
     }
+    method root-extract( Int $n ) {
+        #Only works when invocant has all dims to same power as root
+        my $ok = True;
+        my %ndims;
+        for %.dims.kv -> Str $dim, Int $order {
+            if $order %% $n {
+                %ndims{$dim} = ( $order / $n ).Int;
+            }
+            else {
+                $ok = False;
+            }
+        }
+        my $synth-dime= join-comp( %ndims );
+        my $nuo = Unit.new( name => $synth-dime );
+        return( $ok, $nuo ); 
+    }
     
     #######---HOUSEKEEPING---#######
     sub load-units() {

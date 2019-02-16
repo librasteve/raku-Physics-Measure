@@ -204,16 +204,48 @@ class Measure is export {
             return $nmo;
         }
     }   
-    method divide-const(Real:D $right) {
+    method divide-const( Real:D $right ) {
         $.value /= $right; 
         return self;
     }
     method reciprocal {
-        #use nmo to make new 's-1' object (unlike negate does not affect the original object):w
+        #use nmo to make new 's-1' object (unlike negate does not affect the original object)
         my Unitless $unity .= new( value => 1 );
         my $deno = self;
         return $unity.divide( $deno );
     } 
+
+    method power( Real:D $n ) {
+        #e.g. Area object from Distance ** 2
+        my $result = self;
+        my $factor = self;
+        for 2..$n {
+            $result .= multiply( $factor ); 
+        }
+        return $result;
+    } 
+    sub nth-root( $n, $A, $p=1e-9 ) {
+        my $x0 = $A / $n;
+        loop {
+            my $x1 = (($n-1) * $x0 + $A / ($x0 ** ($n-1))) / $n;
+            return $x1 if abs($x1-$x0) < abs($x0 * $p);
+            $x0 = $x1;
+        }
+    }
+    method root( Int:D $n ) {
+        my ( $ok, $nuo ) = $!units.root-extract( $n );
+        unless $ok {
+            #Test all units of self == x.n and set to x.1 or fail
+            say "Can only take square, cube, fourth root if unit dimensions all exactly divisible by power!";
+            return;
+        }
+        my $nval = nth-root( $n, $!value );
+        my $nmo  = new-measure-object( $nval, $nuo );             #prep return obj
+        return $nmo;
+    }
+    method sqrt() {
+        return self.root( 2 );
+    }
 
     method in( Str $convert-to ) {
         my $in-db = 0; #debug
