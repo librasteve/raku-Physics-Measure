@@ -1,15 +1,12 @@
 #!/usr/bin/env perl6
 #t/06-com.t 
-#TESTALL$ prove -e "perl6" ./t      [from root]
-use v6;
-use lib 'lib';
+#TESTALL$ prove6 ./t      [from root]
 use lib '../lib';
 use Test;
 plan 43; 
 
 use Physics::Measure;
 use Physics::Measure::Unit;
-use Physics::Measure::Lang;
 
 my Speed $s-mph1 ♎️ '17 miles/hours';
 is $s-mph1, '17 miles/hours',                                                   '$s-mph1';

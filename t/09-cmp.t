@@ -1,15 +1,12 @@
 #!/usr/bin/env perl6
 #t/09-cmp.t 
-#TESTALL$ prove -e "perl6" ./t      [from root]
-use v6;
-use lib 'lib';
+#TESTALL$ prove6 ./t      [from root]
 use lib '../lib';
 use Test;
 plan 17; 
 
 use Physics::Measure;
 use Physics::Measure::Unit;
-use Physics::Measure::Lang;
 
 my $a ♎️ '4.3 m';
 my $c = $a;

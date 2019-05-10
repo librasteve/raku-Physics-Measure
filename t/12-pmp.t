@@ -1,19 +1,16 @@
 #!/usr/bin/env perl6
-#t/01-new.t 
-#TESTALL$ prove -e "perl6" ./t      [from root]
-use v6; 
-use lib 'lib';
+#t/12-pmp.t 
+#TESTALL$ prove6 ./t      [from root]
 use lib '../lib';
 use Test;
 plan 5; 
 
+use Math::Polygons;
 use Physics::Measure;
-use Physics::Measure::Lang;
-use Math::Polygons::Drawing;
-use Math::Polygons::Drawing;
 
+#this test defines own Rectangle & Square classes ('copied' from Math::Polygons)
 
-class Rectangle does Element {
+class MyRectangle does Element does Styled {
     has Point $.origin;
     has       $.width;
     has       $.height;
@@ -22,22 +19,23 @@ class Rectangle does Element {
         $.height * $.width
     }
 
+    #|serialize Points as Real to strip any Physics::Measure container
     method serialize( --> Pair) {
-        rect => [ x =>  $!origin.x, y => $!origin.y, width => $!width, height => $!height, |self.styles ];
+        rect => [ x => $!origin.x.Real, y => $!origin.y.Real, width => $!width.Real, height => $!height.Real, |self.styles ];
     }
 }
 
-class Square does Element {
+class MySquare does Element does Styled {
     has Point $.origin;
     has       $.side;
 
     method area() {
-        #$.side ** 2    #need power math too!
-        $.side * $.side
+        $.side ** 2
     }
 
+    #|serialize Points as Real to strip any Physics::Measure container
     method serialize( --> Pair) {
-        rect => [ x =>  $!origin.x, y => $!origin.y, width => $!side, height => $!side, |self.styles ];
+        rect => [ x => $!origin.x.Real, y => $!origin.y.Real, width => $!side.Real, height => $!side.Real, |self.styles ];
     }
 }
 
@@ -47,14 +45,14 @@ my $w ♎️ '120 m';
 my $h ♎️ '80 m'; 
 my $s ♎️ '100 ft';
 
-my $rectangle = Rectangle.new(
+my $rectangle = MyRectangle.new(
     origin => Point.new($x, $y),
     width  => $w, 
     height => $h, 
 );
 
 $x ♎️ 160;
-my $square = Square.new(
+my $square = MySquare.new(
     origin => Point.new($x, $y),
     side => $s,
 );

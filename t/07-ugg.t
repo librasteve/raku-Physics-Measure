@@ -1,15 +1,12 @@
 #!/usr/bin/env perl6
 #t/06-cmp.t 
-#TESTALL$ prove -e "perl6" ./t      [from root]
-use v6;
-use lib 'lib';
+#TESTALL$ prove6 ./t      [from root]
 use lib '../lib';
 use Test;
 plan 72; 
 
 use Physics::Measure;
 use Physics::Measure::Unit;
-use Physics::Measure::Lang;
 
 my $x1 ♎️ '1 kg.m.s^2',
 is $x1.WHAT, Physics::Measure::Measure,                                 '$x1.WHAT';

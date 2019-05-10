@@ -1,15 +1,12 @@
 #!/usr/bin/env perl6
 #t/01-new.t 
-#TESTALL$ prove -e "perl6" ./t      [from root]
-use v6;
-use lib 'lib';
+#TESTALL$ prove6 ./t      [from root]
 use lib '../lib';
 use Test;
 plan 33; 
 
 use Physics::Measure;
 use Physics::Measure::Unit;
-use Physics::Measure::Lang;
 
 #Part 1: Default new Constructor
 

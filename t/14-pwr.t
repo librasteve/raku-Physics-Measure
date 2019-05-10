@@ -1,15 +1,12 @@
 #!/usr/bin/env perl6
 #t/14-pwr.t 
-#TESTALL$ prove -e "perl6" ./t  [from root]
-use v6;
-use lib 'lib';
+#TESTALL$ prove6 ./t      [from root]
 use lib '../lib';
 use Test;
 plan 7;
 
 use Physics::Measure;
 use Physics::Measure::Unit;
-use Physics::Measure::Lang;
 
 my Unit $u     .=new(name => 'm');                  #get Unit object to construct a Measure
 my Distance $d .=new(value => 1e4, units => $u);

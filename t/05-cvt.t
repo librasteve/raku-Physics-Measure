@@ -1,15 +1,12 @@
 #!/usr/bin/env perl6
 #t/05-cvt.t 
-#TESTALL$ prove -e "perl6" ./t      [from root]
-use v6;
-use lib 'lib';
+#TESTALL$ prove6 ./t      [from root]
 use lib '../lib';
 use Test;
 plan 56; 
 
 use Physics::Measure;
 use Physics::Measure::Unit; 
-use Physics::Measure::Lang; 
 
 my Distance $d-me ♎️ '10 m'; 
 is "$d-me", '10 m',                                                         '$d.""';
