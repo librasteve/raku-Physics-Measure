@@ -9,8 +9,7 @@
     "license" : "LGPL-3.0",
     "provides" : {
         "Physics::Measure" : "lib/Physics/Measure.pm6",
-        "Physics::Measure::Unit" : "lib/Physics/Measure/Unit.pm6",
-        "Physics::Measure::Lang" : "lib/Physics/Measure/Lang.pm6"
+        "Physics::Measure::Unit" : "lib/Physics/Measure/Unit.pm6"
     },
     "depends" : [
         "SVG","SVG::Plot","Math::Polygons"
