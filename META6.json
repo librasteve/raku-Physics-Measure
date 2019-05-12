@@ -6,7 +6,7 @@
     "version" : "0.0.2",
     "description" : "Some support for physical units.",
     "authors" : [ "p6steve" ],
-    "license" : "LGPL-3.0",
+    "license" : "Artistic-2.0",
     "provides" : {
         "Physics::Measure" : "lib/Physics/Measure.pm6",
         "Physics::Measure::Unit" : "lib/Physics/Measure/Unit.pm6"
