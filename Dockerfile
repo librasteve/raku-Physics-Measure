@@ -1,7 +1,7 @@
 FROM jupyter/all-spark-notebook:033056e6d164
 
 # last update: Sat Dec 29 13:50:00 EST 2018
-# p6steve 0.0.1 
+# p6steve 0.0.2
 
 USER root
 
