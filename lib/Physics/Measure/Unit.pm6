@@ -114,10 +114,11 @@ class Unit is export {
         }
         
         #strip offset 
-        if ( $defn-str ~~ s/( .* ) \s* ( <[+-]> \s* <number>? )/$0/ ) {
+        if ( $defn-str ~~ s/( .* ) \s* ( <[+-]> \s* <number> )/$0/ ) {
             my $ro-temp = '0.0';
             $ro-temp = $1 if $1.defined;         #otherwise we get Nil (no match at line end)
             $ro-temp ~~ s:g/\s//;                #erase w/s between sign and digits
+            #say "ds: $defn-str"; say "ro-temp: $ro-temp";
             $!root-offset = +"$ro-temp".Real if $ro-temp;
             #say "ds: $defn-str"; say "ro: $!root-offset";
         }
@@ -127,30 +128,31 @@ class Unit is export {
     submethod get-dime( $dime-str is copy ) {
         #https://docs.perl6.org/language/regexes#Regex_Interpolation
         #dd $unit-names; #FIXME change unit-names to List
+        #say $unit-names;
         #use Grammar::Tracer;
 
-        grammar UnitGrammar is export {
+	grammar UnitGrammar {
+	#grammar UnitGrammar is export {
+#FIXME remove 'is export'
             token TOP     { \s* <dimlist> \s* [<divi> \s* <denlist> \s*]? }
-            token dimlist { 1 || <dim>+ % <sep>? }  #was *
-            token denlist { <den>* % <sep>? }
+            token dimlist { 1 || <dim>+ % <sep>? }
+            token denlist { <den>+ % <sep>? }
             token divi    { \/ || per }
-            token sep     { \.|\* }
             token dim     { \s* <unam> \s* <ppfix>? \s* <power>? \s* }
             token den     { \s* <unam> \s* <ppfix>? \s* <power>? \s* }
+            token sep     { '.' || '* ' }   #ws to disambiguate from ppfix
             token unam    { <$unit-names> }
-            token ppfix   { \^|\*\* }
-            token power   { <psign> <pdigs> }
-            token psign   { <[+-]>? }
-            token pdigs   { \d* }
-        }
-        class UnitActions is export {
-            method TOP($/)     { make $<divi> ?? $/.values.[0].made~'.'~$/.values.[1].made !! $/.values.[0].made }
+            token ppfix   { '^' || '**' }
+            token power   { <[+-]>? \s* \d+ }
+        }        
+        class UnitActions {
+        #class UnitActions is export {
+            method TOP($/)     { make $<divi> ?? $<dimlist>.made~'.'~$<denlist>.made !! $<dimlist>.made }
             method dimlist($/) { make $<dim>>>.made.flat.join('.')}
-            method dim($/)     { make ~$<unam>~$<power> }
+            method dim($/)     { make $<power> ?? $<unam>~$<power> !! $<unam> }
             method denlist($/) { make $<den>>>.made.flat.join('.')}
-            method den($/)     { make ~$<power> ?? ~$<unam>~'-'~$<power> !! ~$<unam>~'-1' }
-            method divi($/)    { make True }
-        }
+            method den($/)     { make $<power> ?? $<unam>~'-'~$<power> !! $<unam>~'-1' }
+        }        
 
         #Notes
         #'' and '1' give ''
@@ -158,37 +160,41 @@ class Unit is export {
         #allow ^ or ** in power
         #allow no . or * as separator
         #allow zero or one / and handle following power signs - NB / then -ve power will barf 'kg**3/s**-3'wrong!!
-        #allow per, p, square:d, cube:d, cubic, sq
+        #allow per, FIXME p??, square:d, cube:d, cubic, sq
         #allow unicode superscripts
+
+#`[[FIXME
+need to match '4 kg * m * s4' and '2 kg.m**-3'
+right now dim matching 'kg ' (with trailing space) and can use '* ' to disambiguate '*' from '**'
+working on variations of <.ws> and */s
+#]]
 
         #transliterate power synonyms and superscripts
         $dime-str ~~ s/(<$unit-names>) \s* (<$power-sups>)/$0 %power-sups{$1}/;
         $dime-str ~~ s/(<$unit-names>) \s* (<$power-syns>)/$0 %power-syns{$1}/;
         $dime-str ~~ s/(<$power-syns>) \s* (<$unit-names>)/$1 %power-syns{$0}/;
 
-        ######now for the main action######   
         #say "UG.parse dime-str: $dime-str";
         my $match = UnitGrammar.parse($dime-str, :actions(UnitActions));
-        return $match.made if $match.so;
       
         #`[[ verbose for debug (also uncomment #use Grammar::Tracer)
-        say "$match=", $match.made;
         say "--------------------";
-        say $match.values;
-        say $match.values.[0].made;
-        say $match.values.[1].made;
-        say "--------------------";
-        say $match<dimlist>.made;
-        say $match<dimlist><dim>[0].made;
-        say $match<denlist>.made;
-        say $match<denlist><den>[0].made;
+        if $match.so               { say "<<$match>> => <<{$match.made}>>"  } 
+        if $match<dimlist>.so      { say $match<dimlist>.made }
+        if $match<dimlist><dim>.so { say $match<dimlist><dim>[0].made } 
+        if $match<denlist>.so      { say $match<denlist>.made }
+        if $match<denlist><den>.so { say $match<denlist><den>[0].made }
         #]]
         #['°C', 'Celsius', 'centigrade',],           'K - 273.15',       # exact
+
+        if $match.so { return $match.made } else { return '' };
     }
     
     my $tw-db = 0; #debug tweak
     submethod set-dims( $input ) {
+        say "get-dime input is $input" if $tw-db;
         my $output = self.get-dime( $input );
+        say "get-dime output is $output" if $tw-db;
         $!dime = $output if $output;   #FIXME? this is loose for graceful failure when debugging
         $!dime ~~ s/ ^ \. //; #need for 1/x otherwise 1 becomes leading empty dim
 
@@ -196,16 +202,17 @@ class Unit is export {
         my ( $namstr, $ordint );
         my @dimes = split( '.', $!dime );
         for @dimes -> $dim {
-            #say "set-dims() dim is $dim" if $tw-db;
+            say "set-dims() dim is $dim" if $tw-db;
             ( $namstr, $ordint ) = split-order( $dim );
             %!dims{$namstr} = $ordint;
         }
         say "set-dims() name is «$!name» dime string is «$!dime»" if $tw-db;
         #dd %!dims if $tw-db;
     }
+
     my $pd-db = 0; #debug
     submethod perm-defn() {
-        say "Trying to match unitsof to unit-defns from permutations of dime $!dime" if $pd-db;
+        say "Trying to find name & unitsof from unit-defns from permutations of dime $!dime" if $pd-db;
         for %!dims.keys.permutations -> @dim-perms {
             my @ndims = [];
             for @dim-perms -> $dim-n {
@@ -215,28 +222,36 @@ class Unit is export {
             }
             my $ndime = join( '.', @ndims );
             my $ndim0 = @ndims[0].substr( 0, 1 );
-            say "new perm ndime is $ndime; char 0 is $ndim0" if $pd-db;
+            say "New perm ndime is $ndime; char 0 is $ndim0" if $pd-db;
 
             for %unit-defn.keys -> $def-k {
                 #e.g. where a defn matches one of the perms: m.s-1 => Speed 
+
                 if %unit-defn{$def-k}.index( $ndim0 ).defined {
-                    #weed out defns by matching char0, then UG them
-                    say "def-k name is $def-k defn is " ~ %unit-defn{$def-k} if $pd-db;
-                    my $input  = %unit-defn{$def-k}; 
-                    say "input is $input" if $pd-db;
-                    my $output = self.get-dime( $input );
-                    $output ~~ s/ ^ \. //; #need for 1/x otherwise 1 becomes leading empty dim
-                    say "output is $output" if $pd-db; #FIXME stuff like feet, hours -> () ok?
-                    if $output eq $ndime {
+                    #weed out defns by matching char0, then UG them ##FIXME cache alpha sorted results for speed up?
+                    my $defn-str = %unit-defn{$def-k};
+                    say "def-k name is $def-k defn-str is " ~ $defn-str if $pd-db;
+
+                    my $strip-diff = $defn-str ne self.strip-offa( $defn-str ); 
+                    say "skip unit-defn if it has an offset or factor - strip-diff is $strip-diff" if $pd-db; 
+                    next if $strip-diff; 
+
+                    my $gdime = self.get-dime( $defn-str );
+                    $gdime ~~ s/ ^ \. //;             #need for 1/x otherwise 1 becomes leading empty dim
+                    next unless $gdime;
+                    say "output from UG.parse of defn-str - gdime is $gdime" if $pd-db; 
+
+                    if $gdime eq $ndime {
+                        say "unit-defn found, name is $!name, unitsof is $!unitsof" if $pd-db;
                         $!name = $def-k;
                         $!unitsof = %unit-type{$def-k}; 
-                        say "unit defn found, name is $!name, unitsof is $!unitsof" if $pd-db;
                         return
                     }
                 }
             }
         }
     }
+
     submethod core-proxy() {
         #Make proxy from core root + order, use perm-defn method to find matching defn
         #Usage: must return again after your call to this submethod
@@ -264,6 +279,7 @@ class Unit is export {
         %!dims    = $proxy.dims; 
         return $name-str, $order-str;
     }
+
     submethod comp-proxy() { 
         #Iterate over Unit @elems to get Type (e.g. Speed) from core unitsof
         #Usage: must return again after your call to this submethod
@@ -314,8 +330,10 @@ class Unit is export {
             my $dim-s = %dim-all{$dim-k} == 1 ?? $dim-k !! $dim-k ~ %dim-all{$dim-k};
             @dim-pairs.push( $dim-s );
         }
-        my $dime-str = join( '.', @dim-pairs );     say "dime-str is $dime-str" if $tw-db;
-        my $uno-str  = join( '.', @uno-arr );       say "uno-str is $uno-str" if $tw-db;
+        my $dime-str = join( '.', @dim-pairs );
+        say "dime-str is $dime-str" if $tw-db; #dd @dim-pairs;
+        my $uno-str  = join( '.', @uno-arr );
+        say "uno-str is $uno-str" if $tw-db; #dd @uno-arr;
         #FIXME change 🌀Area.Mass to 🌀Area-Mass (kabob-case)
 
         #use proxy to make unitsof in usual way, then promote this unitsof to invocant unitsof
@@ -330,8 +348,7 @@ class Unit is export {
         #Start with clean up & autogenerate various attributes
         if $!name.defined { 
             say "New instance of Unit setting name to «$!name»" if $tw-db; 
-            #iamerejh - next line redundant
-            self.name( $!name );
+            self.name( $!name );  #need method to handle side effects
         }
         if $!unitsof.defined { 
             $!unitsof ~~ s|.*\:\:||;
@@ -353,7 +370,7 @@ class Unit is export {
         # a. core    - m, s  - is-core
         # b. simple  - miles - walk root to core - root=feet => m
         # c. order   - feet2 - name=feet2; order=2; root=feet =>  m
-        # d. nato    - l     - name=l    ; order=1; root=m3 => m  #natural high order units e.g. l
+        # d. nato    - l     - name=l    ; order=1; root=m3 => m  #natural high order units e.g. l(itre)
         # e. comp    - m.s-1 - is-comp; dims = elements           #composite
         # a > e > d > c > b > x - handle & return a then reverse sequence
         #
@@ -367,13 +384,14 @@ class Unit is export {
             %!dims{$!name} = $!order;  #i.e. default of 1
             return;
         }
+
         #...then either (i) match to preset defn or (ii) use name literal to make a synthetic defn
-        if %unit-defn{$!name}:exists {                  #say "unit-defn exists";
+        if %unit-defn{$!name}:exists {                      say "unit-defn exists" if $tw-db;
             #prestrip factor & offset from defn e.g. '9/5 * Kelvin - 459.67'
             my $defn-str = %unit-defn{$!name};
-            $defn-str = self.strip-offa( $defn-str );   #say "defn-str is $defn-str";
+            $defn-str = self.strip-offa( $defn-str );       say "defn-str is $defn-str" if $tw-db;
             self.set-dims( $defn-str );
-        } else {
+        } else {                                            say "unit-defn does not exist" if $tw-db;
             self.set-dims( $!name );
         }
         
@@ -425,7 +443,7 @@ class Unit is export {
             if ! $!unitsof.defined {
                 #Autogen unitsof from unit dime P2 - infer Measure type by inspecting core object 
                 say "Autogen unitsof from unit dime «$!dime» [P2]" if $tw-db;
-                #dd %!dims if $tw-db;
+                dd %!dims if $tw-db;
         
                 #make proxy from core root + order, use perm-defn method to find matching defn
                 #e.g. m2 => Area, s-1 => Frequency
@@ -903,6 +921,7 @@ my $unit-data = q:to/END-UNIT-DATA/;
     ['kps',],                                   'km/s',
     ['fps',],                                   'feet/s',
     ['knot:s'],                                 'nm/hr',
+#`[[[[
 # Acceleration
     ['m/s^2',],                                 'm/s^2',            # exact 
 # Impulse
@@ -1025,10 +1044,10 @@ my $unit-data = q:to/END-UNIT-DATA/;
     ['Sv', 'Sievert',],                         'Joule / kg',
     ['rad',],                                   'Gray / 100',
     ['rem',],                                   'Sievert / 100',
+#]]]]
 END-UNIT-DATA
 
     #say "gulping $unit-data";
     return $unit-data;
 }
-#]]]]
 

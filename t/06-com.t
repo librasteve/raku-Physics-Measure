@@ -42,10 +42,10 @@ is $x3, '22.747 m3',                                                            
 my $d ♎️ '5e1 m';
 my Time $t6 ♎️ 42;
 my Speed $sp = $d / $t6;
-is $sp, '1.19047619047619 m.s-1',                                               '$sp-m.s-1';
+is $sp, '1.1904761904761905 m.s-1',                                             '$sp-m.s-1';
 
 my Acceleration $dsdt = $sp / $t6;
-is $dsdt, '0.0283446712018141 m.s-2',                                           '$dsdt-m.s-2'; 
+is $dsdt, '0.02834467120181406 m.s-2',                                          '$dsdt-m.s-2'; 
 
 my Acceleration $dsdt2 ♎️ '9.8 m/s^2';
 is $dsdt2, '9.8 m/s^2',                                                         '$dsdt2-m/s^2';
@@ -67,8 +67,7 @@ my $adia = $x2 / $x2;
 is $adia, '1',                                                                  '$adia';
 
 my $inv6 = 1 / $t6;
-#is $inv6, '0.023810 s-1',                                                       '$inv6'; #not Hz?
-is $inv6, '0.023810 Hz',                                                       '$inv6'; #not Hz?
+is $inv6, '0.02381 Hz',                                                       '$inv6'; #not Hz?
 is $inv6.WHAT, (Frequency),                                                     '$inv6-WHAT';
 
 my Force $fo1 ♎️ '7 N';

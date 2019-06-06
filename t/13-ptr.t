@@ -53,7 +53,7 @@ my $drawing = Drawing.new( elements => [
 
 ok $triangle.side   eq '100 m',                 '$triangle.side';
 ok $triangle.apex   eq '200 m, 160 m',          '$triangle.apex';
-ok $triangle.height eq '86.6025403784439 m',    '$triangle.height';
-ok $triangle.area   eq '4330.12701892219 m2',   '$triangle.area';
+ok $triangle.height eq '86.60254037844386 m',   '$triangle.height';
+ok $triangle.area   eq '4330.127018922193 m2',  '$triangle.area';
 
 #done-testing

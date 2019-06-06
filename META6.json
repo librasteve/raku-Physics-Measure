@@ -1,16 +1,15 @@
 {
-    "perl" : "6.c",
+    "perl" : "6.d",
     "name" : "Physics::Measure",
     "auth" : "github:p6steve",
     "api" : "1",
     "version" : "0.0.2",
     "description" : "Some support for physical units.",
     "authors" : [ "p6steve" ],
-    "license" : "LGPL-3.0",
+    "license" : "Artistic-2.0",
     "provides" : {
         "Physics::Measure" : "lib/Physics/Measure.pm6",
-        "Physics::Measure::Unit" : "lib/Physics/Measure/Unit.pm6",
-        "Physics::Measure::Lang" : "lib/Physics/Measure/Lang.pm6"
+        "Physics::Measure::Unit" : "lib/Physics/Measure/Unit.pm6"
     },
     "depends" : [
         "SVG","SVG::Plot","Math::Polygons"

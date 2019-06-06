@@ -58,8 +58,11 @@ is $t10, '2 hours',                                                         '$t.
 
 #Speed = Distance / Time
 my Speed $s1;
+#my Unit $su1 .=new( name=>'m.s-1', unitsof => 'Speed' );
 my Unit $su1 .=new( name=>'m/s', unitsof => 'Speed' );
 $s1 .=new( value => 14, units => $su1 );
+#say $s1;
+#is "$s1", '14 m.s-1',                                                         '$s.named';
 is "$s1", '14 m/s',                                                         '$s.named';
 
 my Speed $s2;
@@ -70,15 +73,13 @@ is "$s3", '17.234 m/s',                                                     '$s.
 
 my Distance $d ♎️ '5e1 m';      #'50 m'
 $s2 = $d / $t6;
-is "$s2", '1.19047619047619 m.s-1',                                         'div.mixed';
-#is "$s2", '1.19047619047619 m/s',                                         'div.mixed';
+is "$s2", '1.1904761904761905 m.s-1',                                       'div.mixed';
 
 my $x = $d * $d;
-say $x.perl;
+#say $x.perl;
 is "$x", '2500 m2',                                                         'mul.same';
 is $x.WHAT, (Physics::Measure::Area),                                       'mul.type';
 # this should fail $s1 = $d * $d;
 
-
-#done-testing
+##done-testing
 

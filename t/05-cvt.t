@@ -83,7 +83,6 @@ is $am2, '2500 m2',                                                         '$a.
 my Area $a-m21 ♎️ '42 m2';
 is $a-m21, '42 m2',                                                         '$a.new';
 
-say "---------";
 say "d=fe is $d-fe";
 my Area $af2 = $d-fe * $d-fe;
 is $af2, '144 feet2',                                                       '$a.$d*$d';
@@ -112,6 +111,9 @@ is $v-y33, '0.0078477037 yards3',                                           '$v.
 my $v-l2 = $v-y33.in( 'l' );
 is $v-l2, '6 l',                                                            '$v.in-l';
 
+#say "========================================";
+#die "yo";
+
 #Conversion of inverse order Units such as Frequency, etc. also uses .in()
 my Frequency $f-h1 ♎️ '78 Hz';
 is $f-h1.WHAT, (Frequency),                                                 '$f.WHAT';
@@ -136,7 +138,7 @@ my Measure $m-s1 ♎️ '30 s1';
 is $m-s1, '30 s',                                                           '$t.new-strip1';
 
 my $m-h12 = $m-s1.in( 'hours1' );
-is $m-h12, '0.00833333333333333 hours',                                     '$t.in-hours';
+is $m-h12, '0.008333333333333333 hours',                                    '$t.in-hours';
 
 my $m-s12 = $m-h12.in( 's1' );
 is $m-s12, '30 s',                                                          '$t.in-strip';

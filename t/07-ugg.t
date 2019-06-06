@@ -23,10 +23,10 @@ is $x3.WHAT, Physics::Measure::Force,                                   '$x3.WHA
 is $x3.units.unitsof, 'Force',                                          '$x3-unitsof';
 is "$x3", '3 kg m s-2',                                                 '$x3-kgms-2';
 
-my $x4 ♎️ '4 kg*m*s4';
+my $x4 ♎️ '4 kg * m * s4';
 is $x4.WHAT, Physics::Measure::Measure,                                 '$x4.WHAT';
 is $x4.units.unitsof, '🌀Time4.Mass.Distance',                          '$x4-unitsof';
-is $x4, '4 kg*m*s4',                                                    '$x4-kg*m*s4';
+is $x4, '4 kg * m * s4',                                                '$x4-kg * m * s4';
 
 my $x5 ♎️ '5 m/s';
 is $x5.WHAT, Physics::Measure::Speed,                                   '$x5.WHAT';

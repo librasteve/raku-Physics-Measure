@@ -50,7 +50,7 @@ class Measure is export {
     multi method new( Str:D $s ) {
         say "new from Str" if $new-db;
         my ( $v, $us ) = extract( $s );
-        my Unit $uo .=new( name => $us );   #say $uo.perl if $new-db;
+        my Unit $uo .=new( name => $us );   say "uo is " ~ $uo.perl if $new-db;
         my $nuts = $uo.unitsof;             #infer new unit type from string
         say "new unit type str is $nuts" if $new-db;
         if $nuts ~~ /'🌀'/ { $nuts  = 'Measure' }
@@ -124,7 +124,7 @@ class Measure is export {
             $.value += $right.value;
             return self;
         } elsif $!units.unitsof eq $right.units.unitsof {
-            say "normalizing Measures to base type for add";
+            say "Normalizing Measures to base type for add.";
             my $left = self.norm;
             $right .= norm;
             $left.value += $right.value;
@@ -138,7 +138,7 @@ class Measure is export {
             $.value -= $right.value; 
             return self;
         } elsif $!units.unitsof eq $right.units.unitsof {
-            say "normalizing Measures to base type for sub";
+            say "Normalizing Measures to base type for subtract.";
             my $left = self.norm;
             $right .= norm;
             $left.value -= $right.value;
@@ -406,7 +406,7 @@ class Measure is export {
             if $a.units.name eq $b.units.name {
                 return $a.value cmp $b.value;
             } else {
-                say "normalizing Measures to base type for cmp";
+                say "Normalizing Measures to base type for cmp.";
                 my $an = $a.norm;
                 my $bn = $b.norm;
                 return $an.value cmp $bn.value;
