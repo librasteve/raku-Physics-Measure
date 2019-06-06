@@ -4,7 +4,7 @@ unit module Physics::Unit:ver<0.0.2>:auth<Steve Roe (sroe@furnival.net)>;
 our %const-defn is export;
 
 #FIXME https://github.com/JJ/p6-math-constants
-# Constants
+######## Constants ########
 # equatorial radius of the reference geoid:
 %const-defn<re0> = '6378388 m';
 # polar radius of the reference geoid:
@@ -25,16 +25,49 @@ our %const-defn is export;
 # Gas-constant:
 %const-defn<R0> = '8.3144598 kg m^2 / s^2 K mol';
 
-#some common definitions
+####### Definitions #######
 my regex number {
     \S+                     #grab chars 
-    <?{ defined +"$/" }>    #assert coerces via '+' to Real
+    <?{ defined +"$/" }>    #assertion that coerces via '+' to Real
 }
+#power synonyms and superscripts
 
+my %power-syns = ( 
+    square => 2, sq => 2, squared => 2,
+    cubic => 3, cubed => 3,
+);
+my $power-syns = join('|', %power-syns.keys );
+
+#x¹ x² x³ x⁴ #x⁻¹ x⁻² x⁻³ x⁻⁴ 
+my %power-sups = ( 
+     '¹' =>  1,  '²' =>  2,  '³' =>  3,  '⁴' =>  4,  
+    '⁻¹' => -1, '⁻²' => -2, '⁻³' => -3, '⁻⁴' => -4, 
+);
+#say %power-sups{'¹'}; #my $power-sups = "'¹'|'²'";
+my $power-sups = "'" ~ join("'|'", %power-sups.keys ) ~ "'";
+
+######## Load Data ########
+my  Str    %unit-type; 
+my  Str    %unit-base;
+my  Str    %unit-defn;
+my  Str    $unit-names;         #compound names excluded
+my  Str    %unit-sing; 
+my  Str    %unit-plur;
+my  Str    %type-base; 
+my  Array  %unit-syns;          #reverse
+load-units(); 
+
+#it's too slow to load all %unit-dime on startup... need incremental cache 
+my  Str    %unit-dime;          #reverse, key is e.g.'kg.m.s-2' via grammar, value is unit-name
+
+my         %pfix-defn;      #FIXME type
+load-pfixs(); 
+
+########## Unit ##########
 class Unit is export {
-    #Parent type for objects that each represent a physical unit with name (e.g.'m') and scale factor 
-    #Builds a list of child types such as m, kg, W that can be used directly in calculations
-    #Manages rules for synonyms and type conversion, plus physical constants
+    #Generic class for objects that each represent a physical unit with name (e.g.'m') and scale factor 
+    #Instances such as m, kg, W are consumed by Measure child instances that may be used in calculations
+    #Manages rules for synonyms and type conversion
     #FIXME batten hatches $. => $!
     
     has Str  $.name      is rw;     #e.g. m, meter, meters, metre, metres (usually plural)
@@ -43,7 +76,7 @@ class Unit is export {
     has Str  $.plur-name is rw;     #plural 
 
     has Str  $.unitsof   is rw;     #Type of bound Measure child e.g. Distance, Mass, Power...
-    has Str  $.dime = 'notset';     #e.g. 'm/s' from defn or decl
+    has Str  $.dime = 'notset';     #e.g. 'm.s-1' from defn or decl
     has Int  %.dims;                #hash of dime name => order e.g. ( m => 1, s => -1 ) 
     has Bool $.is-core   is rw;     #core  - has no root Unit
     has Bool $.is-proxy  is rw;     #proxy - handy way to call submethods during init 
@@ -55,38 +88,9 @@ class Unit is export {
     has Int  $.order = 1;           #order of this unit - e.g. m3 has order 3
     has Bool $.is-nato is rw;       #natural high order - e.g. l has order 1 
     has Bool $.is-comp is rw;       #compound  - e.g. m.s-1
-    
-    my  Str  %unit-type; 
-    my  Str  %unit-base;
-    my  Str  %unit-defn;
-    my  Str  $unit-names;           #compound names excluded
-    my  Str  %unit-sing; 
-    my  Str  %unit-plur;
-    my  Str  %type-base; 
-    my  Array  %unit-syns;          #reverse
-             load-units(); 
-    my  Str  %unit-dime;            #e.g.'kg.m.s-2' from core units via grammar
-             #too slow to load all %unit-dime on start 
-    my       %pfix-defn;      #FIXME type
-             load-pfixs(); 
-
-    #power synonyms and superscripts
-    my %power-syns = ( 
-        square => 2, sq => 2, squared => 2,
-        cubic => 3, cubed => 3,
-    );
-    my $power-syns = join('|', %power-syns.keys );
-
-    #x¹ x² x³ x⁴ #x⁻¹ x⁻² x⁻³ x⁻⁴ 
-    my %power-sups = ( 
-         '¹' =>  1,  '²' =>  2,  '³' =>  3,  '⁴' =>  4,  
-        '⁻¹' => -1, '⁻²' => -2, '⁻³' => -3, '⁻⁴' => -4, 
-    );
-    #say %power-sups{'¹'}; #my $power-sups = "'¹'|'²'";
-    my $power-sups = "'" ~ join("'|'", %power-sups.keys ) ~ "'";
 
     submethod strip-offa( $defn-str is copy ) {
-        #prestrip factor & offset from defn
+        #strip offset & factor from defn-str
         #e.g. '9/5 * Kelvin - 459.67'
         #https://stackoverflow.com/questions/48972033/perl6-regex-match-num?noredirect=1#comment84964369_48972033
         
@@ -129,11 +133,11 @@ class Unit is export {
         #https://docs.perl6.org/language/regexes#Regex_Interpolation
         #dd $unit-names; #FIXME change unit-names to List
         #say $unit-names;
-        #use Grammar::Tracer;
 
-	grammar UnitGrammar {
-	#grammar UnitGrammar is export {
-#FIXME remove 'is export'
+        if %unit-dime{$dime-str}:exists { return %unit-dime{$dime-str} } #get value from unit-dime cache
+
+        #use Grammar::Tracer;
+        grammar UnitGrammar {
             token TOP     { \s* <dimlist> \s* [<divi> \s* <denlist> \s*]? }
             token dimlist { 1 || <dim>+ % <sep>? }
             token denlist { <den>+ % <sep>? }
@@ -146,7 +150,6 @@ class Unit is export {
             token power   { <[+-]>? \s* \d+ }
         }        
         class UnitActions {
-        #class UnitActions is export {
             method TOP($/)     { make $<divi> ?? $<dimlist>.made~'.'~$<denlist>.made !! $<dimlist>.made }
             method dimlist($/) { make $<dim>>>.made.flat.join('.')}
             method dim($/)     { make $<power> ?? $<unam>~$<power> !! $<unam> }
@@ -187,7 +190,13 @@ working on variations of <.ws> and */s
         #]]
         #['°C', 'Celsius', 'centigrade',],           'K - 273.15',       # exact
 
-        if $match.so { return $match.made } else { return '' };
+        if $match.so { 
+            %unit-dime{$dime-str} = $match.made.Str; #store in unit-dime cache
+            return $match.made.Str 
+        } else { 
+            return '' 
+        }
+
     }
     
     my $tw-db = 0; #debug tweak
@@ -669,107 +678,107 @@ working on variations of <.ws> and */s
         my $nuo = Unit.new( name => $synth-dime );
         return( $ok, $nuo ); 
     }
+}
     
-    #######---HOUSEKEEPING---#######
-    sub load-units() {
-        my $lu-db = 0; #debug
-        my $unit-data = load-unit-data();
-        #say "loaded $unit-data" if $lu-db;
+#######---HOUSEKEEPING---#######
+sub load-units() {
+    my $lu-db = 0; #debug
+    my $unit-data = load-unit-data();
+    #say "loaded $unit-data" if $lu-db;
 
-        my ( $this-line, $section, $base-unit );
-        for $unit-data.lines -> $line {
-            $this-line = $line;
+    my ( $this-line, $section, $base-unit );
+    for $unit-data.lines -> $line {
+        $this-line = $line;
 
-            if    $line !~~ m| \S |      { }    #skip empty lines
-            elsif $line  ~~ m|^\#(.*)$|  {      #section headers 
-                $section = $0;                
-                $section ~~ s:g|\s||;
-                say "Section:$section" if $lu-db;
+        if    $line !~~ m| \S |      { }    #skip empty lines
+        elsif $line  ~~ m|^\#(.*)$|  {      #section headers 
+            $section = $0;                
+            $section ~~ s:g|\s||;
+            say "Section:$section" if $lu-db;
+            $base-unit = Nil;
+        } else {                            #content line
+            $this-line ~~ s|\#.*$||;        #strip trailing comments
+        
+            my Str ($syn-str, $def-str);
+            my Str (@syn-arr, @syn-out);
+            if  $this-line ~~ m|^ \s* \[ (.*) \] \,.* (\' .* \') \,\s* $|     {
+                $syn-str = $0.Str;
+                $def-str = $1.Str;
+                $def-str ~~ s:g|\'||;
+                say "syn-def:$syn-str:$def-str" if $lu-db;
+                @syn-arr = $syn-str.split(',');
+                for @syn-arr -> Str $item is rw {
+                    $item ~~ s:g|\'||;
+                    $item ~~ s:g|\s||;
+                    @syn-out.push( $item ) if $item;
+                }
+                say "@syn-out", @syn-out if $lu-db;
+
                 $base-unit = Nil;
-            } else {                            #content line
-                $this-line ~~ s|\#.*$||;        #strip trailing comments
-            
-                my Str ($syn-str, $def-str);
-                my Str (@syn-arr, @syn-out);
-                if  $this-line ~~ m|^ \s* \[ (.*) \] \,.* (\' .* \') \,\s* $|     {
-                    $syn-str = $0.Str;
-                    $def-str = $1.Str;
-                    $def-str ~~ s:g|\'||;
-                    say "syn-def:$syn-str:$def-str" if $lu-db;
-                    @syn-arr = $syn-str.split(',');
-                    for @syn-arr -> Str $item is rw {
-                        $item ~~ s:g|\'||;
-                        $item ~~ s:g|\s||;
-                        @syn-out.push( $item ) if $item;
+                for @syn-out -> Str $item {                 #plurals
+                    my ( $plur, $sing ) = ( Nil, Nil );
+                    if $item ~~ m|':'| {
+                        $item ~~ m|(.*)':'(.*)|;
+                        $sing = "$0";
+                        if    $1 eq 's'  { $plur = "$0s"  }
+                        elsif $1 eq 'es' { $plur = "$0es" }
+                        else             { $plur = "$1"   }
+                        if $lu-db { say "sing=$sing"; say "plur=$plur" };
+                    } else {
+                        $plur = $item;
                     }
-                    say "@syn-out", @syn-out if $lu-db;
-
-                    $base-unit = Nil;
-                    for @syn-out -> Str $item {                 #plurals
-                        my ( $plur, $sing ) = ( Nil, Nil );
-                        if $item ~~ m|':'| {
-                            $item ~~ m|(.*)':'(.*)|;
-                            $sing = "$0";
-                            if    $1 eq 's'  { $plur = "$0s"  }
-                            elsif $1 eq 'es' { $plur = "$0es" }
-                            else             { $plur = "$1"   }
-                            if $lu-db { say "sing=$sing"; say "plur=$plur" };
-                        } else {
-                            $plur = $item;
-                        }
-                        $base-unit //= $plur;
-                        %unit-type{$plur} = $section;
-                        %unit-type{$sing} = $section if $sing;
-                        %unit-base{$plur} = $base-unit;
-                        %unit-base{$sing} = $base-unit if $sing;
-                        %unit-sing{$plur} = $sing if $sing;
-                        %unit-plur{$sing} = $plur if $sing;
-                        %unit-defn{$plur} //= $base-unit;
-                        %unit-defn{$sing} //= $base-unit if $sing;
-                        %type-base{$section} //= $base-unit;  #just want the first one
-                    }
-                    say "base-unit=$base-unit" if $lu-db;
-                    say "def-str=$def-str" if $lu-db;
-                    %unit-defn{$base-unit} = $def-str;
-                    %unit-syns{$base-unit} = @syn-out;    #reverse
-
+                    $base-unit //= $plur;
+                    %unit-type{$plur} = $section;
+                    %unit-type{$sing} = $section if $sing;
+                    %unit-base{$plur} = $base-unit;
+                    %unit-base{$sing} = $base-unit if $sing;
+                    %unit-sing{$plur} = $sing if $sing;
+                    %unit-plur{$sing} = $plur if $sing;
+                    %unit-defn{$plur} //= $base-unit;
+                    %unit-defn{$sing} //= $base-unit if $sing;
+                    %type-base{$section} //= $base-unit;  #just want the first one
                 }
-                else {
-                    #say "mismatch:$this-line" if $lu-db;
-                }
+                say "base-unit=$base-unit" if $lu-db;
+                say "def-str=$def-str" if $lu-db;
+                %unit-defn{$base-unit} = $def-str;
+                %unit-syns{$base-unit} = @syn-out;    #reverse
+
             }
-        } 
+            else {
+                #say "mismatch:$this-line" if $lu-db;
+            }
+        }
+    } 
 
-        my regex compound {         #FIXME handle 'per'
-            < ph | pm | ps > |
-            \d+ | \^+ | \/+
-        }
-        for %unit-defn.keys -> $name {
-            $unit-names ~= "|$name" unless ( $name ~~ /<compound>/ );
-        }
-        $unit-names ~~ s:g/ ( <-[a..z A..Z 0..9 \|]> ) / '$0' /;  #escape everything e.g. unicode
-        #FIXME test ph pm ps mph
-
-        #dd %unit-defn;
-        if $lu-db {
-            #say "%unit-type:"; say %unit-type;
-            #say "%unit-base:"; say %unit-base;
-            #say "%unit-sing:"; say %unit-sing;
-            #say "%unit-plur:"; say %unit-plur;
-            #say "%type-base:"; say %type-base;
-            #say "%unit-defn"; say %unit-defn;
-            #say "unit-names", $unit-names;
-            #say "%unit-syns"; say %unit-syns;    #reverse
-        }
-        return True;
+    my regex compound {         #FIXME handle 'per'
+        < ph | pm | ps > |
+        \d+ | \^+ | \/+
     }
-
-    sub load-pfixs() {
-        my @pfix-data = load-pfix-data();
-        %pfix-defn = @pfix-data; 
-        #say "%pfix-defn"; say %pfix-defn;
-        return True;
+    for %unit-defn.keys -> $name {
+        $unit-names ~= "|$name" unless ( $name ~~ /<compound>/ );
     }
+    $unit-names ~~ s:g/ ( <-[a..z A..Z 0..9 \|]> ) / '$0' /;  #escape everything e.g. unicode
+    #FIXME test ph pm ps mph
+
+    #dd %unit-defn;
+    if $lu-db {
+        #say "%unit-type:"; say %unit-type;
+        #say "%unit-base:"; say %unit-base;
+        #say "%unit-sing:"; say %unit-sing;
+        #say "%unit-plur:"; say %unit-plur;
+        #say "%type-base:"; say %type-base;
+        #say "%unit-defn"; say %unit-defn;
+        #say "unit-names", $unit-names;
+        #say "%unit-syns"; say %unit-syns;    #reverse
+    }
+    return True;
+}
+
+sub load-pfixs() {
+    my @pfix-data = load-pfix-data();
+    %pfix-defn = @pfix-data; 
+    #say "%pfix-defn"; say %pfix-defn;
+    return True;
 }
 
 sub load-pfix-data() {
@@ -820,7 +829,6 @@ my @pfix-data = (
 #say @pfix-data;
 return @pfix-data;
 }
-
 
 sub load-unit-data() {
 
