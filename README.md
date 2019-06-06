@@ -56,8 +56,8 @@ use Physics::Measure::Unit;
     say $d.gist;        #Physics::Measure::Distance.new(value => 50e0, units => "m" ... )
     say $u.gist;        #Physics::Unit::Unit.new(name => "m", unitsof => "Distance" ...)
     say $d.Real;        #50   or use $d in Real context (Real includes Int|Rat|Num etc)
-    say $d.Str;         #50 m or use $d in Str context
-    say "$d";           #50 m
+    say $d.Str;         #'50 m' or use $d in Str context,
+    say "$d";           #'50 m'
 
 #The usual arithmetic operators < + - * / > and () brackets just work
 #i.e. units and magnitudes are checked, calculated and errors are calculated automatically    
