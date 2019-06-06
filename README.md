@@ -113,7 +113,6 @@ use Physics::Measure::Unit;
     my Volume  $v-m3 = $d ** 3;              #125000 m3
     my Distance $a-m = $v-m3 ** <1/3>;       #50 m -- <1/3> is a fraction(Rat)
 
-say "=====================";
 #Conversion of high order or inverse Units of same Type also uses .in() 
     my Volume $v-y31 ♎️ '7 yards3';
     my $v-m31 = $v-y31.in( 'm3' );          #5.35188400589 m3
