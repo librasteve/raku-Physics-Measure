@@ -1,12 +1,10 @@
-[![Build Status](https://travis-ci.org/p6steve/perl6-Physics-Measure.svg?branch=master)](https://travis-ci.org/p6steve/perl6-Physics-Measure)
-
 Synopsys:
 https://github.com/p6steve/perl6-Physics-Measure/blob/master/bin/P--sics.p6
 
-# perl6-Math-Polygons
+# perl6-Physics-Measure
 Some perl6 polygon objects that draw via SVG - an alpha with the plan to do inheritance of Parallelograms, Rhomboids, etc.
 
-[![Build Status](https://travis-ci.org/p6steve/perl6-Math-Polygons.svg?branch=master)](https://travis-ci.org/p6steve/perl6-Math-Polygons)
+[![Build Status](https://travis-ci.org/p6steve/perl6-Physics-Measure.svg?branch=master)](https://travis-ci.org/p6steve/perl6-Physics-Measure)
 
 # Instructions
 There are three ways to consume this module:
