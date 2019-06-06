@@ -1,7 +1,7 @@
 # perl6-Physics-Measure
-A set of SI, Imperial and US Unit objects that are employed by Measure objects to do calculations. Some prefix and physical constants included where needed. Some use of perl6 unicode and operator overload.
+A set of SI, Imperial and US Unit objects that are employed by Measure objects that have value, units and error(tbd) and act as operands in most calculations. Some prefix and physical constants included where needed. Some use of perl6 unicode and operator overload.
 
-*NB. Feedback in general and on the interface in particular is welcomed*
+*NB. Feedback in general and on the [♎️] interface in particular is very welcome!*
 
 [![Build Status](https://travis-ci.org/p6steve/perl6-Physics-Measure.svg?branch=master)](https://travis-ci.org/p6steve/perl6-Physics-Measure)
 
