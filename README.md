@@ -68,8 +68,8 @@ use Physics::Measure::Unit;
     $c = $b - $a;       #'-6.6 m'
     $c = '1 m' - $a;    #'-3.3 m' 
 #Division like for like produces a Real value such as a Rat
-    my Real $r = $a / $b; #'-1.869565'
-#Multiply with & Divide by a Real imply a constant factor...
+    my Real $r = $a / $b; #-1.869565
+#Multiply with (& Divide by) a Real imply a constant factor...
     $c = $b * 30;       #'-69 m'
 
 #The Measure of Time has a perl6 Duration - i.e. the difference between two perl6 DateTime Instants:
