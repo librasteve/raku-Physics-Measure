@@ -3,7 +3,7 @@
 #TESTALL$ prove6 ./t      [from root]
 use lib '../lib';
 use Test;
-plan 72; 
+plan 69; 
 
 use Physics::Measure;
 use Physics::Measure::Unit;
@@ -12,11 +12,6 @@ my $x1 ♎️ '1 kg.m.s^2',
 is $x1.WHAT, Physics::Measure::Measure,                                 '$x1.WHAT';
 is $x1.units.unitsof, '🌀Time2.Mass.Distance',                          '$x1-unitsof';
 is $x1, '1 kg.m.s^2',                                                   '$x1-kg.m.s^2';
-
-my $x2 ♎️ '2 kg.m**-3',
-is $x2.WHAT, Physics::Measure::Measure,                                 '$x2.WHAT';
-is $x2.units.unitsof, '🌀Mass.Distance-3',                              '$x2-unitsof';
-is $x2, '2 kg.m**-3',                                                   '$x2-kg.m**-3';
 
 my $x3 ♎️ '3 kg m s-2',
 is $x3.WHAT, Physics::Measure::Force,                                   '$x3.WHAT';
