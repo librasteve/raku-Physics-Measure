@@ -491,6 +491,7 @@ class Energy             is Measure is export {}
 class Torque             is Measure is export {}
 class Charge             is Measure is export {}
 class Pressure           is Measure is export {}
+class Density            is Measure is export {}
 class Dose               is Measure is export {}
 
 sub infix-prep( $left, $right ) {

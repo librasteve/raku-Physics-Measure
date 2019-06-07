@@ -875,7 +875,7 @@ my $unit-data = q:to/END-UNIT-DATA/;
     ['parsec:s',],                              '3.083e16 m',
 # Mass
     ['kg', 'kilogram:s', 'kilogramme:s','kilo:s',], 'core',         # core
-    ['gm',],                                    'kilogram/1000',    # exact (FIXME test)
+    ['gm',],                                    'kilogram/1000',    # exact
     ['metric-ton:s', 'tonne:s',],               '1000 kg',          # exact
     ['grain:s',],                               '.0648 gm',
     ['pound-mass:pounds-mass', 'lbm:s',],       '0.45359237 kg',    # exact
@@ -931,7 +931,6 @@ my $unit-data = q:to/END-UNIT-DATA/;
     ['kps',],                                   'km/s',
     ['fps',],                                   'feet/s',
     ['knot:s'],                                 'nm/hr',
-#[[[[
 # Acceleration
     ['m/s^2',],                                 'm/s^2',            # exact 
 # Impulse
@@ -1049,12 +1048,13 @@ my $unit-data = q:to/END-UNIT-DATA/;
     ['Torr',],                                  '(101325 / 760) Pascal',
     ['psi',],                                   'pounds per inch^2',
     ['atm', 'atmosphere:s',],                   '101325 Pascal',  # exact
+# Density
+    ['kg/m^3',],                                'kg / m^3',         # exact
 # Dose
     ['Gy', 'Gray:s',],                          'Joule / kg',
     ['Sv', 'Sievert',],                         'Joule / kg',
     ['rad',],                                   'Gray / 100',
     ['rem',],                                   'Sievert / 100',
-#]]]]
 END-UNIT-DATA
 
     #say "gulping $unit-data";
