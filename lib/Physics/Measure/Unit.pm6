@@ -221,6 +221,7 @@ working on variations of <.ws> and */s
 
     my $pd-db = 0; #debug
     submethod perm-defn() {
+        #FIXME maybe further speed up by specifying sort order for loaded dimes?
         say "Trying to find name & unitsof from unit-defns from permutations of dime $!dime" if $pd-db;
         for %!dims.keys.permutations -> @dim-perms {
             my @ndims = [];
@@ -237,18 +238,18 @@ working on variations of <.ws> and */s
                 #e.g. where a defn matches one of the perms: m.s-1 => Speed 
 
                 if %unit-defn{$def-k}.index( $ndim0 ).defined {
-                    #weed out defns by matching char0, then UG them ##FIXME cache alpha sorted results for speed up?
+                    #weed out defns by matching char0, then UG them
                     my $defn-str = %unit-defn{$def-k};
-                    say "def-k name is $def-k defn-str is " ~ $defn-str if $pd-db;
+                    #say "def-k name is $def-k defn-str is " ~ $defn-str if $pd-db;
 
                     my $strip-diff = $defn-str ne self.strip-offa( $defn-str ); 
-                    say "skip unit-defn if it has an offset or factor - strip-diff is $strip-diff" if $pd-db; 
+                    #say "skip unit-defn if it has an offset or factor - strip-diff is $strip-diff" if $pd-db; 
                     next if $strip-diff; 
 
                     my $gdime = self.get-dime( $defn-str );
                     $gdime ~~ s/ ^ \. //;             #need for 1/x otherwise 1 becomes leading empty dim
                     next unless $gdime;
-                    say "output from UG.parse of defn-str - gdime is $gdime" if $pd-db; 
+                    #say "output from UG.parse of defn-str - gdime is $gdime" if $pd-db; 
 
                     if $gdime eq $ndime {
                         say "unit-defn found, name is $!name, unitsof is $!unitsof" if $pd-db;
@@ -840,6 +841,7 @@ sub load-unit-data() {
 #]]
 
 my $unit-data = q:to/END-UNIT-DATA/; 
+# try to keep defn unit sort order "alpha / alpha" (some notable exceptions N m ...)
 # Unitless 
     ['unitless',],                              'core',             # core
 # Angle
@@ -929,7 +931,7 @@ my $unit-data = q:to/END-UNIT-DATA/;
     ['kps',],                                   'km/s',
     ['fps',],                                   'feet/s',
     ['knot:s'],                                 'nm/hr',
-#`[[[[
+#[[[[
 # Acceleration
     ['m/s^2',],                                 'm/s^2',            # exact 
 # Impulse
