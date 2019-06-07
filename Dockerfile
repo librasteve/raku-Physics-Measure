@@ -22,7 +22,7 @@ RUN apt-get update \
   && zef -v install SVG::Plot --force-test \
   && zef -v install Math::Polygons --force-test \
   && zef -v install https://github.com/p6steve/perl6-Physics-Measure.git \
-  && git clone https://github.com/p6steve/perl6-Math::Polygons.git \
+  && git clone https://github.com/p6steve/perl6-Math-Polygons.git \
   && mv perl6-Math-Polygons/eg ${HOME} \
   && rm -rf perl6-Math-Polygons \
   && git clone https://github.com/p6steve/perl6-Physics-Measure.git \
