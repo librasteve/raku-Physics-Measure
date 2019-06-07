@@ -1,0 +1,277 @@
+2018-12-28T17:06:27.246108Z (1) info: starting jupyter kernel
+2018-12-28T17:06:27.327453Z (1) debug: read /Users/stephenroe/Library/Jupyter/runtime/kernel-b066317c-5bca-454b-a925-c990fcf89b38.json
+2018-12-28T17:06:27.328568Z (1) debug: listening on tcp://127.0.0.1
+2018-12-28T17:06:27.336486Z (1) debug: setting up control on 53294
+2018-12-28T17:06:27.382847Z (1) debug: setting up shell on 53291
+2018-12-28T17:06:27.398858Z (1) debug: setting up iopub on 53292
+2018-12-28T17:06:27.406857Z (1) debug: setting up hb on 53295
+2018-12-28T17:06:27.753478Z (7) debug: shell got a message: kernel_info_request
+2018-12-28T17:06:27.754133Z (7) info: shell: sending kernel_info_reply message
+2018-12-28T17:06:27.932246Z (7) debug: shell got a message: kernel_info_request
+2018-12-28T17:06:27.932804Z (7) info: shell: sending kernel_info_reply message
+2018-12-28T17:06:28.074801Z (7) debug: shell got a message: comm_info_request
+2018-12-28T17:06:28.075641Z (7) warning: unimplemented message type: comm_info_request
+2018-12-28T17:06:28.141873Z (7) debug: shell got a message: execute_request
+2018-12-28T17:06:28.142651Z (7) info: iopub: sending status message
+2018-12-28T17:06:28.218182Z (7) info: iopub: sending execute_input message
+2018-12-28T17:06:28.260443Z (7) info: iopub: sending execute_result message
+2018-12-28T17:06:28.295650Z (7) info: iopub: sending status message
+2018-12-28T17:06:28.357254Z (7) info: shell: sending execute_reply message
+2018-12-28T17:06:41.910408Z (7) debug: shell got a message: execute_request
+2018-12-28T17:06:41.911043Z (7) info: iopub: sending status message
+2018-12-28T17:06:43.542798Z (7) info: iopub: sending execute_input message
+2018-12-28T17:06:43.582521Z (7) info: iopub: sending display_data message
+2018-12-28T17:06:43.618778Z (7) info: iopub: sending status message
+2018-12-28T17:06:43.655547Z (7) info: shell: sending execute_reply message
+2018-12-28T17:06:56.135919Z (1) info: starting jupyter kernel
+2018-12-28T17:06:56.156041Z (1) debug: read /Users/stephenroe/Library/Jupyter/runtime/kernel-8f302275-2a4c-457e-a5ea-df66f603843f.json
+2018-12-28T17:06:56.156806Z (1) debug: listening on tcp://127.0.0.1
+2018-12-28T17:06:56.157838Z (1) debug: setting up control on 53518
+2018-12-28T17:06:56.182117Z (1) debug: setting up shell on 53515
+2018-12-28T17:06:56.183288Z (1) debug: setting up iopub on 53516
+2018-12-28T17:06:56.184572Z (1) debug: setting up hb on 53519
+2018-12-28T17:06:56.500335Z (7) debug: shell got a message: kernel_info_request
+2018-12-28T17:06:56.500934Z (7) info: shell: sending kernel_info_reply message
+2018-12-28T17:06:56.647119Z (7) debug: shell got a message: kernel_info_request
+2018-12-28T17:06:56.649285Z (7) info: shell: sending kernel_info_reply message
+2018-12-28T17:06:56.755907Z (7) debug: shell got a message: comm_info_request
+2018-12-28T17:06:56.756469Z (7) warning: unimplemented message type: comm_info_request
+2018-12-28T17:06:58.282642Z (7) debug: shell got a message: execute_request
+2018-12-28T17:06:58.283467Z (7) info: iopub: sending status message
+2018-12-28T17:06:58.359883Z (7) info: iopub: sending execute_input message
+2018-12-28T17:06:58.403524Z (7) info: iopub: sending execute_result message
+2018-12-28T17:06:58.447047Z (7) info: iopub: sending status message
+2018-12-28T17:06:58.497688Z (7) info: shell: sending execute_reply message
+2018-12-28T17:07:03.847023Z (7) debug: shell got a message: execute_request
+2018-12-28T17:07:03.848099Z (7) info: iopub: sending status message
+2018-12-28T17:07:04.037337Z (7) info: iopub: sending execute_input message
+2018-12-28T17:07:04.114781Z (7) info: iopub: sending execute_result message
+2018-12-28T17:07:04.177201Z (7) info: iopub: sending status message
+2018-12-28T17:07:04.254142Z (7) info: shell: sending execute_reply message
+2018-12-28T17:07:10.660930Z (7) debug: shell got a message: execute_request
+2018-12-28T17:07:10.661707Z (7) info: iopub: sending status message
+2018-12-28T17:07:10.871346Z (7) info: iopub: sending execute_input message
+2018-12-28T17:07:10.942793Z (7) info: iopub: sending display_data message
+2018-12-28T17:07:10.981376Z (7) info: iopub: sending status message
+2018-12-28T17:07:11.017732Z (7) info: shell: sending execute_reply message
+2018-12-28T17:07:33.491131Z (6) debug: ctl got a message: shutdown_request
+2018-12-28T17:07:38.691075Z (6) debug: ctl got a message: shutdown_request
+2018-12-29T10:58:44.837312Z (1) info: starting jupyter kernel
+2018-12-29T10:58:44.878624Z (1) debug: read /Users/stephenroe/Library/Jupyter/runtime/kernel-a0e0bd0a-9958-428f-a7b7-f929474cda07.json
+2018-12-29T10:58:44.879423Z (1) debug: listening on tcp://127.0.0.1
+2018-12-29T10:58:44.884184Z (1) debug: setting up control on 59274
+2018-12-29T10:58:44.914319Z (1) debug: setting up shell on 59271
+2018-12-29T10:58:44.916124Z (1) debug: setting up iopub on 59272
+2018-12-29T10:58:44.917596Z (1) debug: setting up hb on 59275
+2018-12-29T10:58:45.254426Z (7) debug: shell got a message: kernel_info_request
+2018-12-29T10:58:45.256943Z (7) info: shell: sending kernel_info_reply message
+2018-12-29T10:58:45.419893Z (7) debug: shell got a message: kernel_info_request
+2018-12-29T10:58:45.420794Z (7) info: shell: sending kernel_info_reply message
+2018-12-29T10:58:45.546808Z (7) debug: shell got a message: comm_info_request
+2018-12-29T10:58:45.547578Z (7) warning: unimplemented message type: comm_info_request
+2018-12-29T10:59:12.393742Z (7) debug: shell got a message: execute_request
+2018-12-29T10:59:12.394946Z (7) info: iopub: sending status message
+2018-12-29T10:59:12.685666Z (7) info: iopub: sending execute_input message
+2018-12-29T10:59:12.727111Z (7) info: iopub: sending display_data message
+2018-12-29T10:59:12.778190Z (7) info: iopub: sending status message
+2018-12-29T10:59:12.856474Z (7) info: shell: sending execute_reply message
+2018-12-29T10:59:20.542886Z (1) info: starting jupyter kernel
+2018-12-29T10:59:20.560861Z (1) debug: read /Users/stephenroe/Library/Jupyter/runtime/kernel-a28ab2b9-f5a8-4869-94be-da64a42e9e7e.json
+2018-12-29T10:59:20.561509Z (1) debug: listening on tcp://127.0.0.1
+2018-12-29T10:59:20.562547Z (1) debug: setting up control on 59536
+2018-12-29T10:59:20.607609Z (1) debug: setting up shell on 59533
+2018-12-29T10:59:20.608845Z (1) debug: setting up iopub on 59534
+2018-12-29T10:59:20.609863Z (1) debug: setting up hb on 59537
+2018-12-29T10:59:21.037607Z (7) debug: shell got a message: kernel_info_request
+2018-12-29T10:59:21.038367Z (7) info: shell: sending kernel_info_reply message
+2018-12-29T10:59:21.189490Z (7) debug: shell got a message: kernel_info_request
+2018-12-29T10:59:21.190617Z (7) info: shell: sending kernel_info_reply message
+2018-12-29T10:59:21.333100Z (7) debug: shell got a message: comm_info_request
+2018-12-29T10:59:21.334157Z (7) warning: unimplemented message type: comm_info_request
+2018-12-29T10:59:42.982082Z (7) debug: shell got a message: execute_request
+2018-12-29T10:59:42.982989Z (7) info: iopub: sending status message
+2018-12-29T10:59:43.266538Z (7) info: iopub: sending execute_input message
+2018-12-29T10:59:43.320815Z (7) info: iopub: sending display_data message
+2018-12-29T10:59:43.403625Z (7) info: iopub: sending status message
+2018-12-29T10:59:43.506978Z (7) info: shell: sending execute_reply message
+2018-12-29T11:00:51.080862Z (6) debug: ctl got a message: shutdown_request
+2018-12-29T11:00:51.087649Z (6) debug: ctl got a message: shutdown_request
+2018-12-29T11:23:02.132393Z (1) info: starting jupyter kernel
+2018-12-29T11:23:02.152826Z (1) debug: read /Users/stephenroe/Library/Jupyter/runtime/kernel-5588af2d-2798-454c-bdac-4cb489c0fd49.json
+2018-12-29T11:23:02.153590Z (1) debug: listening on tcp://127.0.0.1
+2018-12-29T11:23:02.154784Z (1) debug: setting up control on 61214
+2018-12-29T11:23:02.187496Z (1) debug: setting up shell on 61211
+2018-12-29T11:23:02.188819Z (1) debug: setting up iopub on 61212
+2018-12-29T11:23:02.190275Z (1) debug: setting up hb on 61215
+2018-12-29T11:23:02.542479Z (7) debug: shell got a message: kernel_info_request
+2018-12-29T11:23:02.543062Z (7) info: shell: sending kernel_info_reply message
+2018-12-29T11:23:02.722909Z (7) debug: shell got a message: kernel_info_request
+2018-12-29T11:23:02.723651Z (7) info: shell: sending kernel_info_reply message
+2018-12-29T11:23:02.864765Z (7) debug: shell got a message: comm_info_request
+2018-12-29T11:23:02.865521Z (7) warning: unimplemented message type: comm_info_request
+2018-12-29T11:23:05.064181Z (7) debug: shell got a message: execute_request
+2018-12-29T11:23:05.065225Z (7) info: iopub: sending status message
+2018-12-29T11:23:05.451820Z (7) info: iopub: sending execute_input message
+2018-12-29T11:23:05.559261Z (7) info: iopub: sending display_data message
+2018-12-29T11:23:05.609524Z (7) info: iopub: sending status message
+2018-12-29T11:23:05.687488Z (7) info: shell: sending execute_reply message
+2018-12-29T11:23:20.274050Z (6) debug: ctl got a message: shutdown_request
+2019-01-03T22:41:51.145634Z (1) info: starting jupyter kernel
+2019-01-03T22:41:51.163936Z (1) debug: read /Users/stephenroe/Library/Jupyter/runtime/kernel-acfa3b2f-be85-43ad-8230-b9576fac4e7c.json
+2019-01-03T22:41:51.164521Z (1) debug: listening on tcp://127.0.0.1
+2019-01-03T22:41:51.165412Z (1) debug: setting up control on 49939
+2019-01-03T22:41:51.203495Z (1) debug: setting up iopub on 49937
+2019-01-03T22:41:51.201491Z (1) debug: setting up shell on 49936
+2019-01-03T22:41:51.209841Z (1) debug: setting up hb on 49940
+2019-01-03T22:41:51.475515Z (6) debug: shell got a message: kernel_info_request
+2019-01-03T22:41:51.476175Z (6) info: shell: sending kernel_info_reply message
+2019-01-03T22:41:51.589191Z (6) debug: shell got a message: kernel_info_request
+2019-01-03T22:41:51.589706Z (6) info: shell: sending kernel_info_reply message
+2019-01-03T22:41:51.682898Z (6) debug: shell got a message: comm_info_request
+2019-01-03T22:41:51.683339Z (6) warning: unimplemented message type: comm_info_request
+2019-01-03T22:41:57.668909Z (6) debug: shell got a message: execute_request
+2019-01-03T22:41:57.669736Z (6) info: iopub: sending status message
+2019-01-03T22:42:09.529978Z (6) info: iopub: sending execute_input message
+2019-01-03T22:42:09.583252Z (6) info: iopub: sending display_data message
+2019-01-03T22:42:09.631355Z (6) info: iopub: sending status message
+2019-01-03T22:42:09.684070Z (6) info: shell: sending execute_reply message
+2019-01-03T22:42:09.790050Z (6) debug: shell got a message: execute_request
+2019-01-03T22:42:09.790787Z (6) info: iopub: sending status message
+2019-01-03T22:42:09.977470Z (6) info: iopub: sending execute_input message
+2019-01-03T22:42:10.024398Z (6) info: iopub: sending display_data message
+2019-01-03T22:42:10.071176Z (6) info: iopub: sending status message
+2019-01-03T22:42:10.127786Z (6) info: shell: sending execute_reply message
+2019-01-03T22:42:21.777146Z (1) info: starting jupyter kernel
+2019-01-03T22:42:21.800480Z (1) debug: read /Users/stephenroe/Library/Jupyter/runtime/kernel-6d627c46-7178-4fc8-b330-f521fa995273.json
+2019-01-03T22:42:21.803190Z (1) debug: listening on tcp://127.0.0.1
+2019-01-03T22:42:21.805271Z (1) debug: setting up control on 50372
+2019-01-03T22:42:21.861548Z (1) debug: setting up shell on 50369
+2019-01-03T22:42:21.863438Z (1) debug: setting up iopub on 50370
+2019-01-03T22:42:21.867652Z (1) debug: setting up hb on 50373
+2019-01-03T22:42:22.217693Z (7) debug: shell got a message: kernel_info_request
+2019-01-03T22:42:22.218300Z (7) info: shell: sending kernel_info_reply message
+2019-01-03T22:42:22.326269Z (7) debug: shell got a message: kernel_info_request
+2019-01-03T22:42:22.326826Z (7) info: shell: sending kernel_info_reply message
+2019-01-03T22:42:22.422805Z (7) debug: shell got a message: comm_info_request
+2019-01-03T22:42:22.423286Z (7) warning: unimplemented message type: comm_info_request
+2019-01-03T22:42:35.622465Z (7) debug: shell got a message: execute_request
+2019-01-03T22:42:35.623131Z (7) info: iopub: sending status message
+2019-01-03T22:42:36.228314Z (7) info: iopub: sending execute_input message
+2019-01-03T22:42:36.297822Z (7) info: iopub: sending display_data message
+2019-01-03T22:42:36.340807Z (7) info: iopub: sending status message
+2019-01-03T22:42:36.390989Z (7) info: shell: sending execute_reply message
+2019-01-03T22:43:27.272918Z (1) info: starting jupyter kernel
+2019-01-03T22:43:27.289861Z (1) debug: read /Users/stephenroe/Library/Jupyter/runtime/kernel-acfa3b2f-be85-43ad-8230-b9576fac4e7c.json
+2019-01-03T22:43:27.290461Z (1) debug: listening on tcp://127.0.0.1
+2019-01-03T22:43:27.291346Z (1) debug: setting up control on 49939
+2019-01-03T22:43:27.335440Z (1) debug: setting up shell on 49936
+2019-01-03T22:43:27.336839Z (1) debug: setting up iopub on 49937
+2019-01-03T22:43:27.338094Z (1) debug: setting up hb on 49940
+2019-01-03T22:44:41.709168Z (7) debug: shell got a message: execute_request
+2019-01-03T22:44:41.709905Z (7) info: iopub: sending status message
+2019-01-03T22:44:42.433734Z (7) info: iopub: sending execute_input message
+2019-01-03T22:44:42.484697Z (7) info: iopub: sending stream message
+2019-01-03T22:44:42.532089Z (7) info: iopub: sending status message
+2019-01-03T22:44:42.594633Z (7) info: shell: sending execute_reply message
+2019-01-03T22:45:07.278242Z (7) debug: shell got a message: execute_request
+2019-01-03T22:45:07.278910Z (7) info: iopub: sending status message
+2019-01-03T22:45:07.434389Z (7) info: iopub: sending execute_input message
+2019-01-03T22:45:07.483565Z (7) info: iopub: sending stream message
+2019-01-03T22:45:07.526509Z (7) info: iopub: sending status message
+2019-01-03T22:45:07.578960Z (7) info: shell: sending execute_reply message
+2019-01-03T22:45:15.282131Z (7) debug: shell got a message: execute_request
+2019-01-03T22:45:15.284089Z (7) info: iopub: sending status message
+2019-01-03T22:45:15.422154Z (7) info: iopub: sending execute_input message
+2019-01-03T22:45:15.464565Z (7) info: iopub: sending stream message
+2019-01-03T22:45:15.511384Z (7) info: iopub: sending status message
+2019-01-03T22:45:15.559627Z (7) info: shell: sending execute_reply message
+2019-01-03T22:45:46.307440Z (1) info: starting jupyter kernel
+2019-01-03T22:45:46.330573Z (1) debug: read /Users/stephenroe/Library/Jupyter/runtime/kernel-acfa3b2f-be85-43ad-8230-b9576fac4e7c.json
+2019-01-03T22:45:46.331120Z (1) debug: listening on tcp://127.0.0.1
+2019-01-03T22:45:46.332169Z (1) debug: setting up control on 49939
+2019-01-03T22:45:46.375363Z (1) debug: setting up shell on 49936
+2019-01-03T22:45:46.377794Z (1) debug: setting up iopub on 49937
+2019-01-03T22:45:46.379143Z (1) debug: setting up hb on 49940
+2019-01-03T22:45:46.748698Z (7) debug: shell got a message: kernel_info_request
+2019-01-03T22:45:46.749868Z (7) info: shell: sending kernel_info_reply message
+2019-01-03T22:45:46.925422Z (7) debug: shell got a message: kernel_info_request
+2019-01-03T22:45:46.926243Z (7) info: shell: sending kernel_info_reply message
+2019-01-03T22:45:47.242341Z (7) debug: shell got a message: execute_request
+2019-01-03T22:45:47.243218Z (7) info: iopub: sending status message
+2019-01-03T22:45:48.121590Z (7) info: iopub: sending execute_input message
+2019-01-03T22:45:48.174731Z (7) info: iopub: sending stream message
+2019-01-03T22:45:48.232120Z (7) info: iopub: sending status message
+2019-01-03T22:45:48.289408Z (7) info: shell: sending execute_reply message
+2019-01-03T22:46:14.768524Z (7) debug: shell got a message: kernel_info_request
+2019-01-03T22:46:14.769248Z (7) info: shell: sending kernel_info_reply message
+2019-01-03T22:46:15.048397Z (7) debug: shell got a message: comm_info_request
+2019-01-03T22:46:15.053633Z (7) warning: unimplemented message type: comm_info_request
+2019-01-03T22:46:18.493328Z (7) debug: shell got a message: execute_request
+2019-01-03T22:46:18.493858Z (7) info: iopub: sending status message
+2019-01-03T22:46:18.626609Z (7) info: iopub: sending execute_input message
+2019-01-03T22:46:18.669492Z (7) info: iopub: sending stream message
+2019-01-03T22:46:18.713460Z (7) info: iopub: sending status message
+2019-01-03T22:46:18.769852Z (7) info: shell: sending execute_reply message
+2019-01-03T22:46:42.229278Z (7) debug: shell got a message: execute_request
+2019-01-03T22:46:42.230839Z (7) info: iopub: sending status message
+2019-01-03T22:46:42.357832Z (7) info: iopub: sending execute_input message
+2019-01-03T22:46:42.399939Z (7) info: iopub: sending display_data message
+2019-01-03T22:46:42.444942Z (7) info: iopub: sending status message
+2019-01-03T22:46:42.492147Z (7) info: shell: sending execute_reply message
+2019-01-03T22:46:57.220994Z (7) debug: shell got a message: execute_request
+2019-01-03T22:46:57.221681Z (7) info: iopub: sending status message
+2019-01-03T22:46:57.357946Z (7) info: iopub: sending execute_input message
+2019-01-03T22:46:57.400906Z (7) info: iopub: sending stream message
+2019-01-03T22:46:57.442685Z (7) info: iopub: sending status message
+2019-01-03T22:46:57.496518Z (7) info: shell: sending execute_reply message
+2019-01-03T22:47:06.625281Z (7) debug: shell got a message: execute_request
+2019-01-03T22:47:06.626252Z (7) info: iopub: sending status message
+2019-01-03T22:47:06.757507Z (7) info: iopub: sending execute_input message
+2019-01-03T22:47:06.799083Z (7) info: iopub: sending display_data message
+2019-01-03T22:47:06.841681Z (7) info: iopub: sending status message
+2019-01-03T22:47:06.893956Z (7) info: shell: sending execute_reply message
+2019-01-03T22:47:48.087338Z (7) debug: shell got a message: execute_request
+2019-01-03T22:47:48.087941Z (7) info: iopub: sending status message
+2019-01-03T22:47:48.184695Z (7) info: iopub: sending execute_input message
+2019-01-03T22:47:48.225802Z (7) info: iopub: sending stream message
+2019-01-03T22:47:48.269550Z (7) info: iopub: sending status message
+2019-01-03T22:47:48.325412Z (7) info: shell: sending execute_reply message
+2019-01-04T20:07:26.106713Z (1) info: starting jupyter kernel
+2019-01-04T20:07:26.115374Z (1) debug: read /Users/stephenroe/Library/Jupyter/runtime/kernel-87c398da-1b85-4e89-bda6-7bbdd9594962.json
+2019-01-04T20:07:26.116011Z (1) debug: listening on tcp://127.0.0.1
+2019-01-04T20:07:26.117291Z (1) debug: setting up control on 50402
+2019-01-04T20:07:26.170913Z (1) debug: setting up shell on 50399
+2019-01-04T20:07:26.172043Z (1) debug: setting up iopub on 50400
+2019-01-04T20:07:26.185952Z (1) debug: setting up hb on 50403
+2019-01-04T20:07:26.405635Z (7) debug: shell got a message: kernel_info_request
+2019-01-04T20:07:26.406254Z (7) info: shell: sending kernel_info_reply message
+2019-01-04T20:07:26.517990Z (7) debug: shell got a message: kernel_info_request
+2019-01-04T20:07:26.518760Z (7) info: shell: sending kernel_info_reply message
+2019-01-04T20:07:26.613942Z (7) debug: shell got a message: comm_info_request
+2019-01-04T20:07:26.614496Z (7) warning: unimplemented message type: comm_info_request
+2019-01-04T20:07:34.166337Z (7) debug: shell got a message: execute_request
+2019-01-04T20:07:34.167128Z (7) info: iopub: sending status message
+2019-01-04T20:07:34.804524Z (7) info: iopub: sending execute_input message
+2019-01-04T20:07:34.867164Z (7) info: iopub: sending display_data message
+2019-01-04T20:07:34.908008Z (7) info: iopub: sending status message
+2019-01-04T20:07:34.957678Z (7) info: shell: sending execute_reply message
+2019-01-04T20:07:42.333560Z (7) debug: shell got a message: execute_request
+2019-01-04T20:07:42.334460Z (7) info: iopub: sending status message
+2019-01-04T20:07:42.448953Z (7) info: iopub: sending execute_input message
+2019-01-04T20:07:42.489973Z (7) info: iopub: sending display_data message
+2019-01-04T20:07:42.528826Z (7) info: iopub: sending status message
+2019-01-04T20:07:42.574077Z (7) info: shell: sending execute_reply message
+2019-01-04T20:15:28.417353Z (1) info: starting jupyter kernel
+2019-01-04T20:15:28.427444Z (1) debug: read /Users/stephenroe/Library/Jupyter/runtime/kernel-f6181b28-304d-43db-8dde-64ae15cb349a.json
+2019-01-04T20:15:28.428011Z (1) debug: listening on tcp://127.0.0.1
+2019-01-04T20:15:28.429210Z (1) debug: setting up control on 56873
+2019-01-04T20:15:28.478149Z (1) debug: setting up shell on 56870
+2019-01-04T20:15:28.479264Z (1) debug: setting up iopub on 56871
+2019-01-04T20:15:28.480507Z (1) debug: setting up hb on 56874
+2019-01-04T20:15:28.725296Z (7) debug: shell got a message: kernel_info_request
+2019-01-04T20:15:28.726130Z (7) info: shell: sending kernel_info_reply message
+2019-01-04T20:15:28.846333Z (7) debug: shell got a message: kernel_info_request
+2019-01-04T20:15:28.846791Z (7) info: shell: sending kernel_info_reply message
+2019-01-04T20:15:28.928653Z (7) debug: shell got a message: comm_info_request
+2019-01-04T20:15:28.929160Z (7) warning: unimplemented message type: comm_info_request
+2019-01-04T20:18:38.096269Z (6) debug: ctl got a message: shutdown_request
