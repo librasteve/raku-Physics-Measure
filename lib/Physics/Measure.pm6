@@ -452,7 +452,6 @@ class Unitless           is Measure is export {}
 class Angle              is Measure is export {}
 class Solid-Angle        is Measure is export {}
 class Distance           is Measure is export {}
-#`[[
 #FIXME test this
 #some synonyms for Distance...
 class Length             is Distance is export {}
@@ -460,7 +459,6 @@ class Breadth            is Distance is export {}
 class Width              is Distance is export {}
 class Height             is Distance is export {}
 class Depth              is Distance is export {}
-]]
 class Mass               is Measure is export {}
 class Moment-of-Inertia  is Measure is export {}
 class Frequency          is Measure is export {}

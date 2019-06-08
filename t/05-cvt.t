@@ -181,7 +181,7 @@ my Force $fo1 ♎️ '27 kg.m.s-2';
 my $fo2 = $fo1.in( 'N' );
 is $fo2, '27 N',                                                            '$fo1.in-N';
 
-my Density $de1 ♎️ '2 kg.m**-3';
+my Density $de1 ♎️ '2 kg.m-3';
 my $de2 = $de1.in( 'gm per m^3' );
 is $de2, '2000 gm per m^3',                                                 '$de1.in-gm per m^3';
 

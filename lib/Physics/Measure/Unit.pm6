@@ -56,12 +56,11 @@ my  Str    %unit-plur;
 my  Str    %type-base; 
 my  Array  %unit-syns;          #reverse
 load-units(); 
-
-#it's too slow to load all %unit-dime on startup... need incremental cache 
-my  Str    %unit-dime;          #reverse, key is e.g.'kg.m.s-2' via grammar, value is unit-name
-
-my         %pfix-defn;      #FIXME type
+my         %pfix-defn;
 load-pfixs(); 
+
+#since it's too slow to load all %unit-dime on startup... 
+my  Str    %cache-dime;          #key is e.g. 'kg * m / s^2' value is 'kg.m.s-2' via grammar
 
 ########## Unit ##########
 class Unit is export {
@@ -134,20 +133,21 @@ class Unit is export {
         #dd $unit-names; #FIXME change unit-names to List
         #say $unit-names;
 
-        if %unit-dime{$dime-str}:exists { return %unit-dime{$dime-str} } #get value from unit-dime cache
+        if %cache-dime{$dime-str}:exists { return %cache-dime{$dime-str} } #get value from unit-dime cache
 
         #use Grammar::Tracer;
         grammar UnitGrammar {
-            token TOP     { \s* <dimlist> \s* [<divi> \s* <denlist> \s*]? }
+            token TOP     { <dimlist> [\s* <divi> \s* <denlist>]? }
             token dimlist { 1 || <dim>+ % <sep>? }
             token denlist { <den>+ % <sep>? }
             token divi    { \/ || per }
             token dim     { \s* <unam> \s* <ppfix>? \s* <power>? \s* }
             token den     { \s* <unam> \s* <ppfix>? \s* <power>? \s* }
-            token sep     { '.' || '* ' }   #ws to disambiguate from ppfix
+            token sep     { '.' || '*' }
             token unam    { <$unit-names> }
-            token ppfix   { '^' || '**' }
-            token power   { <[+-]>? \s* \d+ }
+            token ppfix   { '^' }
+            token power   { '-'? \d+ }
+
         }        
         class UnitActions {
             method TOP($/)     { make $<divi> ?? $<dimlist>.made~'.'~$<denlist>.made !! $<dimlist>.made }
@@ -191,7 +191,7 @@ working on variations of <.ws> and */s
         #['°C', 'Celsius', 'centigrade',],           'K - 273.15',       # exact
 
         if $match.so { 
-            %unit-dime{$dime-str} = $match.made.Str; #store in unit-dime cache
+            %cache-dime{$dime-str} = $match.made.Str; #store in unit-dime cache
             return $match.made.Str 
         } else { 
             return '' 
