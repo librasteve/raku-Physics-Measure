@@ -130,7 +130,7 @@ class Unit is export {
 
     submethod get-dime( $dime-str is copy ) {
         #https://docs.perl6.org/language/regexes#Regex_Interpolation
-        #dd $unit-names; #FIXME change unit-names to List
+        #dd $unit-names; #FIXME change unit-names to List @unit-names and token unam { @unit-names }
         #say $unit-names;
 
         if %cache-dime{$dime-str}:exists { return %cache-dime{$dime-str} } #get value from unit-dime cache
