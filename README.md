@@ -60,7 +60,7 @@ use Physics::Measure::Unit;
     say "$d";           #'50 m'
 
 #The usual arithmetic operators < + - * / > and () brackets just work
-#i.e. units and magnitudes are checked, calculated and errors are calculated automatically    
+#i.e. units and values are normalized and converted automatically   
     $a ♎️ '4.3 m';      #'4.3 m' 
     $b ♎️ -2.3;         #'-2.3 m'
     $c = $a + $b;       #'2 m'
