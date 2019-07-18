@@ -20,7 +20,7 @@ There are three ways to consume this module:
 - *zef install Physics::Measure*
 
 # Synopsys
-https://github.com/p6steve/perl6-Physics-Measure/blob/master/bin/P--sics.p6
+[https://github.com/p6steve/perl6-Physics-Measure/bin/P--sics.p6](https://github.com/p6steve/perl6-Physics-Measure/blob/master/bin/P--sics.p6)
 
 ```perl6
 #!/usr/bin/env perl6
