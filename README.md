@@ -155,7 +155,6 @@ use Physics::Measure::Unit;
     #square, sq, squared, cubic, cubed
     #x¹ x² x³ x⁴ and x⁻¹ x⁻² x⁻³ x⁻⁴
 
-#what's going to happen with trig? functions & triangles
 #EOF
 ```
 
