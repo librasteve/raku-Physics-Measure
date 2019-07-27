@@ -1,8 +1,5 @@
 #!/usr/bin/env perl6
-#main.p6
 #usage in repl: perl6 -I/path-to-my/perl6-Physics-Measure/lib   then > use Physics::Measure; use Physics::Measure::Unit;
-
-use v6;
 use lib '../lib';
 use Physics::Measure;
 use Physics::Measure::Unit;
@@ -131,5 +128,4 @@ say "=====================";
     #square, sq, squared, cubic, cubed
     #x¹ x² x³ x⁴ and x⁻¹ x⁻² x⁻³ x⁻⁴
 
-#what's going to happen with trig? functions & triangles
 #EOF
