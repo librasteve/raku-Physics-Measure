@@ -44,7 +44,7 @@ use Physics::Measure::Unit;
     my $d ♎️ '5e1 m';      #'50 m' (Distance) from Str
     my $e ♎️ $a;           #'10000 m'
 #...and to assign (coerce) from a Real or Str immediate value
-    $a ♎️ '3e1';        #'30 m'
+    $a ♎️ 3e1;          #'30 m'
     $a ♎️ '3 yards';    #'3 yards'
     $a ♎️ '5';          #'5 yards'
 #...there is an ASCII version of <♎️> namely <libra> 
