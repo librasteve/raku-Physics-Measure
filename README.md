@@ -14,41 +14,20 @@ zef install Physics::Measure
 [https://github.com/p6steve/perl6-Physics-Measure/bin/P--sics.p6](https://github.com/p6steve/perl6-Physics-Measure/blob/master/bin/P--sics.p6)
 
 ```perl6
-#!/usr/bin/env perl6
-#main.p6
-#usage in repl: perl6 -I/path-to-my/perl6-Physics-Measure/lib   then > use Physics::Measure; use Physics::Measure::Unit;
-
-use v6;
-use lib '../lib';
 use Physics::Measure;
 use Physics::Measure::Unit;
 
-#SYNOPSIS
-
-#Types can be declared and constructed formally:
-    my Unit $u     .=new(name => 'm', unitsof => 'Distance');       #new Units for new Measure
+#Instances can built in the usual way:
+    my Unit     $u .=new(name => 'm', unitsof => 'Distance');       #new Units for new Measure
     my Distance $a .=new(value => 1e4, units => $u);                #'10000 m'
-    my Distance $b .=new(value => 42);                              #'42 m' default units
-    my Distance $c;
     
-#The libra operator ♎️ is a handy way to create instances and to set defaults...
+#Introducing the libra operator ♎️ as a shorthand way to declare and initialize instances...
     my $d ♎️ '5e1 m';      #'50 m' (Distance) from Str
     my $e ♎️ $a;           #'10000 m'
-#...and to assign (coerce) from a Real or Str immediate value
+#...and to load a Real or Str immediate value...
     $a ♎️ 3e1;          #'30 m'
     $a ♎️ '3 yards';    #'3 yards'
-    $a ♎️ '5';          #'5 yards'
 #...there is an ASCII version of <♎️> namely <libra> 
-
-#Plural and Singular names are handled as you would expect
-    $a ♎️ -1;           #'-1 yard'
-
-#To check what you have
-    say $d.gist;        #Physics::Measure::Distance.new(value => 50e0, units => "m" ... )
-    say $u.gist;        #Physics::Unit::Unit.new(name => "m", unitsof => "Distance" ...)
-    say $d.Real;        #50   or use $d in Real context (Real includes Int|Rat|Num etc)
-    say $d.Str;         #'50 m' or use $d in Str context,
-    say "$d";           #'50 m'
 
 #The usual arithmetic operators < + - * / > and () brackets just work
 #i.e. units and values are normalized and converted automatically   
@@ -56,27 +35,10 @@ use Physics::Measure::Unit;
     $b ♎️ -2.3;         #'-2.3 m'
     $c = $a + $b;       #'2 m'
     $c = $a + '42 m';   #'46.3 m'
-    $c = $b - $a;       #'-6.6 m'
-    $c = '1 m' - $a;    #'-3.3 m' 
-#Division like for like produces a Real value such as a Rat
-    my Real $r = $a / $b; #-1.869565
-#Multiply with (& Divide by) a Real imply a constant factor...
-    $c = $b * 30;       #'-69 m'
 
-#The Measure of Time has a perl6 Duration - i.e. the difference between two perl6 DateTime Instants:
-    my $i1 = DateTime.now;
-    my $i2 = DateTime.new( '2017-08-10T14:15:27.26Z' );
-    my $i3 = DateTime.new( '2017-08-10T14:15:37.26Z' );
-    my Duration $dur = $i3-$i2; #say "Duration of $dur seconds";
-
-    my Unit $v  .=new( name => 's', unitsof => 'Time' );
-    my Time $t0 .=new( value => 23.3, units => $v );    #'23.3 s'
-    my Time $t1 .=new( value => $dur, units => $v );    #'10 s'
-    
-#Here's how to us the libra assignment operator ♎️ for Time...
+#The Measure of Time has a perl6 Duration
+#i.e. the difference between two perl6 DateTime Instants:
     my Time $t2 ♎️ '5e1 s';      #'50 s'
-    my Time $t3 ♎️ $t1;          #'10 s'
-    my Time $t4 ♎️ 172;          #'172 s'
 
 #...and to assign (coerce) from a Real or Str immediate value
     my Time $t5 ♎️ '3e1 s';      #'30 s'
@@ -85,7 +47,7 @@ use Physics::Measure::Unit;
     my $t7 = $t1 + $t2;         #'60 s'
     my $t8 = $t3 - $t4;         #'-162 s'
     my Duration $d8 = $t8.Duration;
-    my Time $t10 ♎️ '2 hours';
+    my Time $t8 ♎️ '2 hours';
 
 #Unit Conversion uses the .in() method - specify the new units as a String parameter
     my Distance $d-fe ♎️ '12.0 feet';
