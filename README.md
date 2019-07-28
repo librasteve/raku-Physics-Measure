@@ -10,7 +10,7 @@ zef install Physics::Measure
 
 *See https://github.com/p6steve/perl6-Physics-Measure-JupyterBinder - worked examples for Jupyter and Binder* 
 
-# Synopsys
+# Synopsis
 [https://github.com/p6steve/perl6-Physics-Measure/bin/P--sics.p6](https://github.com/p6steve/perl6-Physics-Measure/blob/master/bin/P--sics.p6)
 
 ```perl6
