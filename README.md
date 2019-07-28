@@ -58,11 +58,14 @@ say "$u $a $b $c $t $ab $s $f $v $p";
 ```
 
 # Testing on Jupyter / Binder
+
 1. Jupyter Notebook local
-- Clone this repo locally on your machine
-- Do the Quick Start here Brian Duggan perl6 jupyter-notebook at <https://github.com/bduggan/p6-jupyter-kernel>
+- Clone this repo
+- Do the Quick Start for Brian Duggan perl6 jupyter-notebook at <https://github.com/bduggan/p6-jupyter-kernel>
 - From the root directory run *jupyter-notebook*
+
 2. Jupyter Notebook hosted on Binder
+*If you are not sure, please use https://github.com/p6steve/perl6-Physics-Measure-JupyterBinder - worked examples for Jupyter and Binder - more stable release usually with much faster load time than this repo* 
 - Click this badge => [![Binder](https://mybinder.org/badge_logo.svg)](https://mybinder.org/v2/gh/p6steve/perl6-Physics-Measure/)
 *If you are the first to build e.g. a new version this can take 30 mins or so and the Binder browser UI may lose hope - please just be patient (do not reload as this restarts the build) ...*
 
