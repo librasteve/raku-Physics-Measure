@@ -6,18 +6,9 @@ A set of SI, Imperial and US Unit objects that are employed by Measure objects h
 [![Build Status](https://travis-ci.org/p6steve/perl6-Physics-Measure.svg?branch=master)](https://travis-ci.org/p6steve/perl6-Physics-Measure)
 
 # Instructions
-There are three ways to consume this module:
-1. Jupyter Notebook local
-- Clone this repo locally on your machine
-- Do the Quick Start here Brian Duggan perl6 jupyter-notebook at <https://github.com/bduggan/p6-jupyter-kernel>
-- From the root directory run *jupyter-notebook*
-2. Jupyter Notebook hosted on Binder
-- Click this badge => [![Binder](https://mybinder.org/badge_logo.svg)](https://mybinder.org/v2/gh/p6steve/perl6-Physics-Measure/master)
-- Go to /eg and click Polygons.ipynb, then Run
-- If you are the first to build e.g. a new version this can take 30 mins or so and the Binder browser UI may lose hope - please just be patient (do not reload as this restarts the build)
-- If not, go to <mybinder.org> and paste this url <https://github.com/p6steve/perl6-Physics-Measure>, then the ./Dockerfile will be used to (re)build and run on Jupyter at Binder
-3. Perl6 Module
-- *zef install Physics::Measure*
+zef install Physics::Measure
+
+*See https://github.com/p6steve/perl6-Physics-Measure-JupyterBinder - worked examples for Jupyter and Binder* 
 
 # Synopsys
 [https://github.com/p6steve/perl6-Physics-Measure/bin/P--sics.p6](https://github.com/p6steve/perl6-Physics-Measure/blob/master/bin/P--sics.p6)
