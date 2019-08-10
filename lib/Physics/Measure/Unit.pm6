@@ -1007,7 +1007,11 @@ my $unit-data = q:to/END-UNIT-DATA/;
     ['dl',],                                    'deciliter',        # exact
     ['cc', 'ml',],                              'cubic centimeter', # exact
     ['us-gallon:s', 'us-gal',],                 '3.785411784 litre',
-    ['imp-gallon:s', 'imp-gal',],               '4.54609 litre',    # exact
+    ['imp-gallon:s', 'imp-gal',],               '4.54609 litre',
+    ['us-firkin:s',],                           '9 us-gallons',    # exact
+    ['imp-firkin:s',],                          '9 imp-gallons',   # exact
+    ['us-barrel:s',],                           '36 us-gallons',    # exact
+    ['imp-barrel:s',],                          '36 imp-gallons',   # exact
     ['quart:s', 'qt',],                         'us-gallon/4',
     ['peck:s',],                                '8 quarts',
     ['bushel:s'],                               '4 pecks',

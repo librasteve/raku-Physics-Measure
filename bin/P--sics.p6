@@ -8,9 +8,13 @@ my $distance ♎️ '10.0 km';
 my $time ♎️ '20.0 min';
 my $average_speed = $distance / $time;
 
-$average_speed = $average_speed.in( 'km/h' );
+#$average_speed = $average_speed.in( 'km/h' );
+$average_speed = $average_speed.in( 'm/s' );
 
 say "$distance, $time, $average_speed";
+
+my $beer ♎️ '1 firkin';
+$beer = $beer.in( 'liters' );
 
 die "yo";
 
