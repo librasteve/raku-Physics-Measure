@@ -251,9 +251,9 @@ class Measure is export {
         my $cfo = self.units;                                   #convert-fm unit object
         my $convert-fm = $cfo.name;                             #convert-fm name
 
-        say "...converting from «$convert-fm» to «$convert-to»..thus..«" ~ $cfo.unitsof ~ "» to «" 
-                         ~ $cto.unitsof ~ "»..." if $in-db;
-        #dd $cto;
+        #if $in-db { dd $cfo; dd $cto; }
+        say "...converting from «$convert-fm» to «$convert-to»..
+                thus..«" ~ $cfo.unitsof ~ "» to «" ~ $cto.unitsof ~ "»..." if $in-db;
         
         #check Measure Types match 
         if $cto.unitsof ne $cfo.unitsof {

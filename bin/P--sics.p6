@@ -4,6 +4,19 @@ use lib '../lib';
 use Physics::Measure;
 use Physics::Measure::Unit;
 
+my $distance ♎️ '10.0 km';
+my $time ♎️ '20.0 min';
+my $average_speed = $distance / $time;
+
+$average_speed = $average_speed.in( 'km/h' );
+
+say "$distance, $time, $average_speed";
+
+die "yo";
+
+$distance = $distance.in( 'm' );
+say "$distance";
+
 #SYNOPSIS
 
 #Types can be declared and constructed formally:

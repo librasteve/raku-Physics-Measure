@@ -169,7 +169,6 @@ class Unit is export {
 #`[[FIXME
 need to match '4 kg * m * s4' and '2 kg.m**-3'
 right now dim matching 'kg ' (with trailing space) and can use '* ' to disambiguate '*' from '**'
-working on variations of <.ws> and */s
 #]]
 
         #transliterate power synonyms and superscripts
@@ -865,16 +864,19 @@ my $unit-data = q:to/END-UNIT-DATA/;
     ['mile:s', 'mi',],                          '5280 feet',        # exact
     ['μ', 'micron:s', 'um',],                   '1e-6 m',           # exact
     ['å', 'angstrom:s', 'a',],                  '1e-10 m',          # exact
-    ['cm',],                                    'centimeter',       # exact
-    ['km',],                                    'kilometer',        # exact
-    ['pica',],                                  'in/6',    # exact, but see docs 
+    ['pica',],                                  'in/6',             # exact, but see docs 
+    ['cm',],                                    '1e-2 m',           # exact
+    ['km',],                                    '1e3 m',            # exact
+    #['cm',],                                    'centimeter',       # exact FIXME put back in with pfix
+    #['km',],                                    'kilometer',        # exact
     ['point',],                                 'pica/12',          # exact
     ['nautical-mile:s', 'nm',],                 '1852 m',           # exact
+    ['cable:s',],                               '185.2 m',          # exact
     ['astronomical-unit:s', 'au',],             '1.49598e11 m',
     ['light-year:s', 'ly',],                    '9.46e15 m',
     ['parsec:s',],                              '3.083e16 m',
 # Mass
-    ['kg', 'kilogram:s', 'kilogramme:s','kilo:s',], 'core',         # core
+    ['kg', 'kilogram:s', 'kilogramme:s',],      'core',             # core [remove 'kilo:s' conflict with kilometer]
     ['gm',],                                    'kilogram/1000',    # exact
     ['metric-ton:s', 'tonne:s',],               '1000 kg',          # exact
     ['grain:s',],                               '.0648 gm',
@@ -900,7 +902,7 @@ my $unit-data = q:to/END-UNIT-DATA/;
 # Time
     ['s', 'second:s', 'sec:s',],                'core',             # core
     ['minute:s', 'min:s',],                     '60 s',
-    ['hour:s', 'hr:s',],                        '60 min',
+    ['hour:s', 'hr:s', 'h', ],                  '60 min',
     ['day:s',],                                 '24 hr',
     ['week:s', 'wk:s',],                        '7 days',
     ['fortnight:s',],                           '2 week',
