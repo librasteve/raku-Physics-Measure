@@ -498,11 +498,8 @@ right now dim matching 'kg ' (with trailing space) and can use '* ' to disambigu
             $!base-name = %unit-base{$name};
             $!sing-name = %unit-sing{$!name}; 
             $!plur-name = %unit-plur{$!name};
-            if ! $!sing-name && $!plur-name {
-                $!sing-name = %unit-sing{$!plur-name}; 
-            } elsif $!sing-name && ! $!plur-name {
-                $!plur-name = %unit-plur{$!sing-name};
-            }
+            $!sing-name = %unit-sing{$!name} // $!name; 
+            $!plur-name = %unit-plur{$!name} // $!name;
             say "names set " ~ self.perl if $tw-db;
         } else {
             return $!name;
