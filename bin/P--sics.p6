@@ -4,23 +4,6 @@ use lib '../lib';
 use Physics::Measure;
 use Physics::Measure::Unit;
 
-my $distance ♎️ '10.0 km';
-my $time ♎️ '20.0 min';
-my $average_speed = $distance / $time;
-
-#$average_speed = $average_speed.in( 'km/h' );
-$average_speed = $average_speed.in( 'm/s' );
-
-say "$distance, $time, $average_speed";
-
-my $beer ♎️ '1 firkin';
-$beer = $beer.in( 'liters' );
-
-die "yo";
-
-$distance = $distance.in( 'm' );
-say "$distance";
-
 #SYNOPSIS
 
 #Types can be declared and constructed formally:
@@ -144,5 +127,22 @@ say "=====================";
 #Colloquial terms or unicode superscripts can be used for powers in unitname declarations 
     #square, sq, squared, cubic, cubed
     #x¹ x² x³ x⁴ and x⁻¹ x⁻² x⁻³ x⁻⁴
+
+#`[[
+make kilometers work
+make all prefixes work (see College Physics)
+make firkins work
+
+my $distance ♎️ '10.0 km';
+my $time ♎️ '20.0 min';
+my $average_speed = $distance / $time;
+
+$average_speed = $average_speed.in( 'km/h' );
+#$average_speed = $average_speed.in( 'm/s' );
+
+say "$distance, $time, $average_speed";
+$distance = $distance.in( 'm' );
+say "$distance";
+#]]
 
 #EOF
