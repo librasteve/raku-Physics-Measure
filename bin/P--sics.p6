@@ -4,6 +4,7 @@ use lib '../lib';
 use Physics::Measure;
 use Physics::Measure::Unit;
 
+#`[[
 my $distance ♎️ '10.0 km';
 my $time ♎️ '20.0 min';
 my $average_speed = $distance / $time;
@@ -20,6 +21,7 @@ die "yo";
 
 $distance = $distance.in( 'm' );
 say "$distance";
+#]]
 
 #SYNOPSIS
 
@@ -40,6 +42,8 @@ say "$distance";
 
 #Plural and Singular names are handled as you would expect
     $a ♎️ -1;           #'-1 yard'
+say "$a";
+die "yoyo";
 
 #To check what you have
     say $d.gist;        #Physics::Measure::Distance.new(value => 50e0, units => "m" ... )

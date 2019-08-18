@@ -1,6 +1,7 @@
 #lib/Physics/Measure/Unit.pm6 
-unit module Physics::Unit:ver<0.0.2>:auth<Steve Roe (sroe@furnival.net)>;
+unit module Physics::Unit:ver<0.0.3>:auth<Steve Roe (sroe@furnival.net)>;
 
+#`<<<
 our %const-defn is export;
 
 #FIXME https://github.com/JJ/p6-math-constants
@@ -24,14 +25,15 @@ our %const-defn is export;
 %const-defn<k0> = '1.380648e-23 J/K';
 # Gas-constant:
 %const-defn<R0> = '8.3144598 kg m^2 / s^2 K mol';
+#>>>
 
 ####### Definitions #######
 my regex number {
     \S+                     #grab chars 
     <?{ defined +"$/" }>    #assertion that coerces via '+' to Real
 }
-#power synonyms and superscripts
 
+#power synonyms and superscripts
 my %power-syns = ( 
     square => 2, sq => 2, squared => 2,
     cubic => 3, cubed => 3,
@@ -51,13 +53,16 @@ my  Str    %unit-type;
 my  Str    %unit-base;
 my  Str    %unit-defn;
 my  Str    $unit-names;         #compound names excluded
+##my  Str    @unit-names;         #compound names excluded
 my  Str    %unit-sing; 
 my  Str    %unit-plur;
 my  Str    %type-base; 
 my  Array  %unit-syns;          #reverse
 load-units(); 
+#`<<<
 my         %pfix-defn;
 load-pfixs(); 
+#>>>
 
 #since it's too slow to load all %unit-dime on startup... 
 my  Str    %cache-dime;          #key is e.g. 'kg * m / s^2' value is 'kg.m.s-2' via grammar
@@ -70,9 +75,9 @@ class Unit is export {
     #FIXME batten hatches $. => $!
     
     has Str  $.name      is rw;     #e.g. m, meter, meters, metre, metres (usually plural)
-    has Str  $.base-name is rw;     #e.g. m always plural
-    has Str  $.sing-name is rw;     #singular 
-    has Str  $.plur-name is rw;     #plural 
+    has Str  $.base-name is rw;     #e.g. m (always plural)
+    has Str  $!sing-name;
+    has Str  $!plur-name;
 
     has Str  $.unitsof   is rw;     #Type of bound Measure child e.g. Distance, Mass, Power...
     has Str  $.dime = 'notset';     #e.g. 'm.s-1' from defn or decl
@@ -508,10 +513,10 @@ right now dim matching 'kg ' (with trailing space) and can use '* ' to disambigu
             return $!name;
         }
     }
-    method set-sing-name {
+    method set-name-to-sing {
         $!name = $!sing-name if $!sing-name;
     }
-    method set-plur-name {
+    method set-name-to-plur {
         $!name = $!plur-name if $!plur-name;
     }
     method Str {
@@ -773,7 +778,7 @@ sub load-units() {
     }
     return True;
 }
-
+#`<<<
 sub load-pfixs() {
     my @pfix-data = load-pfix-data();
     %pfix-defn = @pfix-data; 
@@ -829,7 +834,7 @@ my @pfix-data = (
 #say @pfix-data;
 return @pfix-data;
 }
-
+#>>>
 sub load-unit-data() {
 
 #`[[ fixme add and test

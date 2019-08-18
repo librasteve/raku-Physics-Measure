@@ -1,4 +1,4 @@
-unit module Physics::Measure:ver<0.0.2>:auth<Steve Roe (p6steve@furnival.net)>;
+unit module Physics::Measure:ver<0.0.3>:auth<Steve Roe (p6steve@furnival.net)>;
 use Physics::Measure::Unit;
 
 class Unitless { ... }
@@ -17,8 +17,8 @@ class Measure is export {
     	Proxy.new:
             FETCH => sub ( $ ) { $!value },
             STORE => sub ( $, $value )  {
-                if $value == 1 || $value == -1 { self.units.set-sing-name } 
-                    else                       { self.units.set-plur-name }
+                if $value == 1 || $value == -1 { self.units.set-name-to-sing } 
+                    else                       { self.units.set-name-to-plur }
                 $!value = $value;
             }
     }
