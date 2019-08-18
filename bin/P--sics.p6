@@ -42,8 +42,6 @@ say "$distance";
 
 #Plural and Singular names are handled as you would expect
     $a ♎️ -1;           #'-1 yard'
-say "$a";
-die "yoyo";
 
 #To check what you have
     say $d.gist;        #Physics::Measure::Distance.new(value => 50e0, units => "m" ... )

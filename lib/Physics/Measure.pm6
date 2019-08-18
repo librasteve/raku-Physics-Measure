@@ -8,7 +8,7 @@ class Measure is export {
     #Parent class for physical quantities with value, units & error(tbd)
     #Builds child classes such as Distance, Mass, Power, etc. 
 
-    has Real $!value;
+    has Real $.value;
     has Unit $.units;
 
     submethod BUILD( :$!value, :$!units ) { }

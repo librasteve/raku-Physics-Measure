@@ -66,6 +66,5 @@ my $r5 = $r3 / $a7;
 is $r5, '1.29 Newtons.metres.s-1',                                     '$r5-div-mixed';
 is $r5.norm, '1.29 W',                                                 '$r5-norm-div-mixed';
 
-
 #done-testing;
 

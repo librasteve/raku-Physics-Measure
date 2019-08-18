@@ -19,7 +19,8 @@ our %const-defn is export;
 # elementary-charge
 %const-defn<e0>  = '1.6021766208981892e-19 coulomb';
 # Planck-constant:
-%const-defn<h0>  = '6.626196e-34 J/s'; # Avogadro-number:
+%const-defn<h0>  = '6.626196e-34 J/s'; 
+# Avogadro-number:
 %const-defn<na0> = '6.022169 / mol';
 # Boltzmann-constant:
 %const-defn<k0> = '1.380648e-23 J/K';
@@ -72,26 +73,25 @@ class Unit is export {
     #Generic class for objects that each represent a physical unit with name (e.g.'m') and scale factor 
     #Instances such as m, kg, W are consumed by Measure child instances that may be used in calculations
     #Manages rules for synonyms and type conversion
-    #FIXME batten hatches $. => $!
     
-    has Str  $.name      is rw;     #e.g. m, meter, meters, metre, metres (usually plural)
-    has Str  $.base-name is rw;     #e.g. m (always plural)
-    has Str  $!sing-name;
-    has Str  $!plur-name;
+    has Str  $.name;                #e.g. m, meter, meters, metre, metres (usually plural)
+    has Str  $.base-name;           #e.g. m (always plural)
+    has Str  $.sing-name;
+    has Str  $.plur-name;
 
-    has Str  $.unitsof   is rw;     #Type of bound Measure child e.g. Distance, Mass, Power...
-    has Str  $.dime = 'notset';     #e.g. 'm.s-1' from defn or decl
-    has Int  %.dims;                #hash of dime name => order e.g. ( m => 1, s => -1 ) 
-    has Bool $.is-core   is rw;     #core  - has no root Unit
-    has Bool $.is-proxy  is rw;     #proxy - handy way to call submethods during init 
+    has Str  $.unitsof;             #Type of bound Measure child e.g. Distance, Mass, Power...
+    has Str  $.dime = 'notset';     #string of dimensions e.g. 'm.s-1' parsed from defn or decl
+    has Int  %.dims;                #hash of dimensions { name => order } e.g. { m => 1, s => -1 ...} 
+    has Bool $.is-core;             #core  - has no root Unit
+    has Bool $.is-proxy;            #proxy - handy way to call submethods during init 
 
     has Unit $.root;
     has Real $.root-factor = 1.0;   #*a from root Unit
     has Real $.root-offset = 0.0;   #+b from root Unit
     
     has Int  $.order = 1;           #order of this unit - e.g. m3 has order 3
-    has Bool $.is-nato is rw;       #natural high order - e.g. l has order 1 
-    has Bool $.is-comp is rw;       #compound  - e.g. m.s-1
+    has Bool $.is-nato;             #natural high order - e.g. l has order 1 
+    has Bool $.is-comp;             #compound  - e.g. m.s-1
 
     submethod strip-offa( $defn-str is copy ) {
         #strip offset & factor from defn-str
@@ -146,11 +146,11 @@ class Unit is export {
             token dimlist { 1 || <dim>+ % <sep>? }
             token denlist { <den>+ % <sep>? }
             token divi    { \/ || per }
-            token dim     { \s* <unam> \s* <ppfix>? \s* <power>? \s* }
-            token den     { \s* <unam> \s* <ppfix>? \s* <power>? \s* }
+            token dim     { \s* <unam> \s* <pchar>? \s* <power>? \s* }
+            token den     { \s* <unam> \s* <pchar>? \s* <power>? \s* }
             token sep     { '.' || '*' }
             token unam    { <$unit-names> }
-            token ppfix   { '^' }
+            token pchar   { '^' }
             token power   { '-'? \d+ }
 
         }        
