@@ -3,22 +3,16 @@
 #TESTALL$ prove6 ./t      [from root]
 use lib '../lib';
 use Test;
-plan 26; 
+plan 20; 
 
 use Physics::Measure;
 use Physics::Measure::Unit;
 
 my $a0 ♎️ '4.3 m';
 is $a0, '4.3 m',                                                        '$a0-m';
-is $a0.units.base-name, 'm',                                            '$a0-base-name';
-is $a0.units.plur-name, Str,                                            '$a0-plur-name';
-is $a0.units.sing-name, Str,                                            '$a0-sing-name';
 
 my $a1 ♎️ '4.3 metres';
 is $a1, '4.3 metres',                                                   '$a1-metres';
-is $a1.units.base-name, 'm',                                            '$a1-base-name';
-is $a1.units.plur-name, 'metres',                                       '$a1-plur-name';
-is $a1.units.sing-name, 'metre',                                        '$a1-sing-name';
 
 my $a2 = $a1.norm;
 is $a2, '4.3 m',                                                        '$a2-norm-metres';

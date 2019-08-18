@@ -25,6 +25,13 @@ say "$distance";
 
 #SYNOPSIS
 
+#`[[
+my $y ♎️ '5e1 cm';      #'50 m' (Distance) from Str
+$y .= in: <m>;
+say "$y";
+die "yoyo";
+#]]
+
 #Types can be declared and constructed formally:
     my Unit $u     .=new(name => 'm', unitsof => 'Distance');       #new Units for new Measure
     my Distance $a .=new(value => 1e4, units => $u);                #'10000 m'

@@ -60,26 +60,66 @@ my  Str    %unit-plur;
 my  Str    %type-base; 
 my  Array  %unit-syns;          #reverse
 load-units(); 
-#`<<<
 my         %pfix-defn;
 load-pfixs(); 
-#>>>
 
 #since it's too slow to load all %unit-dime on startup... 
 my  Str    %cache-dime;          #key is e.g. 'kg * m / s^2' value is 'kg.m.s-2' via grammar
 
-########## Unit ##########
-class Unit is export {
-    #Generic class for objects that each represent a physical unit with name (e.g.'m') and scale factor 
-    #Instances such as m, kg, W are consumed by Measure child instances that may be used in calculations
-    #Manages rules for synonyms and type conversion
-    
-    has Str  $.name;                #e.g. m, meter, meters, metre, metres (usually plural)
-    has Str  $.base-name;           #e.g. m (always plural)
-    has Str  $.sing-name;
-    has Str  $.plur-name;
+##### Roles & Classes #####
 
+#|Apply Singular & Plural name toggling
+role SingPlur {
+    has Str  $!sing-name;
+    has Str  $!plur-name;
+
+    method load-singplur( Str $new-name ) {
+        #where there is no sing plur distinction (e.g. m)
+        if ! %unit-sing{$new-name} && ! %unit-plur{$new-name} {
+            $!sing-name = $new-name; 
+            $!plur-name = $new-name;
+        }
+        #generally, there is only a hit on sing (e.g. foot) OR on plur (e.g. feet)
+        #luckily %sing-name & %sing-plur are mirrored, so we can grab the other thusly:
+        if %unit-sing{$new-name} && ! %unit-plur{$new-name} {
+            $!sing-name = %unit-sing{$new-name}; 
+            $!plur-name = %unit-plur{$!sing-name};
+        }
+        if ! %unit-sing{$new-name} && %unit-plur{$new-name} {
+            $!plur-name = %unit-plur{$new-name};
+            $!sing-name = %unit-sing{$!plur-name}; 
+        }
+        #say "loaded sing-name " ~ $!sing-name ~ " and plur-name " ~ $!plur-name;
+    }
+    method set-name-to-sing {
+        self.name( $!sing-name );
+    }   
+    method set-name-to-plur {
+        self.name( $!plur-name );
+    }   
+}
+#iamerejh
+#|Apply logic to handle Prefixes
+role Prefixy {
+    has Str  $!base-name;           #e.g. m (always plural)
+    has Str  $!full-name;           #e.g. cm, centimeters (the name you first thought of)
+    has Str  $!prefix;
+
+    has Bool $!is-based = False;
+    has Real $!base-factor;          #e.g. 1e-2
+}
+
+########## Unit ##########
+
+#|Unit objects each represent a physical unit with name (e.g.'m') and derivation pathway
+#|Instances such as m, kg, W are consumed by Measure child instances used in calculations
+
+class Unit is export does SingPlur {
+    has Str  $.name;                #e.g. m, meter, meters, metre, metres (usually plural)
     has Str  $.unitsof;             #Type of bound Measure child e.g. Distance, Mass, Power...
+
+    has Str  $!base-name;           #e.g. m (always plural)
+
     has Str  $.dime = 'notset';     #string of dimensions e.g. 'm.s-1' parsed from defn or decl
     has Int  %.dims;                #hash of dimensions { name => order } e.g. { m => 1, s => -1 ...} 
     has Bool $.is-core;             #core  - has no root Unit
@@ -136,7 +176,6 @@ class Unit is export {
     submethod get-dime( $dime-str is copy ) {
         #https://docs.perl6.org/language/regexes#Regex_Interpolation
         #dd $unit-names; #FIXME change unit-names to List @unit-names and token unam { @unit-names }
-        #say $unit-names;
 
         if %cache-dime{$dime-str}:exists { return %cache-dime{$dime-str} } #get value from unit-dime cache
 
@@ -175,6 +214,10 @@ class Unit is export {
 need to match '4 kg * m * s4' and '2 kg.m**-3'
 right now dim matching 'kg ' (with trailing space) and can use '* ' to disambiguate '*' from '**'
 #]]
+
+#iamerejh - preparse for pfixes, tool to synth prefix+baseunit, tool to apply factor
+#well what about base and debase methods - with attributes for prefix / name and factor - in a role
+
 
         #transliterate power synonyms and superscripts
         $dime-str ~~ s/(<$unit-names>) \s* (<$power-sups>)/$0 %power-sups{$1}/;
@@ -496,29 +539,15 @@ right now dim matching 'kg ' (with trailing space) and can use '* ' to disambigu
         }
     }
 
-    method name( $name? ) {
-        if $name {
-            $!name = $name;
-            $!name ~~ s| \s*? $||;  #FIXME should do this in Measure extract
-            $!base-name = %unit-base{$name};
-            $!sing-name = %unit-sing{$!name}; 
-            $!plur-name = %unit-plur{$!name};
-            if ! $!sing-name && $!plur-name {
-                $!sing-name = %unit-sing{$!plur-name}; 
-            } elsif $!sing-name && ! $!plur-name {
-                $!plur-name = %unit-plur{$!sing-name};
-            }
-            say "names set " ~ self.perl if $tw-db;
-        } else {
-            return $!name;
-        }
+    multi method name( Str $new-name ) {
+        $!name = $new-name.trim;
+        $!base-name = %unit-base{$!name};
+        self.load-singplur( $!name );
     }
-    method set-name-to-sing {
-        $!name = $!sing-name if $!sing-name;
+    multi method name() {
+        return $!name;
     }
-    method set-name-to-plur {
-        $!name = $!plur-name if $!plur-name;
-    }
+
     method Str {
         return $.name;
     }
@@ -778,7 +807,7 @@ sub load-units() {
     }
     return True;
 }
-#`<<<
+
 sub load-pfixs() {
     my @pfix-data = load-pfix-data();
     %pfix-defn = @pfix-data; 
@@ -788,8 +817,27 @@ sub load-pfixs() {
 
 sub load-pfix-data() {
 my @pfix-data = (
+    'da',      1e1,
+    'h',       1e2,
+    'k',       1e3,
+    'M',       1e6,
+    'G',       1e9,
+    'T',       1e12,
+    'P',       1e15,
+    'E',       1e18,
+    'Z',       1e21,
+    'Y',       1e24,
+    'd',       1e-1,
+    'c',       1e-2,
+    'm',       1e-3,
+    'µ',       1e-6,
+    'n',       1e-9,
+    'p',       1e-12,
+    'f',       1e-15,
+    'a',       1e-18,
+    'z',       1e-21,
+    'y',       1e-24,
     'deka',    1e1,
-    'deca',    1e1,
     'hecto',   1e2,
     'kilo',    1e3,
     'mega',    1e6,
@@ -834,7 +882,7 @@ my @pfix-data = (
 #say @pfix-data;
 return @pfix-data;
 }
-#>>>
+
 sub load-unit-data() {
 
 #`[[ fixme add and test
@@ -858,24 +906,24 @@ my $unit-data = q:to/END-UNIT-DATA/;
     ['sr','steradian:s',],                      'core',
 # Distance
     ['m', 'metre:s', 'meter:s',],               'core',             # core
+    ['micron:s', ],                             '1e-6 m',           # exact
     ['foot:feet', 'ft', '′',],                  '.3048 m',          # exact U+2032
     ['inch:es', 'in', '″'],                     'feet/12',          # exact U+2033
-    ['mil:s',],                                 'in/1000',          # exact
+    ['mil:s', 'thou:s',],                       'in/1000',          # exact
     ['yard:s',],                                '3 feet',           # exact
     ['fathom:s',],                              '2 yards',          # exact
     ['rod:s', 'pole:s', 'perch:es',],           '5.5 yards',        # exact
     ['chain:s',],                               '22 yards',         # exact
     ['furlong:s',],                             '40 rods',          # exact
-    ['mile:s', 'mi',],                          '5280 feet',        # exact
-    ['μ', 'micron:s', 'um',],                   '1e-6 m',           # exact
+    ['mile:s', ],                               '5280 feet',        # exact
     ['å', 'angstrom:s', 'a',],                  '1e-10 m',          # exact
     ['pica',],                                  'in/6',             # exact, but see docs 
     ['cm',],                                    '1e-2 m',           # exact
-    ['km',],                                    '1e3 m',            # exact
+    #['km',],                                    '1e3 m',            # exact
     #['cm',],                                    'centimeter',       # exact FIXME put back in with pfix
     #['km',],                                    'kilometer',        # exact
     ['point',],                                 'pica/12',          # exact
-    ['nautical-mile:s', 'nm',],                 '1852 m',           # exact
+    ['nautical-mile:s', 'nmile:s',],            '1852 m',           # exact
     ['cable:s',],                               '185.2 m',          # exact
     ['astronomical-unit:s', 'au',],             '1.49598e11 m',
     ['light-year:s', 'ly',],                    '9.46e15 m',
@@ -892,8 +940,8 @@ my $unit-data = q:to/END-UNIT-DATA/;
     ['ton:s', 'short-ton:s',],                  '2000 lbms',        # exact
     ['long-ton:s',],                            '2240 lbms',        # exact
     ['slug:s',],                                'lbm g0 s^2/feet',  # exact
-    ['mg',],                                    'milligram',        # exact
-    ['μg', 'ug',],                              'microgram',        # exact
+    #['mg',],                                    'milligram',        # exact
+    #['μg', 'ug',],                              'microgram',        # exact
     ['dram:s',],                                'ounce / 16',       # exact
     ['troy-pound:s',],                          '0.373 kg',
     ['troy-ounce:s',],                          '31.103 gm',
@@ -916,10 +964,10 @@ my $unit-data = q:to/END-UNIT-DATA/;
     ['score:s',],                               '20 yr',
     ['century:centuries',],                     '100 yr',
     ['millenium:millenia',],                    '1000 yr',
-    ['ms', 'msec:s',],                          'millisecond',
-    ['μs', 'us', 'μsec:s', 'usec:s',],          'microsecond',
-    ['ns', 'nsec:s',],                          'nanosecond',
-    ['ps', 'psec:s',],                          'picosecond',
+    #['ms', 'msec:s',],                          'millisecond',
+    #['μs', 'us', 'μsec:s', 'usec:s',],          'microsecond',
+    #['ns', 'nsec:s',],                          'nanosecond',
+    #['ps', 'psec:s',],                          'picosecond',
 # Frequency
     ['Hz', 'Hertz'],                            '1/s',
     ['cycle:s',],                               '1 Hz',
