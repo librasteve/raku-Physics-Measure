@@ -1,4 +1,4 @@
-# perl6-Physics-Measure
+# raku-Physics-Measure
 A set of SI, Imperial and US Unit objects that are employed by Measure objects having value, units and error(tbd) and act as operands in most calculations. Some prefix and physical constants included where needed. Some use of unicode and operator overload.
 
 *NB. Feedback in general and on the [♎️] interface in particular is very welcome!*
@@ -6,10 +6,8 @@ A set of SI, Imperial and US Unit objects that are employed by Measure objects h
 # Instructions
 zef install Physics::Measure
 
-*See https://github.com/p6steve/perl6-Physics-Measure-JupyterBinder - worked examples for Jupyter and Binder* 
-
 # Synopsis
-[https://github.com/p6steve/perl6-Physics-Measure/bin/P--sics.p6](https://github.com/p6steve/perl6-Physics-Measure/blob/master/bin/P--sics.p6)
+[https://github.com/p6steve/raku-Physics-Measure/bin/synopsis.raku](https://github.com/p6steve/raku-Physics-Measure/blob/master/bin/synopsis.raku)
 
 ```perl6
 use Physics::Measure;
@@ -54,17 +52,3 @@ use Physics::Measure::Unit;
 
 say "$u $a $b $c $t $ab $s $f $v $p"; 
 ```
-
-# Testing on Jupyter / Binder
-
-1. Jupyter Notebook local
-- Clone this repo
-- Do the Quick Start for Brian Duggan perl6 jupyter-notebook at <https://github.com/bduggan/p6-jupyter-kernel>
-- From the root directory run *jupyter-notebook*
-
-2. Jupyter Notebook hosted on Binder
-- Please try https://github.com/p6steve/perl6-Physics-Measure-JupyterBinder - worked examples for Jupyter and Binder - more stable release usually with much faster load time than this repo (although this will build by virtue of Docker file provided)
-- If you are the first to build e.g. a new version this can take 30 mins or so and the Binder browser UI may lose hope - please just be patient (do not reload as this restarts the build) ...
-
-# Inspired by
-* Brian Duggan's perl6 jupyter-notebook at <https://github.com/bduggan/p6-jupyter-kernel>
