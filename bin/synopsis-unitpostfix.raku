@@ -3,23 +3,9 @@ use lib '../lib';
 use Physics::Measure;
 use Physics::UnitPostfix;
 
-my $l = 1km;
-say ~$l;
-say $l.WHAT; 
-
-my $t = 1ms;
-say ~$t;
-say $t.WHAT; 
-
-my $s = $l/$t;
-say ~$s;
-say $s.WHAT; 
-
-my $f = $l.in: <ft>;
-say ~$f;
-say $f.WHAT; 
-
-my $m = 1kg;
-say ~$m;
-say $m.WHAT; 
+my $l = 1km;			say ~$l;
+my $t = 1ms;			say ~$t;
+my $s = $l/$t;			say ~$s;
+my $f = $l.in: <ft>;	say ~$f;
+my $m = 1kg;			say ~$m;
 
