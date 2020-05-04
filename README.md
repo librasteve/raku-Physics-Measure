@@ -25,17 +25,17 @@ use Physics::Measure;
 	my $ff = Unit.new( defn => 'furlong / fortnight', names => ['ff'] );
 
 #Measure objects such as Length can be formally constructed:
-	my Length $a .=new(value => 1e4, units => $u);	say "$a";		#10000 m
+	my Length $a .=new(value => 1e4, units => $u);		say "$a";		#10000 m
 
 #The libra operator ♎️ is a handy way to construct objects...
-    my $b ♎️ '5e1 m';								say "$b";		#50 m
-    my $c ♎️ $a;								say "$c";		#10000 m
-	my Length $l ♎️ 42;							say "$l";		#42 m
+    my $b ♎️ '5e1 m';						say "$b";		#50 m
+    my $c ♎️ $a;						say "$c";		#10000 m
+    my Length $l ♎️ 42;						say "$l";		#42 m
 #...and to assign objects a value:
-    $a ♎️ 3e1;          #'30 m'
-    $a ♎️ '3 yards';    #'3 yards'
-    $a ♎️ 5;            #'5 yards'
-#...there is an ASCII version of <♎️> namely <libra> 
+    $a ♎️ 3e1;          								#'30 m'
+    $a ♎️ '3 yards';    								#'3 yards'
+    $a ♎️ 5;            								#'5 yards'
+#...there is an ASCII "texas" variant of <♎️> namely <libra> 
 
 #To see what you have
     say $a.Real;        #50   or use $a in Real context (Real includes Int|Rat|Num etc)
@@ -51,7 +51,7 @@ use Physics::Measure;
     $c = $b - $a;       #'-6.6 m'
     $c = '1 m' - $a;    #'-3.3 m' 
 #Division like for like produces a Real value such as a Rat
-    my Real $r = $a / $b; #'-1.869565'
+    my Real $r = $a / $b; #'-1.8696'
 #Multiply with & Divide by a Real imply a constant factor...
     $c = $b * 30;       #'-69 m'
 
@@ -62,16 +62,16 @@ use Physics::Measure;
     my Duration $dur = $i3-$i2;
 
 #Here's how to us the libra assignment operator ♎️ for Time...
-    my Time $t1 ♎️ '5e1 s';     #50 s
-    my Time $t2 ♎️ $dur;        #10 s
-    my $t3 = $t1 + $t2;         #60 s
-    my Time $t4 ♎️ '2 hours';   #2 hr
+    my Time $t1 ♎️ '5e1 s';     	#50 s
+    my Time $t2 ♎️ $dur;        	#10 s
+    my $t3 = $t1 + $t2;         	#60 s
+    my Time $t4 ♎️ '2 hours';   	#2 hr
     $dur = $t4.Duration;		#7200
 
 #Unit Conversion uses the .in() method - specify the new units as a String
     my Length $df ♎️ '12.0 feet';
-    my $dm = $df.in( 'm' );				#3.658 m
-       $dm = $df.in: <m> ;				#alternate form
+    my $dm = $df.in( 'm' );		#3.658 m
+       $dm = $df.in: <m> ;		#alternate form
     my Temperature $deg-c ♎️ '39 ºC';
     my $deg-k = $deg-c.in( 'K' );       #312.15 K
     my $deg-cr = $deg-k.in( 'ºC' );     #39 ºC
@@ -85,16 +85,16 @@ use Physics::Measure;
     my Length	  $d = $v ** <1/3>;     #0.43 m
 
 #About 230 built in units are included, for example...
-    my $v2 ♎️ '7 yards^3';			#7 yard^3		(Volume)
-    my $v3 = $v2.in( 'm3' );			#5.352 m^3		(Volume) 
-    my $dsdt = $s / $t1;			#0.009 m/s^2		(Acceleration)
-    my $sm ♎️ '70 mph';                		#70 mph			(Speed)
-    my $fo ♎️ '27 kg m / s^2';			#27 N			(Force)
-    my $en1 ♎️ '26 kg m^2 / s^2';		#26 J			(Energy)
-    my $po ♎️ '25 kg m^2 / s^3';		#25 W			(Power)
-    my $en2 = $po * $t1;                	#1250 J			(Energy)
-    say $po.canonical;				#25 m2.s-3.kg   	(SI base units)
-    say $po.pretty;				#25 m²⋅s⁻³⋅kg   	(SI recommends)
+    my $v2 ♎️ '7 yards^3';		#7 yard^3		(Volume)
+    my $v3 = $v2.in( 'm3' );		#5.352 m^3		(Volume) 
+    my $dsdt = $s / $t1;		#0.009 m/s^2		(Acceleration)
+    my $sm ♎️ '70 mph';                	#70 mph			(Speed)
+    my $fo ♎️ '27 kg m / s^2';		#27 N			(Force)
+    my $en1 ♎️ '26 kg m^2 / s^2';	#26 J			(Energy)
+    my $po ♎️ '25 kg m^2 / s^3';	#25 W			(Power)
+    my $en2 = $po * $t1;                #1250 J			(Energy)
+    say $po.canonical;			#25 m2.s-3.kg   	(SI base units)
+    say $po.pretty;			#25 m²⋅s⁻³⋅kg   	(SI recommends)
     say ListBases(); say ListTypes(); say ListUnits();
 
 #Measures can be converted to base type with the .rebase() method
