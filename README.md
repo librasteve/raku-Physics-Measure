@@ -21,7 +21,7 @@ use Physics::Measure;
 
 #Unit objects can be selected or created with GetUnit:
 	my Unit   $u  = GetUnit( 'm' );
-# Define your own unit named "ff" (named args)
+#Define your own unit named "ff" (named args)
 	my $ff = Unit.new( defn => 'furlong / fortnight', names => ['ff'] );
 
 #Measure objects such as Length can be formally constructed:
@@ -29,8 +29,8 @@ use Physics::Measure;
 
 #The libra operator ♎️ is a handy way to construct objects...
     my $b ♎️ '5e1 m';								say "$b";		#50 m
-    my $c ♎️ $a;									say "$c";		#10000 m
-	my Length $l ♎️ 42;								say "$l";		#42 m
+    my $c ♎️ $a;								say "$c";		#10000 m
+	my Length $l ♎️ 42;							say "$l";		#42 m
 #...and to assign objects a value:
     $a ♎️ 3e1;          #'30 m'
     $a ♎️ '3 yards';    #'3 yards'
@@ -76,7 +76,7 @@ use Physics::Measure;
     my $deg-k = $deg-c.in( 'K' );       #312.15 K
     my $deg-cr = $deg-k.in( 'ºC' );     #39 ºC
 #Use arithmetic to get high order or inverse Unit types such as Area, Volume, Frequency, etc.
-    my Area		  $x = $a * $a;         #18.49 m^2
+    my Area	  $x = $a * $a;         #18.49 m^2
     my Speed      $s = $a / $t2;        #0.43 m/s
     my Frequency  $f = 1  / $t2;        #0.1 Hz
 
@@ -85,20 +85,20 @@ use Physics::Measure;
     my Length	  $d = $v ** <1/3>;     #0.43 m
 
 #About 230 built in units are included, for example...
-    my $v2 ♎️ '7 yards^3';				#7 yard^3		(Volume)
+    my $v2 ♎️ '7 yards^3';			#7 yard^3		(Volume)
     my $v3 = $v2.in( 'm3' );			#5.352 m^3		(Volume) 
-    my $dsdt = $s / $t1;				#0.009 m/s^2	(Acceleration)
-    my $sm ♎️ '70 mph';                 #70 mph			(Speed)
+    my $dsdt = $s / $t1;			#0.009 m/s^2		(Acceleration)
+    my $sm ♎️ '70 mph';                		#70 mph			(Speed)
     my $fo ♎️ '27 kg m / s^2';			#27 N			(Force)
     my $en1 ♎️ '26 kg m^2 / s^2';		#26 J			(Energy)
     my $po ♎️ '25 kg m^2 / s^3';		#25 W			(Power)
-    my $en2 = $po * $t1;                #1250 J			(Energy)
-	say $po.canonical;					#25 m2.s-3.kg   (SI base units)
-	say $po.pretty;						#25 m²⋅s⁻³⋅kg   (SI recommends)
-	say ListBases(); say ListTypes(); say ListUnits();
+    my $en2 = $po * $t1;                	#1250 J			(Energy)
+    say $po.canonical;				#25 m2.s-3.kg   	(SI base units)
+    say $po.pretty;				#25 m²⋅s⁻³⋅kg   	(SI recommends)
+    say ListBases(); say ListTypes(); say ListUnits();
 
 #Measures can be converted to base type with the .rebase() method
-    my $v4 = $v3.rebase;				#5.352 m^3
+    my $v4 = $v3.rebase;		#5.352 m^3
 #Measures can be compared with $a cmp $b
     my $af = $a.in: 'feet';             #4.3 m => 14.108 feet
     say $af cmp $a;                     #Same
