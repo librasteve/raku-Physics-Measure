@@ -21,8 +21,12 @@ my $f = $l.in: <ft>;    	say ~$f;
 my $m = 1kg;			say ~$m;
 ```
 
+you may have to go in and uncomment if you want all SI units (~30) xx all Prefixes (~20) - as default these are clipped to length, time, mass for performance reasons...
+
 # Synopsis - General
 [https://github.com/p6steve/raku-Physics-Measure/bin/synopsis.raku](https://github.com/p6steve/raku-Physics-Measure/blob/master/bin/synopsis.raku)
+
+you may want to go in and adjust round-to = 0.001 if you want more or less precision
 
 ```perl6
 #!/usr/bin/env raku
