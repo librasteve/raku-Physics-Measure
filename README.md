@@ -12,18 +12,22 @@ and, conversely, zef uninstall Physics::Measure
 [https://github.com/p6steve/raku-Physics-Measure/bin/synopsis-unitpostfix.raku](https://github.com/p6steve/raku-Physics-Measure/blob/master/bin/synopsis-unitpostfix.raku)
 
 ```perl6
-#!/usr/bin/env raku 
-use lib '../lib';
-use Physics::Unit;
+#!/usr/bin/env raku
 use Physics::Measure;
+use Physics::UnitPostfix;
+
+my $l = 1km;			say ~$l;
+my $t = 1ms;			say ~$t;
+my $s = $l/$t;			say ~$s;
+my $f = $l.in: <ft>;	say ~$f;
+my $m = 1kg;			say ~$m;
 ```
 
 # Synopsis - General
 [https://github.com/p6steve/raku-Physics-Measure/bin/synopsis.raku](https://github.com/p6steve/raku-Physics-Measure/blob/master/bin/synopsis.raku)
 
 ```perl6
-#!/usr/bin/env raku 
-use lib '../lib';
+#!/usr/bin/env raku
 use Physics::Unit;
 use Physics::Measure;
 
