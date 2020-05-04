@@ -4,7 +4,7 @@ A set of SI, Imperial and US Unit objects that are employed by Measure objects h
 *NB. Feedback in general and on the [♎️] interface in particular is very welcome!*
 
 # Instructions
-zef install https://github.com/p6steve/raku-Physics-Measure.git
+zef install --verbose https://github.com/p6steve/raku-Physics-Measure.git
 
 # Synopsis
 [https://github.com/p6steve/raku-Physics-Measure/bin/synopsis.raku](https://github.com/p6steve/raku-Physics-Measure/blob/master/bin/synopsis.raku)
