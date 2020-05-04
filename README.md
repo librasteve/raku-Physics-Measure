@@ -8,7 +8,17 @@ zef install --verbose https://github.com/p6steve/raku-Physics-Measure.git
 
 and, conversely, zef uninstall Physics::Measure
 
-# Synopsis
+# Synopsis - UnitPostfix
+[https://github.com/p6steve/raku-Physics-Measure/bin/synopsis-unitpostfix.raku](https://github.com/p6steve/raku-Physics-Measure/blob/master/bin/synopsis-unitpostfix.raku)
+
+```perl6
+#!/usr/bin/env raku 
+use lib '../lib';
+use Physics::Unit;
+use Physics::Measure;
+```
+
+# Synopsis - General
 [https://github.com/p6steve/raku-Physics-Measure/bin/synopsis.raku](https://github.com/p6steve/raku-Physics-Measure/blob/master/bin/synopsis.raku)
 
 ```perl6
@@ -20,12 +30,12 @@ use Physics::Measure;
 #SYNOPSIS
 
 #Unit objects can be selected or created with GetUnit:
-	my Unit   $u  = GetUnit( 'm' );
+    my Unit   $u  = GetUnit( 'm' );
 #Define your own unit named "ff" (named args)
-	my $ff = Unit.new( defn => 'furlong / fortnight', names => ['ff'] );
+    my $ff = Unit.new( defn => 'furlong / fortnight', names => ['ff'] );
 
 #Measure objects such as Length can be formally constructed:
-	my Length $a .=new(value => 1e4, units => $u);		say "$a";		#10000 m
+    my Length $a .=new(value => 1e4, units => $u);		say "$a";		#10000 m
 
 #The libra operator ♎️ is a handy way to construct objects...
     my $b ♎️ '5e1 m';						say "$b";		#50 m
