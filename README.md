@@ -5,6 +5,8 @@ A set of SI, Imperial and US Unit objects that are employed by Measure objects h
 
 # Instructions
 zef install --verbose https://github.com/p6steve/raku-Physics-Measure.git
+and, conversely,
+zef uninstall Physics::Measure
 
 # Synopsis
 [https://github.com/p6steve/raku-Physics-Measure/bin/synopsis.raku](https://github.com/p6steve/raku-Physics-Measure/blob/master/bin/synopsis.raku)
