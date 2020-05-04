@@ -3,7 +3,7 @@ A set of SI, Imperial and US Unit objects that are employed by Measure objects h
 
 *NB. Feedback in general and on the [♎️] interface in particular is very welcome!*
 
-[![Build Status](https://travis-ci.org/p6steve/perl6-Physics-Measure.svg?branch=master)](https://travis-ci.org/p6steve/perl6-Physics-Measure)
+[![Build Status](https://travis-ci.org/p6steve/raku-Physics-Measure.svg?branch=master)](https://travis-ci.org/p6steve/raku-Physics-Measure)
 
 # Instructions
 zef install Physics::Measure
