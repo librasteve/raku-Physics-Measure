@@ -17,7 +17,7 @@ use Physics::UnitPostfix;
 my $l = 1km;			say ~$l;
 my $t = 1ms;			say ~$t;
 my $s = $l/$t;			say ~$s;
-my $f = $l.in: <ft>;	say ~$f;
+my $f = $l.in: <ft>;    	say ~$f;
 my $m = 1kg;			say ~$m;
 ```
 
