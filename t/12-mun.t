@@ -6,7 +6,7 @@ use Test;
 plan 10;
 
 use Physics::Measure;
-use Physics::ShortUnit;
+use Physics::UnitPostfix;
 
 
 my $l = 1km;

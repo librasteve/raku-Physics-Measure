@@ -1,4 +1,4 @@
-unit module Physics::Measure:ver<0.0.7>:auth<Steve Roe (p6steve@furnival.net)>;
+unit module Physics::Measure:ver<0.0.3>:auth<Steve Roe (p6steve@furnival.net)>;
 use Physics::Unit;
 
 my $db = 0;			#debug
