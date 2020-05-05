@@ -14,11 +14,11 @@ and, conversely, zef uninstall Physics::Measure
 use Physics::Measure;
 use Physics::UnitPostfix;
 
-my $l = 1km;			say ~$l;
-my $t = 1ms;			say ~$t;
-my $s = $l/$t;			say ~$s;
-my $f = $l.in: <ft>;    	say ~$f;
-my $m = 1kg;			say ~$m;
+my $l = 1km;			    say ~$l;        #1 km           (Length)
+my $t = 1ms;			    say ~$t;        #1 ms           (Time)
+my $s = $l/$t;			    say ~$s;        #1000000 m/s    (Speed)
+my $f = $l.in: <ft>;    	say ~$f;    #3280.84 ft     (Length)
+my $m = 1kg;			    say ~$m;        #1 kg           (Mass)
 ```
 
 you may wish to go in and uncomment if you want all SI units (~30) xx all Prefixes (~20) - as default these are clipped to length, time, mass for performance reasons...
