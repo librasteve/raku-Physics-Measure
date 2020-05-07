@@ -97,10 +97,6 @@ class Unit is export {
         $n.SetNames: @names;
         return $n
     }
-    #new the even easier way for consumers
-    multi method new( Str $defn, @names, Bool:U :$stock ) {     #positional args
-        samewith( defn => $defn, names => @names );
-    }
 
     ### format methods ###
     method Str { self.name }

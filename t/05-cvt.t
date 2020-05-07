@@ -20,10 +20,10 @@ my Length $d-fe ♎️ '12.0 feet';
 is $d-fe, '12 ft',                                                          '$d.new';
 
 my $d-me3 = $d-fe.in( 'm' );
-is $d-me3, '3.658 m',                                                       '$d.in';
+is $d-me3, '3.6576 m',                                                      '$d.in';
 
 $d-me3 = $d-fe.in: <m> ;
-is $d-me3, '3.658 m',                                                       '$d.in-alt';
+is $d-me3, '3.6576 m',                                                      '$d.in-alt';
 
 my Length $d-y ♎️ '3 yards';
 my $d-f2 = $d-y.in( 'feet' );
@@ -31,10 +31,10 @@ is $d-f2, '9 ft',                                                           '$d.
 
 my Length $d-m3 ♎️ '43.3 m';
 my $d-f3 = $d-m3.in( 'feet' );
-is $d-f3, '142.06 ft',	                                                    '$d.in-feet';
+is $d-f3, '142.060367 ft',	                                                '$d.in-feet';
 
 my $d-y2 = $d-m3.in( 'yards' );
-is $d-y2, '47.353 yard',	                                                '$d.in-yards';
+is $d-y2, '47.353456 yard',	                                                '$d.in-yards';
 
 my Length $d-mi ♎️ '10 miles';
 is $d-mi, '10 mile',                                                        '$d.in-miles';
@@ -60,7 +60,7 @@ my Temperature $deg-k2 ♎️ '300 K';
 is $deg-k2, '300 K',                                                        '$t.in-K';
 
 my $deg-f = $deg-k2.in( 'ºF' );
-is $deg-f, '80.33 ºF',                                                    '$t.in-F';
+is $deg-f, '80.329568 ºF',                                                  '$t.in-F';
     
 my $deg-k2r = $deg-f.in( 'K' );
 is $deg-k2r, '300 K',                                                       '$t.in-K';
@@ -69,7 +69,7 @@ my Temperature $deg-f2 ♎️ '98.6 ºF';
 is $deg-f2, '98.6 ºF',                                                      '$t.in-F';
 
 my $deg-c2 = $deg-f2.in( 'ºC' );
-is $deg-c2, '37 ºC',                                                        '$t.in-C';
+is $deg-c2, '37.00024812 ºC',                                               '$t.in-C';
     
 my $deg-f2r = $deg-c2.in( 'ºF' );
 is $deg-f2r, '98.6 ºF',                                                     '$t.in-F';
@@ -90,13 +90,13 @@ my Area $a-f21 ♎️ '36 sq ft';
 is $a-f21, '36 sq ft',                                                      '$a.new-feet2';
 
 my $a-f22 = $a-m21.in( 'sq ft' );
-is $a-f22, '452.084 sq ft',                                                 '$a.in-feet2';
+is $a-f22, '452.084238 sq ft',                                              '$a.in-feet2';
 
 my Volume $v-y31 ♎️ '7 cubic yard';
 is $v-y31, '7 cubic yard',                                                  '$v.new-yards3';
 
 my $v-m31 = $v-y31.in( 'm3' );
-is $v-m31, '5.352 m^3',                                                     '$v.in-m3';
+is $v-m31, '5.35188400589 m^3',                                             '$v.in-m3';
 
 my $v-y32 = $v-m31.in( 'cubic yard' );
 is $v-y32, '7 cubic yard',                                                  '$v.in-cubic yard';
@@ -105,7 +105,7 @@ my Volume $v-l1 ♎️ '6 l';
 is $v-l1, '6 l',                                                            '$v.new-l';
 
 my $v-y33 = $v-l1.in( 'cubic yard' );
-is $v-y33, '0.008 cubic yard',                                              '$v.in-cubic yard';
+is $v-y33, '0.0078477037 cubic yard',                                      '$v.in-cubic yard';
 
 my $v-l2 = $v-y33.in( 'l' );
 is $v-l2, '6 l',                                                            '$v.in-l';

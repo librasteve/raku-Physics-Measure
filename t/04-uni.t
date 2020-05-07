@@ -70,7 +70,7 @@ is "$s3", '17.234 m/s',                                                     '$s.
 
 my Length $d ♎️ '5e1 m';      #'50 m'
 $s2 = $d / $t6;
-is "$s2", '1.19 m/s',			                                            'div.mixed';
+is "$s2", '1.1904761904761905 m/s',                                         'div.mixed';
 
 my $x = $d * $d;
 is "$x", '2500 m^2',                                                        'mul.same';

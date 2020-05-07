@@ -22,7 +22,7 @@ is ~$s,'1000000 m/s',														'm/s';
 is $s.^name,'Physics::Measure::Speed',										'Speed';
 
 my $f = $l.in: <ft>;
-is ~$f,'3280.84 ft',														'ft';
+is ~$f,'3280.839895 ft',													'ft';
 is $f.^name,'Physics::Measure::Length',										'.in';
 
 my $m = 1kg;

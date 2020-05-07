@@ -21,7 +21,8 @@ my $sr1 = $sq1 ** <1/2>;
 is $sr1,'10000 m',                                                                '**.sqrt';
 
 my $cr1 = $cu1 ** <1/3>;
-is $cr1,'10000 m',                                                                '**.curt';
+##is $cr1,'10000 m',                                                                '**.curt';
+is $cr1,'9999.999999999995 m',                                                    '**.curt';
 
 my $sq2 = $d ** 2;
 is $sq2.sqrt, '10000 m',                                                          'sqrt.sqrt';

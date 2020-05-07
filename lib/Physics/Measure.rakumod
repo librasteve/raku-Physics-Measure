@@ -9,7 +9,7 @@ my $db = 0;			#debug
 #Length = 12.5 ±0.05 m   (FIXME v2 cover errors)
 #viz. https://www.mathsisfun.com/measure/error-measurement.html
 
-constant \round-to = 0.001;	#FIXME v2 make option (on/off & scale)
+constant \isa-length = 'Distance' | 'Breadth' | 'Width' | 'Height' | 'Depth'; 
 
 my regex number {
 	\S+                     #grab chars
@@ -46,6 +46,7 @@ class Measure is export {
     multi method new( ::T: Real:D $r ) {			say "new from Real" if $db;
 		my $s = ~T.^name;
 		$s ~~ s/'Physics::Measure::'//;
+		$s = 'Length' if $s ~~ isa-length;
 		my $u = GetPrototype($s);
         self.bless( value => $r, units => $u )
     }
@@ -78,9 +79,9 @@ class Measure is export {
 
     method Real      { $!value }
     method Numeric   { $!value }
-    method Str       { "{$!value.round(round-to)} {$!units}" }
-    method canonical { "{$!value.round(round-to)} {$!units.canonical}" }
-    method pretty    { "{$!value.round(round-to)} {$!units.pretty}" }
+    method Str       { "{$!value} {$!units}" }
+    method canonical { "{$!value} {$!units.canonical}" }
+    method pretty    { "{$!value} {$!units.pretty}" }
 
 	sub make-same( $l, $r ) {
         if ! $l.units.type eq $r.units.type {
@@ -242,14 +243,12 @@ class Inductance         is Measure is export {}
 class Magnetic-Flux      is Measure is export {}
 class Magnetic-Field     is Measure is export {}
 class Dose               is Measure is export {}
-#`[[
-#Synonyms for Length... FIXME
+#Synonyms for Length... 
 class Distance           is Length is export {}
 class Breadth            is Length is export {}
 class Width              is Length is export {}
 class Height             is Length is export {}
 class Depth              is Length is export {}
-#]]
 
 sub infix-prep( $left, $right ) {
     #clone Measure child object (e.g. Distance) as container for result
