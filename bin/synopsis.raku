@@ -5,6 +5,12 @@ use Physics::Measure;
 
 #SYNOPSIS
 
+my $h ♎️ '6.626196e-34 J/s';
+##my $h ♎️ '6.626196e-34 J/s';
+say ~($h * 1e34);
+say $h.WHAT; 
+die;
+
 #Unit objects can be selected or created with GetUnit:
 	my Unit   $u  = GetUnit( 'm' );
 # Define your own unit named "ff" (named args)
