@@ -26,8 +26,6 @@ you may wish to go in and uncomment if you want all SI units (~30) xx all Prefix
 # Synopsis - Physics::Measure & Physics::Unit
 [https://github.com/p6steve/raku-Physics-Measure/bin/synopsis.raku](https://github.com/p6steve/raku-Physics-Measure/blob/master/bin/synopsis.raku)
 
-you may wish to go in and adjust round-to != 0.001 if you want more or less precision
-
 ```perl6
 #!/usr/bin/env raku
 use Physics::Unit;
