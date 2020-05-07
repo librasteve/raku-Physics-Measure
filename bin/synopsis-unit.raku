@@ -17,10 +17,10 @@ say $ff.raku;
 my $fh = $ff.new( <fh fi> );
 
 # New Unit (positional args)
-my $fg = Unit.new( 'furlong / fortnight', ['fg'] );
+my $fg = Unit.new( defn => 'furlong / fortnight', names => ['fg'] );
 
 # More intricate unit expression (using the newly defined unit 'ff'):
-my $gonzo = Unit.new( "13 square millimeters per ff", ['gonzo'] );
+my $gonzo = Unit.new( defn => "13 square millimeters per ff", names => ['gonzo'] );
 
 # Parsing of input  
 my $u1 = GetUnit( 'kg m^2 / s^2' );
