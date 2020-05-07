@@ -5,15 +5,6 @@ use Physics::Measure;
 
 #SYNOPSIS
 
-my $h ♎️ '6.626196e-34 J/s';					say ~$h;
-say $h.WHAT; 
-
-
-my Width $w ♎️ 42;								say "$w";		#42 m
-say $w.WHAT; 
-
-die;
-
 #Unit objects can be selected or created with GetUnit:
 	my Unit   $u  = GetUnit( 'm' );
 # Define your own unit named "ff" (named args)
@@ -26,7 +17,6 @@ die;
     my $b ♎️ '5e1 m';								say "$b";		#50 m
     my $c ♎️ $a;									say "$c";		#10000 m
 	my Length $l ♎️ 42;								say "$l";		#42 m
-say $l cmp $w;
 #...and to assign objects a value:
     $a ♎️ 3e1;          #'30 m'
     $a ♎️ '3 yards';    #'3 yards'
