@@ -91,14 +91,14 @@ class Unit is export {
         return $n
     }
 
-    #new the easy way for consumers
-    multi method new( :$defn!, :@names, Bool:U :$stock ) {      #named args
+    #new by named arguments 
+    multi method new( :$defn!, :@names, Bool:U :$stock ) {
         my $n = CreateUnit( $defn );
         $n.SetNames: @names;
         return $n
     }
 
-    ### format methods ###
+    ### output methods ###
     method Str { self.name }
 
     multi method name()         { @!names[0] || '' }
