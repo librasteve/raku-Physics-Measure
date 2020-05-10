@@ -6,5 +6,7 @@
 .log
 .p6.swp
 .pm6.swp
+.raku.swp
+.rakumod.swp
 .Dockerfile.swp
 .json.swp
