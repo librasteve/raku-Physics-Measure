@@ -40,7 +40,7 @@ class Measure is export {
     multi method new( Str:D $s ) {					say "new from Str" if $db;
         my ($v, $u) = extract( $s );
         my $nuo = GetUnit( $u );
-		my $n-type = $nuo.type( just1 => 1 );
+		my $n-type = $nuo.type( just1 => 1 ) || 'Measure';
         ::($n-type).new( value => $v, units => $nuo )
     }
     multi method new( ::T: Real:D $r ) {			say "new from Real" if $db;
@@ -444,7 +444,7 @@ sub do-postfix( Real $v, Str $n ) is export {
     my $n-type = $nuo.type( just1 => 1 );
     ::($n-type).new( value => $v, units => $nuo )
 } 
-##sub postfix:<m> ( Real:D $x ) is export { do-postfix( $x, 'm' ) } 
+##e.g. => sub postfix:<m> ( Real:D $x ) is export { do-postfix( $x, 'm' ) } 
 
 #approx. 600 shorty units == ~600 more lines...
 sub postfix:<hm> (Real:D $x) is export { do-postfix($x,'hm') }

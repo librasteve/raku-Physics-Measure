@@ -532,7 +532,8 @@ if $fast-start {
 
     # Dimensionless
     ['pi'],          '3.1415926535897932385',
-    ['e'],           '2.7182818284590452354',
+#FIXME cull
+    #['e'],           '2.7182818284590452354',
 
     #SI Derived Units with special names & symbols
     ['sr', 'steradian'],                    'rad^2',
@@ -754,17 +755,6 @@ if $fast-start {
     # Dose
     ['rad'],           'gray / 100',
     ['rem'],           'sievert / 100',
-
-    # equatorial radius of the reference geoid:
-    ['re'],                                     '6378388 m',   
-    # polar radius of the reference geoid:
-    ['rp'],                                     '6356912 m',   
-    # Planck Constant
-    ['h'],                                      '6.626196e-34 J/s',
-    # Avogadro Constant
-    ['na'],                                     '6.022169 / mol',
-    # Elementary Charge
-    ['eq'],                                     '1.6021892e-19 coulomb',
 )
 } #end of fast-start else
 
@@ -1087,17 +1077,15 @@ Unit.new( factor => 0.00001, offset => 0, defn => 'gm centimetre / s^2', type =>
 	  dims => [1,1,-2,0,0,0,0,0], dmix => ("gm"=>1,"s"=>-2,"metre"=>1).MixHash, 
 	  names => ['dyne','dynes'] , stock => True  );
 
+#`[[ FIXME cull
 Unit.new( factor => 2.7182818284590452354, offset => 0, defn => '2.7182818284590452354', type => '',
 	  dims => [0,0,0,0,0,0,0,0], dmix => ().MixHash, 
 	  names => ['e'] , stock => True  );
+#]]
 
 Unit.new( factor => 1.60217733e-19, offset => 0, defn => '1.60217733e-19 joule', type => '',
 	  dims => [2,1,-2,0,0,0,0,0], dmix => ("joule"=>1).MixHash, 
 	  names => ['eV','electron-volt','electron-volts'] , stock => True  );
-
-Unit.new( factor => 1.6021892e-19, offset => 0, defn => '1.6021892e-19 coulomb', type => '',
-	  dims => [0,0,1,1,0,0,0,0], dmix => ("coulomb"=>1).MixHash, 
-	  names => ['eq'] , stock => True  );
 
 Unit.new( factor => 1e-07, offset => 0, defn => '1.0e-7 joule', type => '',
 	  dims => [2,1,-2,0,0,0,0,0], dmix => ("joule"=>1).MixHash, 
@@ -1170,10 +1158,6 @@ Unit.new( factor => 0.0000648, offset => 0, defn => '0.0648 gm', type => '',
 Unit.new( factor => 0.00980665, offset => 0, defn => 'gm g0', type => '',
 	  dims => [1,1,-2,0,0,0,0,0], dmix => ("g0"=>1,"gm"=>1).MixHash, 
 	  names => ['gram-force','gram-forces'] , stock => True  );
-
-Unit.new( factor => 6.626196e-34, offset => 0, defn => '6.626196e-34 J/s', type => '',
-	  dims => [2,1,-3,0,0,0,0,0], dmix => ("J"=>1,"s"=>-1).MixHash, 
-	  names => ['h'] , stock => True  );
 
 Unit.new( factor => 10000, offset => 0, defn => '100 ares', type => '',
 	  dims => [2,0,0,0,0,0,0,0], dmix => ("ares"=>1).MixHash, 
@@ -1339,10 +1323,6 @@ Unit.new( factor => 0.44704, offset => 0, defn => 'miles per hour', type => '',
 	  dims => [1,0,-1,0,0,0,0,0], dmix => ("miles"=>1,"hour"=>-1).MixHash, 
 	  names => ['mph','mphs'] , stock => True  );
 
-Unit.new( factor => 6.022169, offset => 0, defn => '6.022169 / mol', type => '',
-	  dims => [0,0,0,0,0,-1,0,0], dmix => ("mol"=>-1).MixHash, 
-	  names => ['na'] , stock => True  );
-
 Unit.new( factor => 1852, offset => 0, defn => '1852 m', type => '',
 	  dims => [1,0,0,0,0,0,0,0], dmix => ("m"=>1).MixHash, 
 	  names => ['nm','nautical-mile','nautical-miles'] , stock => True  );
@@ -1411,10 +1391,6 @@ Unit.new( factor => 1, offset => 0, defn => 'Hz', type => '',
 	  dims => [0,0,-1,0,0,0,0,0], dmix => ("Hz"=>1).MixHash, 
 	  names => ['radians per second','radians per seconds'] , stock => True  );
 
-Unit.new( factor => 6378388, offset => 0, defn => '6378388 m', type => '',
-	  dims => [1,0,0,0,0,0,0,0], dmix => ("m"=>1).MixHash, 
-	  names => ['re'] , stock => True  );
-
 Unit.new( factor => 0.01, offset => 0, defn => 'sievert / 100', type => '',
 	  dims => [2,0,-2,0,0,0,0,0], dmix => ("sievert"=>1).MixHash, 
 	  names => ['rem','rems'] , stock => True  );
@@ -1430,10 +1406,6 @@ Unit.new( factor => 6.283185307179586477, offset => 0, defn => '2 pi * Hz', type
 Unit.new( factor => 5.0292, offset => 0, defn => '5.5 yards', type => '',
 	  dims => [1,0,0,0,0,0,0,0], dmix => ("yards"=>1).MixHash, 
 	  names => ['rod','rods','pole','poles','perch','perchs'] , stock => True  );
-
-Unit.new( factor => 6356912, offset => 0, defn => '6356912 m', type => '',
-	  dims => [1,0,0,0,0,0,0,0], dmix => ("m"=>1).MixHash, 
-	  names => ['rp'] , stock => True  );
 
 Unit.new( factor => 0.016667, offset => 0, defn => 'revolutions per minute', type => '',
 	  dims => [0,0,-1,0,0,0,0,0], dmix => ("minute"=>-1,"revolutions"=>1).MixHash, 
