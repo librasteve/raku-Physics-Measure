@@ -713,7 +713,9 @@ if $fast-start {
 
 	# Density
     ['kg/m^3'],                                 'kg / m^3',
-	['ºproof',],                               '923 kg / m^3',
+    ['SG'],                                     '999.974 kg / m^3',
+	['ºproof',],                                '923 kg / m^3',       
+	#UK metric https://en.wikipedia.org/wiki/Alcohol_proof (US version is just 2x ABV)
 
     # Energy
     ['eV', 'electron-volt'],                    '1.60217733e-19 joule',
