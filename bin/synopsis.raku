@@ -26,7 +26,7 @@ use Physics::Measure;
 #To see what you have
     say $a.Real;        #50   or use $a in Real context (Real includes Int|Rat|Num etc)
     say $a.Str;         #50 m or use $a in Str context
-    say "$a";           #50 m (values are rounded to 0.001 decimals by Str)
+    say "$a";           #50 m
 
 #The usual arithmetic operators < + - * / > and () brackets just work
 #i.e. units and magnitudes are checked, calculated and errors are calculated automatically    
