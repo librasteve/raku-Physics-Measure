@@ -713,7 +713,7 @@ if $fast-start {
 
 	# Density
     ['kg/m^3'],                                 'kg / m^3',
-	['º proof',],                               '923 kg / m^3',
+	['ºproof',],                               '923 kg / m^3',
 
     # Energy
     ['eV', 'electron-volt'],                    '1.60217733e-19 joule',
@@ -1509,7 +1509,7 @@ Unit.new( factor => 0.017453292519943295, offset => 0, defn => 'pi radians / 180
 
 Unit.new( factor => 923, offset => 0, defn => '923 kg / m^3', type => '',
 	  dims => [-3,1,0,0,0,0,0,0], dmix => ("kg"=>1,"m"=>-3).MixHash, 
-	  names => ['º proof','º proofs'] , stock => True  );
+	  names => ['ºproof','ºproofs'] , stock => True  );
 
 Unit.new( factor => 1, offset => 273.15, defn => 'K + 273.15', type => '',
 	  dims => [0,0,0,0,1,0,0,0], dmix => ("K"=>1).MixHash, 
