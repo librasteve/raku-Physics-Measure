@@ -1434,6 +1434,10 @@ Unit.new( factor => 0.5, offset => 0, defn => '1/2', type => '',
 	  dims => [0,0,0,0,0,0,0,0], dmix => ().MixHash, 
 	  names => ['semi','semis','demi','demis','hemi','hemis'] , stock => True  );
 
+Unit.new( factor => 0.01, offset => 0, defn => '1/100', type => '',
+	  dims => [0,0,0,0,0,0,0,0], dmix => ().MixHash, 
+	  names => ['%','percent'] , stock => True  );
+
 Unit.new( factor => 14.5939029372064, offset => 0, defn => 'lbm g0 s^2/ft', type => '',
 	  dims => [0,1,0,0,0,0,0,0], dmix => ("lbm"=>1,"g0"=>1,"ft"=>-1,"s"=>2).MixHash, 
 	  names => ['slug','slugs'] , stock => True  );
