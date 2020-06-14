@@ -1353,6 +1353,10 @@ Unit.new( factor => 0.001555, offset => 0, defn => '1.555 gm', type => '',
 	  dims => [0,1,0,0,0,0,0,0], dmix => ("gm"=>1).MixHash, 
 	  names => ['pennyweight','pennyweights'] , stock => True  );
 
+Unit.new( factor => 1, offset => 0, defn => '1', type => '',
+	  dims => [0,0,0,0,0,0,0,0], dmix => ().MixHash, 
+	  names => ['ABV'] , stock => True  );
+
 Unit.new( factor => 3.1415926535897932385, offset => 0, defn => '3.1415926535897932385', type => '',
 	  dims => [0,0,0,0,0,0,0,0], dmix => ().MixHash, 
 	  names => ['pi'] , stock => True  );
