@@ -561,8 +561,9 @@ if $fast-start {
     #SI coherent Derived Units that include units with special names - TBD [see url]
 
     # Dimensionless
-    ['one', 'unity'],                    '1',
-    ['semi','demi','hemi'],            '1/2',
+    ['one', 'unity'],							'1',
+    ['semi','demi','hemi'],						'1/2',
+    ['ABV'],									'1',   
 
     # Angle
     ['º', 'degree', 'deg', '°'],                'pi radians / 180',
@@ -713,7 +714,6 @@ if $fast-start {
 
 	# Density
     ['kg/m^3'],                                 'kg / m^3',
-    ['SG'],                                     '999.974 kg / m^3',
 	['ºproof',],                                '923 kg / m^3',       
 	#UK metric https://en.wikipedia.org/wiki/Alcohol_proof (US version is just 2x ABV)
 
