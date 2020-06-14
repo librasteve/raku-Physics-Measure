@@ -258,7 +258,91 @@ Unit.new( factor => 1e-24, offset => 0, defn => 'yoctosecond', type => '',
 	  dims => [0,0,1,0,0,0,0,0], dmix => ("second"=>1).MixHash, 
 	  names => ['ys'] , stock => True  );
 
-### Below commented out as first compile too slow > 30 mins 
+Unit.new( factor => 0.001, offset => 0, defn => 'litre', type => '',
+	  dims => [3,0,0,0,0,0,0,0], dmix => ("litre"=>1).MixHash, 
+	  names => ['l'] , stock => True  );
+
+Unit.new( factor => 0.01, offset => 0, defn => 'dekalitre', type => '',
+	  dims => [3,0,0,0,0,0,0,0], dmix => ("litre"=>1).MixHash, 
+	  names => ['dal','dals'] , stock => True  );
+
+Unit.new( factor => 0.1, offset => 0, defn => 'hectolitre', type => '',
+	  dims => [3,0,0,0,0,0,0,0], dmix => ("litre"=>1).MixHash, 
+	  names => ['hl'] , stock => True  );
+
+Unit.new( factor => 1, offset => 0, defn => 'kilolitre', type => '',
+	  dims => [3,0,0,0,0,0,0,0], dmix => ("litre"=>1).MixHash, 
+	  names => ['kl'] , stock => True  );
+
+Unit.new( factor => 1000, offset => 0, defn => 'megalitre', type => '',
+	  dims => [3,0,0,0,0,0,0,0], dmix => ("litre"=>1).MixHash, 
+	  names => ['Ml'] , stock => True  );
+
+Unit.new( factor => 1000000, offset => 0, defn => 'gigalitre', type => '',
+	  dims => [3,0,0,0,0,0,0,0], dmix => ("litre"=>1).MixHash, 
+	  names => ['Gl'] , stock => True  );
+
+Unit.new( factor => 1000000000, offset => 0, defn => 'teralitre', type => '',
+	  dims => [3,0,0,0,0,0,0,0], dmix => ("litre"=>1).MixHash, 
+	  names => ['Tl'] , stock => True  );
+
+Unit.new( factor => 1000000000000, offset => 0, defn => 'petalitre', type => '',
+	  dims => [3,0,0,0,0,0,0,0], dmix => ("litre"=>1).MixHash, 
+	  names => ['Pl'] , stock => True  );
+
+Unit.new( factor => 1000000000000000, offset => 0, defn => 'exalitre', type => '',
+	  dims => [3,0,0,0,0,0,0,0], dmix => ("litre"=>1).MixHash, 
+	  names => ['El'] , stock => True  );
+
+Unit.new( factor => 1000000000000000000, offset => 0, defn => 'zettalitre', type => '',
+	  dims => [3,0,0,0,0,0,0,0], dmix => ("litre"=>1).MixHash, 
+	  names => ['Zl'] , stock => True  );
+
+Unit.new( factor => 1000000000000000000000, offset => 0, defn => 'yottalitre', type => '',
+	  dims => [3,0,0,0,0,0,0,0], dmix => ("litre"=>1).MixHash, 
+	  names => ['Yl'] , stock => True  );
+
+Unit.new( factor => 0.0001, offset => 0, defn => 'decilitre', type => '',
+	  dims => [3,0,0,0,0,0,0,0], dmix => ("litre"=>1).MixHash, 
+	  names => ['dl'] , stock => True  );
+
+Unit.new( factor => 0.00001, offset => 0, defn => 'centilitre', type => '',
+	  dims => [3,0,0,0,0,0,0,0], dmix => ("litre"=>1).MixHash, 
+	  names => ['cl'] , stock => True  );
+
+Unit.new( factor => 0.000001, offset => 0, defn => 'millilitre', type => '',
+	  dims => [3,0,0,0,0,0,0,0], dmix => ("litre"=>1).MixHash, 
+	  names => ['ml'] , stock => True  );
+
+Unit.new( factor => 0.000000001, offset => 0, defn => 'microlitre', type => '',
+	  dims => [3,0,0,0,0,0,0,0], dmix => ("litre"=>1).MixHash, 
+	  names => ['μl'] , stock => True  );
+
+Unit.new( factor => 0.000000000001, offset => 0, defn => 'nanolitre', type => '',
+	  dims => [3,0,0,0,0,0,0,0], dmix => ("litre"=>1).MixHash, 
+	  names => ['nl'] , stock => True  );
+
+Unit.new( factor => 0.000000000000001, offset => 0, defn => 'picolitre', type => '',
+	  dims => [3,0,0,0,0,0,0,0], dmix => ("litre"=>1).MixHash, 
+	  names => ['pl'] , stock => True  );
+
+Unit.new( factor => 0.000000000000000001, offset => 0, defn => 'femtolitre', type => '',
+	  dims => [3,0,0,0,0,0,0,0], dmix => ("litre"=>1).MixHash, 
+	  names => ['fl'] , stock => True  );
+
+Unit.new( factor => 1.0000000000000001e-21, offset => 0, defn => 'attolitre', type => '',
+	  dims => [3,0,0,0,0,0,0,0], dmix => ("litre"=>1).MixHash, 
+	  names => ['al'] , stock => True  );
+
+Unit.new( factor => 1e-24, offset => 0, defn => 'zeptolitre', type => '',
+	  dims => [3,0,0,0,0,0,0,0], dmix => ("litre"=>1).MixHash, 
+	  names => ['zl'] , stock => True  );
+
+Unit.new( factor => 1e-27, offset => 0, defn => 'yoctolitre', type => '',
+	  dims => [3,0,0,0,0,0,0,0], dmix => ("litre"=>1).MixHash, 
+	  names => ['yl'] , stock => True  );
+
+### Below commented out with ((...)) as first compile too slow > 30 mins 
 ### If you can live with this feel free to uncomment here and  
 ### relevant items in Measure.rakumod
 #`((
@@ -2531,89 +2615,6 @@ Unit.new( factor => 1.7453292519943293e-26, offset => 0, defn => 'yoctodegrees',
 	  dims => [0,0,0,0,0,0,0,1], dmix => ("degrees"=>1).MixHash, 
 	  names => ['yº'] , stock => True  );
 
-Unit.new( factor => 0.001, offset => 0, defn => 'litre', type => '',
-	  dims => [3,0,0,0,0,0,0,0], dmix => ("litre"=>1).MixHash, 
-	  names => ['l'] , stock => True  );
-
-Unit.new( factor => 0.01, offset => 0, defn => 'dekalitre', type => '',
-	  dims => [3,0,0,0,0,0,0,0], dmix => ("litre"=>1).MixHash, 
-	  names => ['dal','dals'] , stock => True  );
-
-Unit.new( factor => 0.1, offset => 0, defn => 'hectolitre', type => '',
-	  dims => [3,0,0,0,0,0,0,0], dmix => ("litre"=>1).MixHash, 
-	  names => ['hl'] , stock => True  );
-
-Unit.new( factor => 1, offset => 0, defn => 'kilolitre', type => '',
-	  dims => [3,0,0,0,0,0,0,0], dmix => ("litre"=>1).MixHash, 
-	  names => ['kl'] , stock => True  );
-
-Unit.new( factor => 1000, offset => 0, defn => 'megalitre', type => '',
-	  dims => [3,0,0,0,0,0,0,0], dmix => ("litre"=>1).MixHash, 
-	  names => ['Ml'] , stock => True  );
-
-Unit.new( factor => 1000000, offset => 0, defn => 'gigalitre', type => '',
-	  dims => [3,0,0,0,0,0,0,0], dmix => ("litre"=>1).MixHash, 
-	  names => ['Gl'] , stock => True  );
-
-Unit.new( factor => 1000000000, offset => 0, defn => 'teralitre', type => '',
-	  dims => [3,0,0,0,0,0,0,0], dmix => ("litre"=>1).MixHash, 
-	  names => ['Tl'] , stock => True  );
-
-Unit.new( factor => 1000000000000, offset => 0, defn => 'petalitre', type => '',
-	  dims => [3,0,0,0,0,0,0,0], dmix => ("litre"=>1).MixHash, 
-	  names => ['Pl'] , stock => True  );
-
-Unit.new( factor => 1000000000000000, offset => 0, defn => 'exalitre', type => '',
-	  dims => [3,0,0,0,0,0,0,0], dmix => ("litre"=>1).MixHash, 
-	  names => ['El'] , stock => True  );
-
-Unit.new( factor => 1000000000000000000, offset => 0, defn => 'zettalitre', type => '',
-	  dims => [3,0,0,0,0,0,0,0], dmix => ("litre"=>1).MixHash, 
-	  names => ['Zl'] , stock => True  );
-
-Unit.new( factor => 1000000000000000000000, offset => 0, defn => 'yottalitre', type => '',
-	  dims => [3,0,0,0,0,0,0,0], dmix => ("litre"=>1).MixHash, 
-	  names => ['Yl'] , stock => True  );
-
-Unit.new( factor => 0.0001, offset => 0, defn => 'decilitre', type => '',
-	  dims => [3,0,0,0,0,0,0,0], dmix => ("litre"=>1).MixHash, 
-	  names => ['dl'] , stock => True  );
-
-Unit.new( factor => 0.00001, offset => 0, defn => 'centilitre', type => '',
-	  dims => [3,0,0,0,0,0,0,0], dmix => ("litre"=>1).MixHash, 
-	  names => ['cl'] , stock => True  );
-
-Unit.new( factor => 0.000001, offset => 0, defn => 'millilitre', type => '',
-	  dims => [3,0,0,0,0,0,0,0], dmix => ("litre"=>1).MixHash, 
-	  names => ['ml'] , stock => True  );
-
-Unit.new( factor => 0.000000001, offset => 0, defn => 'microlitre', type => '',
-	  dims => [3,0,0,0,0,0,0,0], dmix => ("litre"=>1).MixHash, 
-	  names => ['μl'] , stock => True  );
-
-Unit.new( factor => 0.000000000001, offset => 0, defn => 'nanolitre', type => '',
-	  dims => [3,0,0,0,0,0,0,0], dmix => ("litre"=>1).MixHash, 
-	  names => ['nl'] , stock => True  );
-
-Unit.new( factor => 0.000000000000001, offset => 0, defn => 'picolitre', type => '',
-	  dims => [3,0,0,0,0,0,0,0], dmix => ("litre"=>1).MixHash, 
-	  names => ['pl'] , stock => True  );
-
-Unit.new( factor => 0.000000000000000001, offset => 0, defn => 'femtolitre', type => '',
-	  dims => [3,0,0,0,0,0,0,0], dmix => ("litre"=>1).MixHash, 
-	  names => ['fl'] , stock => True  );
-
-Unit.new( factor => 1.0000000000000001e-21, offset => 0, defn => 'attolitre', type => '',
-	  dims => [3,0,0,0,0,0,0,0], dmix => ("litre"=>1).MixHash, 
-	  names => ['al'] , stock => True  );
-
-Unit.new( factor => 1e-24, offset => 0, defn => 'zeptolitre', type => '',
-	  dims => [3,0,0,0,0,0,0,0], dmix => ("litre"=>1).MixHash, 
-	  names => ['zl'] , stock => True  );
-
-Unit.new( factor => 1e-27, offset => 0, defn => 'yoctolitre', type => '',
-	  dims => [3,0,0,0,0,0,0,0], dmix => ("litre"=>1).MixHash, 
-	  names => ['yl'] , stock => True  );
 #)) ##End of commented out units
 ###### Short Stock Units End ######
 

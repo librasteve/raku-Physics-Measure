@@ -508,10 +508,31 @@ sub postfix:<fs> (Real:D $x) is export { do-postfix($x,'fs') }
 sub postfix:<as> (Real:D $x) is export { do-postfix($x,'as') }
 sub postfix:<zs> (Real:D $x) is export { do-postfix($x,'zs') }
 sub postfix:<ys> (Real:D $x) is export { do-postfix($x,'ys') }
+sub postfix:<l> (Real:D $x) is export { do-postfix($x,'l') }
+sub postfix:<dal> (Real:D $x) is export { do-postfix($x,'dal') }
+sub postfix:<hl> (Real:D $x) is export { do-postfix($x,'hl') }
+sub postfix:<kl> (Real:D $x) is export { do-postfix($x,'kl') }
+sub postfix:<Ml> (Real:D $x) is export { do-postfix($x,'Ml') }
+sub postfix:<Gl> (Real:D $x) is export { do-postfix($x,'Gl') }
+sub postfix:<Tl> (Real:D $x) is export { do-postfix($x,'Tl') }
+sub postfix:<Pl> (Real:D $x) is export { do-postfix($x,'Pl') }
+sub postfix:<El> (Real:D $x) is export { do-postfix($x,'El') }
+sub postfix:<Zl> (Real:D $x) is export { do-postfix($x,'Zl') }
+sub postfix:<Yl> (Real:D $x) is export { do-postfix($x,'Yl') }
+sub postfix:<dl> (Real:D $x) is export { do-postfix($x,'dl') }
+sub postfix:<cl> (Real:D $x) is export { do-postfix($x,'cl') }
+sub postfix:<ml> (Real:D $x) is export { do-postfix($x,'ml') }
+sub postfix:<μl> (Real:D $x) is export { do-postfix($x,'μl') }
+sub postfix:<nl> (Real:D $x) is export { do-postfix($x,'nl') }
+sub postfix:<pl> (Real:D $x) is export { do-postfix($x,'pl') }
+sub postfix:<fl> (Real:D $x) is export { do-postfix($x,'fl') }
+sub postfix:<al> (Real:D $x) is export { do-postfix($x,'al') }
+sub postfix:<zl> (Real:D $x) is export { do-postfix($x,'zl') }
+sub postfix:<yl> (Real:D $x) is export { do-postfix($x,'yl') }
 
 ### Below commented out as first compile too slow > 7 mins
 ### If you can live with this feel free to uncomment here and 
-### relevant items in ShortUnit.rakumod
+### relevant items in UnitPostfix.rakumod
 #`(( 
 sub postfix:<A> (Real:D $x) is export { do-postfix($x,'A') }
 sub postfix:<daA> (Real:D $x) is export { do-postfix($x,'daA') }
@@ -1080,29 +1101,6 @@ sub postfix:<fº> (Real:D $x) is export { do-postfix($x,'fº') }
 sub postfix:<aº> (Real:D $x) is export { do-postfix($x,'aº') }
 sub postfix:<zº> (Real:D $x) is export { do-postfix($x,'zº') }
 sub postfix:<yº> (Real:D $x) is export { do-postfix($x,'yº') }
-sub postfix:<l> (Real:D $x) is export { do-postfix($x,'l') }
-sub postfix:<dal> (Real:D $x) is export { do-postfix($x,'dal') }
-sub postfix:<hl> (Real:D $x) is export { do-postfix($x,'hl') }
-sub postfix:<kl> (Real:D $x) is export { do-postfix($x,'kl') }
-sub postfix:<Ml> (Real:D $x) is export { do-postfix($x,'Ml') }
-sub postfix:<Gl> (Real:D $x) is export { do-postfix($x,'Gl') }
-sub postfix:<Tl> (Real:D $x) is export { do-postfix($x,'Tl') }
-sub postfix:<Pl> (Real:D $x) is export { do-postfix($x,'Pl') }
-sub postfix:<El> (Real:D $x) is export { do-postfix($x,'El') }
-sub postfix:<Zl> (Real:D $x) is export { do-postfix($x,'Zl') }
-sub postfix:<Yl> (Real:D $x) is export { do-postfix($x,'Yl') }
-sub postfix:<dl> (Real:D $x) is export { do-postfix($x,'dl') }
-sub postfix:<cl> (Real:D $x) is export { do-postfix($x,'cl') }
-sub postfix:<ml> (Real:D $x) is export { do-postfix($x,'ml') }
-sub postfix:<μl> (Real:D $x) is export { do-postfix($x,'μl') }
-sub postfix:<nl> (Real:D $x) is export { do-postfix($x,'nl') }
-sub postfix:<pl> (Real:D $x) is export { do-postfix($x,'pl') }
-sub postfix:<fl> (Real:D $x) is export { do-postfix($x,'fl') }
-sub postfix:<al> (Real:D $x) is export { do-postfix($x,'al') }
-sub postfix:<zl> (Real:D $x) is export { do-postfix($x,'zl') }
-sub postfix:<yl> (Real:D $x) is export { do-postfix($x,'yl') }
 #))
-
-#EOF
 
 #EOF
