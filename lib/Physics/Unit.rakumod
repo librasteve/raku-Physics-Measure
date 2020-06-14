@@ -563,6 +563,7 @@ if $fast-start {
     # Dimensionless
     ['one', 'unity'],							'1',
     ['semi','demi','hemi'],						'1/2',
+	['%','percent'],							'1/100',
     ['ABV'],									'1',   
 
     # Angle
