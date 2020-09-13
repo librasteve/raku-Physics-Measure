@@ -58,9 +58,9 @@ use Physics::Measure;
     my Length $df ♎️ '12.0 feet';
     my $dm = $df.in( 'm' );				#3.658 m
        $dm = $df.in: <m> ;				#alternate form
-    my Temperature $deg-c ♎️ '39 ºC';
+    my Temperature $deg-c ♎️ '39 °C';
     my $deg-k = $deg-c.in( 'K' );       #312.15 K
-    my $deg-cr = $deg-k.in( 'ºC' );     #39 ºC
+    my $deg-cr = $deg-k.in( '°C' );     #39 °C
 #Use arithmetic to get high order or inverse Unit types such as Area, Volume, Frequency, etc.
     my Area		  $x = $a * $a;         #18.49 m^2
     my Speed      $s = $a / $t2;        #0.43 m/s

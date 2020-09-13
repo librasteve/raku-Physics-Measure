@@ -1945,87 +1945,87 @@ Unit.new( factor => 1e-24, offset => 0, defn => 'yoctohenry', type => '',
 
 Unit.new( factor => 1, offset => 0, defn => 'celsius', type => '',
 	  dims => [0,0,0,0,1,0,0,0], dmix => ("celsius"=>1).MixHash, 
-	  names => ['ºC'] , stock => True  );
+	  names => ['°C'] , stock => True  );
 
 Unit.new( factor => 10, offset => 0, defn => 'dekacelsius', type => '',
 	  dims => [0,0,0,0,1,0,0,0], dmix => ("celsius"=>1).MixHash, 
-	  names => ['daºC','daºCs'] , stock => True  );
+	  names => ['da°C','da°Cs'] , stock => True  );
 
 Unit.new( factor => 100, offset => 0, defn => 'hectocelsius', type => '',
 	  dims => [0,0,0,0,1,0,0,0], dmix => ("celsius"=>1).MixHash, 
-	  names => ['hºC','hºCs'] , stock => True  );
+	  names => ['h°C','h°Cs'] , stock => True  );
 
 Unit.new( factor => 1000, offset => 0, defn => 'kilocelsius', type => '',
 	  dims => [0,0,0,0,1,0,0,0], dmix => ("celsius"=>1).MixHash, 
-	  names => ['kºC','kºCs'] , stock => True  );
+	  names => ['k°C','k°Cs'] , stock => True  );
 
 Unit.new( factor => 1000000, offset => 0, defn => 'megacelsius', type => '',
 	  dims => [0,0,0,0,1,0,0,0], dmix => ("celsius"=>1).MixHash, 
-	  names => ['MºC','MºCs'] , stock => True  );
+	  names => ['M°C','M°Cs'] , stock => True  );
 
 Unit.new( factor => 1000000000, offset => 0, defn => 'gigacelsius', type => '',
 	  dims => [0,0,0,0,1,0,0,0], dmix => ("celsius"=>1).MixHash, 
-	  names => ['GºC','GºCs'] , stock => True  );
+	  names => ['G°C','G°Cs'] , stock => True  );
 
 Unit.new( factor => 1000000000000, offset => 0, defn => 'teracelsius', type => '',
 	  dims => [0,0,0,0,1,0,0,0], dmix => ("celsius"=>1).MixHash, 
-	  names => ['TºC','TºCs'] , stock => True  );
+	  names => ['T°C','T°Cs'] , stock => True  );
 
 Unit.new( factor => 1000000000000000, offset => 0, defn => 'petacelsius', type => '',
 	  dims => [0,0,0,0,1,0,0,0], dmix => ("celsius"=>1).MixHash, 
-	  names => ['PºC','PºCs'] , stock => True  );
+	  names => ['P°C','P°Cs'] , stock => True  );
 
 Unit.new( factor => 1000000000000000000, offset => 0, defn => 'exacelsius', type => '',
 	  dims => [0,0,0,0,1,0,0,0], dmix => ("celsius"=>1).MixHash, 
-	  names => ['EºC','EºCs'] , stock => True  );
+	  names => ['E°C','E°Cs'] , stock => True  );
 
 Unit.new( factor => 1000000000000000000000, offset => 0, defn => 'zettacelsius', type => '',
 	  dims => [0,0,0,0,1,0,0,0], dmix => ("celsius"=>1).MixHash, 
-	  names => ['ZºC','ZºCs'] , stock => True  );
+	  names => ['Z°C','Z°Cs'] , stock => True  );
 
 Unit.new( factor => 1000000000000000000000000, offset => 0, defn => 'yottacelsius', type => '',
 	  dims => [0,0,0,0,1,0,0,0], dmix => ("celsius"=>1).MixHash, 
-	  names => ['YºC','YºCs'] , stock => True  );
+	  names => ['Y°C','Y°Cs'] , stock => True  );
 
 Unit.new( factor => 0.1, offset => 0, defn => 'decicelsius', type => '',
 	  dims => [0,0,0,0,1,0,0,0], dmix => ("celsius"=>1).MixHash, 
-	  names => ['dºC','dºCs'] , stock => True  );
+	  names => ['d°C','d°Cs'] , stock => True  );
 
 Unit.new( factor => 0.01, offset => 0, defn => 'centicelsius', type => '',
 	  dims => [0,0,0,0,1,0,0,0], dmix => ("celsius"=>1).MixHash, 
-	  names => ['cºC','cºCs'] , stock => True  );
+	  names => ['c°C','c°Cs'] , stock => True  );
 
 Unit.new( factor => 0.001, offset => 0, defn => 'millicelsius', type => '',
 	  dims => [0,0,0,0,1,0,0,0], dmix => ("celsius"=>1).MixHash, 
-	  names => ['mºC','mºCs'] , stock => True  );
+	  names => ['m°C','m°Cs'] , stock => True  );
 
 Unit.new( factor => 0.000001, offset => 0, defn => 'microcelsius', type => '',
 	  dims => [0,0,0,0,1,0,0,0], dmix => ("celsius"=>1).MixHash, 
-	  names => ['μºC','μºCs'] , stock => True  );
+	  names => ['μ°C','μ°Cs'] , stock => True  );
 
 Unit.new( factor => 0.000000001, offset => 0, defn => 'nanocelsius', type => '',
 	  dims => [0,0,0,0,1,0,0,0], dmix => ("celsius"=>1).MixHash, 
-	  names => ['nºC','nºCs'] , stock => True  );
+	  names => ['n°C','n°Cs'] , stock => True  );
 
 Unit.new( factor => 0.000000000001, offset => 0, defn => 'picocelsius', type => '',
 	  dims => [0,0,0,0,1,0,0,0], dmix => ("celsius"=>1).MixHash, 
-	  names => ['pºC','pºCs'] , stock => True  );
+	  names => ['p°C','p°Cs'] , stock => True  );
 
 Unit.new( factor => 0.000000000000001, offset => 0, defn => 'femtocelsius', type => '',
 	  dims => [0,0,0,0,1,0,0,0], dmix => ("celsius"=>1).MixHash, 
-	  names => ['fºC','fºCs'] , stock => True  );
+	  names => ['f°C','f°Cs'] , stock => True  );
 
 Unit.new( factor => 0.000000000000000001, offset => 0, defn => 'attocelsius', type => '',
 	  dims => [0,0,0,0,1,0,0,0], dmix => ("celsius"=>1).MixHash, 
-	  names => ['aºC','aºCs'] , stock => True  );
+	  names => ['a°C','a°Cs'] , stock => True  );
 
 Unit.new( factor => 1.0000000000000001e-21, offset => 0, defn => 'zeptocelsius', type => '',
 	  dims => [0,0,0,0,1,0,0,0], dmix => ("celsius"=>1).MixHash, 
-	  names => ['zºC','zºCs'] , stock => True  );
+	  names => ['z°C','z°Cs'] , stock => True  );
 
 Unit.new( factor => 1e-24, offset => 0, defn => 'yoctocelsius', type => '',
 	  dims => [0,0,0,0,1,0,0,0], dmix => ("celsius"=>1).MixHash, 
-	  names => ['yºC','yºCs'] , stock => True  );
+	  names => ['y°C','y°Cs'] , stock => True  );
 
 Unit.new( factor => 1, offset => 0, defn => 'lumen', type => '',
 	  dims => [0,0,0,0,0,0,1,2], dmix => ("lumen"=>1).MixHash, 
@@ -2533,87 +2533,87 @@ Unit.new( factor => 1e-24, offset => 0, defn => 'yoctokatal', type => '',
 
 Unit.new( factor => 0.017453292519943295, offset => 0, defn => 'degrees', type => '',
 	  dims => [0,0,0,0,0,0,0,1], dmix => ("degrees"=>1).MixHash, 
-	  names => ['º'] , stock => True  );
+	  names => ['°'] , stock => True  );
 
 Unit.new( factor => 0.17453292519943295, offset => 0, defn => 'dekadegrees', type => '',
 	  dims => [0,0,0,0,0,0,0,1], dmix => ("degrees"=>1).MixHash, 
-	  names => ['daº','daºs'] , stock => True  );
+	  names => ['da°','da°s'] , stock => True  );
 
 Unit.new( factor => 1.7453292519943295, offset => 0, defn => 'hectodegrees', type => '',
 	  dims => [0,0,0,0,0,0,0,1], dmix => ("degrees"=>1).MixHash, 
-	  names => ['hº'] , stock => True  );
+	  names => ['h°'] , stock => True  );
 
 Unit.new( factor => 17.453292519943297, offset => 0, defn => 'kilodegrees', type => '',
 	  dims => [0,0,0,0,0,0,0,1], dmix => ("degrees"=>1).MixHash, 
-	  names => ['kº'] , stock => True  );
+	  names => ['k°'] , stock => True  );
 
 Unit.new( factor => 17453.292519943294, offset => 0, defn => 'megadegrees', type => '',
 	  dims => [0,0,0,0,0,0,0,1], dmix => ("degrees"=>1).MixHash, 
-	  names => ['Mº'] , stock => True  );
+	  names => ['M°'] , stock => True  );
 
 Unit.new( factor => 17453292.519943297, offset => 0, defn => 'gigadegrees', type => '',
 	  dims => [0,0,0,0,0,0,0,1], dmix => ("degrees"=>1).MixHash, 
-	  names => ['Gº'] , stock => True  );
+	  names => ['G°'] , stock => True  );
 
 Unit.new( factor => 17453292519.943295, offset => 0, defn => 'teradegrees', type => '',
 	  dims => [0,0,0,0,0,0,0,1], dmix => ("degrees"=>1).MixHash, 
-	  names => ['Tº'] , stock => True  );
+	  names => ['T°'] , stock => True  );
 
 Unit.new( factor => 17453292519943.295, offset => 0, defn => 'petadegrees', type => '',
 	  dims => [0,0,0,0,0,0,0,1], dmix => ("degrees"=>1).MixHash, 
-	  names => ['Pº'] , stock => True  );
+	  names => ['P°'] , stock => True  );
 
 Unit.new( factor => 17453292519943296, offset => 0, defn => 'exadegrees', type => '',
 	  dims => [0,0,0,0,0,0,0,1], dmix => ("degrees"=>1).MixHash, 
-	  names => ['Eº'] , stock => True  );
+	  names => ['E°'] , stock => True  );
 
 Unit.new( factor => 1.7453292519943295e+19, offset => 0, defn => 'zettadegrees', type => '',
 	  dims => [0,0,0,0,0,0,0,1], dmix => ("degrees"=>1).MixHash, 
-	  names => ['Zº'] , stock => True  );
+	  names => ['Z°'] , stock => True  );
 
 Unit.new( factor => 1.7453292519943295e+22, offset => 0, defn => 'yottadegrees', type => '',
 	  dims => [0,0,0,0,0,0,0,1], dmix => ("degrees"=>1).MixHash, 
-	  names => ['Yº'] , stock => True  );
+	  names => ['Y°'] , stock => True  );
 
 Unit.new( factor => 0.0017453292519943296, offset => 0, defn => 'decidegrees', type => '',
 	  dims => [0,0,0,0,0,0,0,1], dmix => ("degrees"=>1).MixHash, 
-	  names => ['dº'] , stock => True  );
+	  names => ['d°'] , stock => True  );
 
 Unit.new( factor => 0.00017453292519943296, offset => 0, defn => 'centidegrees', type => '',
 	  dims => [0,0,0,0,0,0,0,1], dmix => ("degrees"=>1).MixHash, 
-	  names => ['cº'] , stock => True  );
+	  names => ['c°'] , stock => True  );
 
 Unit.new( factor => 1.7453292519943296e-05, offset => 0, defn => 'millidegrees', type => '',
 	  dims => [0,0,0,0,0,0,0,1], dmix => ("degrees"=>1).MixHash, 
-	  names => ['mº'] , stock => True  );
+	  names => ['m°'] , stock => True  );
 
 Unit.new( factor => 1.7453292519943295e-08, offset => 0, defn => 'microdegrees', type => '',
 	  dims => [0,0,0,0,0,0,0,1], dmix => ("degrees"=>1).MixHash, 
-	  names => ['μº'] , stock => True  );
+	  names => ['μ°'] , stock => True  );
 
 Unit.new( factor => 1.7453292519943298e-11, offset => 0, defn => 'nanodegrees', type => '',
 	  dims => [0,0,0,0,0,0,0,1], dmix => ("degrees"=>1).MixHash, 
-	  names => ['nº'] , stock => True  );
+	  names => ['n°'] , stock => True  );
 
 Unit.new( factor => 1.7453292519943295e-14, offset => 0, defn => 'picodegrees', type => '',
 	  dims => [0,0,0,0,0,0,0,1], dmix => ("degrees"=>1).MixHash, 
-	  names => ['pº'] , stock => True  );
+	  names => ['p°'] , stock => True  );
 
 Unit.new( factor => 1.7453292519943298e-17, offset => 0, defn => 'femtodegrees', type => '',
 	  dims => [0,0,0,0,0,0,0,1], dmix => ("degrees"=>1).MixHash, 
-	  names => ['fº'] , stock => True  );
+	  names => ['f°'] , stock => True  );
 
 Unit.new( factor => 1.7453292519943297e-20, offset => 0, defn => 'attodegrees', type => '',
 	  dims => [0,0,0,0,0,0,0,1], dmix => ("degrees"=>1).MixHash, 
-	  names => ['aº'] , stock => True  );
+	  names => ['a°'] , stock => True  );
 
 Unit.new( factor => 1.7453292519943298e-23, offset => 0, defn => 'zeptodegrees', type => '',
 	  dims => [0,0,0,0,0,0,0,1], dmix => ("degrees"=>1).MixHash, 
-	  names => ['zº'] , stock => True  );
+	  names => ['z°'] , stock => True  );
 
 Unit.new( factor => 1.7453292519943293e-26, offset => 0, defn => 'yoctodegrees', type => '',
 	  dims => [0,0,0,0,0,0,0,1], dmix => ("degrees"=>1).MixHash, 
-	  names => ['yº'] , stock => True  );
+	  names => ['y°'] , stock => True  );
 
 #)) ##End of commented out units
 ###### Short Stock Units End ######

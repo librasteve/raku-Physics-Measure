@@ -30,7 +30,7 @@ my %pwr-superscript = (
 ######## Classes & Roles ########
 class Unit is export {
     has Real $!factor = 1;
-    has Real $!offset = 0;				#for K <=> ºC
+    has Real $!offset = 0;				#for K <=> °C
     has Str  $!defn   = '';
     has Str  $!type;
     has Str  @.names  is rw = [];
@@ -502,14 +502,14 @@ InitShortyNames (
     'Wb',  'weber',
     'T',   'tesla',
     'H',   'henry',
-    'ºC',  'celsius',
+    '°C',  'celsius',
     'lm',  'lumen',
     'lx',  'lux',
     'Bq',  'becquerel',
     'Gy',  'gray',
     'Sv',  'sievert',
     'kat', 'katal',
-	'º',   'degrees',
+	'°',   'degrees',
     'l',   'litre',
 );
 
@@ -550,7 +550,7 @@ if $fast-start {
     ['Wb', 'weber'],                        'kg m^2 / A s^2',
     ['T',  'tesla'],                        'kg / A s^2',
     ['H',  'henry'],                        'kg m^2 / A^2 s^2',
-    ['ºC', 'celsius', 'Centigrade'],        'K + 273.15',
+    ['°C', 'celsius', 'Centigrade'],        'K + 273.15',
     ['lm', 'lumen'],                        'cd sr',
     ['lx', 'lux'],                          'm^-2 cd',
     ['Bq', 'becquerel'],                    '1 Hz',
@@ -567,7 +567,7 @@ if $fast-start {
     ['ABV'],									'1',   
 
     # Angle
-    ['º', 'degree', 'deg', '°'],                'pi radians / 180',
+    ['°', 'degree', 'deg', '°'],                'pi radians / 180',
     ['′', 'arcminute', 'arcmin'],               'deg / 60',         #U+2032
     ['″', 'arcsecond', 'arcsec'],               'arcmin / 60',      #U+2033
     ['ᵍ', 'gon'],                               'pi radians / 200',
@@ -715,7 +715,7 @@ if $fast-start {
 
 	# Density
     ['kg/m^3'],                                 'kg / m^3',
-	['ºproof',],                                '923 kg / m^3',       
+	['°proof',],                                '923 kg / m^3',       
 	#UK metric https://en.wikipedia.org/wiki/Alcohol_proof (US version is just 2x ABV)
 
     # Energy
@@ -752,8 +752,8 @@ if $fast-start {
     ['gauss'],                                  '1e-4 tesla',
 
     # Temperature
-    ['ºR', 'Rankine'],                          '5/9 * K',    
-    ['ºF', 'Fahrenheit'],                       '5/9 * K + 459.67',
+    ['°R', 'Rankine'],                          '5/9 * K',    
+    ['°F', 'Fahrenheit'],                       '5/9 * K + 459.67',
 
     # Dose
     ['rad'],           'gray / 100',
@@ -1516,23 +1516,23 @@ Unit.new( factor => 31557600, offset => 0, defn => '365.25 days', type => '',
 
 Unit.new( factor => 0.017453292519943295, offset => 0, defn => 'pi radians / 180', type => '',
 	  dims => [0,0,0,0,0,0,0,1], dmix => ("pi"=>1,"radians"=>1).MixHash, 
-	  names => ['º','degree','degrees','deg','degs','°'] , stock => True  );
+	  names => ['°','degree','degrees','deg','degs','°'] , stock => True  );
 
 Unit.new( factor => 923, offset => 0, defn => '923 kg / m^3', type => '',
 	  dims => [-3,1,0,0,0,0,0,0], dmix => ("kg"=>1,"m"=>-3).MixHash, 
-	  names => ['ºproof','ºproofs'] , stock => True  );
+	  names => ['°proof','°proofs'] , stock => True  );
 
 Unit.new( factor => 1, offset => 273.15, defn => 'K + 273.15', type => '',
 	  dims => [0,0,0,0,1,0,0,0], dmix => ("K"=>1).MixHash, 
-	  names => ['ºC','celsius','Centigrade','Centigrades'] , stock => True  );
+	  names => ['°C','celsius','Centigrade','Centigrades'] , stock => True  );
 
 Unit.new( factor => 0.555556, offset => 459.67, defn => '5/9 * K + 459.67', type => '',
 	  dims => [0,0,0,0,1,0,0,0], dmix => ("K"=>1).MixHash, 
-	  names => ['ºF','Fahrenheit','Fahrenheits'] , stock => True  );
+	  names => ['°F','Fahrenheit','Fahrenheits'] , stock => True  );
 
 Unit.new( factor => 0.555556, offset => 0, defn => '5/9 * K', type => '',
 	  dims => [0,0,0,0,1,0,0,0], dmix => ("K"=>1).MixHash, 
-	  names => ['ºR','Rankine','Rankines'] , stock => True  );
+	  names => ['°R','Rankine','Rankines'] , stock => True  );
 
 Unit.new( factor => 1e-10, offset => 0, defn => '1e-10 m', type => '',
 	  dims => [1,0,0,0,0,0,0,0], dmix => ("m"=>1).MixHash, 
