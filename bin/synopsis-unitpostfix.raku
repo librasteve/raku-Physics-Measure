@@ -8,4 +8,5 @@ my $t = 1ms;			say ~$t;
 my $s = $l/$t;			say ~$s;
 my $f = $l.in: <ft>;	say ~$f;
 my $m = 1kg;			say ~$m;
+my $c = 17cm; say ~$c;
 
