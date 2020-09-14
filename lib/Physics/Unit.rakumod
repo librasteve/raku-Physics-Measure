@@ -567,7 +567,7 @@ if $fast-start {
     ['ABV'],									'1',   
 
     # Angle
-    ['°', 'degree', 'deg', '°'],                'pi radians / 180',
+    ['°', 'degree', 'deg', 'º'],                'pi radians / 180',
     ['′', 'arcminute', 'arcmin'],               'deg / 60',         #U+2032
     ['″', 'arcsecond', 'arcsec'],               'arcmin / 60',      #U+2033
     ['ᵍ', 'gon'],                               'pi radians / 200',
