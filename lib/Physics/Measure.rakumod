@@ -79,6 +79,7 @@ class Measure is export {
 
     method Real      { $!value }
     method Numeric   { $!value }
+    method Num	     { $!value }
     method Str       { "{$!value} {$!units}" }
     method canonical { "{$!value} {$!units.canonical}" }
     method pretty    { "{$!value} {$!units.pretty}" }
