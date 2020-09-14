@@ -47,32 +47,32 @@ my Length $d-mi2 ♎️ '1 miles';
 my $d-y3 = $d-mi2.in( 'yards' );
 is $d-y3, '1760 yard',                                                      '$d.in-yards';
 
-my Temperature $deg-c ♎️ '39 ºC';
-is $deg-c, '39 ºC',                                                         '$t.in-C';
+my Temperature $deg-c ♎️ '39 °C';
+is $deg-c, '39 °C',                                                         '$t.in-C';
 
 my $deg-k = $deg-c.in( 'K' );
 is $deg-k, '312.15 K',                                                      '$t.in-K';
     
-my $deg-cr = $deg-k.in( 'ºC' );
-is $deg-cr, '39 ºC',                                                        '$t.in-C';
+my $deg-cr = $deg-k.in( '°C' );
+is $deg-cr, '39 °C',                                                        '$t.in-C';
 
 my Temperature $deg-k2 ♎️ '300 K'; 
 is $deg-k2, '300 K',                                                        '$t.in-K';
 
-my $deg-f = $deg-k2.in( 'ºF' );
-is $deg-f, '80.329568 ºF',                                                  '$t.in-F';
+my $deg-f = $deg-k2.in( '°F' );
+is $deg-f, '80.329568 °F',                                                  '$t.in-F';
     
 my $deg-k2r = $deg-f.in( 'K' );
 is $deg-k2r, '300 K',                                                       '$t.in-K';
     
-my Temperature $deg-f2 ♎️ '98.6 ºF';
-is $deg-f2, '98.6 ºF',                                                      '$t.in-F';
+my Temperature $deg-f2 ♎️ '98.6 °F';
+is $deg-f2, '98.6 °F',                                                      '$t.in-F';
 
-my $deg-c2 = $deg-f2.in( 'ºC' );
-is $deg-c2, '37.00024812 ºC',                                               '$t.in-C';
+my $deg-c2 = $deg-f2.in( '°C' );
+is $deg-c2, '37.00024812 °C',                                               '$t.in-C';
     
-my $deg-f2r = $deg-c2.in( 'ºF' );
-is $deg-f2r, '98.6 ºF',                                                     '$t.in-F';
+my $deg-f2r = $deg-c2.in( '°F' );
+is $deg-f2r, '98.6 °F',                                                     '$t.in-F';
 
 #Conversion of high order Units such as Area, Volume, etc. also uses .in()
 
