@@ -487,7 +487,7 @@ InitShortyNames (
 	'K',   'kelvin',
 	'mol', 'mol',
 	'cd',  'candela',
-	'rad', 'radian',
+#	'rad', 'radian',   #remove due to confusion with rad Dose
     'sr',  'steradian',
     'Hz',  'hertz',
     'N',   'newton',
@@ -522,7 +522,7 @@ InitBaseUnit (
     'Temperature' => ['K', 'kelvin'],   
     'Substance'   => ['mol', 'mole'],
     'Luminosity'  => ['cd', 'candela', 'candle'],
-	'Angle'		  => ['rad', 'radian'],		#for angle <=> solid angle
+	'Angle'		  => ['radian'],		#for angle <=> solid angle
 );
 
 if $fast-start {
@@ -1388,7 +1388,7 @@ Unit.new( factor => 0.0011365225, offset => 0, defn => 'gallon/4', type => '',
 
 Unit.new( factor => 1, offset => 0, defn => 'rad', type => '',
 	  dims => [0,0,0,0,0,0,0,1], dmix => ("rad"=>1).MixHash, 
-	  names => ['rad','rads','radian','radians'] , stock => True  );
+	  names => ['radian','radians'] , stock => True  );
 
 Unit.new( factor => 0.01, offset => 0, defn => 'gray / 100', type => '',
 	  dims => [2,0,-2,0,0,0,0,0], dmix => ("gray"=>1).MixHash, 
