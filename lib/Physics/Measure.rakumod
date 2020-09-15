@@ -79,7 +79,6 @@ class Measure is export {
 
     method Real      { $!value }
     method Numeric   { $!value }
-    method Num	     { $!value }
     method Str       { "{$!value} {$!units}" }
     method canonical { "{$!value} {$!units.canonical}" }
     method pretty    { "{$!value} {$!units.pretty}" }
@@ -171,7 +170,7 @@ class Measure is export {
 		my $nuo = GetUnit( $to );		#aka new unit object
 		my $n-type = $nuo.type( just1 => 1 );
 
-		unless self ~~ ::($n-type) { die "cannot convert in to different type" }
+		unless self ~~ ::($n-type) { die "cannot convert in to different type $n-type" }
 
 		my $n-value = ($!value + $ouo.offset) * ($ouo.factor / $nuo.factor) - $nuo.offset;
 

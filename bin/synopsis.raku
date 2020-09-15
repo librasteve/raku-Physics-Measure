@@ -41,6 +41,11 @@ use Physics::Measure;
 #Multiply with & Divide by a Real imply a constant factor...
     $c = $b * 30;       #'-69 m'
 
+#Angles can have units of degrees/minutes/seconds, or radians
+	my $angle-in-degrees ♎️ "7 °"; say "My angle in degrees is $angle-in-degrees";
+	my $angle-in-minutes ♎️ "7 ′"; say "My angle in minutes is $angle-in-minutes";
+	my $angle-in-seconds ♎️ "7 ″"; say "My angle in seconds is $angle-in-seconds";
+
 #The Measure of Time has a raku Duration - i.e. the difference between two DateTime Instants:
     my $i1 = DateTime.now;
     my $i2 = DateTime.new( '2020-08-10T14:15:27.26Z' );
@@ -61,11 +66,12 @@ use Physics::Measure;
     my Temperature $deg-c ♎️ '39 °C';
     my $deg-k = $deg-c.in( 'K' );       #312.15 K
     my $deg-cr = $deg-k.in( '°C' );     #39 °C
+say $angle-in-degrees.units.type;
+	my $angle-in-radians = $angle-in-degrees.in( 'rad' ); say "My angle in radians is $angle-in-radians";
 #Use arithmetic to get high order or inverse Unit types such as Area, Volume, Frequency, etc.
     my Area		  $x = $a * $a;         #18.49 m^2
     my Speed      $s = $a / $t2;        #0.43 m/s
     my Frequency  $f = 1  / $t2;        #0.1 Hz
-
 #Use powers & roots in a similar way
     my Volume     $v = $a ** 3;         #79.507 m^3
     my Length	  $d = $v ** <1/3>;     #0.43 m
