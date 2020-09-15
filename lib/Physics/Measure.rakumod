@@ -446,6 +446,14 @@ sub do-postfix( Real $v, Str $n ) is export {
 } 
 ##e.g. => sub postfix:<m> ( Real:D $x ) is export { do-postfix( $x, 'm' ) } 
 
+##First a few "non-declining singletons"...
+sub postfix:<°> (Real:D $x) is export { do-postfix($x,'°') }
+sub postfix:<′> (Real:D $x) is export { do-postfix($x,'′') }
+sub postfix:<″> (Real:D $x) is export { do-postfix($x,'″') }
+sub postfix:<radian> (Real:D $x) is export { do-postfix($x,'radian') }
+sub postfix:<steradian> (Real:D $x) is export { do-postfix($x,'steradian') }
+sub postfix:<°C> (Real:D $x) is export { do-postfix($x,'°C') }
+
 #approx. 600 shorty units == ~600 more lines...
 sub postfix:<hm> (Real:D $x) is export { do-postfix($x,'hm') }
 sub postfix:<km> (Real:D $x) is export { do-postfix($x,'km') }
@@ -618,48 +626,6 @@ sub postfix:<fcd> (Real:D $x) is export { do-postfix($x,'fcd') }
 sub postfix:<acd> (Real:D $x) is export { do-postfix($x,'acd') }
 sub postfix:<zcd> (Real:D $x) is export { do-postfix($x,'zcd') }
 sub postfix:<ycd> (Real:D $x) is export { do-postfix($x,'ycd') }
-sub postfix:<rad> (Real:D $x) is export { do-postfix($x,'rad') }
-sub postfix:<darad> (Real:D $x) is export { do-postfix($x,'darad') }
-sub postfix:<hrad> (Real:D $x) is export { do-postfix($x,'hrad') }
-sub postfix:<krad> (Real:D $x) is export { do-postfix($x,'krad') }
-sub postfix:<Mrad> (Real:D $x) is export { do-postfix($x,'Mrad') }
-sub postfix:<Grad> (Real:D $x) is export { do-postfix($x,'Grad') }
-sub postfix:<Trad> (Real:D $x) is export { do-postfix($x,'Trad') }
-sub postfix:<Prad> (Real:D $x) is export { do-postfix($x,'Prad') }
-sub postfix:<Erad> (Real:D $x) is export { do-postfix($x,'Erad') }
-sub postfix:<Zrad> (Real:D $x) is export { do-postfix($x,'Zrad') }
-sub postfix:<Yrad> (Real:D $x) is export { do-postfix($x,'Yrad') }
-sub postfix:<drad> (Real:D $x) is export { do-postfix($x,'drad') }
-sub postfix:<crad> (Real:D $x) is export { do-postfix($x,'crad') }
-sub postfix:<mrad> (Real:D $x) is export { do-postfix($x,'mrad') }
-sub postfix:<μrad> (Real:D $x) is export { do-postfix($x,'μrad') }
-sub postfix:<nrad> (Real:D $x) is export { do-postfix($x,'nrad') }
-sub postfix:<prad> (Real:D $x) is export { do-postfix($x,'prad') }
-sub postfix:<frad> (Real:D $x) is export { do-postfix($x,'frad') }
-sub postfix:<arad> (Real:D $x) is export { do-postfix($x,'arad') }
-sub postfix:<zrad> (Real:D $x) is export { do-postfix($x,'zrad') }
-sub postfix:<yrad> (Real:D $x) is export { do-postfix($x,'yrad') }
-sub postfix:<sr> (Real:D $x) is export { do-postfix($x,'sr') }
-sub postfix:<dasr> (Real:D $x) is export { do-postfix($x,'dasr') }
-sub postfix:<hsr> (Real:D $x) is export { do-postfix($x,'hsr') }
-sub postfix:<ksr> (Real:D $x) is export { do-postfix($x,'ksr') }
-sub postfix:<Msr> (Real:D $x) is export { do-postfix($x,'Msr') }
-sub postfix:<Gsr> (Real:D $x) is export { do-postfix($x,'Gsr') }
-sub postfix:<Tsr> (Real:D $x) is export { do-postfix($x,'Tsr') }
-sub postfix:<Psr> (Real:D $x) is export { do-postfix($x,'Psr') }
-sub postfix:<Esr> (Real:D $x) is export { do-postfix($x,'Esr') }
-sub postfix:<Zsr> (Real:D $x) is export { do-postfix($x,'Zsr') }
-sub postfix:<Ysr> (Real:D $x) is export { do-postfix($x,'Ysr') }
-sub postfix:<dsr> (Real:D $x) is export { do-postfix($x,'dsr') }
-sub postfix:<csr> (Real:D $x) is export { do-postfix($x,'csr') }
-sub postfix:<msr> (Real:D $x) is export { do-postfix($x,'msr') }
-sub postfix:<μsr> (Real:D $x) is export { do-postfix($x,'μsr') }
-sub postfix:<nsr> (Real:D $x) is export { do-postfix($x,'nsr') }
-sub postfix:<psr> (Real:D $x) is export { do-postfix($x,'psr') }
-sub postfix:<fsr> (Real:D $x) is export { do-postfix($x,'fsr') }
-sub postfix:<asr> (Real:D $x) is export { do-postfix($x,'asr') }
-sub postfix:<zsr> (Real:D $x) is export { do-postfix($x,'zsr') }
-sub postfix:<ysr> (Real:D $x) is export { do-postfix($x,'ysr') }
 sub postfix:<Hz> (Real:D $x) is export { do-postfix($x,'Hz') }
 sub postfix:<daHz> (Real:D $x) is export { do-postfix($x,'daHz') }
 sub postfix:<hHz> (Real:D $x) is export { do-postfix($x,'hHz') }
@@ -933,27 +899,6 @@ sub postfix:<fH> (Real:D $x) is export { do-postfix($x,'fH') }
 sub postfix:<aH> (Real:D $x) is export { do-postfix($x,'aH') }
 sub postfix:<zH> (Real:D $x) is export { do-postfix($x,'zH') }
 sub postfix:<yH> (Real:D $x) is export { do-postfix($x,'yH') }
-sub postfix:<°C> (Real:D $x) is export { do-postfix($x,'°C') }
-sub postfix:<da°C> (Real:D $x) is export { do-postfix($x,'da°C') }
-sub postfix:<h°C> (Real:D $x) is export { do-postfix($x,'h°C') }
-sub postfix:<k°C> (Real:D $x) is export { do-postfix($x,'k°C') }
-sub postfix:<M°C> (Real:D $x) is export { do-postfix($x,'M°C') }
-sub postfix:<G°C> (Real:D $x) is export { do-postfix($x,'G°C') }
-sub postfix:<T°C> (Real:D $x) is export { do-postfix($x,'T°C') }
-sub postfix:<P°C> (Real:D $x) is export { do-postfix($x,'P°C') }
-sub postfix:<E°C> (Real:D $x) is export { do-postfix($x,'E°C') }
-sub postfix:<Z°C> (Real:D $x) is export { do-postfix($x,'Z°C') }
-sub postfix:<Y°C> (Real:D $x) is export { do-postfix($x,'Y°C') }
-sub postfix:<d°C> (Real:D $x) is export { do-postfix($x,'d°C') }
-sub postfix:<c°C> (Real:D $x) is export { do-postfix($x,'c°C') }
-sub postfix:<m°C> (Real:D $x) is export { do-postfix($x,'m°C') }
-sub postfix:<μ°C> (Real:D $x) is export { do-postfix($x,'μ°C') }
-sub postfix:<n°C> (Real:D $x) is export { do-postfix($x,'n°C') }
-sub postfix:<p°C> (Real:D $x) is export { do-postfix($x,'p°C') }
-sub postfix:<f°C> (Real:D $x) is export { do-postfix($x,'f°C') }
-sub postfix:<a°C> (Real:D $x) is export { do-postfix($x,'a°C') }
-sub postfix:<z°C> (Real:D $x) is export { do-postfix($x,'z°C') }
-sub postfix:<y°C> (Real:D $x) is export { do-postfix($x,'y°C') }
 sub postfix:<lm> (Real:D $x) is export { do-postfix($x,'lm') }
 sub postfix:<dalm> (Real:D $x) is export { do-postfix($x,'dalm') }
 sub postfix:<hlm> (Real:D $x) is export { do-postfix($x,'hlm') }
@@ -1080,27 +1025,6 @@ sub postfix:<fkat> (Real:D $x) is export { do-postfix($x,'fkat') }
 sub postfix:<akat> (Real:D $x) is export { do-postfix($x,'akat') }
 sub postfix:<zkat> (Real:D $x) is export { do-postfix($x,'zkat') }
 sub postfix:<ykat> (Real:D $x) is export { do-postfix($x,'ykat') }
-sub postfix:<°> (Real:D $x) is export { do-postfix($x,'°') }
-sub postfix:<da°> (Real:D $x) is export { do-postfix($x,'da°') }
-sub postfix:<h°> (Real:D $x) is export { do-postfix($x,'h°') }
-sub postfix:<k°> (Real:D $x) is export { do-postfix($x,'k°') }
-sub postfix:<M°> (Real:D $x) is export { do-postfix($x,'M°') }
-sub postfix:<G°> (Real:D $x) is export { do-postfix($x,'G°') }
-sub postfix:<T°> (Real:D $x) is export { do-postfix($x,'T°') }
-sub postfix:<P°> (Real:D $x) is export { do-postfix($x,'P°') }
-sub postfix:<E°> (Real:D $x) is export { do-postfix($x,'E°') }
-sub postfix:<Z°> (Real:D $x) is export { do-postfix($x,'Z°') }
-sub postfix:<Y°> (Real:D $x) is export { do-postfix($x,'Y°') }
-sub postfix:<d°> (Real:D $x) is export { do-postfix($x,'d°') }
-sub postfix:<c°> (Real:D $x) is export { do-postfix($x,'c°') }
-sub postfix:<m°> (Real:D $x) is export { do-postfix($x,'m°') }
-sub postfix:<μ°> (Real:D $x) is export { do-postfix($x,'μ°') }
-sub postfix:<n°> (Real:D $x) is export { do-postfix($x,'n°') }
-sub postfix:<p°> (Real:D $x) is export { do-postfix($x,'p°') }
-sub postfix:<f°> (Real:D $x) is export { do-postfix($x,'f°') }
-sub postfix:<a°> (Real:D $x) is export { do-postfix($x,'a°') }
-sub postfix:<z°> (Real:D $x) is export { do-postfix($x,'z°') }
-sub postfix:<y°> (Real:D $x) is export { do-postfix($x,'y°') }
 #))
 
 #EOF

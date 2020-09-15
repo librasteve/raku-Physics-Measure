@@ -487,8 +487,6 @@ InitShortyNames (
 	'K',   'kelvin',
 	'mol', 'mol',
 	'cd',  'candela',
-#	'rad', 'radian',   #remove due to confusion with rad Dose
-    'sr',  'steradian',
     'Hz',  'hertz',
     'N',   'newton',
     'Pa',  'pascal',
@@ -502,15 +500,18 @@ InitShortyNames (
     'Wb',  'weber',
     'T',   'tesla',
     'H',   'henry',
-    '°C',  'celsius',
     'lm',  'lumen',
     'lx',  'lux',
     'Bq',  'becquerel',
     'Gy',  'gray',
     'Sv',  'sievert',
     'kat', 'katal',
-	'°',   'degrees',
-    'l',   'litre',
+    'l',   'litre',    #add due to common use of ml, dl, etc.
+#   '°',   'degrees',  #remove due to lack of demand for yotta°'s
+#	'radian', 'radian',#remove due to confusion with rad Dose
+#   'sr',  'steradian',#remove due to lack of demand for yottasr's
+#   '°C',  'celsius',  #remove due to presence of K
+## i.e. removed and replaced with non-declining singletons in Measure.rakumod
 );
 
 InitBaseUnit (
@@ -522,7 +523,7 @@ InitBaseUnit (
     'Temperature' => ['K', 'kelvin'],   
     'Substance'   => ['mol', 'mole'],
     'Luminosity'  => ['cd', 'candela', 'candle'],
-	'Angle'		  => ['radian'],		#for angle <=> solid angle
+	'Angle'		  => ['radian'],		
 );
 
 if $fast-start {

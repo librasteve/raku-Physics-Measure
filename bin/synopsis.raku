@@ -42,9 +42,11 @@ use Physics::Measure;
     $c = $b * 30;       #'-69 m'
 
 #Angles can have units of degrees/minutes/seconds, or radians
-	my $angle-in-degrees ♎️ "7 °"; say "My angle in degrees is $angle-in-degrees";
-	my $angle-in-minutes ♎️ "7 ′"; say "My angle in minutes is $angle-in-minutes";
-	my $angle-in-seconds ♎️ "7 ″"; say "My angle in seconds is $angle-in-seconds";
+	my $angle-in-degrees ♎️ '7 °';  #7 °
+	my $angle-in-minutes ♎️ '7 ′';  #7 ′ 
+	my $angle-in-seconds ♎️ '7 ″';  #7 ″ 
+	my $angle-in-radians = $angle-in-degrees.in('radians'); #0.122173047639603065 radian
+#NB. The unit name 'rad' is reserved for the unit of radioactive Dose
 
 #The Measure of Time has a raku Duration - i.e. the difference between two DateTime Instants:
     my $i1 = DateTime.now;
@@ -66,8 +68,6 @@ use Physics::Measure;
     my Temperature $deg-c ♎️ '39 °C';
     my $deg-k = $deg-c.in( 'K' );       #312.15 K
     my $deg-cr = $deg-k.in( '°C' );     #39 °C
-say $angle-in-degrees.units.type;
-	my $angle-in-radians = $angle-in-degrees.in( 'rad' ); say "My angle in radians is $angle-in-radians";
 #Use arithmetic to get high order or inverse Unit types such as Area, Volume, Frequency, etc.
     my Area		  $x = $a * $a;         #18.49 m^2
     my Speed      $s = $a / $t2;        #0.43 m/s
