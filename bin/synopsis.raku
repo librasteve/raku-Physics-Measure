@@ -42,9 +42,9 @@ use Physics::Measure;
     $c = $b * 30;       #'-69 m'
 
 #Angles can have units of degrees/minutes/seconds, or radians
-	my $angle-in-degrees ♎️ '7 °';  #7 °
-	my $angle-in-minutes ♎️ '7 ′';  #7 ′ 
-	my $angle-in-seconds ♎️ '7 ″';  #7 ″ 
+	my $angle-in-degrees ♎️ '7 °';  #7 ° U+00B0
+	my $angle-in-minutes ♎️ '7 ′';  #7 ′ U+2032
+	my $angle-in-seconds ♎️ '7 ″';  #7 ″ U+2033
 	my $angle-in-radians = $angle-in-degrees.in('radians'); #0.122173047639603065 radian
 #NB. The unit name 'rad' is reserved for the unit of radioactive Dose
 

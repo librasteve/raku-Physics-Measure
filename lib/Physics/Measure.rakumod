@@ -62,26 +62,26 @@ class Measure is export {
 
     multi method assign( Str:D $r ) {				say "assign from Str" if $db;
         my ($v, $u) = extract( $r );  
-		$!value = $v;
-		$!units = GetUnit($u);
+		$.value = $v;
+		$.units = GetUnit($u);
     }   
     multi method assign( Real:D $r ) {				say "assign from Real" if $db;
-        $!value = $r;
+        $.value = $r;
     }
     multi method assign( Duration:D $r ) {			say "assign from Duration" if $db;
-        $!value = $r.Real;
-		$!units = GetUnit('s');
+        $.value = $r.Real;
+		$.units = GetUnit('s');
     }
     multi method assign( Measure:D $r ) {			say "assign from Measure" if $db;
-        $!value = $r.value;
-        $!units = $r.units;
+        $.value = $r.value;
+        $.units = $r.units;
     }
 
-    method Real      { $!value }
-    method Numeric   { $!value }
-    method Str       { "{$!value} {$!units}" }
-    method canonical { "{$!value} {$!units.canonical}" }
-    method pretty    { "{$!value} {$!units.pretty}" }
+    method Real      { $.value }
+    method Numeric   { $.value }
+    method Str       { "{$.value} {$.units}" }
+    method canonical { "{$.value} {$.units.canonical}" }
+    method pretty    { "{$.value} {$.units.pretty}" }
 
 	sub make-same( $l, $r ) {
         if ! $l.units.type eq $r.units.type {
@@ -106,7 +106,7 @@ class Measure is export {
 		return $l
     }   
     method negate {
-        $!value *= -1;
+        $.value *= -1;
         return self
     } 
 
@@ -120,7 +120,7 @@ class Measure is export {
         return $nmo
     }   
     method multiply-const(Real:D $r) {
-        $!value *= $r; 
+        $.value *= $r; 
         return self
     }   
     method divide( Measure:D $right ) {				#eg. Distance / Time => Speed
@@ -155,7 +155,7 @@ class Measure is export {
     } 
     method root( Int:D $n where 1 <= $n <= 4 ) {
 		my $l = self.rebase;
-        my $nuo = $!units.root-extract( $n );
+        my $nuo = $.units.root-extract( $n );
 		my $nmo = ::($nuo.type).new( value => $l.value, units => $nuo );
         $nmo.value = $l.value ** ( 1 / $n );
         return $nmo
@@ -166,13 +166,13 @@ class Measure is export {
 
     #### convert & compare methods ####
     method in( $to ) {					#convert units and adjust value
-		my $ouo = $!units;				#aka old unit object
+		my $ouo = $.units;				#aka old unit object
 		my $nuo = GetUnit( $to );		#aka new unit object
 		my $n-type = $nuo.type( just1 => 1 );
 
 		unless self ~~ ::($n-type) { die "cannot convert in to different type $n-type" }
 
-		my $n-value = ($!value + $ouo.offset) * ($ouo.factor / $nuo.factor) - $nuo.offset;
+		my $n-value = ($.value + $ouo.offset) * ($ouo.factor / $nuo.factor) - $nuo.offset;
 
 		::($n-type).new( value => $n-value, units => $nuo )
 	}
