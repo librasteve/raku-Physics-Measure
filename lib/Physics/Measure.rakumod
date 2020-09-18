@@ -17,12 +17,24 @@ my regex number {
 }
 
 sub extract( Str:D $s ) {						#baby Grammar for value/unit/error
-	$s ~~ /^ ( <number> ) \s* ( <-[±]>* ) $/;  
-	my $v = +"$0".Real if $0.defined;
-	my $u =  "$1".Str  if $1.defined;
+	#detect & handle compound degrees-minutes-seconds
+	if $s ~~ /(\d*)\°(\d*)\′(\d*)\″?/ {
+		my ( $deg, $min, $sec ) = $0, $1, $2 // 0;
+		my $v = ( ($deg * 3600) + ($min * 60) + $sec ) / 3600;
 
-	say "extracting «$s»: v is «$v», u is «$u»" if $db;
-	return($v, $u)
+		say "extracting «$s»: v is $deg°$min′$sec″, u is degrees" if $db;
+		return($v, 'degrees')
+	}
+	#put hh:mm:ss in here ;-)
+	#handle generic case
+	else {
+		$s ~~ /^ ( <number> ) \s* ( <-[±]>* ) $/;  
+		my $v = +"$0".Real if $0.defined;
+		my $u =  "$1".Str  if $1.defined;
+
+		say "extracting «$s»: v is «$v», u is «$u»" if $db;
+		return($v, $u)
+	}
 }
 
 class Dimensionless { ... }
@@ -197,8 +209,22 @@ class Measure is export {
     }
 }
 
+class Angle is Measure is export {
+	method dms(*%h)  {
+		my $deg = $.value.floor; 
+		my $rem = ( $.value - $deg ) * 60; 
+		if %h<no-secs>:!exists {
+			qq{$deg°$rem′}
+		} else {
+			my $min = $rem.floor;
+			my $sec = ( $rem - $min ) * 60; 
+			qq{$deg°$min′$sec″}
+		}
+	}
+}
+
 class Time is Measure is export {
-    #FIXME v2 denormalize Time e.g. hh:mm:ss (and Angle) 
+    #FIXME v2 compound Time e.g. hh:mm:ss 
     #Duration ops <+> <-> <mod>
 
     multi method Duration {				#ie. $d = $t.Duration
@@ -216,7 +242,6 @@ class Substance          is Measure is export {}
 class Luminosity         is Measure is export {}
 #Derived Units
 class Dimensionless      is Measure is export {}
-class Angle              is Measure is export {}
 class Solid-Angle        is Measure is export {}
 class Frequency          is Measure is export {}
 class Area               is Measure is export {}

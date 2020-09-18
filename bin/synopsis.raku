@@ -48,6 +48,13 @@ use Physics::Measure;
 	my $angle-in-radians = $angle-in-degrees.in('radians'); #0.122173047639603065 radian
 #NB. The unit name 'rad' is reserved for the unit of radioactive Dose
 
+my $dms1 ♎️ <45°30′30″>;
+##my $dms1 ♎️ <45°30′>;
+say "dms is $dms1";
+say $dms1.dms;
+say $dms1.dms( :no-secs );
+##FIXME mv these to test
+
 #The Measure of Time has a raku Duration - i.e. the difference between two DateTime Instants:
     my $i1 = DateTime.now;
     my $i2 = DateTime.new( '2020-08-10T14:15:27.26Z' );
