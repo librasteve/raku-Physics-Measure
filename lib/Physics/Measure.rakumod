@@ -19,7 +19,9 @@ my regex number {
 sub extract( Str:D $s ) {						#baby Grammar for value/unit/error
 	#detect & handle compound degrees-minutes-seconds
 	if $s ~~ /(\d*)\°(\d*)\′(\d*)\″?/ {
-		my ( $deg, $min, $sec ) = $0, $1, $2 // 0;
+		my $deg where 0 <= * < 360 = $0 % 360;
+		my $min where 0 <= * <  60 = $1 // 0;
+		my $sec where 0 <= * <  60 = $2 // 0;
 		my $v = ( ($deg * 3600) + ($min * 60) + $sec ) / 3600;
 
 		say "extracting «$s»: v is $deg°$min′$sec″, u is degrees" if $db;
@@ -105,6 +107,7 @@ class Measure is export {
 		}
 		return $r
 	}
+
     method add( $r is rw ) {
 		my $l = self;
 		$r = make-same( $l, $r );
@@ -213,14 +216,30 @@ class Angle is Measure is export {
 	method dms(*%h)  {
 		my $deg = $.value.floor; 
 		my $rem = ( $.value - $deg ) * 60; 
-		if %h<no-secs>:!exists {
-			qq{$deg°$rem′}
+		my $min = $rem.floor;
+		my $sec = ( $rem - $min ) * 60; 
+
+		if %h<no-secs>:exists {
+			return( $deg, $rem )
 		} else {
-			my $min = $rem.floor;
-			my $sec = ( $rem - $min ) * 60; 
-			qq{$deg°$min′$sec″}
+			return( $deg, $min, $sec )
 		}
 	}
+	method Str {
+		my ( $deg, $min, $sec ) = self.dms;	
+		qq{$deg°$min′$sec″}
+	}
+
+#`[[
+    method value() {
+		##FIXME debug and generalize to Rad...
+        Proxy.new:
+            FETCH => -> $ { $!value },
+            STORE => -> $, $x {
+                $!value = $x % 360;
+            }
+    }   
+#]]
 }
 
 class Time is Measure is export {

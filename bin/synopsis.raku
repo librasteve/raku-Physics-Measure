@@ -49,10 +49,11 @@ use Physics::Measure;
 #NB. The unit name 'rad' is reserved for the unit of radioactive Dose
 
 my $dms1 ♎️ <45°30′30″>;
-##my $dms1 ♎️ <45°30′>;
+my $dms2 ♎️ <245°30′>;
 say "dms is $dms1";
 say $dms1.dms;
 say $dms1.dms( :no-secs );
+my $asum = $dms1 + $dms2;
 ##FIXME mv these to test
 
 #The Measure of Time has a raku Duration - i.e. the difference between two DateTime Instants:
