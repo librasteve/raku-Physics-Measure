@@ -569,8 +569,6 @@ if $fast-start {
 
     # Angle
     ['°', 'degree', 'deg', 'º'],                'pi radians / 180',
-    ['′', 'arcminute', 'arcmin'],               'deg / 60',         #U+2032
-    ['″', 'arcsecond', 'arcsec'],               'arcmin / 60',      #U+2033
     ['ᵍ', 'gon'],                               'pi radians / 200',
 
     # Solid Angle
@@ -1550,14 +1548,6 @@ Unit.new( factor => 1e-06, offset => 0, defn => '1e-6 m', type => '',
 Unit.new( factor => 0.015707963267948967, offset => 0, defn => 'pi radians / 200', type => '',
 	  dims => [0,0,0,0,0,0,0,1], dmix => ("pi"=>1,"radians"=>1).MixHash, 
 	  names => ['ᵍ','gon','gons'] , stock => True  );
-
-Unit.new( factor => 0.0002908882086657216, offset => 0, defn => 'deg / 60', type => '',
-	  dims => [0,0,0,0,0,0,0,1], dmix => ("deg"=>1).MixHash, 
-	  names => ['′','arcminute','arcminutes','arcmin','arcmins'] , stock => True  );
-
-Unit.new( factor => 4.84813681109536e-06, offset => 0, defn => 'arcmin / 60', type => '',
-	  dims => [0,0,0,0,0,0,0,1], dmix => ("arcmin"=>1).MixHash, 
-	  names => ['″','arcsecond','arcseconds','arcsec','arcsecs'] , stock => True  );
 
 ######## Stock Unit End ########
 }

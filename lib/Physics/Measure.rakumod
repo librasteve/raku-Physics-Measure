@@ -17,8 +17,9 @@ my regex number {
 }
 
 sub extract( Str:D $s ) {						#baby Grammar for value/unit/error
-	#detect & handle compound degrees-minutes-seconds
-	if $s ~~ /(\d*)\°(\d*)\′(\d*)\″?/ {
+	#handle degrees-minutes-seconds
+	#<°> is U+00B0 <′> is U+2032 <″> is U+2033
+	if $s ~~ /(\d*)\°(\d*)\′(\d*)\″?/ {			
 		my $deg where 0 <= * < 360 = $0 % 360;
 		my $min where 0 <= * <  60 = $1 // 0;
 		my $sec where 0 <= * <  60 = $2 // 0;
@@ -226,8 +227,12 @@ class Angle is Measure is export {
 		}
 	}
 	method Str {
-		my ( $deg, $min, $sec ) = self.dms;	
-		qq{$deg°$min′$sec″}
+		if self.units.name eq <°> {
+			my ( $deg, $min, $sec ) = self.dms;	
+			qq{$deg°$min′$sec″}
+		} else {
+			nextsame
+		}
 	}
 
 #`[[
@@ -374,14 +379,11 @@ multi infix:<libra> ( Measure:D $left, Duration:D $right ) is equiv( &infix:<=> 
     $left.assign( $right );
 }
 
+#math
 multi prefix:<-> ( Measure:D $right) is export {
     my $result = $right.clone;
     return $result.negate;
 }
-multi prefix:<+> ( Measure:D $right) is export {
-    return $right;   #no op
-}
-
 multi infix:<+> ( Measure:D $left, Measure:D $right ) is export {
     my ( $result, $argument ) = infix-prep( $left, $right );
     return $result.add( $argument );
@@ -492,8 +494,6 @@ sub do-postfix( Real $v, Str $n ) is export {
 
 ##First a few "non-declining singletons"...
 sub postfix:<°> (Real:D $x) is export { do-postfix($x,'°') }
-sub postfix:<′> (Real:D $x) is export { do-postfix($x,'′') }
-sub postfix:<″> (Real:D $x) is export { do-postfix($x,'″') }
 sub postfix:<radian> (Real:D $x) is export { do-postfix($x,'radian') }
 sub postfix:<steradian> (Real:D $x) is export { do-postfix($x,'steradian') }
 sub postfix:<°C> (Real:D $x) is export { do-postfix($x,'°C') }

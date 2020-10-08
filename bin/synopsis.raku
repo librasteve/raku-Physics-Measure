@@ -42,19 +42,15 @@ use Physics::Measure;
     $c = $b * 30;       #'-69 m'
 
 #Angles can have units of degrees/minutes/seconds, or radians
-	my $angle-in-degrees ♎️ '7 °';  #7 ° U+00B0
-	my $angle-in-minutes ♎️ '7 ′';  #7 ′ U+2032
-	my $angle-in-seconds ♎️ '7 ″';  #7 ″ U+2033
-	my $angle-in-radians = $angle-in-degrees.in('radians'); #0.122173047639603065 radian
+	my $θ1 ♎️ <45°30′30″>;  #use <> to avoid confusing quotation marks
+say "θ1 is $θ1";
+	my $θ2 ♎️ '2.141 radians';
+say "θ2 is $θ2";
+my $θ3 = $θ1 + $θ2;
+say $θ3.dms( :no-secs );
 #NB. The unit name 'rad' is reserved for the unit of radioactive Dose
-
-my $dms1 ♎️ <45°30′30″>;
-my $dms2 ♎️ <245°30′>;
-say "dms is $dms1";
-say $dms1.dms;
-say $dms1.dms( :no-secs );
-my $asum = $dms1 + $dms2;
 ##FIXME mv these to test
+##FIXME rm mins and secs as separate units
 
 #The Measure of Time has a raku Duration - i.e. the difference between two DateTime Instants:
     my $i1 = DateTime.now;
