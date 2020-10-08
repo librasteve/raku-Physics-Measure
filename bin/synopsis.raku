@@ -50,7 +50,6 @@ my $θ3 = $θ1 + $θ2;
 say $θ3.dms( :no-secs );
 #NB. The unit name 'rad' is reserved for the unit of radioactive Dose
 ##FIXME mv these to test
-##FIXME rm mins and secs as separate units
 
 #The Measure of Time has a raku Duration - i.e. the difference between two DateTime Instants:
     my $i1 = DateTime.now;

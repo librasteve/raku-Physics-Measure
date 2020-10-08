@@ -605,7 +605,7 @@ if $fast-start {
     ['rod', 'pole', 'perch'],                   '5.5 yards',       
     ['furlong'],                                '40 rods',         
     ['mile'],                                   '5280 ft',         
-    ['nm', 'nautical-mile'],                    '1852 m',
+    ['nmile', 'nautical-mile'],                 '1852 m',
     ['pica'],                                   'in/6',	#chosen defn not unique 
     ['point'],                                  'pica/12',         
 
@@ -649,7 +649,7 @@ if $fast-start {
     ['kph'],                                    'kilometre per hour',
     ['kps'],                                    'kilometre per second',
     ['fps'],                                    'feet per second',
-    ['knot'],                                   'nm per hour',
+    ['knot'],                                   'nmile per hour',
     ['c', 'speed-of-light'],                    '2.99792458e8 m/s',
 
     # Angular-Speed
@@ -1229,8 +1229,8 @@ Unit.new( factor => 1000, offset => 0, defn => 'kilometre', type => '',
 	  dims => [1,0,0,0,0,0,0,0], dmix => ("metre"=>1).MixHash, 
 	  names => ['km'] , stock => True  );
 
-Unit.new( factor => 0.514444, offset => 0, defn => 'nm per hour', type => '',
-	  dims => [1,0,-1,0,0,0,0,0], dmix => ("hour"=>-1,"nm"=>1).MixHash, 
+Unit.new( factor => 0.514444, offset => 0, defn => 'nmile per hour', type => '',
+	  dims => [1,0,-1,0,0,0,0,0], dmix => ("hour"=>-1,"nmile"=>1).MixHash, 
 	  names => ['knot','knots'] , stock => True  );
 
 Unit.new( factor => 0.277778, offset => 0, defn => 'kilometre per hour', type => '',
@@ -1327,7 +1327,7 @@ Unit.new( factor => 0.44704, offset => 0, defn => 'miles per hour', type => '',
 
 Unit.new( factor => 1852, offset => 0, defn => '1852 m', type => '',
 	  dims => [1,0,0,0,0,0,0,0], dmix => ("m"=>1).MixHash, 
-	  names => ['nm','nautical-mile','nautical-miles'] , stock => True  );
+	  names => ['nmile','nmiles','nautical-mile','nautical-miles'] , stock => True  );
 
 Unit.new( factor => 1, offset => 0, defn => '1', type => '',
 	  dims => [0,0,0,0,0,0,0,0], dmix => ().MixHash, 
