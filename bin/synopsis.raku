@@ -50,6 +50,12 @@ my $θ3 = $θ1 + $θ2;
 say $θ3.dms( :no-secs );
 #NB. The unit name 'rad' is reserved for the unit of radioactive Dose
 ##FIXME mv these to test
+my $nmiles ♎️ "7 nmiles";
+say ~$nmiles;
+my $xd ♎️ "40 nmile";
+say ~$xd;
+##FIXME change factor and offset to Rat for short cut round trip (ie for knots = nmiles/hrs)
+##FIXME have the Physics::Navigation module override Speed to have default in knots where dist is nmiles: 
 
 #The Measure of Time has a raku Duration - i.e. the difference between two DateTime Instants:
     my $i1 = DateTime.now;
