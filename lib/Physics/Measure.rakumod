@@ -1,7 +1,7 @@
 unit module Physics::Measure:ver<0.0.3>:auth<Steve Roe (p6steve@furnival.net)>;
 use Physics::Unit;
 
-my $db = 0;			#debug
+my $db = 0;					#debug
 
 #This module uses Type Variables such as ::T,::($s) 
 #viz. http://www.jnthn.net/papers/2008-yapc-eu-raku6types.pdf
@@ -11,7 +11,7 @@ my $db = 0;			#debug
 
 constant \isa-length = 'Distance' | 'Breadth' | 'Width' | 'Height' | 'Depth'; 
 
-our $round-to is export = 0.001;	#global rounding for Str etc.
+our $round-to is export;	#optional global rounding for Str etc.
 
 my regex number {
 	\S+                     #grab chars
@@ -96,7 +96,7 @@ class Measure is export {
 
     method Real      { $.value }
     method Numeric   { $.value }
-	method value-r   { $.value.round($round-to) }
+	method value-r   { $.value.round($round-to) if $round-to }
     method Str       { "{$.value-r} {$.units}" }
     method canonical { "{$.value-r} {$.units.canonical}" }
     method pretty    { "{$.value-r} {$.units.pretty}" }
