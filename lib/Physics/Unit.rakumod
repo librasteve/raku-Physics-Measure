@@ -606,6 +606,7 @@ if $fast-start {
     ['furlong'],                                '40 rods',         
     ['mile'],                                   '5280 ft',         
     ['nmile', 'nautical-mile'],                 '1852 m',
+    ['ca', 'cable'],		                    '185.2 m',
     ['pica'],                                   'in/6',	#chosen defn not unique 
     ['point'],                                  'pica/12',         
 
@@ -1328,6 +1329,10 @@ Unit.new( factor => 0.44704, offset => 0, defn => 'miles per hour', type => '',
 Unit.new( factor => 1852, offset => 0, defn => '1852 m', type => '',
 	  dims => [1,0,0,0,0,0,0,0], dmix => ("m"=>1).MixHash, 
 	  names => ['nmile','nmiles','nautical-mile','nautical-miles'] , stock => True  );
+
+Unit.new( factor => 185.2, offset => 0, defn => '185.2 m', type => '',
+	  dims => [1,0,0,0,0,0,0,0], dmix => ("m"=>1).MixHash, 
+	  names => ['ca','cable','cables'] , stock => True  );
 
 Unit.new( factor => 1, offset => 0, defn => '1', type => '',
 	  dims => [0,0,0,0,0,0,0,0], dmix => ().MixHash, 

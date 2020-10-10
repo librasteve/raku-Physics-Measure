@@ -56,6 +56,17 @@ my $xd ♎️ "40 nmile";
 say ~$xd;
 ##FIXME change factor and offset to Rat for short cut round trip (ie for knots = nmiles/hrs)
 ##FIXME have the Physics::Navigation module override Speed to have default in knots where dist is nmiles: 
+##FIXME add round method to Measure
+#`[[
+$Physics::Measure::round-by = 0.01;
+say $Physics::Measure::round-by;
+#]]
+$round-to = 0.01;
+say $round-to;
+my $hours ♎️ "3.5 hr";
+my $speed = $nmiles / $hours;
+say "That's a speed of {$speed.in('knots')}";
+die "yo";
 
 #The Measure of Time has a raku Duration - i.e. the difference between two DateTime Instants:
     my $i1 = DateTime.now;

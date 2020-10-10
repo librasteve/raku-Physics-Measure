@@ -11,6 +11,8 @@ my $db = 0;			#debug
 
 constant \isa-length = 'Distance' | 'Breadth' | 'Width' | 'Height' | 'Depth'; 
 
+our $round-to is export = 0.001;	#global rounding for Str etc.
+
 my regex number {
 	\S+                     #grab chars
 	<?{ defined +"$/" }>    #assert coerces via '+' to Real
@@ -94,9 +96,10 @@ class Measure is export {
 
     method Real      { $.value }
     method Numeric   { $.value }
-    method Str       { "{$.value} {$.units}" }
-    method canonical { "{$.value} {$.units.canonical}" }
-    method pretty    { "{$.value} {$.units.pretty}" }
+	method value-r   { $.value.round($round-to) }
+    method Str       { "{$.value-r} {$.units}" }
+    method canonical { "{$.value-r} {$.units.canonical}" }
+    method pretty    { "{$.value-r} {$.units.pretty}" }
 
 	sub make-same( $l, $r ) {
         if ! $l.units.type eq $r.units.type {
