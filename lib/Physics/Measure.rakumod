@@ -96,7 +96,7 @@ class Measure is export {
 
     method Real      { $.value }
     method Numeric   { $.value }
-	method value-r   { $.value.round($round-to) if $round-to }
+	method value-r   { $round-to ?? $.value.round($round-to) !! $.value }
     method Str       { "{$.value-r} {$.units}" }
     method canonical { "{$.value-r} {$.units.canonical}" }
     method pretty    { "{$.value-r} {$.units.pretty}" }
