@@ -57,10 +57,6 @@ say ~$xd;
 ##FIXME change factor and offset to Rat for short cut round trip (ie for knots = nmiles/hrs)
 ##FIXME have the Physics::Navigation module override Speed to have default in knots where dist is nmiles: 
 ##FIXME add round method to Measure
-#`[[
-$Physics::Measure::round-by = 0.01;
-say $Physics::Measure::round-by;
-#]]
 $round-to = 0.01;
 say $round-to;
 my $hours ♎️ "3.5 hr";

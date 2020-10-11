@@ -232,6 +232,7 @@ class Angle is Measure is export {
 	method Str {
 		if self.units.name eq <°> {
 			my ( $deg, $min, $sec ) = self.dms;	
+			$sec = $round-to ?? $sec.round($round-to) !! $sec;
 			qq{$deg°$min′$sec″}
 		} else {
 			nextsame
