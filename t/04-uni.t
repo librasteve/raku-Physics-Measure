@@ -3,7 +3,7 @@
 #TESTALL$ prove6 ./t      [from root]
 use lib '../lib';
 use Test;
-plan 26;
+plan 30;
 
 use Physics::Measure;
 use Physics::Unit;
@@ -76,6 +76,19 @@ my $x = $d * $d;
 is "$x", '2500 m^2',                                                        'mul.same';
 is $x.WHAT, (Physics::Measure::Area),                                       'mul.type';
 # this should fail $s1 = $d * $d;
+
+my $θ1 ♎️ <45°30′30″>;  
+is "$θ1", <45°30′30″>,														'dms Str';
+my $θ2 ♎️ '2.141 radians';
+is "$θ2", '2.141 radian',													'radian Str';
+my $θ3 = $θ1 + $θ2;
+ok $θ3.dms( :no-secs ) == (168, 10.71583625055526423),						'add.angles';
+
+$round-to = 0.01;
+my $nmiles ♎️ "7 nmiles";
+my $hours ♎️ "3.5 hr";
+my $speed = $nmiles / $hours;
+is ~$speed.in('knots'), '2 knot',											'cmp.round-to';
 
 ##done-testing
 

@@ -41,28 +41,10 @@ use Physics::Measure;
 #Multiply with & Divide by a Real imply a constant factor...
     $c = $b * 30;       #'-69 m'
 
-#Angles can have units of degrees/minutes/seconds, or radians
-	my $θ1 ♎️ <45°30′30″>;  #use <> to avoid confusing quotation marks
-say "θ1 is $θ1";
-	my $θ2 ♎️ '2.141 radians';
-say "θ2 is $θ2";
-my $θ3 = $θ1 + $θ2;
-say $θ3.dms( :no-secs );
+#Angles use degrees/minutes/seconds or decimal radians
+	my $θ1 ♎️ <45°30′30″>;  #45°30′30″ (using <> to deconfuse quotation marks)
+	my $θ2 ♎️ '2.141 radians';  #'2.141 radian'
 #NB. The unit name 'rad' is reserved for the unit of radioactive Dose
-##FIXME mv these to test
-my $nmiles ♎️ "7 nmiles";
-say ~$nmiles;
-my $xd ♎️ "40 nmile";
-say ~$xd;
-##FIXME change factor and offset to Rat for short cut round trip (ie for knots = nmiles/hrs)
-##FIXME have the Physics::Navigation module override Speed to have default in knots where dist is nmiles: 
-##FIXME add round method to Measure
-$round-to = 0.01;
-say $round-to;
-my $hours ♎️ "3.5 hr";
-my $speed = $nmiles / $hours;
-say "That's a speed of {$speed.in('knots')}";
-die "yo";
 
 #The Measure of Time has a raku Duration - i.e. the difference between two DateTime Instants:
     my $i1 = DateTime.now;
