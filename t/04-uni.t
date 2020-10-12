@@ -3,7 +3,7 @@
 #TESTALL$ prove6 ./t      [from root]
 use lib '../lib';
 use Test;
-plan 30;
+plan 32;
 
 use Physics::Measure;
 use Physics::Unit;
@@ -89,6 +89,11 @@ my $nmiles ♎️ "7 nmiles";
 my $hours ♎️ "3.5 hr";
 my $speed = $nmiles / $hours;
 is ~$speed.in('knots'), '2 knot',											'cmp.round-to';
+
+my $sine = sin( $θ1 );
+ok $sine == 0.7133523847299412,												'sin.dms';
+my $arcsin = asin( $sine, units => '°' );
+is "$arcsin", <45°30′30″>,													'asin.dms';
 
 ##done-testing
 

@@ -41,10 +41,18 @@ use Physics::Measure;
 #Multiply with & Divide by a Real imply a constant factor...
     $c = $b * 30;       #'-69 m'
 
+#The Physics::Measure $round-to variable is applied to Str output
+	$round-to = 0.01;
+ 
 #Angles use degrees/minutes/seconds or decimal radians
-	my $θ1 ♎️ <45°30′30″>;  #45°30′30″ (using <> to deconfuse quotation marks)
+	my $θ1 ♎️ <45°30′30″>;		#45°30′30″ (using <> to deconfuse quotation marks)
 	my $θ2 ♎️ '2.141 radians';  #'2.141 radian'
 #NB. The unit name 'rad' is reserved for the unit of radioactive Dose
+
+# Trigonometric functions sin, cos and tan (and arc-x) handle Angles 
+	my $sine = sin( $θ1 );		#0.7133523847299412
+	my $arcsin = asin( $sine, units => '°' ); #45°30′30″
+#NB. Provide the units => '°' tag to tell asin you want degrees back
 
 #The Measure of Time has a raku Duration - i.e. the difference between two DateTime Instants:
     my $i1 = DateTime.now;

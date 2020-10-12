@@ -216,6 +216,16 @@ class Measure is export {
     }
 }
 
+class Time is Measure is export {
+    #FIXME v2 compound Time e.g. hh:mm:ss 
+    #Duration ops <+> <-> <mod>
+
+    multi method Duration {				#ie. $d = $t.Duration
+		my $nmo = self.in('s');
+        return Duration.new( $nmo.value );
+    }
+}
+
 class Angle is Measure is export {
 	method dms(*%h)  {
 		my $deg = $.value.floor; 
@@ -251,14 +261,30 @@ class Angle is Measure is export {
 #]]
 }
 
-class Time is Measure is export {
-    #FIXME v2 compound Time e.g. hh:mm:ss 
-    #Duration ops <+> <-> <mod>
+#| Override sin/cos/tan for Unit type Angle
+#| Automatically convert argument to radians
+multi sin( Angle:D $a ) is export {
+    sin( $a.in('radian').value );
+}
+multi cos( Angle:D $a ) is export {
+    cos( $a.in('radian').value );
+}
+multi tan( Angle:D $a ) is export {
+    tan( $a.in('radian').value );
+}
 
-    multi method Duration {				#ie. $d = $t.Duration
-		my $nmo = self.in('s');
-        return Duration.new( $nmo.value );
-    }
+#| Override asin/acos/atan accept unitsof arg and return Angle object
+multi asin( Numeric:D $x, Str :$units! ) is export { 
+    my $a = Angle.new( value => asin( $x ), units => 'radians' );
+    return $a.in( $units );
+}
+multi acos( Numeric:D $x, Str :$units! ) is export { 
+    my $a = Angle.new( value => acos( $x ), units => 'radians' );
+    return $a.in( $units );
+}
+multi atan( Numeric:D $x, Str :$units! ) is export { 
+    my $a = Angle.new( value => atan( $x ), units => 'radians' );
+    return $a.in( $units );
 }
 
 #SI Base Units
