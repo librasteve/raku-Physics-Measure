@@ -18,30 +18,6 @@ my regex number {
 	<?{ defined +"$/" }>    #assert coerces via '+' to Real
 }
 
-sub extract( Str:D $s ) {						#baby Grammar for value/unit/error
-	#handle degrees-minutes-seconds
-	#<°> is U+00B0 <′> is U+2032 <″> is U+2033
-	if $s ~~ /(\d*)\°(\d*)\′(\d*)\″?/ {			
-		my $deg where 0 <= * < 360 = $0 % 360;
-		my $min where 0 <= * <  60 = $1 // 0;
-		my $sec where 0 <= * <  60 = $2 // 0;
-		my $v = ( ($deg * 3600) + ($min * 60) + $sec ) / 3600;
-
-		say "extracting «$s»: v is $deg°$min′$sec″, u is degrees" if $db;
-		return($v, 'degrees')
-	}
-	#put hh:mm:ss in here ;-)
-	#handle generic case
-	else {
-		$s ~~ /^ ( <number> ) \s* ( <-[±]>* ) $/;  
-		my $v = +"$0".Real if $0.defined;
-		my $u =  "$1".Str  if $1.defined;
-
-		say "extracting «$s»: v is «$v», u is «$u»" if $db;
-		return($v, $u)
-	}
-}
-
 class Dimensionless { ... }
 
 class Measure is export {
@@ -55,7 +31,7 @@ class Measure is export {
         self.bless( value => $value, units => GetUnit( $units) )
     }
     multi method new( Str:D $s ) {					say "new from Str" if $db;
-        my ($v, $u) = extract( $s );
+        my ($v, $u) = Measure.defn-extract( $s );
         my $nuo = GetUnit( $u );
 		my $n-type = $nuo.type( just1 => 1 ) || 'Measure';
         ::($n-type).new( value => $v, units => $nuo )
@@ -78,7 +54,7 @@ class Measure is export {
     }  
 
     multi method assign( Str:D $r ) {				say "assign from Str" if $db;
-        my ($v, $u) = extract( $r );  
+        my ($v, $u) = Measure.defn-extract( $r );  
 		$.value = $v;
 		$.units = GetUnit($u);
     }   
@@ -100,6 +76,31 @@ class Measure is export {
     method Str       { "{$.value-r} {$.units}" }
     method canonical { "{$.value-r} {$.units.canonical}" }
     method pretty    { "{$.value-r} {$.units.pretty}" }
+
+	#class method baby Grammar for initial extraction of definition from Str (value/unit/error)
+	method defn-extract( Measure:U: Str:D $s ) {
+		#handle degrees-minutes-seconds
+		#<°> is U+00B0 <′> is U+2032 <″> is U+2033
+		if $s ~~ /(\d*)\°(\d*)\′(\d*)\″?/ {			
+			my $deg where 0 <= * < 360 = $0 % 360;
+			my $min where 0 <= * <  60 = $1 // 0;
+			my $sec where 0 <= * <  60 = $2 // 0;
+			my $v = ( ($deg * 3600) + ($min * 60) + $sec ) / 3600;
+
+			say "extracting «$s»: v is $deg°$min′$sec″, u is degrees";# if $db;
+			return($v, 'degrees')
+		}
+		#put hh:mm:ss in here ;-)
+		#handle generic case
+		else {
+			$s ~~ /^ ( <number> ) \s* ( <-[±]>* ) $/;  
+			my $v = +"$0".Real if $0.defined;
+			my $u =  "$1".Str  if $1.defined;
+
+			say "extracting «$s»: v is «$v», u is «$u»" if $db;
+			return($v, $u)
+		}
+	}
 
 	sub make-same( $l, $r ) {
         if ! $l.units.type eq $r.units.type {
