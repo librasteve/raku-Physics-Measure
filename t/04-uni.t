@@ -84,7 +84,7 @@ is "$θ2", '2.141 radian',													'radian Str';
 my $θ3 = $θ1 + $θ2;
 ok $θ3.dms( :no-secs ) == (168, 10.71583625055526423),						'add.angles';
 
-$round-to = 0.01;
+$Physics::Measure::round-to = 0.01;
 my $nmiles ♎️ "7 nmiles";
 my $hours ♎️ "3.5 hr";
 my $speed = $nmiles / $hours;

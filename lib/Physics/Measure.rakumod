@@ -1,22 +1,28 @@
 unit module Physics::Measure:ver<0.0.3>:auth<Steve Roe (p6steve@furnival.net)>;
 use Physics::Unit;
 
-my $db = 0;					#debug
-
 #This module uses Type Variables such as ::T,::($s) 
 #viz. http://www.jnthn.net/papers/2008-yapc-eu-raku6types.pdf
 
 #Length = 12.5 ±0.05 m   (FIXME v2 cover errors)
 #viz. https://www.mathsisfun.com/measure/error-measurement.html
 
+
+######## Constants & Definitions ########
+
+my $db = 0;					#debug
+
+our $round-to;				#optional round for output methods.. Str etc.
+
 constant \isa-length = 'Distance' | 'Breadth' | 'Width' | 'Height' | 'Depth'; 
 
-our $round-to is export;	#optional global rounding for Str etc.
-
-my regex number {
+my regex number is export {
 	\S+                     #grab chars
 	<?{ defined +"$/" }>    #assert coerces via '+' to Real
 }
+
+
+########## Classes & Methods ##########
 
 class Dimensionless { ... }
 
@@ -28,7 +34,7 @@ class Measure is export {
     has Unit $.units is rw;
 
     multi method new( :$value, :$units ) {			say "new from attrs" if $db;
-        self.bless( value => $value, units => GetUnit( $units) )
+        self.bless( value => $value, units => GetUnit($units) )
     }
     multi method new( Str:D $s ) {					say "new from Str" if $db;
         my ($v, $u) = Measure.defn-extract( $s );
@@ -249,17 +255,6 @@ class Angle is Measure is export {
 			nextsame
 		}
 	}
-
-#`[[
-    method value() {
-		##FIXME debug and generalize to Rad...
-        Proxy.new:
-            FETCH => -> $ { $!value },
-            STORE => -> $, $x {
-                $!value = $x % 360;
-            }
-    }   
-#]]
 }
 
 #| Override sin/cos/tan for Unit type Angle

@@ -41,8 +41,8 @@ use Physics::Measure;
 #Multiply with & Divide by a Real imply a constant factor...
     $c = $b * 30;       #'-69 m'
 
-#The Physics::Measure $round-to variable is applied to Str output
-	$round-to = 0.01;
+#The package variable $Physics::Measure::round-to is applied to Str output if defined
+	$Physics::Measure::round-to = 0.01;
  
 #Angles use degrees/minutes/seconds or decimal radians
 	my $θ1 ♎️ <45°30′30″>;		#45°30′30″ (using <> to deconfuse quotation marks)
