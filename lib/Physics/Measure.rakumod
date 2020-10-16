@@ -235,14 +235,14 @@ class Time is Measure is export {
 
 class Angle is Measure is export {
 	method dms(*%h)  {
-		my $abs = %h<negate>:exists ?? -$.value !! $.value;
+		my $abs = %h<negate> ?? -$.value !! $.value;
 
 		my $deg = $abs.floor; 
 		my $rem = ( $abs - $deg ) * 60; 
 		my $min = $rem.floor;
 		my $sec = ( $rem - $min ) * 60; 
 
-		if %h<no-secs>:exists {
+		if %h<no-secs> {
 			return( $deg, $rem )
 		} else {
 			return( $deg, $min, $sec )
