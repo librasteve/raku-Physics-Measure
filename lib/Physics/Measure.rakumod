@@ -235,8 +235,10 @@ class Time is Measure is export {
 
 class Angle is Measure is export {
 	method dms(*%h)  {
-		my $deg = $.value.floor; 
-		my $rem = ( $.value - $deg ) * 60; 
+		my $abs = %h<negate>:exists ?? -$.value !! $.value;
+
+		my $deg = $abs.floor; 
+		my $rem = ( $abs - $deg ) * 60; 
 		my $min = $rem.floor;
 		my $sec = ( $rem - $min ) * 60; 
 
