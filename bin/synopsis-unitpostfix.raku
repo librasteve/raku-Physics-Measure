@@ -10,6 +10,4 @@ my $f = $l.in: <ft>;	say ~$f;
 my $m = 1kg;			say ~$m;
 my $c = 17cm;			say ~$c;
 my $a-d = 7°;			say ~$a-d;
-my $a-m = 7′;			say ~$a-m;
-my $a-s = 7″;			say ~$a-s;
 
