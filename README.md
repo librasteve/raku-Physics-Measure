@@ -27,7 +27,7 @@ Physics::UnitPostfix takes the SI Base Units (7), SI Derived Units (20) and SI P
 
 IMPORTANT:
 * you will need to go in and uncomment if you want all SI units (~30) xx all Prefixes (~20) - as default these are limited to length(m), time(s), mass(kg) and volume(l) for installation performance reasons...
-* you will need to use Physics::UnitPostfix anytime you want compound units to be defined - eve if you do not need the postfix variant of operator - e.g. for ```my $x = Length.new(value => 21.006, units => 'cm');```
+* you will need to use Physics::UnitPostfix anytime you want compound units to be defined - even if you do not need the postfix variant of operator - e.g. for ```my $x = Length.new(value => 21.006, units => 'cm');```
 
 <img src="images/SIUnitPrefixTable.png" width="480">
 
