@@ -20,13 +20,15 @@ my $s = $l/$t;			    say ~$s;        #1000000 m/s    (Speed)
 my $f = $l.in: <ft>;    	    say ~$f;        #3280.84 ft     (Length)
 my $m = 1kg;			    say ~$m;        #1 kg           (Mass)
 ```
+ 
+Physics::UnitPostfix takes the SI Base Units (7), SI Derived Units (20) and SI Prefixes (20):
+* defines Unit objects for all combinations of Prefixes x [Base|Derived]Unit short names
+* declares raku <postfix> operators for all of these combinations and exports them into your namespace
 
-IMPORTANT: 
-Physics::UnitPostfix takes all combinations of the SI Base Units, SI Derived Units and SI Prefixes.
+IMPORTANT:
+* you will need to go in and uncomment if you want all SI units (~30) xx all Prefixes (~20) - as default these are limited to length(m), time(s), mass(kg) and volume(l) for performance reasons...
 
-![image1](images/SIUnitPrefixTable.png)
-
-You will need go in and uncomment if you want all SI units (~30) xx all Prefixes (~20) - as default these are limited to length(m), time(s), mass(kg) and volume(l) for performance reasons...
+![image1](images/SIUnitPrefixTable.png width=200)
 
 # Synopsis - Physics::Measure & Physics::Unit
 [https://github.com/p6steve/raku-Physics-Measure/bin/synopsis.raku](https://github.com/p6steve/raku-Physics-Measure/blob/master/bin/synopsis.raku)
