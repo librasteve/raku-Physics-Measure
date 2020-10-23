@@ -506,11 +506,11 @@ InitShortyNames (
     'Gy',  'gray',
     'Sv',  'sievert',
     'kat', 'katal',
-    'l',   'litre',    #add due to common use of ml, dl, etc.
-#   '°',   'degrees',  #remove due to lack of demand for yotta°'s
-#	'rad', 'radian',#remove due to confusion with rad Dose
-#   'sr',  'steradian',#remove due to lack of demand for yottasr's
-#   '°C',  'celsius',  #remove due to presence of K
+    'l',   'litre',     #add due to common use of ml, dl, etc.
+#   '°',   'degrees',   #remove due to lack of demand for yotta°'s
+#	'rad', 'radian',	#remove due to confusion with rad Dose
+#   'sr',  'steradian', #remove due to lack of demand for yottasr's
+#   '°C',  'celsius',   #remove due to presence of K
 ## i.e. removed and replaced with non-declining singletons in Measure.rakumod
 );
 
