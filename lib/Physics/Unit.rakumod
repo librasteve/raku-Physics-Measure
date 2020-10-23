@@ -508,7 +508,7 @@ InitShortyNames (
     'kat', 'katal',
     'l',   'litre',    #add due to common use of ml, dl, etc.
 #   '°',   'degrees',  #remove due to lack of demand for yotta°'s
-#	'radian', 'radian',#remove due to confusion with rad Dose
+#	'rad', 'radian',#remove due to confusion with rad Dose
 #   'sr',  'steradian',#remove due to lack of demand for yottasr's
 #   '°C',  'celsius',  #remove due to presence of K
 ## i.e. removed and replaced with non-declining singletons in Measure.rakumod
@@ -651,7 +651,6 @@ if $fast-start {
     ['kps'],                                    'kilometre per second',
     ['fps'],                                    'feet per second',
     ['knot'],                                   'nmile per hour',
-    ['c', 'speed-of-light'],                    '2.99792458e8 m/s',
 
     # Angular-Speed
     ['radians per second'],			            'Hz',  #the SI unit (radians=1)
@@ -1031,10 +1030,6 @@ Unit.new( factor => 1055.056, offset => 0, defn => '1055.056 joule', type => '',
 Unit.new( factor => 0.03636872, offset => 0, defn => '4 pecks', type => '',
 	  dims => [3,0,0,0,0,0,0,0], dmix => ("pecks"=>1).MixHash, 
 	  names => ['bushel','bushels'] , stock => True  );
-
-Unit.new( factor => 299792458, offset => 0, defn => '2.99792458e8 m/s', type => '',
-	  dims => [1,0,-1,0,0,0,0,0], dmix => ("s"=>-1,"m"=>1).MixHash, 
-	  names => ['c','speed-of-light','speed-of-lights'] , stock => True  );
 
 Unit.new( factor => 4.184, offset => 0, defn => '4.184 joules', type => '',
 	  dims => [2,1,-2,0,0,0,0,0], dmix => ("joules"=>1).MixHash, 

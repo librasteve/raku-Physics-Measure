@@ -93,7 +93,7 @@ class Measure is export {
 			my $sec where 0 <= * <  60 = $2 // 0;
 			my $v = ( ($deg * 3600) + ($min * 60) + $sec ) / 3600;
 
-			say "extracting «$s»: v is $deg°$min′$sec″, u is degrees";# if $db;
+			say "extracting «$s»: v is $deg°$min′$sec″, u is degrees" if $db;
 			return($v, 'degrees')
 		}
 		#put hh:mm:ss in here ;-)

@@ -7,11 +7,22 @@ use Physics::Measure;
 
 #Unit objects can be selected or created with GetUnit:
 	my Unit   $u  = GetUnit( 'm' );
-# Define your own unit named "ff" (named args)
+#Define your own unit named "ff" (named args)
 	my $ff = Unit.new( defn => 'furlong / fortnight', names => ['ff'] );
 
 #Measure objects such as Length can be formally constructed:
 	my Length $a .=new(value => 1e4, units => $u);	say "$a";		#10000 m
+
+
+my $xx = Length.new(value => 21.006, units => 'centim');
+say "$xx";
+#`[[
+my $zz ♎️ '5 km';
+say "$zz";
+my $yy ♎️ '5 cm';
+say "$yy";
+die;
+#]]
 
 #The libra operator ♎️ is a handy way to construct objects...
     my $b ♎️ '5e1 m';								say "$b";		#50 m
