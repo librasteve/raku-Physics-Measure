@@ -24,6 +24,8 @@ my $m = 1kg;			    say ~$m;        #1 kg           (Mass)
 IMPORTANT: 
 Physics::UnitPostfix takes all combinations of the SI Base Units, SI Derived Units and SI Prefixes.
 
+![image1](images/SIUnitPrefixTable.png)
+
 You will need go in and uncomment if you want all SI units (~30) xx all Prefixes (~20) - as default these are limited to length(m), time(s), mass(kg) and volume(l) for performance reasons...
 
 # Synopsis - Physics::Measure & Physics::Unit
