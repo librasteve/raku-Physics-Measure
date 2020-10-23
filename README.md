@@ -21,7 +21,10 @@ my $f = $l.in: <ft>;    	    say ~$f;        #3280.84 ft     (Length)
 my $m = 1kg;			    say ~$m;        #1 kg           (Mass)
 ```
 
-you may wish to go in and uncomment if you want all SI units (~30) xx all Prefixes (~20) - as default these are clipped to length(m), time(s), mass(kg) and volume(l) for performance reasons...
+IMPORTANT: 
+Physics::UnitPostfix takes all combinations of the SI Base Units, SI Derived Units and SI Prefixes.
+
+You will need go in and uncomment if you want all SI units (~30) xx all Prefixes (~20) - as default these are limited to length(m), time(s), mass(kg) and volume(l) for performance reasons...
 
 # Synopsis - Physics::Measure & Physics::Unit
 [https://github.com/p6steve/raku-Physics-Measure/bin/synopsis.raku](https://github.com/p6steve/raku-Physics-Measure/blob/master/bin/synopsis.raku)
