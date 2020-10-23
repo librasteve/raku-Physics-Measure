@@ -152,3 +152,5 @@ use Physics::Measure;
 
 #EOF
 ```
+
+Building with Travis
