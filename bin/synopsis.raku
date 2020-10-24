@@ -2,7 +2,6 @@
 use lib '../lib';
 use Physics::Unit;
 use Physics::Measure;
-use Physics::UnitPostfix;
 
 #SYNOPSIS
 
@@ -13,12 +12,6 @@ use Physics::UnitPostfix;
 
 #Measure objects such as Length can be formally constructed:
 	my Length $a .=new(value => 1e4, units => $u);	say "$a";		#10000 m
-
-
-my $xx = Length.new(value => 21.006, units => 'cm');
-say "$xx";
-my $yy = Measure.new(value => 21.006, units => 'ml');
-say "$yy";
 
 #The libra operator ♎️ is a handy way to construct objects...
     my $b ♎️ '5e1 m';								say "$b";		#50 m
