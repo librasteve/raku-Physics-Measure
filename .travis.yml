@@ -9,12 +9,3 @@ install:
   - docker images
 
 script: docker run -t -v  $TRAVIS_BUILD_DIR:/test jjmerelo/raku-test
-
-script:  docker run -t --user root --entrypoint="/bin/sh" \
-  -v  $TRAVIS_BUILD_DIR:/test \jjmerelo/raku-test\
-  -c "apk add --update --no-cache openssl-dev make \
-  build-base && \
-  zef -v install SVG && \
-  zef -v install SVG::Plot && \
-  zef -v install Math::Polygons && \
-  zef install --deps-only . && zef test ."
