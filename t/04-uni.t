@@ -91,7 +91,7 @@ my $speed = $nmiles / $hours;
 is ~$speed.in('knots'), '2 knot',											'cmp.round-to';
 
 my $sine = sin( $θ1 );
-ok $sine == 0.7133523847299412,												'sin.dms';
+is-approx $sine, 0.7133523847299412,										'sin.dms';
 my $arcsin = asin( $sine, units => '°' );
 is "$arcsin", <45°30′30″>,													'asin.dms';
 
