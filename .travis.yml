@@ -8,4 +8,4 @@ install:
   - docker pull jjmerelo/raku-test
   - docker images
 
-script: docker run -t -v  $TRAVIS_BUILD_DIR:/test jjmerelo/raku-test
+script: travis_wait docker run -t -v  $TRAVIS_BUILD_DIR:/test jjmerelo/raku-test
