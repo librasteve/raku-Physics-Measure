@@ -7,7 +7,6 @@ services:
 install:
   - docker pull jjmerelo/raku-test
   - docker images
-  - rakudobrew build zef
   - zef -v install SVG
   - zef -v install SVG::Plot
   - zef -v install Math::Polygons 
