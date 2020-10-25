@@ -1,4 +1,4 @@
-unit module Physics::UnitPostfix:ver<0.0.3>:auth<Steve Roe (p6steve@furnival.net)>;
+unit module Physics::UnitStock:ver<0.0.4>:auth<Steve Roe (p6steve@furnival.net)>;
 use Physics::Unit;
 
 #approx. 600 units == ~2400 more lines...
