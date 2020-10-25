@@ -1,3 +1,4 @@
+[![Build Status](https://travis-ci.com/p6steve/raku-Physics-Measure.svg?branch=master)](https://travis-ci.com/p6steve/raku-Physics-Measure)
 # raku-Physics-Measure
 A set of SI, Imperial and US Unit objects that are employed by Measure objects having value, units and error(tbd) and act as operands in most calculations. Some prefix and physical constants included where needed. Some use of unicode and operator overload.
 
@@ -152,5 +153,3 @@ use Physics::Measure;
 
 #EOF
 ```
-
-Building with Travis
