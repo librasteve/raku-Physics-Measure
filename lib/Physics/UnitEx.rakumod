@@ -1,5 +1,18 @@
-unit module Physics::UnitStock:ver<0.0.4>:auth<Steve Roe (p6steve@furnival.net)>;
+unit module Physics::UnitEx:ver<0.0.4>:auth<Steve Roe (p6steve@furnival.net)>;
 use Physics::Unit;
+
+##spike
+#UnitEx replaces UnitPostfix
+#synopsis-unitex.raku replaces synopsis-unitpostscript.raku...
+
+
+##check
+#uplift to v0.0.4
+#use UnitStock not UnitPostfix
+#thoughtful test
+
+
+
 
 #approx. 600 units == ~2400 more lines...
 #some individual units commented out as already defined in Physics::Unit

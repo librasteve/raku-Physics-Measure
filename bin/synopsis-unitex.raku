@@ -1,7 +1,7 @@
 #!/usr/bin/env raku 
 use lib '../lib';
 use Physics::Measure;
-use Physics::UnitStock;
+use Physics::UnitEx;
 
 my $l = 1km;			say ~$l;
 my $t = 1ms;			say ~$t;
