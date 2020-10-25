@@ -1,9 +1,11 @@
 unit module Physics::UnitEx:ver<0.0.4>:auth<Steve Roe (p6steve@furnival.net)>;
+use MONKEY-SEE-NO-EVAL;
 use Physics::Unit;
 
 ##spike
 #UnitEx replaces UnitPostfix
 #synopsis-unitex.raku replaces synopsis-unitpostscript.raku...
+#move the postfix export to here (at the end)
 
 
 ##check
@@ -2294,5 +2296,116 @@ Unit.new( factor => 1e-24, offset => 0, defn => 'yoctokatal', type => '',
 
 #)) ##End of commented out units
 ###### Short Stock Units End ######
+
+
+#approx. 600 units == ~2400 more lines...
+#some individual units commented out as already defined in Physics::Unit
+
+##### Postfix Unit Export Start #####
+sub do-postfix( Real $v, Str $n ) is export {
+    my $nuo = GetUnit( $n );
+    my $n-type = $nuo.type( just1 => 1 );
+
+    my $nao;
+    EVAL qq| {
+        use Physics::Measure;
+        return ::($n-type).new(value => $v, units => $nuo);
+    } |;
+} 
+##e.g. => sub postfix:<m> ( Real:D $x ) is export { do-postfix( $x, 'm' ) }
+
+#[[
+##First a few "non-declining singletons"...
+sub postfix:<°> (Real:D $x) is export { do-postfix($x,'°') }
+sub postfix:<radian> (Real:D $x) is export { do-postfix($x,'radian') }
+sub postfix:<steradian> (Real:D $x) is export { do-postfix($x,'steradian') }
+sub postfix:<°C> (Real:D $x) is export { do-postfix($x,'°C') }
+
+#approx. 600 shorty units == ~600 more lines...
+sub postfix:<hm> (Real:D $x) is export { do-postfix($x,'hm') }
+sub postfix:<km> (Real:D $x) is export { do-postfix($x,'km') }
+sub postfix:<Mm> (Real:D $x) is export { do-postfix($x,'Mm') }
+sub postfix:<Gm> (Real:D $x) is export { do-postfix($x,'Gm') }
+sub postfix:<Tm> (Real:D $x) is export { do-postfix($x,'Tm') }
+sub postfix:<Pm> (Real:D $x) is export { do-postfix($x,'Pm') }
+sub postfix:<Em> (Real:D $x) is export { do-postfix($x,'Em') }
+sub postfix:<Zm> (Real:D $x) is export { do-postfix($x,'Zm') }
+sub postfix:<Ym> (Real:D $x) is export { do-postfix($x,'Ym') }
+sub postfix:<dm> (Real:D $x) is export { do-postfix($x,'dm') }
+sub postfix:<cm> (Real:D $x) is export { do-postfix($x,'cm') }
+sub postfix:<mm> (Real:D $x) is export { do-postfix($x,'mm') }
+sub postfix:<μm> (Real:D $x) is export { do-postfix($x,'μm') }
+sub postfix:<nm> (Real:D $x) is export { do-postfix($x,'nm') }
+sub postfix:<pm> (Real:D $x) is export { do-postfix($x,'pm') }
+sub postfix:<fm> (Real:D $x) is export { do-postfix($x,'fm') }
+sub postfix:<am> (Real:D $x) is export { do-postfix($x,'am') }
+sub postfix:<zm> (Real:D $x) is export { do-postfix($x,'zm') }
+sub postfix:<ym> (Real:D $x) is export { do-postfix($x,'ym') }
+sub postfix:<g> (Real:D $x) is export { do-postfix($x,'g') }
+sub postfix:<dag> (Real:D $x) is export { do-postfix($x,'dag') }
+sub postfix:<hg> (Real:D $x) is export { do-postfix($x,'hg') }
+sub postfix:<kg> (Real:D $x) is export { do-postfix($x,'kg') }
+sub postfix:<Mg> (Real:D $x) is export { do-postfix($x,'Mg') }
+sub postfix:<Gg> (Real:D $x) is export { do-postfix($x,'Gg') }
+sub postfix:<Tg> (Real:D $x) is export { do-postfix($x,'Tg') }
+sub postfix:<Pg> (Real:D $x) is export { do-postfix($x,'Pg') }
+sub postfix:<Eg> (Real:D $x) is export { do-postfix($x,'Eg') }
+sub postfix:<Zg> (Real:D $x) is export { do-postfix($x,'Zg') }
+sub postfix:<Yg> (Real:D $x) is export { do-postfix($x,'Yg') }
+sub postfix:<dg> (Real:D $x) is export { do-postfix($x,'dg') }
+sub postfix:<cg> (Real:D $x) is export { do-postfix($x,'cg') }
+sub postfix:<mg> (Real:D $x) is export { do-postfix($x,'mg') }
+sub postfix:<μg> (Real:D $x) is export { do-postfix($x,'μg') }
+sub postfix:<ng> (Real:D $x) is export { do-postfix($x,'ng') }
+sub postfix:<pg> (Real:D $x) is export { do-postfix($x,'pg') }
+sub postfix:<fg> (Real:D $x) is export { do-postfix($x,'fg') }
+sub postfix:<ag> (Real:D $x) is export { do-postfix($x,'ag') }
+sub postfix:<zg> (Real:D $x) is export { do-postfix($x,'zg') }
+sub postfix:<yg> (Real:D $x) is export { do-postfix($x,'yg') }
+sub postfix:<s> (Real:D $x) is export { do-postfix($x,'s') }
+sub postfix:<das> (Real:D $x) is export { do-postfix($x,'das') }
+sub postfix:<hs> (Real:D $x) is export { do-postfix($x,'hs') }
+sub postfix:<ks> (Real:D $x) is export { do-postfix($x,'ks') }
+sub postfix:<Ms> (Real:D $x) is export { do-postfix($x,'Ms') }
+sub postfix:<Gs> (Real:D $x) is export { do-postfix($x,'Gs') }
+sub postfix:<Ts> (Real:D $x) is export { do-postfix($x,'Ts') }
+sub postfix:<Ps> (Real:D $x) is export { do-postfix($x,'Ps') }
+sub postfix:<Es> (Real:D $x) is export { do-postfix($x,'Es') }
+sub postfix:<Zs> (Real:D $x) is export { do-postfix($x,'Zs') }
+sub postfix:<Ys> (Real:D $x) is export { do-postfix($x,'Ys') }
+sub postfix:<ds> (Real:D $x) is export { do-postfix($x,'ds') }
+sub postfix:<cs> (Real:D $x) is export { do-postfix($x,'cs') }
+sub postfix:<ms> (Real:D $x) is export { do-postfix($x,'ms') }
+sub postfix:<μs> (Real:D $x) is export { do-postfix($x,'μs') }
+sub postfix:<ns> (Real:D $x) is export { do-postfix($x,'ns') }
+sub postfix:<ps> (Real:D $x) is export { do-postfix($x,'ps') }
+sub postfix:<fs> (Real:D $x) is export { do-postfix($x,'fs') }
+sub postfix:<as> (Real:D $x) is export { do-postfix($x,'as') }
+sub postfix:<zs> (Real:D $x) is export { do-postfix($x,'zs') }
+sub postfix:<ys> (Real:D $x) is export { do-postfix($x,'ys') }
+sub postfix:<l> (Real:D $x) is export { do-postfix($x,'l') }
+sub postfix:<dal> (Real:D $x) is export { do-postfix($x,'dal') }
+sub postfix:<hl> (Real:D $x) is export { do-postfix($x,'hl') }
+sub postfix:<kl> (Real:D $x) is export { do-postfix($x,'kl') }
+sub postfix:<Ml> (Real:D $x) is export { do-postfix($x,'Ml') }
+sub postfix:<Gl> (Real:D $x) is export { do-postfix($x,'Gl') }
+sub postfix:<Tl> (Real:D $x) is export { do-postfix($x,'Tl') }
+sub postfix:<Pl> (Real:D $x) is export { do-postfix($x,'Pl') }
+sub postfix:<El> (Real:D $x) is export { do-postfix($x,'El') }
+sub postfix:<Zl> (Real:D $x) is export { do-postfix($x,'Zl') }
+sub postfix:<Yl> (Real:D $x) is export { do-postfix($x,'Yl') }
+sub postfix:<dl> (Real:D $x) is export { do-postfix($x,'dl') }
+sub postfix:<cl> (Real:D $x) is export { do-postfix($x,'cl') }
+sub postfix:<ml> (Real:D $x) is export { do-postfix($x,'ml') }
+sub postfix:<μl> (Real:D $x) is export { do-postfix($x,'μl') }
+sub postfix:<nl> (Real:D $x) is export { do-postfix($x,'nl') }
+sub postfix:<pl> (Real:D $x) is export { do-postfix($x,'pl') }
+sub postfix:<fl> (Real:D $x) is export { do-postfix($x,'fl') }
+sub postfix:<al> (Real:D $x) is export { do-postfix($x,'al') }
+sub postfix:<zl> (Real:D $x) is export { do-postfix($x,'zl') }
+sub postfix:<yl> (Real:D $x) is export { do-postfix($x,'yl') }
+
+#]] ##End of commented out units
+##### Postfix Unit Export End #####
 
 #EOF
