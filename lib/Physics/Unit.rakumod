@@ -464,6 +464,7 @@ InitPrefix (
     'zepto',   0.000000000000000000001,
     'yocto',   0.000000000000000000000001,
 );
+#`[[[
 InitShortyPrefix (
 	'',   '',
     'da', 'deka',
@@ -551,6 +552,7 @@ InitShortyTags (
     'l',   ':DEFAULT',
 );
 #iamerejh
+#]]]
 
 InitBaseUnit (
     #SI Base Units 
@@ -567,7 +569,11 @@ InitBaseUnit (
 if $fast-start {
     LoadStockUnits(); 
 } else {
-    InitUnit (
+
+	InitUnit (
+
+    # Dimensionless
+    ['pi'],          '3.1415926535897932385',
 
     #SI Derived Units with special names & symbols
     ['sr', 'steradian'],                    'radian^2',
@@ -601,12 +607,12 @@ if $fast-start {
     ['ABV'],									'1',   
 
     # Angle
-    ['°', 'degree', 'deg', 'º'],                'π radians / 180',
-    ['ᵍ', 'gon'],                               'π radians / 200',
+    ['°', 'degree', 'deg', 'º'],                'pi radians / 180',
+    ['ᵍ', 'gon'],                               'pi radians / 200',
 
     # Solid Angle
     ['deg²'],									'deg^2',
-    ['sp','spat'],								'4 * π steradians',
+    ['sp','spat'],								'4 pi steradians',
 
     # Time
     ['min', 'minute'],                          '60 s',
@@ -687,7 +693,7 @@ if $fast-start {
 
     # Angular-Speed
     ['radians per second'],			            'Hz',  #the SI unit (radians=1)
-    ['revs', 'revolutions per second'],         '2 * π Hz',
+    ['revs', 'revolutions per second'],         '2 pi * Hz',
     ['rpm'],							        '60 revs',
 
     # Acceleration
@@ -747,7 +753,7 @@ if $fast-start {
 
 	# Density
     ['kg/m^3'],                                 'kg / m^3',
-	['°proof',],                                '923 kg / m^3',       
+	['°proof'],                                 '923 kg / m^3',       
 	#UK metric https://en.wikipedia.org/wiki/Alcohol_proof (US version is just 2x ABV)
 
     # Energy
@@ -790,7 +796,7 @@ if $fast-start {
     # Dose
     ['rad'],           'gray / 100',
     ['rem'],           'sievert / 100',
-)
+);
 } #end of fast-start else
 
 InitTypes (
@@ -843,7 +849,6 @@ say "INITIALIZATION DONE";
 say "+++++++++++++++++++";
 say "";
 }
-
 
 #### ShortUnits for Postfix Operators ####
 
@@ -1383,6 +1388,10 @@ Unit.new( factor => 1, offset => 0, defn => '1', type => '',
 	  dims => [0,0,0,0,0,0,0,0], dmix => ().MixHash, 
 	  names => ['ABV'] , stock => True  );
 
+Unit.new( factor => 3.1415926535897932385, offset => 0, defn => '3.1415926535897932385', type => '',
+	  dims => [0,0,0,0,0,0,0,0], dmix => ().MixHash, 
+	  names => ['pi'] , stock => True  );
+
 Unit.new( factor => 0.004233, offset => 0, defn => 'in/6', type => '',
 	  dims => [1,0,0,0,0,0,0,0], dmix => ("in"=>1).MixHash, 
 	  names => ['pica','picas'] , stock => True  );
@@ -1407,7 +1416,7 @@ Unit.new( factor => 0.0011365225, offset => 0, defn => 'gallon/4', type => '',
 	  dims => [3,0,0,0,0,0,0,0], dmix => ("gallon"=>1).MixHash, 
 	  names => ['quart','quarts'] , stock => True  );
 
-Unit.new( factor => 1, offset => 0, defn => 'rad', type => '',
+Unit.new( factor => 1, offset => 0, defn => 'radian', type => '',
 	  dims => [0,0,0,0,0,0,0,1], dmix => ("rad"=>1).MixHash, 
 	  names => ['radian','radians'] , stock => True  );
 
@@ -1427,8 +1436,8 @@ Unit.new( factor => 1, offset => 0, defn => '1', type => '',
 	  dims => [0,0,0,0,0,0,0,0], dmix => ().MixHash, 
 	  names => ['revolution','revolutions'] , stock => True  );
 
-Unit.new( factor => 6.283185307179586477, offset => 0, defn => '2 * π Hz', type => '',
-	  dims => [0,0,-1,0,0,0,0,0], dmix => ("Hz"=>1).MixHash, 
+Unit.new( factor => 6.283185307179586477, offset => 0, defn => '2 pi * Hz', type => '',
+	  dims => [0,0,-1,0,0,0,0,0], dmix => ("pi"=>1,"Hz"=>1).MixHash, 
 	  names => ['revs','revolutions per second','revolutions per seconds'] , stock => True  );
 
 Unit.new( factor => 5.0292, offset => 0, defn => '5.5 yards', type => '',
@@ -1467,12 +1476,12 @@ Unit.new( factor => 4.4482216152605, offset => 0, defn => 'slug feet/s', type =>
 	  dims => [1,1,-1,0,0,0,0,0], dmix => ("s"=>-1,"slug"=>1,"feet"=>1).MixHash, 
 	  names => ['slug ft/s'] , stock => True  );
 
-Unit.new( factor => 12.566370614359172954, offset => 0, defn => '4 * π steradians', type => '',
-	  dims => [0,0,0,0,0,0,0,2], dmix => ("steradians"=>1).MixHash, 
+Unit.new( factor => 12.566370614359172954, offset => 0, defn => '4 pi steradians', type => '',
+	  dims => [0,0,0,0,0,0,0,2], dmix => ("pi"=>1,"steradians"=>1).MixHash, 
 	  names => ['sp','spat','spats'] , stock => True  );
 
-Unit.new( factor => 1, offset => 0, defn => 'rad^2', type => '',
-	  dims => [0,0,0,0,0,0,0,2], dmix => ("rad"=>2).MixHash, 
+Unit.new( factor => 1, offset => 0, defn => 'radian^2', type => '',
+	  dims => [0,0,0,0,0,0,0,2], dmix => ("radian"=>2).MixHash, 
 	  names => ['sr','steradian','steradians'] , stock => True  );
 
 Unit.new( factor => 6.35029318, offset => 0, defn => '14 lbm', type => '',
@@ -1535,8 +1544,8 @@ Unit.new( factor => 31557600, offset => 0, defn => '365.25 days', type => '',
 	  dims => [0,0,1,0,0,0,0,0], dmix => ("days"=>1).MixHash, 
 	  names => ['yr','year','years'] , stock => True  );
 
-Unit.new( factor => 0.017453292519943295, offset => 0, defn => 'π radians / 180', type => '',
-	  dims => [0,0,0,0,0,0,0,1], dmix => ("radians"=>1).MixHash, 
+Unit.new( factor => 0.017453292519943295, offset => 0, defn => 'pi radians / 180', type => '',
+	  dims => [0,0,0,0,0,0,0,1], dmix => ("pi"=>1,"radians"=>1).MixHash, 
 	  names => ['°','degree','degrees','deg','degs','°'] , stock => True  );
 
 Unit.new( factor => 923, offset => 0, defn => '923 kg / m^3', type => '',
@@ -1567,11 +1576,11 @@ Unit.new( factor => 1e-06, offset => 0, defn => '1e-6 m', type => '',
 	  dims => [1,0,0,0,0,0,0,0], dmix => ("m"=>1).MixHash, 
 	  names => ['μ','micron','microns'] , stock => True  );
 
-Unit.new( factor => 0.015707963267948967, offset => 0, defn => 'π radians / 200', type => '',
-	  dims => [0,0,0,0,0,0,0,1], dmix => ("radians"=>1).MixHash, 
+Unit.new( factor => 0.015707963267948967, offset => 0, defn => 'pi radians / 200', type => '',
+	  dims => [0,0,0,0,0,0,0,1], dmix => ("pi"=>1,"radians"=>1).MixHash, 
 	  names => ['ᵍ','gon','gons'] , stock => True  );
 
 ######## Stock Unit End ########
 }
- 
+
 #EOF
