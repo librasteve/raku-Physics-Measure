@@ -2,7 +2,7 @@ unit module Physics::Unit:ver<0.0.4>:auth<Steve Roe (p6steve@furnival.net)>;
 #viz. https://en.wikipedia.org/wiki/International_System_of_Units
 
 my $db = 0;           #debug 
-my $fast-start = 1;   #[off ~ 97s / on ~ 12s / precomp ~ 1.3s ] 
+my $fast-start = 0;   #[off ~ 97s / on ~ 12s / precomp ~ 1.3s ] 
 ## if Short Units on  #[first compile ~8mins / precomp ~ 3.5 sec]
 ##Read the Stock Unit Guidance (~line 900 below) prior to editing this module##
 
