@@ -16,6 +16,7 @@ my %prefix-by-name;
 my %prototype-by-type;  #ie. Unit objects that exemplify each type 
 my @shorty-prefix;
 my @shorty-names;
+my %shorty-tag;			#ie. Define tags for UnitEx import
 
 #Power synonyms
 my %pwr-preword   = ( square  => 2, sq => 2, cubic => 3, );   
@@ -255,6 +256,9 @@ sub ListShortyNames is export {
 sub ListShortyPrefix is export {
 	return @shorty-prefix
 }
+sub GetShortyTag( Str $n ) is export {
+	return %shorty-tag{$n}
+}
 sub GetPrototype( Str $t ) is export {
 	return %prototype-by-type{$t}
 }
@@ -428,6 +432,11 @@ sub InitShortyNames( @_ ) {
 		@shorty-names.push: $n => $s
 	}
 }
+sub InitShortyTags( @_ ) {
+	for @_ -> $n, $t {
+		%shorty-tag{$n} = $t;
+	}
+}
 
 ######## Unit Data ########
 InitPrefix (
@@ -455,7 +464,6 @@ InitPrefix (
     'zepto',   0.000000000000000000001,
     'yocto',   0.000000000000000000000001,
 );
-
 InitShortyPrefix (
 	'',   '',
     'da', 'deka',
@@ -512,6 +520,35 @@ InitShortyNames (
 #   'sr',  'steradian', #remove due to lack of demand for yottasr's
 #   '°C',  'celsius',   #remove due to lack of demand for yotta°C's
 ## i.e. removed and replaced with non-declining singletons in UnitEx.rakumod
+);
+InitShortyTags (
+	'm',   ':DEFAULT',
+	'g',   ':DEFAULT',
+	's',   ':DEFAULT',
+	'A',   ':electrical',
+	'K',   ':mechnical',
+	'mol', ':mechnical',
+	'cd',  ':astral',
+    'Hz',  ':mechnical',
+    'N',   ':mechnical',
+    'Pa',  ':mechnical',
+    'J',   ':mechnical',
+    'W',   ':mechnical',
+    'C',   ':electrical',
+    'V',   ':electrical',
+    'F',   ':electrical',
+    'Ω',   ':electrical',
+    'S',   ':electrical', 
+    'Wb',  ':electrical',
+    'T',   ':electrical',
+    'H',   ':electrical',
+    'lm',  ':astral',
+    'lx',  ':astral',
+    'Bq',  ':astral',
+    'Gy',  ':astral',
+    'Sv',  ':astral',
+    'kat', ':astral',
+    'l',   ':DEFAULT',
 );
 
 InitBaseUnit (
