@@ -550,6 +550,7 @@ InitShortyTags (
     'kat', ':astral',
     'l',   ':DEFAULT',
 );
+#iamerejh
 
 InitBaseUnit (
     #SI Base Units 
@@ -568,13 +569,8 @@ if $fast-start {
 } else {
     InitUnit (
 
-    # Dimensionless
-    ['pi'],          '3.1415926535897932385',
-#FIXME cull
-    #['e'],           '2.7182818284590452354',
-
     #SI Derived Units with special names & symbols
-    ['sr', 'steradian'],                    'rad^2',
+    ['sr', 'steradian'],                    'radian^2',
     ['Hz', 'hertz'],                        '1 / s',
     ['N',  'newton'],                       'kg m / s^2',
     ['Pa', 'pascal'],                       'N / m^2',
@@ -605,12 +601,12 @@ if $fast-start {
     ['ABV'],									'1',   
 
     # Angle
-    ['°', 'degree', 'deg', 'º'],                'pi radians / 180',
-    ['ᵍ', 'gon'],                               'pi radians / 200',
+    ['°', 'degree', 'deg', 'º'],                'π radians / 180',
+    ['ᵍ', 'gon'],                               'π radians / 200',
 
     # Solid Angle
     ['deg²'],									'deg^2',
-    ['sp','spat'],								'4 pi steradians',
+    ['sp','spat'],								'4 * π steradians',
 
     # Time
     ['min', 'minute'],                          '60 s',
@@ -691,7 +687,7 @@ if $fast-start {
 
     # Angular-Speed
     ['radians per second'],			            'Hz',  #the SI unit (radians=1)
-    ['revs', 'revolutions per second'],         '2 pi * Hz',
+    ['revs', 'revolutions per second'],         '2 * π Hz',
     ['rpm'],							        '60 revs',
 
     # Acceleration
@@ -1111,12 +1107,6 @@ Unit.new( factor => 0.00001, offset => 0, defn => 'gm centimetre / s^2', type =>
 	  dims => [1,1,-2,0,0,0,0,0], dmix => ("gm"=>1,"s"=>-2,"metre"=>1).MixHash, 
 	  names => ['dyne','dynes'] , stock => True  );
 
-#`[[ FIXME cull
-Unit.new( factor => 2.7182818284590452354, offset => 0, defn => '2.7182818284590452354', type => '',
-	  dims => [0,0,0,0,0,0,0,0], dmix => ().MixHash, 
-	  names => ['e'] , stock => True  );
-#]]
-
 Unit.new( factor => 1.60217733e-19, offset => 0, defn => '1.60217733e-19 joule', type => '',
 	  dims => [2,1,-2,0,0,0,0,0], dmix => ("joule"=>1).MixHash, 
 	  names => ['eV','electron-volt','electron-volts'] , stock => True  );
@@ -1393,10 +1383,6 @@ Unit.new( factor => 1, offset => 0, defn => '1', type => '',
 	  dims => [0,0,0,0,0,0,0,0], dmix => ().MixHash, 
 	  names => ['ABV'] , stock => True  );
 
-Unit.new( factor => 3.1415926535897932385, offset => 0, defn => '3.1415926535897932385', type => '',
-	  dims => [0,0,0,0,0,0,0,0], dmix => ().MixHash, 
-	  names => ['pi'] , stock => True  );
-
 Unit.new( factor => 0.004233, offset => 0, defn => 'in/6', type => '',
 	  dims => [1,0,0,0,0,0,0,0], dmix => ("in"=>1).MixHash, 
 	  names => ['pica','picas'] , stock => True  );
@@ -1441,8 +1427,8 @@ Unit.new( factor => 1, offset => 0, defn => '1', type => '',
 	  dims => [0,0,0,0,0,0,0,0], dmix => ().MixHash, 
 	  names => ['revolution','revolutions'] , stock => True  );
 
-Unit.new( factor => 6.283185307179586477, offset => 0, defn => '2 pi * Hz', type => '',
-	  dims => [0,0,-1,0,0,0,0,0], dmix => ("pi"=>1,"Hz"=>1).MixHash, 
+Unit.new( factor => 6.283185307179586477, offset => 0, defn => '2 * π Hz', type => '',
+	  dims => [0,0,-1,0,0,0,0,0], dmix => ("Hz"=>1).MixHash, 
 	  names => ['revs','revolutions per second','revolutions per seconds'] , stock => True  );
 
 Unit.new( factor => 5.0292, offset => 0, defn => '5.5 yards', type => '',
@@ -1481,8 +1467,8 @@ Unit.new( factor => 4.4482216152605, offset => 0, defn => 'slug feet/s', type =>
 	  dims => [1,1,-1,0,0,0,0,0], dmix => ("s"=>-1,"slug"=>1,"feet"=>1).MixHash, 
 	  names => ['slug ft/s'] , stock => True  );
 
-Unit.new( factor => 12.566370614359172954, offset => 0, defn => '4 pi steradians', type => '',
-	  dims => [0,0,0,0,0,0,0,2], dmix => ("pi"=>1,"steradians"=>1).MixHash, 
+Unit.new( factor => 12.566370614359172954, offset => 0, defn => '4 * π steradians', type => '',
+	  dims => [0,0,0,0,0,0,0,2], dmix => ("steradians"=>1).MixHash, 
 	  names => ['sp','spat','spats'] , stock => True  );
 
 Unit.new( factor => 1, offset => 0, defn => 'rad^2', type => '',
@@ -1549,8 +1535,8 @@ Unit.new( factor => 31557600, offset => 0, defn => '365.25 days', type => '',
 	  dims => [0,0,1,0,0,0,0,0], dmix => ("days"=>1).MixHash, 
 	  names => ['yr','year','years'] , stock => True  );
 
-Unit.new( factor => 0.017453292519943295, offset => 0, defn => 'pi radians / 180', type => '',
-	  dims => [0,0,0,0,0,0,0,1], dmix => ("pi"=>1,"radians"=>1).MixHash, 
+Unit.new( factor => 0.017453292519943295, offset => 0, defn => 'π radians / 180', type => '',
+	  dims => [0,0,0,0,0,0,0,1], dmix => ("radians"=>1).MixHash, 
 	  names => ['°','degree','degrees','deg','degs','°'] , stock => True  );
 
 Unit.new( factor => 923, offset => 0, defn => '923 kg / m^3', type => '',
@@ -1581,8 +1567,8 @@ Unit.new( factor => 1e-06, offset => 0, defn => '1e-6 m', type => '',
 	  dims => [1,0,0,0,0,0,0,0], dmix => ("m"=>1).MixHash, 
 	  names => ['μ','micron','microns'] , stock => True  );
 
-Unit.new( factor => 0.015707963267948967, offset => 0, defn => 'pi radians / 200', type => '',
-	  dims => [0,0,0,0,0,0,0,1], dmix => ("pi"=>1,"radians"=>1).MixHash, 
+Unit.new( factor => 0.015707963267948967, offset => 0, defn => 'π radians / 200', type => '',
+	  dims => [0,0,0,0,0,0,0,1], dmix => ("radians"=>1).MixHash, 
 	  names => ['ᵍ','gon','gons'] , stock => True  );
 
 ######## Stock Unit End ########

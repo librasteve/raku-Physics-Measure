@@ -10,7 +10,7 @@
     "provides" : {
         "Physics::Measure" : "lib/Physics/Measure.rakumod",
         "Physics::Unit" : "lib/Physics/Unit.rakumod",
-        "Physics::UnitPostfix" : "lib/Physics/UnitPostfix.rakumod"
+        "Physics::UnitEx" : "lib/Physics/UnitEx.rakumod"
     },
     "depends" : [
         "SVG","SVG::Plot","Math::Polygons"

@@ -18,7 +18,7 @@ use MONKEY-SEE-NO-EVAL;
 
 #using (moving here) eg DumpShortStock routine to make 
 #Short Stock Units
-#
+#iamerejh
 
 
 #approx. 600 units == ~2400 more lines...
