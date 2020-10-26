@@ -1,19 +1,24 @@
 unit module Physics::UnitEx:ver<0.0.4>:auth<Steve Roe (p6steve@furnival.net)>;
-use MONKEY-SEE-NO-EVAL;
 use Physics::Unit;
+
+use MONKEY-SEE-NO-EVAL;
 
 ##spike
 #UnitEx replaces UnitPostfix
 #synopsis-unitex.raku replaces synopsis-unitpostscript.raku...
 #move the postfix export to here (at the end)
+#still need fast start mode
 
 
 ##check
 #uplift to v0.0.4
-#use UnitStock not UnitPostfix
+#rm DumpShort.. routines
+#use UnitEx not UnitPostfix
 #thoughtful test
 
-
+#using (moving here) eg DumpShortStock routine to make 
+#Short Stock Units
+#
 
 
 #approx. 600 units == ~2400 more lines...
@@ -2314,13 +2319,13 @@ sub do-postfix( Real $v, Str $n ) is export {
 } 
 ##e.g. => sub postfix:<m> ( Real:D $x ) is export { do-postfix( $x, 'm' ) }
 
-#[[
 ##First a few "non-declining singletons"...
 sub postfix:<°> (Real:D $x) is export { do-postfix($x,'°') }
 sub postfix:<radian> (Real:D $x) is export { do-postfix($x,'radian') }
 sub postfix:<steradian> (Real:D $x) is export { do-postfix($x,'steradian') }
 sub postfix:<°C> (Real:D $x) is export { do-postfix($x,'°C') }
 
+#[[
 #approx. 600 shorty units == ~600 more lines...
 sub postfix:<hm> (Real:D $x) is export { do-postfix($x,'hm') }
 sub postfix:<km> (Real:D $x) is export { do-postfix($x,'km') }

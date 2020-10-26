@@ -507,11 +507,11 @@ InitShortyNames (
     'Sv',  'sievert',
     'kat', 'katal',
     'l',   'litre',     #add due to common use of ml, dl, etc.
-#   '°',   'degrees',   #remove due to lack of demand for yotta°'s
-#	'rad', 'radian',	#remove due to confusion with rad Dose
+#   '°',   'degrees',   #remove due to lack of demand for eg. yotta°'s
+#	'rad', 'radian',	#remove use 'radian' due to confusion with rad Dose
 #   'sr',  'steradian', #remove due to lack of demand for yottasr's
-#   '°C',  'celsius',   #remove due to presence of K
-## i.e. removed and replaced with non-declining singletons in Measure.rakumod
+#   '°C',  'celsius',   #remove due to lack of demand for yotta°C's
+## i.e. removed and replaced with non-declining singletons in UnitEx.rakumod
 );
 
 InitBaseUnit (
@@ -878,7 +878,6 @@ sub DumpShortStock is export {
 
 sub DumpStockUnits is export {
     my %unique-unit{Unit} = %unit-by-name.kv.reverse;
-	##my @unique-sort = %unique-unit.keys;
 	my @unique-sort = %unique-unit.keys.sort({$^a.name cmp $^b.name});	
     for @unique-sort -> $u {
         say $u.raku
