@@ -1,32 +1,31 @@
 unit module Physics::UnitEx:ver<0.0.4>:auth<Steve Roe (p6steve@furnival.net)>;
 use Physics::Unit;
 
-use MONKEY-SEE-NO-EVAL;
-
 ##spike
 #UnitEx replaces UnitPostfix
 #synopsis-unitex.raku replaces synopsis-unitpostscript.raku...
 #move the postfix export to here
 #interleave postfix and uit defn/ (at the end)
-#still need fast start mode
-
+#only takes 1.7 sec for all imports - no need for tags/evals
+#still need fast start mode (same speed as comment out?)
 
 ##check
 #uplift to v0.0.4
-#rm DumpShort.. routines
+#rm DumpShort.. routines scripts
 #use UnitEx not UnitPostfix
 #thoughtful test
+#suppress plural in dags
 
 #using (moving here) eg DumpShortStock routine to make 
 #Short Stock Units
 #iamerejh
 
 my $db = 0;           #debug 
+my $fast-start = 0;   #[off ~ s / on ~ s / precomp ~ s ]
 
 ##### Constant Declarations ######
 my @shorty-prefix;
 my @shorty-names;
-my %shorty-tag;         #ie. Define tags for UnitEx import
 
 ######## Subroutines ########
 sub ListShortyNames {
@@ -34,9 +33,6 @@ sub ListShortyNames {
 }
 sub ListShortyPrefix {
     return @shorty-prefix
-}
-sub GetShortyTag( Str $n ) {
-    return %shorty-tag{$n}
 }
 
 sub InitShortyPrefix( @_ ) {
@@ -47,11 +43,6 @@ sub InitShortyPrefix( @_ ) {
 sub InitShortyNames( @_ ) {
     for @_ -> $n, $s {
         @shorty-names.push: $n => $s
-    }
-}
-sub InitShortyTags( @_ ) {
-    for @_ -> $n, $t {
-        %shorty-tag{$n} = $t;
     }
 }
 
@@ -118,39 +109,9 @@ InitShortyNames (
 #   '°C',  'celsius',   #remove due to lack of demand for yotta°C's
 ## i.e. removed and replaced with non-declining singletons in UnitEx.rakumod
 );
-InitShortyTags (
-    'm',   ':DEFAULT',
-    'g',   ':DEFAULT',
-#`<<
-    's',   ':DEFAULT',
-    'A',   ':electrical',
-    'K',   ':mechnical',
-    'mol', ':mechnical',
-    'cd',  ':astral',
-    'Hz',  ':mechnical',
-    'N',   ':mechnical',
-    'Pa',  ':mechnical',
-    'J',   ':mechnical',
-    'W',   ':mechnical',
-    'C',   ':electrical',
-    'V',   ':electrical',
-    'F',   ':electrical',
-    'Ω',   ':electrical',
-    'S',   ':electrical',
-    'Wb',  ':electrical',
-    'T',   ':electrical',
-    'H',   ':electrical',
-    'lm',  ':astral',
-    'lx',  ':astral',
-    'Bq',  ':astral',
-    'Gy',  ':astral',
-    'Sv',  ':astral',
-    'kat', ':astral',
-    'l',   ':DEFAULT',
-#>>
-);
 #iamerejh
 #]]]
+
 #### ShortUnits for Postfix Operators ####
 
 #|To facilitate intuitive access to Physics::Unit, the sister Physics::ShortUnit module is
@@ -202,7 +163,7 @@ sub DumpShortStock is export {
 #approx. 600 units == ~2400 more lines...
 #some individual units commented out as already defined in Physics::Unit
 
-####`{{{{
+####{{{{
 ##### Short Stock Units Start #####
 #`[[
 Unit.new( factor => 1, offset => 0, defn => 'metre', type => '',
@@ -544,7 +505,7 @@ Unit.new( factor => 1e-27, offset => 0, defn => 'yoctolitre', type => '',
 ### Below commented out with ((...)) as first compile too slow > 30 mins 
 ### If you can live with this feel free to uncomment here and matching 
 ### relevant items in Measure.rakumod
-#`((
+#((
 #`[[
 Unit.new( factor => 1, offset => 0, defn => 'amp', type => '',
 	  dims => [0,0,0,1,0,0,0,0], dmix => ("amp"=>1).MixHash, 

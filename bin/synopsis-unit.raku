@@ -7,6 +7,7 @@ use Physics::Unit;
 # Define your own unit named "ff" (named args)
 my $ff = Unit.new( defn => 'furlong / fortnight', names => ['ff'] );
 say "$ff";
+die;
 say $ff.type;
 say $ff.canonical;
 say $ff.pretty;
