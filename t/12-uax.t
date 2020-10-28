@@ -1,11 +1,11 @@
 #!/usr/bin/env raku
-#t/12-uex.t 
+#t/12-uax.t 
 #TESTALL$ prove6 ./t      [from root]
 use lib '../lib';
 use Test;
 plan 10;
 
-use Physics::UnitEx;
+use Physics::UnitAffix;
 use Physics::Measure;
 
 my $l = 1km;

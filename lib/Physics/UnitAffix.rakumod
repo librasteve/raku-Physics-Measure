@@ -1,4 +1,4 @@
-unit module Physics::UnitEx:ver<0.0.4>:auth<Steve Roe (p6steve@furnival.net)>;
+unit module Physics::UnitAffix:ver<0.0.4>:auth<Steve Roe (p6steve@furnival.net)>;
 use Physics::Unit;
 
 ##spike
@@ -2452,10 +2452,12 @@ sub do-postfix( Real $v, Str $n ) is export {
     my $n-type = $nuo.type( just1 => 1 );
 
     my $nao;
+#`[[
     EVAL qq| {
         use Physics::Measure;
         return ::($n-type).new(value => $v, units => $nuo);
     } |;
+#]]FIXME
 } 
 ##e.g. => sub postfix:<m> ( Real:D $x ) is export { do-postfix( $x, 'm' ) }
 
