@@ -15,7 +15,7 @@ We use the term Affix to indicate that both concepts are provided by this module
 Now you can simply go 'my $l = 1km;' to declare a new Measure with value => 1 and units => 'km'
 #]]
 
-my $l = 1km;			say ~$l;
+my $l = 1m;				say ~$l;
 my $t = 1ms;			say ~$t;
 my $s = $l/$t;			say ~$s;
 my $f = $l.in: <ft>;	say ~$f;

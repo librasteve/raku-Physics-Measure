@@ -1,6 +1,6 @@
 #!/usr/bin/env raku
 use lib '../lib';
-use Physics::UnitEx;
+use Physics::UnitAffix;
 
 #### Make Stock Units from Short Postfix Operators #### 
 
@@ -10,6 +10,6 @@ use Physics::UnitEx;
 #|And since you want all these 600 units pre built for performance, you can and pre-pend to the Stock
 #|Units faststart set (read guidance below first)  
 
-DumpShortStock();
+DumpAffixUnits();
 
 #EOF

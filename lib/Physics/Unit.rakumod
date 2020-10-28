@@ -456,6 +456,7 @@ if $fast-start {
 
 	# Dimensionless
 	['pi'],          '3.1415926535897932385',
+#FIXME try ['pi'], 'π', #or similar
 
 	#SI Derived Units with special names & symbols
 	['sr', 'steradian'],                    'radian^2',

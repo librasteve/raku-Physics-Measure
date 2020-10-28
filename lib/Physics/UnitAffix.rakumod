@@ -1,6 +1,8 @@
 unit module Physics::UnitAffix:ver<0.0.4>:auth<Steve Roe (p6steve@furnival.net)>;
 use Physics::Unit;
 
+use MONKEY-SEE-NO-EVAL;
+
 ##spike
 #UnitEx replaces UnitPostfix
 #synopsis-unitex.raku replaces synopsis-unitpostscript.raku...
@@ -18,37 +20,44 @@ use Physics::Unit;
 
 #using (moving here) eg DumpShortStock routine to make 
 #Short Stock Units
+
+#`[[[ all slow-start
 #iamerejh
 
+##Read the Affix Unit Guidance (~line 825 below) prior to editing this module##
+
 my $db = 0;           #debug 
-my $fast-start = 0;   #[off ~ s / on ~ s / precomp ~ s ]
+my $fast-start = 1;   #[off ~ s / on ~ s / precomp ~ s ]
 
 ##### Constant Declarations ######
-my @shorty-prefix;
-my @shorty-names;
+my @affix-prefix;
+my @affix-names;
 
 ######## Subroutines ########
-sub ListShortyNames {
-    return @shorty-names
+sub ListAffixNames {
+    return @affix-names
 }
-sub ListShortyPrefix {
-    return @shorty-prefix
+sub ListAffixPrefix {
+    return @affix-prefix
 }
 
-sub InitShortyPrefix( @_ ) {
+sub InitAffixPrefix( @_ ) {
     for @_ -> $p, $s {
-        @shorty-prefix.push: $p => $s
+        @affix-prefix.push: $p => $s
     }
 }
-sub InitShortyNames( @_ ) {
+sub InitAffixNames( @_ ) {
     for @_ -> $n, $s {
-        @shorty-names.push: $n => $s
+        @affix-names.push: $n => $s
     }
 }
 
-######## Unit Data ########
-#[[[
-InitShortyPrefix (
+if $fast-start {
+	LoadAffixUnits();
+	LoadAffixOps();
+} else {
+	InitAffixPrefix (
+
     '',   '',
     'da', 'deka',
     'h',  'hecto',
@@ -72,8 +81,8 @@ InitShortyPrefix (
     'z',  'zepto',
     'y',  'yocto',
 #>>
-);
-InitShortyNames (
+	);
+	InitAffixNames (
     'm',   'metre',
     'g',   'gram',
 #`<<
@@ -109,14 +118,13 @@ InitShortyNames (
 #   '°C',  'celsius',   #remove due to lack of demand for yotta°C's
 ## i.e. removed and replaced with non-declining singletons in UnitEx.rakumod
 );
-#iamerejh
-#]]]
+} #end of fast-start else
 
-#### ShortUnits for Postfix Operators ####
+#### Affix Units for Postfix Operators ####
 
-#|To facilitate intuitive access to Physics::Unit, the sister Physics::ShortUnit module is
+#|To facilitate intuitive access to Physics::Unit, the sister Physics::UnitAffix module is
 #|provided with a laundry list of predefined units that cover all combinations
-#|of shorty-prefix xx shorty-names (as defined above).
+#|of affix-prefix xx affix-names (as defined above).
 #|
 #|The postfix form needs no fancy ♎️ unicode to be typed, literally $l = 1m; will return a
 #|Length object that can be mixed and matched. The postfix definitions are built into
@@ -127,9 +135,9 @@ InitShortyNames (
 #|
 #|eg. sub postfix:<m> ( Real:D $x ) is export { do-postfix( $x, 'm' ) }
 
-sub DumpShortOps is export {
-    for @shorty-names -> $name {
-        for @shorty-prefix -> $prefix {
+sub DumpAffixOps is export {
+    for @affix-names -> $name {
+        for @affix-prefix -> $prefix {
             my $o = $prefix.key ~ $name.key;
             say q|sub postfix:<\qq[$o]> (Real:D $x) is export { do-postfix($x,'\qq[$o]') }|
         }
@@ -141,30 +149,35 @@ sub DumpShortOps is export {
 #|This takes ca 30 minutes on my machine. You will need to weed out the unprefixed BaseUnits
 #|and other already defined above (m, km, g, kg, s, A and so on)
 
-sub DumpShortStock is export {
-    my @shorty-prefix-names;
+sub DumpAffixUnits is export {
+    my @affix-prefix-names;
     my @init-me;
-    for @shorty-names -> $name {
-        for @shorty-prefix -> $prefix {
+    for @affix-names -> $name {
+        for @affix-prefix -> $prefix {
             my $opcode = $prefix.key ~ $name.key;
             my $opdefn = $prefix.value ~ $name.value;
             @init-me.push: [$opcode];
             @init-me.push: $opdefn;
-            @shorty-prefix-names.push: $opcode;
+            @affix-prefix-names.push: $opcode;
         }
     }
     InitUnit( @init-me );
-    for @shorty-prefix-names -> $o {
+    for @affix-prefix-names -> $o {
 		say GetUnit($o).raku;
     }
 }
+#]]]
 #iamerejh
 
 #approx. 600 units == ~2400 more lines...
 #some individual units commented out as already defined in Physics::Unit
 
 ####{{{{
-##### Short Stock Units Start #####
+
+sub LoadAffixUnits {
+
+#approx. 600 units == ~2,400 lines...
+##### Affix Unit Start #####
 #`[[
 Unit.new( factor => 1, offset => 0, defn => 'metre', type => '',
 	  dims => [1,0,0,0,0,0,0,0], dmix => ("metre"=>1).MixHash, 
@@ -2440,7 +2453,9 @@ Unit.new( factor => 1e-24, offset => 0, defn => 'yoctokatal', type => '',
 	  names => ['ykat','ykats'] , stock => True  );
 
 #)) ##End of commented out units
-###### Short Stock Units End ######
+
+###### Affix Units End ######
+}
 
 
 #approx. 600 units == ~2400 more lines...
@@ -2451,14 +2466,15 @@ sub do-postfix( Real $v, Str $n ) is export {
     my $nuo = GetUnit( $n );
     my $n-type = $nuo.type( just1 => 1 );
 
-    my $nao;
-#`[[
-    EVAL qq| {
-        use Physics::Measure;
+	#limit the use of Physics::Measure to this block
+	{ 
+		use Physics::Measure;
         return ::($n-type).new(value => $v, units => $nuo);
-    } |;
-#]]FIXME
+	} 
 } 
+
+sub LoadAffixOps {
+
 ##e.g. => sub postfix:<m> ( Real:D $x ) is export { do-postfix( $x, 'm' ) }
 
 ##First a few "non-declining singletons"...
@@ -2468,7 +2484,8 @@ sub postfix:<steradian> (Real:D $x) is export { do-postfix($x,'steradian') }
 sub postfix:<°C> (Real:D $x) is export { do-postfix($x,'°C') }
 
 #[[
-#approx. 600 shorty units == ~600 more lines...
+#approx. 600 affix units == ~600 more lines...
+sub postfix:<m> (Real:D $x) is export { do-postfix($x,'m') }
 sub postfix:<hm> (Real:D $x) is export { do-postfix($x,'hm') }
 sub postfix:<km> (Real:D $x) is export { do-postfix($x,'km') }
 sub postfix:<Mm> (Real:D $x) is export { do-postfix($x,'Mm') }
@@ -2553,7 +2570,8 @@ sub postfix:<zl> (Real:D $x) is export { do-postfix($x,'zl') }
 sub postfix:<yl> (Real:D $x) is export { do-postfix($x,'yl') }
 
 #]] ##End of commented out units
-##### Postfix Unit Export End #####
+##### Postfix Unit End #####
+}
 #}}}}
 
 #EOF
