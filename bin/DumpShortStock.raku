@@ -1,6 +1,6 @@
 #!/usr/bin/env raku
 use lib '../lib';
-use Physics::Unit;
+use Physics::UnitEx;
 
 #### Make Stock Units from Short Postfix Operators #### 
 

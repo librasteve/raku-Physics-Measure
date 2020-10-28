@@ -6,7 +6,8 @@ use MONKEY-SEE-NO-EVAL;
 ##spike
 #UnitEx replaces UnitPostfix
 #synopsis-unitex.raku replaces synopsis-unitpostscript.raku...
-#move the postfix export to here (at the end)
+#move the postfix export to here
+#interleave postfix and uit defn/ (at the end)
 #still need fast start mode
 
 
@@ -55,11 +56,12 @@ sub InitShortyTags( @_ ) {
 }
 
 ######## Unit Data ########
-#`[[[
+#[[[
 InitShortyPrefix (
     '',   '',
     'da', 'deka',
     'h',  'hecto',
+#`<<
     'k',  'kilo',
     'M',  'mega',
     'G',  'giga',
@@ -78,10 +80,12 @@ InitShortyPrefix (
     'a',  'atto',
     'z',  'zepto',
     'y',  'yocto',
+#>>
 );
 InitShortyNames (
     'm',   'metre',
     'g',   'gram',
+#`<<
     's',   'second',
     'A',   'amp',
     'K',   'kelvin',
@@ -107,6 +111,7 @@ InitShortyNames (
     'Sv',  'sievert',
     'kat', 'katal',
     'l',   'litre',     #add due to common use of ml, dl, etc.
+#>>
 #   '°',   'degrees',   #remove due to lack of demand for eg. yotta°'s
 #   'rad', 'radian',    #remove use 'radian' due to confusion with rad Dose
 #   'sr',  'steradian', #remove due to lack of demand for yottasr's
@@ -116,6 +121,7 @@ InitShortyNames (
 InitShortyTags (
     'm',   ':DEFAULT',
     'g',   ':DEFAULT',
+#`<<
     's',   ':DEFAULT',
     'A',   ':electrical',
     'K',   ':mechnical',
@@ -141,6 +147,7 @@ InitShortyTags (
     'Sv',  ':astral',
     'kat', ':astral',
     'l',   ':DEFAULT',
+#>>
 );
 #iamerejh
 #]]]
@@ -187,14 +194,15 @@ sub DumpShortStock is export {
     }
     InitUnit( @init-me );
     for @shorty-prefix-names -> $o {
-####fixme #iamerejh
-        ##say %unit-by-name{$o}.raku
+		say GetUnit($o).raku;
     }
 }
+#iamerejh
 
 #approx. 600 units == ~2400 more lines...
 #some individual units commented out as already defined in Physics::Unit
 
+####`{{{{
 ##### Short Stock Units Start #####
 #`[[
 Unit.new( factor => 1, offset => 0, defn => 'metre', type => '',
@@ -2583,5 +2591,6 @@ sub postfix:<yl> (Real:D $x) is export { do-postfix($x,'yl') }
 
 #]] ##End of commented out units
 ##### Postfix Unit Export End #####
+#}}}}
 
 #EOF

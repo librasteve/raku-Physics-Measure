@@ -2,12 +2,12 @@ unit module Physics::Unit:ver<0.0.4>:auth<Steve Roe (p6steve@furnival.net)>;
 #viz. https://en.wikipedia.org/wiki/International_System_of_Units
 
 my $db = 0;           #debug 
-my $fast-start = 0;   #[off ~ 97s / on ~ 12s / precomp ~ 1.3s ] 
+my $fast-start = 1;   #[off ~ 97s / on ~ 12s / precomp ~ 1.3s ] 
 ## if Short Units on  #[first compile ~8mins / precomp ~ 3.5 sec]
 ##Read the Stock Unit Guidance (~line 900 below) prior to editing this module##
 
 ##### Constant Declarations ######
-constant \locale = "imp";   #Imperial="imp"; US="us' FIXME v2 make option
+constant \locale = "imp";   #Imperial="imp"; US="us' FIXME v2 make tag
 constant \NumBases = 8; 
 my Str   @BaseNames;
 
@@ -28,13 +28,13 @@ my %pwr-superscript = (
 ######## Classes & Roles ########
 class Unit is export {
     has Real $!factor = 1;
-    has Real $!offset = 0;				#for K <=> °C
+    has Real $!offset = 0;				#i.e. for K <=> °C
     has Str  $!defn   = '';
     has Str  $!type;
     has Str  @.names  is rw = [];
     has Int  @.dims   = 0 xx NumBases;
 	has MixHash $.dmix is rw = ∅.MixHash;
-    has Bool $!stock;					#for pre-baked units
+    has Bool $!stock;					#for pre-cooked 'stock' units
 
     ### accessor methods ###		    #use 'self.attr: 42' not 'self.attr = 42'
     multi method factor($f) { self.CheckChange; $!factor = $f } 
@@ -145,7 +145,7 @@ class Unit is export {
             %unit-by-name{$n} = self;
 
             #naive plurals - append 's' unless...
-            if     $n.chars > 2                 #...too short
+            if     $n.chars > 3                 #...too short
                 && $n.comb.first(:end) ne 's'   #...already ends with 's'
                 && $n !~~ /<[\d\/^*]>/          #...contains a digit or a symbol
                 && ! $noplural                  #...instructed not to
