@@ -18,7 +18,8 @@ constant \isa-length = 'Distance' | 'Breadth' | 'Width' | 'Height' | 'Depth';
 
 my regex number is export {
 	\S+                     #grab chars
-	<?{ defined +"$/" }>    #assert coerces via '+' to Real
+	##<?{ defined +"$/" }>    #assert coerces via '+' to Real
+	<?{ +"$/" ~~ Real }>    #assert coerces via '+' to Real
 }
 
 
