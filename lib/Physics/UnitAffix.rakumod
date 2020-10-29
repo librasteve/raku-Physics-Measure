@@ -27,6 +27,7 @@ my $fast-start = 1;   #[off ~ s / on ~ s / precomp ~ 1.74s ]
 ##### Constant Declarations ######
 my @affix-prefix;
 my @affix-names;
+my %affix-tag;         #ie. Define tags for UnitEx import
 
 ######## Subroutines ########
 sub ListAffixNames {
@@ -35,8 +36,11 @@ sub ListAffixNames {
 sub ListAffixPrefix {
     return @affix-prefix
 }
+sub GetAffixTag( Str $n ) {
+    return %shorty-tag{$n}
+}
 
-sub InitAffixPrefix( @_ ) {
+sub InitAffixPrefixes( @_ ) {
     for @_ -> $p, $s {
         @affix-prefix.push: $p => $s
     }
@@ -46,13 +50,18 @@ sub InitAffixNames( @_ ) {
         @affix-names.push: $n => $s
     }
 }
+sub InitAffixTags( @_ ) {
+    for @_ -> $n, $t {
+        %affix-tag{$n} = $t;
+    }
+ }
 
 if $fast-start {
 	LoadAffixUnits();
 	LoadAffixOps();
 } else {
-	InitAffixPrefix (
 
+InitAffixPrefixes (
     '',   '',
     'da', 'deka',
     'h',  'hecto',
@@ -76,8 +85,9 @@ if $fast-start {
     'z',  'zepto',
     'y',  'yocto',
 #>>
-	);
-	InitAffixNames (
+);
+
+InitAffixNames (
     'm',   'metre',
     'g',   'gram',
 #`<<
@@ -113,6 +123,39 @@ if $fast-start {
 #   '°C',  'celsius',   #remove due to lack of demand for yotta°C's
 ## i.e. removed and replaced with non-declining singletons in UnitEx.rakumod
 );
+
+InitAffixTags (
+     'm',   ':DEFAULT',
+     'g',   ':DEFAULT',
+ #`<<
+     's',   ':DEFAULT',
+     'A',   ':electrical',
+     'K',   ':mechnical',
+    'mol', ':mechnical',
+    'cd',  ':astral',
+    'Hz',  ':mechnical',
+    'N',   ':mechnical',
+    'Pa',  ':mechnical',
+    'J',   ':mechnical',
+    'W',   ':mechnical',
+    'C',   ':electrical',
+    'V',   ':electrical',
+    'F',   ':electrical',
+    'Ω',   ':electrical',
+    'S',   ':electrical',
+    'Wb',  ':electrical',
+    'T',   ':electrical',
+    'H',   ':electrical',
+    'lm',  ':astral',
+    'lx',  ':astral',
+    'Bq',  ':astral',
+    'Gy',  ':astral',
+     'Sv',  ':astral',
+     'kat', ':astral',
+     'l',   ':DEFAULT',
+ #>>
+);
+
 } #end of fast-start else
 
 
@@ -2562,7 +2605,7 @@ sub postfix:<yl> (Real:D $x) is export { do-postfix($x,'yl') }
 
 ### Below commented out as first compile too slow > 7 mins
 ### If you can live with this feel free to uncomment here 
-#`(( 
+#(( 
 sub postfix:<A> (Real:D $x) is export { do-postfix($x,'A') }
 sub postfix:<daA> (Real:D $x) is export { do-postfix($x,'daA') }
 sub postfix:<hA> (Real:D $x) is export { do-postfix($x,'hA') }
