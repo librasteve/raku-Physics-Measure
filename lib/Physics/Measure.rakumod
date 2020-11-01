@@ -527,6 +527,7 @@ sub postfix:<steradian> (Real:D $x) is export { do-postfix($x,'steradian') }
 sub postfix:<°C> (Real:D $x) is export { do-postfix($x,'°C') }
 
 #approx. 600 shorty units == ~600 more lines...
+sub postfix:<m> (Real:D $x) is export { do-postfix($x,'m') }
 sub postfix:<hm> (Real:D $x) is export { do-postfix($x,'hm') }
 sub postfix:<km> (Real:D $x) is export { do-postfix($x,'km') }
 sub postfix:<Mm> (Real:D $x) is export { do-postfix($x,'Mm') }
