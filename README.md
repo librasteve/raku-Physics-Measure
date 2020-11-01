@@ -21,7 +21,7 @@ my $s = $l/$t;			    say ~$s;        #1000000 m/s    (Speed)
 my $f = $l.in: <ft>;    	    say ~$f;        #3280.84 ft     (Length)
 my $m = 1kg;			    say ~$m;        #1 kg           (Mass)
 my $y ♎️ '5e1 km';                  say ~$y;        #50 km          (Length)
-my $x = Measure.new(value => 21.006, units => 'μl'); say "$x"; #21.006 μl (Measure)
+my $x = Volume.new(value => 21.006, units => 'μl'); say "$x"; #21.006 μl (Measure)
 ```
  
 Physics::UnitPostfix takes the SI Base Units (7), SI Derived Units (20) and SI Prefixes (20):
