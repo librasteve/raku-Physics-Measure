@@ -29,8 +29,8 @@ Physics::UnitPostfix takes the SI Base Units (7), SI Derived Units (20) and SI P
 * declares raku ```<postfix>``` operators for all of these combinations and exports them into your namespace
 
 IMPORTANT:
-* you will need to go in and uncomment if you want all SI units (~30) xx all Prefixes (~20) - as default these are limited to length(m), time(s), mass(kg) and volume(l) for installation performance reasons...
-* you will need to use Physics::UnitPostfix anytime you want compound units to be defined - even if you do not need the postfix variant of operator - e.g. for ```my $x = Length.new(value => 21.006, units => 'cm'); my $y ♎️ '5e1 km';```
+* you will need to go in and uncomment if you want all compound SI units (~30) xx all Prefixes (~20) - as default these are limited to length(m), time(s), mass(kg) and volume(l) for installation performance reasons...
+* you will need to use Physics::UnitPostfix anytime you want compound units to be defined - even if you do not need the postfix variant of operator - e.g. for ```my $x = Length.new(value => 17, units => 'cm'); my $y ♎️ '5e1 km';``` and so on
 
 <img src="images/SIUnitPrefixTable.png" width="480">
 
