@@ -1,6 +1,6 @@
 #!/usr/bin/env raku 
 use lib '../lib';
-use Physics::UnitAffix;
+use Physics::UnitAffix( :DEFAULT );
 use Physics::Measure;
 
 #`[[

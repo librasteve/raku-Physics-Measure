@@ -1,13 +1,11 @@
 unit module Physics::UnitAffix:ver<0.0.4>:auth<Steve Roe (p6steve@furnival.net)>;
 use Physics::Unit;
 
-#[off ~ 65s / on ~ 11s / precomp ~ 1.7s ]
+###### UnitAffix has the QUICK variant (UnitAffixQ) for faster speed#######
+#[firstcomp ~ 480s (!) / precomp ~ 1.9s ]
 
 LoadAffixUnits();
 LoadAffixOps();
-
-#approx. 600 units == ~2400 more lines...
-#some individual units commented out as already defined in Physics::Unit
 
 sub LoadAffixUnits {
 
