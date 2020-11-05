@@ -3,14 +3,15 @@
     "name" : "Physics::Measure",
     "auth" : "github:p6steve",
     "api" : "1",
-    "version" : "0.0.3",
+    "version" : "0.0.4",
     "description" : "Some support for physical units.",
     "authors" : [ "p6steve" ],
     "license" : "Artistic-2.0",
     "provides" : {
         "Physics::Measure" : "lib/Physics/Measure.rakumod",
         "Physics::Unit" : "lib/Physics/Unit.rakumod",
-        "Physics::UnitPostfix" : "lib/Physics/UnitPostfix.rakumod"
+        "Physics::UnitAffix" : "lib/Physics/UnitAffix.rakumod",
+        "Physics::UnitAffixQ" : "lib/Physics/UnitAffixQ.rakumod"
     },
     "depends" : [
         "SVG","SVG::Plot","Math::Polygons"

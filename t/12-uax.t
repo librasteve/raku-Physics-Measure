@@ -1,13 +1,14 @@
 #!/usr/bin/env raku
-#t/12-mun.t 
+#t/12-uax.t 
 #TESTALL$ prove6 ./t      [from root]
 use lib '../lib';
 use Test;
 plan 10;
 
-use Physics::Measure;
-use Physics::UnitPostfix;
+##NB This test uses the :DEFAULT only UnitAffixQ for faster install times
 
+use Physics::UnitAffixQ;
+use Physics::Measure;
 
 my $l = 1km;
 is ~$l,'1 km',																'km';

@@ -1,21 +1,19 @@
-unit module Physics::Unit:ver<0.0.3>:auth<Steve Roe (sroe@furnival.net)>; 
+unit module Physics::Unit:ver<0.0.4>:auth<Steve Roe (p6steve@furnival.net)>; 
 #viz. https://en.wikipedia.org/wiki/International_System_of_Units
 
+##Read the Stock Unit Guidance (~line 725 below) prior to editing this module##
+
 my $db = 0;           #debug 
-my $fast-start = 1;   #[off ~ 97s / on ~ 12s / precomp ~ 1.3s ] 
-## if Short Units on  #[first compile ~8mins / precomp ~ 3.5 sec]
-##Read the Stock Unit Guidance (~line 900 below) prior to editing this module##
+my $fast-start = 1;   #[off ~ 65s / on ~ 11s / precomp ~ 1.7s ] 
 
 ##### Constant Declarations ######
-constant \locale = "imp";   #Imperial="imp"; US="us' FIXME v2 make option
+constant \locale = "imp";   #Imperial="imp"; US="us' FIXME v2 make tag
 constant \NumBases = 8; 
 my Str   @BaseNames;
 
 my %unit-by-name;
 my %prefix-by-name;
-my %prototype-by-type;  #ie. Unit objects that exemplify each type 
-my @shorty-prefix;
-my @shorty-names;
+my %prototype-by-type;		#ie. Unit objects that exemplify each type 
 
 #Power synonyms
 my %pwr-preword   = ( square  => 2, sq => 2, cubic => 3, );   
@@ -30,13 +28,13 @@ my %pwr-superscript = (
 ######## Classes & Roles ########
 class Unit is export {
     has Real $!factor = 1;
-    has Real $!offset = 0;				#for K <=> °C
+    has Real $!offset = 0;				#i.e. for K <=> °C
     has Str  $!defn   = '';
     has Str  $!type;
     has Str  @.names  is rw = [];
     has Int  @.dims   = 0 xx NumBases;
 	has MixHash $.dmix is rw = ∅.MixHash;
-    has Bool $!stock;					#for pre-baked units
+    has Bool $!stock;					#for pre-cooked 'stock' units
 
     ### accessor methods ###		    #use 'self.attr: 42' not 'self.attr = 42'
     multi method factor($f) { self.CheckChange; $!factor = $f } 
@@ -129,13 +127,13 @@ class Unit is export {
         }
         return @dim-str.join('⋅')
     }
-    method raku {                #can make stock
-		my $s-str = $fast-start ?? '' !! ', stock => True ';
-		my $t-str = $fast-start ?? "'$!type'" !! "''";
+    method raku( :$stock ) {								#can make stock units
+		my $s-str = $stock ?? ', stock => True' !! '';
+		my $t-str = $stock ?? "''" !! "'$!type'";			#suppress type if stock
         return qq:to/END/;
         Unit.new( factor => $.factor, offset => $.offset, defn => '$.defn', type => $t-str,
 		  dims => [{@.dims.join(',')}], dmix => {$.dmix.raku}, 
-		  names => [{@.names.map( ->$n {"'$n'"}).join(',')}] $s-str );
+		  names => [{@.names.map( ->$n {"'$n'"}).join(',')}]$s-str );
         END
     }
 
@@ -240,7 +238,7 @@ class Unit is export {
 }
 
 ######## Subroutines ########
-sub ListUnits is export {		#FIXME probably does work with fast-start
+sub ListUnits is export {		
     return sort keys %unit-by-name
 }
 sub ListTypes is export {
@@ -248,12 +246,6 @@ sub ListTypes is export {
 }
 sub ListBases is export {
     return @BaseNames
-}
-sub ListShortyNames is export {
-	return @shorty-names
-}
-sub ListShortyPrefix is export {
-	return @shorty-prefix
 }
 sub GetPrototype( Str $t ) is export {
 	return %prototype-by-type{$t}
@@ -400,7 +392,7 @@ sub InitPrefix( @_ ) {
         say "Initialized Prefix $name" if $db;
     }
 }
-sub InitUnit( @_ ) {
+sub InitUnit( @_ ) is export {
     for @_ -> $names, $defn {
         my $u = CreateUnit( $defn );
         $u.SetNames: $names;    #decont from scalar to list
@@ -417,16 +409,6 @@ sub InitTypes( @_ )  {
         my ($t, $u) = %p.key, %p.value;
 		GetUnit($u).NewType($t)
     }
-}
-sub InitShortyPrefix( @_ ) {
-	for @_ -> $p, $s {
-		@shorty-prefix.push: $p => $s
-	}
-}
-sub InitShortyNames( @_ ) {
-	for @_ -> $n, $s {
-		@shorty-names.push: $n => $s
-	}
 }
 
 ######## Unit Data ########
@@ -455,65 +437,6 @@ InitPrefix (
     'zepto',   0.000000000000000000001,
     'yocto',   0.000000000000000000000001,
 );
-
-InitShortyPrefix (
-	'',   '',
-    'da', 'deka',
-    'h',  'hecto',
-	'k',  'kilo',
-    'M',  'mega',
-    'G',  'giga',
-	'T',  'tera',
-	'P',  'peta',
-    'E',  'exa',
-    'Z',  'zetta',
-    'Y',  'yotta',
-    'd',  'deci',
-    'c',  'centi',
-    'm',  'milli',
-    'μ',  'micro',
-    'n',  'nano',
-    'p',  'pico',
-    'f',  'femto',
-    'a',  'atto',
-    'z',  'zepto',
-    'y',  'yocto',
-);
-InitShortyNames (
-	'm',   'metre',
-	'g',   'gram',
-	's',   'second',
-	'A',   'amp',
-	'K',   'kelvin',
-	'mol', 'mol',
-	'cd',  'candela',
-    'Hz',  'hertz',
-    'N',   'newton',
-    'Pa',  'pascal',
-    'J',   'joule',
-    'W',   'watt',
-    'C',   'coulomb',
-    'V',   'volt',
-    'F',   'farad',
-    'Ω',   'ohm',
-    'S',   'siemens',
-    'Wb',  'weber',
-    'T',   'tesla',
-    'H',   'henry',
-    'lm',  'lumen',
-    'lx',  'lux',
-    'Bq',  'becquerel',
-    'Gy',  'gray',
-    'Sv',  'sievert',
-    'kat', 'katal',
-    'l',   'litre',     #add due to common use of ml, dl, etc.
-#   '°',   'degrees',   #remove due to lack of demand for yotta°'s
-#	'rad', 'radian',	#remove due to confusion with rad Dose
-#   'sr',  'steradian', #remove due to lack of demand for yottasr's
-#   '°C',  'celsius',   #remove due to presence of K
-## i.e. removed and replaced with non-declining singletons in Measure.rakumod
-);
-
 InitBaseUnit (
     #SI Base Units 
     'Length'      => ['m', 'metre', 'meter'],
@@ -529,235 +452,234 @@ InitBaseUnit (
 if $fast-start {
     LoadStockUnits(); 
 } else {
-    InitUnit (
+	InitUnit (
 
-    # Dimensionless
-    ['pi'],          '3.1415926535897932385',
-#FIXME cull
-    #['e'],           '2.7182818284590452354',
+	# Dimensionless
+	['pi'],          '3.1415926535897932385',
+#FIXME try ['pi'], 'π', #or similar
 
-    #SI Derived Units with special names & symbols
-    ['sr', 'steradian'],                    'rad^2',
-    ['Hz', 'hertz'],                        '1 / s',
-    ['N',  'newton'],                       'kg m / s^2',
-    ['Pa', 'pascal'],                       'N / m^2',
-    ['J',  'joule'],                        'kg m^2 / s^2',
-    ['W',  'watt'],                         'kg m^2 / s^3',
-    ['C',  'coulomb'],                      'A s',
-    ['V',  'volt'],                         'kg m^2 / A s^3',
-    ['F',  'farad'],                        'A^2 s^4 / kg m^2',
-    ['Ω',  'ohm'],                          'kg m^2 / A^2 s^3',
-    ['S',  'siemens'],                      'A^2 s^3 / kg m^2',
-    ['Wb', 'weber'],                        'kg m^2 / A s^2',
-    ['T',  'tesla'],                        'kg / A s^2',
-    ['H',  'henry'],                        'kg m^2 / A^2 s^2',
-    ['°C', 'celsius', 'Centigrade'],        'K + 273.15',
-    ['lm', 'lumen'],                        'cd sr',
-    ['lx', 'lux'],                          'm^-2 cd',
-    ['Bq', 'becquerel'],                    '1 Hz',
-    ['Gy', 'gray'],                         'J / kg',
-    ['Sv', 'sievert'],                      'J / kg',
-    ['kat', 'katal'],                       'mol s^-1',
-    #SI coherent Derived Units in terms of base units - TBD [see url]
-    #SI coherent Derived Units that include units with special names - TBD [see url]
+	#SI Derived Units with special names & symbols
+	['sr', 'steradian'],                    'radian^2',
+	['Hz', 'hertz'],                        '1 / s',
+	['N',  'newton'],                       'kg m / s^2',
+	['Pa', 'pascal'],                       'N / m^2',
+	['J',  'joule'],                        'kg m^2 / s^2',
+	['W',  'watt'],                         'kg m^2 / s^3',
+	['C',  'coulomb'],                      'A s',
+	['V',  'volt'],                         'kg m^2 / A s^3',
+	['F',  'farad'],                        'A^2 s^4 / kg m^2',
+	['Ω',  'ohm'],                          'kg m^2 / A^2 s^3',
+	['S',  'siemens'],                      'A^2 s^3 / kg m^2',
+	['Wb', 'weber'],                        'kg m^2 / A s^2',
+	['T',  'tesla'],                        'kg / A s^2',
+	['H',  'henry'],                        'kg m^2 / A^2 s^2',
+	['°C', 'celsius', 'Centigrade'],        'K + 273.15',
+	['lm', 'lumen'],                        'cd sr',
+	['lx', 'lux'],                          'm^-2 cd',
+	['Bq', 'becquerel'],                    '1 Hz',
+	['Gy', 'gray'],                         'J / kg',
+	['Sv', 'sievert'],                      'J / kg',
+	['kat', 'katal'],                       'mol s^-1',
+	#SI coherent Derived Units in terms of base units - TBD [see url]
+	#SI coherent Derived Units that include units with special names - TBD [see url]
 
-    # Dimensionless
-    ['one', 'unity'],							'1',
-    ['semi','demi','hemi'],						'1/2',
+	# Dimensionless
+	['one', 'unity'],							'1',
+	['semi','demi','hemi'],						'1/2',
 	['%','percent'],							'1/100',
-    ['ABV'],									'1',   
+	['ABV'],									'1',   
 
-    # Angle
-    ['°', 'degree', 'deg', 'º'],                'pi radians / 180',
-    ['ᵍ', 'gon'],                               'pi radians / 200',
+	# Angle
+	['°', 'degree', 'deg', 'º'],                'pi radians / 180',
+	['ᵍ', 'gon'],                               'pi radians / 200',
 
-    # Solid Angle
-    ['deg²'],									'deg^2',
-    ['sp','spat'],								'4 pi steradians',
+	# Solid Angle
+	['deg²'],									'deg^2',
+	['sp','spat'],								'4 pi steradians',
 
-    # Time
-    ['min', 'minute'],                          '60 s',
-    ['hr', 'hour'],                             '60 min',
-    ['day'],                                    '24 hr',
-    ['week'],                                   '7 days',
-    ['fortnight'],                              '2 week',
-    ['yr', 'year'],                             '365.25 days',
-    ['month'],                                  'year / 12',    # an average month
-    ['century', 'centuries'],                   '100 yr',
-    ['millenium', 'millenia'],                  '1000 yr',
+	# Time
+	['min', 'minute'],                          '60 s',
+	['hr', 'hour'],                             '60 min',
+	['day'],                                    '24 hr',
+	['week'],                                   '7 days',
+	['fortnight'],                              '2 week',
+	['yr', 'year'],                             '365.25 days',
+	['month'],                                  'year / 12',    # an average month
+	['century', 'centuries'],                   '100 yr',
+	['millenium', 'millenia'],                  '1000 yr',
 
-    # Frequency
-    ['cycle'],                                  '1 Hz',
-    ['revolution'],                             '1',
-    ['rpm'],                                    'revolutions per minute',
+	# Frequency
+	['cycle'],                                  '1 Hz',
+	['revolution'],                             '1',
+	['rpm'],                                    'revolutions per minute',
 
-    # Length 
-    ['km'],				                        'kilometre',
-    ['μ', 'micron'],                            '1e-6 m',
-    ['å', 'angstrom'],                          '1e-10 m',
-    ['au', 'astronomical-unit'],                '1.49598e11 m',
-    ['ly', 'light-year'],                       '9.46e15 m',
-    ['parsec'],                                 '3.083e16 m',
-    ['ft', 'foot', 'feet'],                     '0.3048 m',         
-    ['in', 'inch'],                             'ft/12',           
-    ['yard'],                                   '3 ft',            
-    ['fathom'],                                 '2 yards',         
-    ['rod', 'pole', 'perch'],                   '5.5 yards',       
-    ['furlong'],                                '40 rods',         
-    ['mile'],                                   '5280 ft',         
-    ['nmile', 'nautical-mile'],                 '1852 m',
-    ['ca', 'cable'],		                    '185.2 m',
-    ['pica'],                                   'in/6',	#chosen defn not unique 
-    ['point'],                                  'pica/12',         
+	# Length 
+	['km'],				                        'kilometre',
+	['μ', 'micron'],                            '1e-6 m',
+	['å', 'angstrom'],                          '1e-10 m',
+	['au', 'astronomical-unit'],                '1.49598e11 m',
+	['ly', 'light-year'],                       '9.46e15 m',
+	['parsec'],                                 '3.083e16 m',
+	['ft', 'foot', 'feet'],                     '0.3048 m',         
+	['in', 'inch'],                             'ft/12',           
+	['yard'],                                   '3 ft',            
+	['fathom'],                                 '2 yards',         
+	['rod', 'pole', 'perch'],                   '5.5 yards',       
+	['furlong'],                                '40 rods',         
+	['mile'],                                   '5280 ft',         
+	['nmile', 'nautical-mile'],                 '1852 m',
+	['ca', 'cable'],		                    '185.2 m',
+	['pica'],                                   'in/6',	#chosen defn not unique 
+	['point'],                                  'pica/12',         
 
-    # Area
-    ['m^2', 'm2', 'm²'],                        'm^2',
-    ['are'],                                    '100 square metres',
-    ['hectare'],                                '100 ares',
-    ['barn'],                                   '1e-28 square metres',
-    ['acre'],                                   '43560 square feet',
+	# Area
+	['m^2', 'm2', 'm²'],                        'm^2',
+	['are'],                                    '100 square metres',
+	['hectare'],                                '100 ares',
+	['barn'],                                   '1e-28 square metres',
+	['acre'],                                   '43560 square feet',
 
-    # Volume
-    ['m^3', 'm3', 'm³'],                        'm^3',
-    ['l', 'L', 'litre', 'liter'],               'm^3/1000',        
-    ['cc'],		                                'cubic centimetre',
-    ['bottle'],                                 '750 millilitre',
-    ['fluidram'],                               '3.5516 millilitre',
-    ['minim'],                                  '0.059194 millilitre',
-    ['alcohol-unit'],                           '10 millilitre',            # of pure alcohol
+	# Volume
+	['m^3', 'm3', 'm³'],                        'm^3',
+	['l', 'L', 'litre', 'liter'],               'm^3/1000',        
+	['cc'],		                                'cubic centimetre',
+	['bottle'],                                 '750 millilitre',
+	['fluidram'],                               '3.5516 millilitre',
+	['minim'],                                  '0.059194 millilitre',
+	['alcohol-unit'],                           '10 millilitre',            # of pure alcohol
 	# setting Imperial (imp-) or US (us-) from \locale
-    ['us-gallon'],                              '3.785411784 litre',
-    ['imp-gallon'],                             '4.54609 litre',
-    ['gallon'],									"1 {locale}-gallon",
+	['us-gallon'],                              '3.785411784 litre',
+	['imp-gallon'],                             '4.54609 litre',
+	['gallon'],									"1 {locale}-gallon",
 	['firkin'],							        '9 gallons',
-    ['barrel'],							        '36 gallons',
-    ['quart'],                                  'gallon/4',
-    ['peck'],                                   '8 quarts',
-    ['bushel'],                                 '4 pecks',
-    ['fifth'],                                  'us-gallon/5',
-    ['us-pint'],                                'us-gallon/8',
-    ['imp-pint'],                               'imp-gallon/8',
-    ['pint'],									"1 {locale}-pint",
-    ['cup'],                                    'us-pint/2',
-    ['floz', 'fluid-ounce'],                    'cup/8',
-    ['gill'],                                   '4 fluid-ounces',
-    ['tablespoon', 'tbsp'],                     'fluid-ounce / 2',
-    ['teaspoon', 'tsp'],                        'tablespoon / 3',
+	['barrel'],							        '36 gallons',
+	['quart'],                                  'gallon/4',
+	['peck'],                                   '8 quarts',
+	['bushel'],                                 '4 pecks',
+	['fifth'],                                  'us-gallon/5',
+	['us-pint'],                                'us-gallon/8',
+	['imp-pint'],                               'imp-gallon/8',
+	['pint'],									"1 {locale}-pint",
+	['cup'],                                    'us-pint/2',
+	['floz', 'fluid-ounce'],                    'cup/8',
+	['gill'],                                   '4 fluid-ounces',
+	['tablespoon', 'tbsp'],                     'fluid-ounce / 2',
+	['teaspoon', 'tsp'],                        'tablespoon / 3',
 
-    # Speed
-    ['m/s'],		                            'm/s',
-    ['mph'],                                    'miles per hour',
-    ['kph'],                                    'kilometre per hour',
-    ['kps'],                                    'kilometre per second',
-    ['fps'],                                    'feet per second',
-    ['knot'],                                   'nmile per hour',
+	# Speed
+	['m/s'],		                            'm/s',
+	['mph'],                                    'miles per hour',
+	['kph'],                                    'kilometre per hour',
+	['kps'],                                    'kilometre per second',
+	['fps'],                                    'feet per second',
+	['knot'],                                   'nmile per hour',
 
-    # Angular-Speed
-    ['radians per second'],			            'Hz',  #the SI unit (radians=1)
-    ['revs', 'revolutions per second'],         '2 pi * Hz',
-    ['rpm'],							        '60 revs',
+	# Angular-Speed
+	['radians per second'],			            'Hz',  #the SI unit (radians=1)
+	['revs', 'revolutions per second'],         '2 pi * Hz',
+	['rpm'],							        '60 revs',
 
-    # Acceleration
-    ['m/s^2'],                                  'm/s^2',
-    ['g0', 'earth-gravity'],                    '9.80665 m/s^2',   
+	# Acceleration
+	['m/s^2'],                                  'm/s^2',
+	['g0', 'earth-gravity'],                    '9.80665 m/s^2',   
 
-    # Mass
-    ['g', 'gram', 'gm', 'gramme'],              'kg / 1000',       
-    ['u', 'atomic-mass-unit'],                  '1.6605402e-27 kg',
-    ['metric-ton', 'tonne'],                    '1000 kg',         
-    ['grain'],                                  '0.0648 gm',
-    ['lbm', 'pounds-mass'],                     '0.45359237 kg',   
-    ['oz', 'ounce'],                            'lbm/16',          
-    ['stone'],                                  '14 lbm',          
-    ['hundredweight'],                          '100 lbm',        
-    ['ton', 'short-ton'],                       '2000 lbm',       
-    ['long-ton'],                               '2240 lbm',       
-    ['slug'],                                   'lbm g0 s^2/ft',   
-    ['dram'],                                   'ounce / 16',      
-    ['troy-pound'],                             '0.373 kg',
-    ['troy-ounce'],                             '31.103 gm',
-    ['pennyweight'],                            '1.555 gm',
-    ['scruple'],                                '1.296 gm',
-    ['carat', 'karat'],                         '200 milligram',
-    ['j-point'],                                '2 carat',        
+	# Mass
+	['g', 'gram', 'gm', 'gramme'],              'kg / 1000',       
+	['u', 'atomic-mass-unit'],                  '1.6605402e-27 kg',
+	['metric-ton', 'tonne'],                    '1000 kg',         
+	['grain'],                                  '0.0648 gm',
+	['lbm', 'pounds-mass'],                     '0.45359237 kg',   
+	['oz', 'ounce'],                            'lbm/16',          
+	['stone'],                                  '14 lbm',          
+	['hundredweight'],                          '100 lbm',        
+	['ton', 'short-ton'],                       '2000 lbm',       
+	['long-ton'],                               '2240 lbm',       
+	['slug'],                                   'lbm g0 s^2/ft',   
+	['dram'],                                   'ounce / 16',      
+	['troy-pound'],                             '0.373 kg',
+	['troy-ounce'],                             '31.103 gm',
+	['pennyweight'],                            '1.555 gm',
+	['scruple'],                                '1.296 gm',
+	['carat', 'karat'],                         '200 milligram',
+	['j-point'],                                '2 carat',        
 
-    # Moment-of-Inertia
-    ['kg m^2'],                                 'kg m^2',
+	# Moment-of-Inertia
+	['kg m^2'],                                 'kg m^2',
 
-    # Momentum
-    ['kg m/s'],                                 'kg m/s',
-    ['slug ft/s'],                              'slug feet/s',
+	# Momentum
+	['kg m/s'],                                 'kg m/s',
+	['slug ft/s'],                              'slug feet/s',
 
-    # Angular-Momentum
-    ['kg m^2/s'],                               'kg m^2 / s',
+	# Angular-Momentum
+	['kg m^2/s'],                               'kg m^2 / s',
 
-    # Force
-    ['lb', 'lbs', 'pound', 'pound-force'],      'slug foot / s^2', 
-    ['ounce-force'],                            'pound-force / 16',
-    ['dyne'],                                   'gm centimetre / s^2',     
-    ['gram-force'],                             'gm g0',           
-    ['kgf'],                                    'kilo gram-force', 
+	# Force
+	['lb', 'lbs', 'pound', 'pound-force'],      'slug foot / s^2', 
+	['ounce-force'],                            'pound-force / 16',
+	['dyne'],                                   'gm centimetre / s^2',     
+	['gram-force'],                             'gm g0',           
+	['kgf'],                                    'kilo gram-force', 
 
-    # Torque
-    ['Nm', 'newton-metre'],                     'N m',
-    ['ft-lb', 'footpound'],                     'foot pound-force',
+	# Torque
+	['Nm', 'newton-metre'],                     'N m',
+	['ft-lb', 'footpound'],                     'foot pound-force',
 
-    # Impulse
-    ['Ns'],                                     'N * s',
-    ['pound-second'],                           'pound * s',
+	# Impulse
+	['Ns'],                                     'N * s',
+	['pound-second'],                           'pound * s',
 
-    # Pressure
-    ['bar'],                                    '1e5 pascal',
-    ['torr'],                                   '133.322368 pascal',  #(101325 / 760)
-    ['psi'],                                    'pounds per inch^2',
-    ['atm', 'atmosphere'],                      '101325 pascal',            
+	# Pressure
+	['bar'],                                    '1e5 pascal',
+	['torr'],                                   '133.322368 pascal',  #(101325 / 760)
+	['psi'],                                    'pounds per inch^2',
+	['atm', 'atmosphere'],                      '101325 pascal',            
 
 	# Density
-    ['kg/m^3'],                                 'kg / m^3',
-	['°proof',],                                '923 kg / m^3',       
+	['kg/m^3'],                                 'kg / m^3',
+	['°proof'],                                 '923 kg / m^3',       
 	#UK metric https://en.wikipedia.org/wiki/Alcohol_proof (US version is just 2x ABV)
 
-    # Energy
-    ['eV', 'electron-volt'],                    '1.60217733e-19 joule',
-    ['MeV'],                                    'mega electron-volt',
-    ['GeV'],                                    'giga electron-volt',
-    ['TeV'],                                    'tera electron-volt',
-    ['cal', 'calorie'],                         '4.184 joules', 
-    ['kcal'],                                   'kilocalories',  
-    ['btu', 'british-thermal-unit'],            '1055.056 joule',
-    ['therm'],                                  '1.0e5 btu',
-    ['erg'],                                    '1.0e-7 joule',
-    ['kWh'],                                    'kilowatt hour',
+	# Energy
+	['eV', 'electron-volt'],                    '1.60217733e-19 joule',
+	['MeV'],                                    'mega electron-volt',
+	['GeV'],                                    'giga electron-volt',
+	['TeV'],                                    'tera electron-volt',
+	['cal', 'calorie'],                         '4.184 joules', 
+	['kcal'],                                   'kilocalories',  
+	['btu', 'british-thermal-unit'],            '1055.056 joule',
+	['therm'],                                  '1.0e5 btu',
+	['erg'],                                    '1.0e-7 joule',
+	['kWh'],                                    'kilowatt hour',
 
-    # Power
-    ['us-horsepower', 'us-hp'],                 '550 foot pound-force / s',
-    ['PS', 'horsepower', 'hp'],                 '75 kg * g0 * m / s',
+	# Power
+	['us-horsepower', 'us-hp'],                 '550 foot pound-force / s',
+	['PS', 'horsepower', 'hp'],                 '75 kg * g0 * m / s',
 
-    # Current (Base Unit)
+	# Current (Base Unit)
 
-    # Potential (Derived Unit)
+	# Potential (Derived Unit)
 
-    # Conductance
-    ['mho'],                                    '1 / ohm',
+	# Conductance
+	['mho'],                                    '1 / ohm',
 
-    # Capacitance (Derived Unit)
+	# Capacitance (Derived Unit)
 
-    # Inductance (Derived Unit)
+	# Inductance (Derived Unit)
 
-    # Magnetic_flux
-    ['Mx', 'maxwell'],                          '1e-8 weber',
+	# Magnetic_flux
+	['Mx', 'maxwell'],                          '1e-8 weber',
 
-    # Magnetic_field
-    ['gauss'],                                  '1e-4 tesla',
+	# Magnetic_field
+	['gauss'],                                  '1e-4 tesla',
 
-    # Temperature
-    ['°R', 'Rankine'],                          '5/9 * K',    
-    ['°F', 'Fahrenheit'],                       '5/9 * K + 459.67',
+	# Temperature
+	['°R', 'Rankine'],                          '5/9 * K',    
+	['°F', 'Fahrenheit'],                       '5/9 * K + 459.67',
 
-    # Dose
-    ['rad'],           'gray / 100',
-    ['rem'],           'sievert / 100',
-)
+	# Dose
+	['rad'],           'gray / 100',
+	['rem'],           'sievert / 100',
+);
 } #end of fast-start else
 
 InitTypes (
@@ -812,58 +734,8 @@ say "";
 }
 
 
-#### ShortUnits for Postfix Operators ####
+####### Stock Unit Guidance (aka fast-start)#######
 
-#|To facilitate intuitive access to Physics::Unit, the sister Physics::ShortUnit module is
-#|provided with a laundry list of predefined units that cover all combinations 
-#|of shorty-prefix xx shorty-names (as defined above). 
-#|
-#|The postfix form needs no fancy ♎️ unicode to be typed, literally $l = 1m; will return a
-#|Length object that can be mixed and matched. The postfix definitions are built into 
-#|Physics::Measure. 
-#|
-#|Since there are 20 prefixes and 30 names, this is adding 600 custom operators to the name
-#|space, so they need to be autogenerated. And then pasted into Measure.rakumod (~ line 450)
-#|
-#|eg. sub postfix:<m> ( Real:D $x ) is export { do-postfix( $x, 'm' ) }
-
-sub DumpShortOps is export {
-	for @shorty-names -> $name {
-		for @shorty-prefix -> $prefix {
-			my $o = $prefix.key ~ $name.key;
-			say q|sub postfix:<\qq[$o]> (Real:D $x) is export { do-postfix($x,'\qq[$o]') }|
-		}
-	}
-}
-
-#|And since you want all these 600 units pre built for performance, use this sub to generate
-#|them (for pasting into the ShortUnit.rakumod - set fast-start = 0 as you want stock => True
-#|This takes ca 30 minutes on my machine. You will need to weed out the unprefixed BaseUnits 
-#|and other already defined above (m, km, g, kg, s, A and so on) 
-
-sub DumpShortStock is export {
-	my @shorty-prefix-names;
-	my @init-me;
-	for @shorty-names -> $name {
-		for @shorty-prefix -> $prefix {
-			my $opcode = $prefix.key ~ $name.key;
-			my $opdefn = $prefix.value ~ $name.value;
-			@init-me.push: [$opcode];
-			@init-me.push: $opdefn;
-			@shorty-prefix-names.push: $opcode;
-		}
-	}
-	InitUnit( @init-me );
-	for @shorty-prefix-names -> $o {
-        say %unit-by-name{$o}.raku
-    }
-}
-
-
-####### Stock Units #######
-
-#|Stock Unit Guidance (aka fast-start)
-#|
 #|When editing this module, then the raw data for units can be edited in the InitUnit section
 #|above. The normal startup sequence is InitBaseUnit, InitPrefix, InitUnit, InitTypes. Many of
 #|these unit definitions are ordered and may depend on previous ones. Set $fast-start = 0; 
@@ -874,14 +746,13 @@ sub DumpShortStock is export {
 #|
 #|This works by the DumpStockUnits subroutine - run this with bin/DumpStock.raku > temp.txt
 #|after any change to Unit Data and then paste the output at the end of this module between
-#|the Start/End comments (these Unit.new definitions are not ordered)...  
+#|the Start/End comments...
 
 sub DumpStockUnits is export {
     my %unique-unit{Unit} = %unit-by-name.kv.reverse;
-	##my @unique-sort = %unique-unit.keys;
 	my @unique-sort = %unique-unit.keys.sort({$^a.name cmp $^b.name});	
     for @unique-sort -> $u {
-        say $u.raku
+        say $u.raku( :stock );
     }
 }
 
@@ -891,20 +762,28 @@ sub LoadStockUnits {
 
 #approx. 230 units == ~920 more lines...
 ####### Stock Unit Start #######
+Unit.new( factor => 0.01, offset => 0, defn => '1/100', type => '',
+	  dims => [0,0,0,0,0,0,0,0], dmix => ().MixHash, 
+	  names => ['%','percent','percents'] , stock => True  );
+
 Unit.new( factor => 1, offset => 0, defn => 'A', type => '',
 	  dims => [0,0,0,1,0,0,0,0], dmix => ("A"=>1).MixHash, 
 	  names => ['A','amp','amps','ampere','amperes','ampère','ampères'] , stock => True  );
+
+Unit.new( factor => 1, offset => 0, defn => '1', type => '',
+	  dims => [0,0,0,0,0,0,0,0], dmix => ().MixHash, 
+	  names => ['ABV','ABVs'] , stock => True  );
 
 Unit.new( factor => 1, offset => 0, defn => '1 Hz', type => '',
 	  dims => [0,0,-1,0,0,0,0,0], dmix => ("Hz"=>1).MixHash, 
 	  names => ['Bq','becquerel','becquerels'] , stock => True  );
 
 Unit.new( factor => 1, offset => 0, defn => 'A s', type => '',
-	  dims => [0,0,1,1,0,0,0,0], dmix => ("s"=>1,"A"=>1).MixHash, 
+	  dims => [0,0,1,1,0,0,0,0], dmix => ("A"=>1,"s"=>1).MixHash, 
 	  names => ['C','coulomb','coulombs'] , stock => True  );
 
 Unit.new( factor => 1, offset => 0, defn => 'A^2 s^4 / kg m^2', type => '',
-	  dims => [-2,-1,4,2,0,0,0,0], dmix => ("kg"=>-1,"m"=>-2,"A"=>2,"s"=>4).MixHash, 
+	  dims => [-2,-1,4,2,0,0,0,0], dmix => ("s"=>4,"A"=>2,"m"=>-2,"kg"=>-1).MixHash, 
 	  names => ['F','farad','farads'] , stock => True  );
 
 Unit.new( factor => 1.60217733e-10, offset => 0, defn => 'giga electron-volt', type => '',
@@ -912,11 +791,11 @@ Unit.new( factor => 1.60217733e-10, offset => 0, defn => 'giga electron-volt', t
 	  names => ['GeV','GeVs'] , stock => True  );
 
 Unit.new( factor => 1, offset => 0, defn => 'J / kg', type => '',
-	  dims => [2,0,-2,0,0,0,0,0], dmix => ("J"=>1,"kg"=>-1).MixHash, 
+	  dims => [2,0,-2,0,0,0,0,0], dmix => ("kg"=>-1,"J"=>1).MixHash, 
 	  names => ['Gy','gray','grays'] , stock => True  );
 
 Unit.new( factor => 1, offset => 0, defn => 'kg m^2 / A^2 s^2', type => '',
-	  dims => [2,1,-2,-2,0,0,0,0], dmix => ("kg"=>1,"A"=>-2,"m"=>2,"s"=>-2).MixHash, 
+	  dims => [2,1,-2,-2,0,0,0,0], dmix => ("m"=>2,"kg"=>1,"A"=>-2,"s"=>-2).MixHash, 
 	  names => ['H','henry','henrys'] , stock => True  );
 
 Unit.new( factor => 1, offset => 0, defn => '1 / s', type => '',
@@ -924,7 +803,7 @@ Unit.new( factor => 1, offset => 0, defn => '1 / s', type => '',
 	  names => ['Hz','hertz','hertzs'] , stock => True  );
 
 Unit.new( factor => 1, offset => 0, defn => 'kg m^2 / s^2', type => '',
-	  dims => [2,1,-2,0,0,0,0,0], dmix => ("kg"=>1,"s"=>-2,"m"=>2).MixHash, 
+	  dims => [2,1,-2,0,0,0,0,0], dmix => ("kg"=>1,"m"=>2,"s"=>-2).MixHash, 
 	  names => ['J','joule','joules'] , stock => True  );
 
 Unit.new( factor => 1, offset => 0, defn => 'K', type => '',
@@ -940,7 +819,7 @@ Unit.new( factor => 1e-08, offset => 0, defn => '1e-8 weber', type => '',
 	  names => ['Mx','maxwell','maxwells'] , stock => True  );
 
 Unit.new( factor => 1, offset => 0, defn => 'kg m / s^2', type => '',
-	  dims => [1,1,-2,0,0,0,0,0], dmix => ("kg"=>1,"m"=>1,"s"=>-2).MixHash, 
+	  dims => [1,1,-2,0,0,0,0,0], dmix => ("m"=>1,"kg"=>1,"s"=>-2).MixHash, 
 	  names => ['N','newton','newtons'] , stock => True  );
 
 Unit.new( factor => 1, offset => 0, defn => 'N m', type => '',
@@ -952,7 +831,7 @@ Unit.new( factor => 1, offset => 0, defn => 'N * s', type => '',
 	  names => ['Ns'] , stock => True  );
 
 Unit.new( factor => 735.49875, offset => 0, defn => '75 kg * g0 * m / s', type => '',
-	  dims => [2,1,-3,0,0,0,0,0], dmix => ("s"=>-1,"m"=>1,"g0"=>1,"kg"=>1).MixHash, 
+	  dims => [2,1,-3,0,0,0,0,0], dmix => ("s"=>-1,"m"=>1,"kg"=>1,"g0"=>1).MixHash, 
 	  names => ['PS','horsepower','horsepowers','hp'] , stock => True  );
 
 Unit.new( factor => 1, offset => 0, defn => 'N / m^2', type => '',
@@ -960,7 +839,7 @@ Unit.new( factor => 1, offset => 0, defn => 'N / m^2', type => '',
 	  names => ['Pa','pascal','pascals'] , stock => True  );
 
 Unit.new( factor => 1, offset => 0, defn => 'A^2 s^3 / kg m^2', type => '',
-	  dims => [-2,-1,3,2,0,0,0,0], dmix => ("s"=>3,"A"=>2,"m"=>-2,"kg"=>-1).MixHash, 
+	  dims => [-2,-1,3,2,0,0,0,0], dmix => ("m"=>-2,"kg"=>-1,"A"=>2,"s"=>3).MixHash, 
 	  names => ['S','siemens'] , stock => True  );
 
 Unit.new( factor => 1, offset => 0, defn => 'J / kg', type => '',
@@ -968,7 +847,7 @@ Unit.new( factor => 1, offset => 0, defn => 'J / kg', type => '',
 	  names => ['Sv','sievert','sieverts'] , stock => True  );
 
 Unit.new( factor => 1, offset => 0, defn => 'kg / A s^2', type => '',
-	  dims => [0,1,-2,-1,0,0,0,0], dmix => ("kg"=>1,"s"=>-2,"A"=>-1).MixHash, 
+	  dims => [0,1,-2,-1,0,0,0,0], dmix => ("A"=>-1,"kg"=>1,"s"=>-2).MixHash, 
 	  names => ['T','tesla','teslas'] , stock => True  );
 
 Unit.new( factor => 1.60217733e-07, offset => 0, defn => 'tera electron-volt', type => '',
@@ -976,15 +855,15 @@ Unit.new( factor => 1.60217733e-07, offset => 0, defn => 'tera electron-volt', t
 	  names => ['TeV','TeVs'] , stock => True  );
 
 Unit.new( factor => 1, offset => 0, defn => 'kg m^2 / A s^3', type => '',
-	  dims => [2,1,-3,-1,0,0,0,0], dmix => ("m"=>2,"A"=>-1,"s"=>-3,"kg"=>1).MixHash, 
+	  dims => [2,1,-3,-1,0,0,0,0], dmix => ("A"=>-1,"kg"=>1,"m"=>2,"s"=>-3).MixHash, 
 	  names => ['V','volt','volts'] , stock => True  );
 
 Unit.new( factor => 1, offset => 0, defn => 'kg m^2 / s^3', type => '',
-	  dims => [2,1,-3,0,0,0,0,0], dmix => ("kg"=>1,"m"=>2,"s"=>-3).MixHash, 
+	  dims => [2,1,-3,0,0,0,0,0], dmix => ("s"=>-3,"m"=>2,"kg"=>1).MixHash, 
 	  names => ['W','watt','watts'] , stock => True  );
 
 Unit.new( factor => 1, offset => 0, defn => 'kg m^2 / A s^2', type => '',
-	  dims => [2,1,-2,-1,0,0,0,0], dmix => ("m"=>2,"A"=>-1,"s"=>-2,"kg"=>1).MixHash, 
+	  dims => [2,1,-2,-1,0,0,0,0], dmix => ("s"=>-2,"kg"=>1,"m"=>2,"A"=>-1).MixHash, 
 	  names => ['Wb','weber','webers'] , stock => True  );
 
 Unit.new( factor => 4046.856422, offset => 0, defn => '43560 square feet', type => '',
@@ -1031,6 +910,10 @@ Unit.new( factor => 0.03636872, offset => 0, defn => '4 pecks', type => '',
 	  dims => [3,0,0,0,0,0,0,0], dmix => ("pecks"=>1).MixHash, 
 	  names => ['bushel','bushels'] , stock => True  );
 
+Unit.new( factor => 185.2, offset => 0, defn => '185.2 m', type => '',
+	  dims => [1,0,0,0,0,0,0,0], dmix => ("m"=>1).MixHash, 
+	  names => ['ca','cable','cables'] , stock => True  );
+
 Unit.new( factor => 4.184, offset => 0, defn => '4.184 joules', type => '',
 	  dims => [2,1,-2,0,0,0,0,0], dmix => ("joules"=>1).MixHash, 
 	  names => ['cal','cals','calorie','calories'] , stock => True  );
@@ -1075,12 +958,6 @@ Unit.new( factor => 0.00001, offset => 0, defn => 'gm centimetre / s^2', type =>
 	  dims => [1,1,-2,0,0,0,0,0], dmix => ("gm"=>1,"s"=>-2,"metre"=>1).MixHash, 
 	  names => ['dyne','dynes'] , stock => True  );
 
-#`[[ FIXME cull
-Unit.new( factor => 2.7182818284590452354, offset => 0, defn => '2.7182818284590452354', type => '',
-	  dims => [0,0,0,0,0,0,0,0], dmix => ().MixHash, 
-	  names => ['e'] , stock => True  );
-#]]
-
 Unit.new( factor => 1.60217733e-19, offset => 0, defn => '1.60217733e-19 joule', type => '',
 	  dims => [2,1,-2,0,0,0,0,0], dmix => ("joule"=>1).MixHash, 
 	  names => ['eV','electron-volt','electron-volts'] , stock => True  );
@@ -1114,7 +991,7 @@ Unit.new( factor => 1209600, offset => 0, defn => '2 week', type => '',
 	  names => ['fortnight','fortnights'] , stock => True  );
 
 Unit.new( factor => 0.3048, offset => 0, defn => 'feet per second', type => '',
-	  dims => [1,0,-1,0,0,0,0,0], dmix => ("feet"=>1,"second"=>-1).MixHash, 
+	  dims => [1,0,-1,0,0,0,0,0], dmix => ("second"=>-1,"feet"=>1).MixHash, 
 	  names => ['fps'] , stock => True  );
 
 Unit.new( factor => 0.3048, offset => 0, defn => '0.3048 m', type => '',
@@ -1122,7 +999,7 @@ Unit.new( factor => 0.3048, offset => 0, defn => '0.3048 m', type => '',
 	  names => ['ft','foot','foots','feet','feets'] , stock => True  );
 
 Unit.new( factor => 1.3558179483314004, offset => 0, defn => 'foot pound-force', type => '',
-	  dims => [2,1,-2,0,0,0,0,0], dmix => ("foot"=>1,"pound-force"=>1).MixHash, 
+	  dims => [2,1,-2,0,0,0,0,0], dmix => ("pound-force"=>1,"foot"=>1).MixHash, 
 	  names => ['ft-lb','ft-lbs','footpound','footpounds'] , stock => True  );
 
 Unit.new( factor => 201.168, offset => 0, defn => '40 rods', type => '',
@@ -1154,7 +1031,7 @@ Unit.new( factor => 0.0000648, offset => 0, defn => '0.0648 gm', type => '',
 	  names => ['grain','grains'] , stock => True  );
 
 Unit.new( factor => 0.00980665, offset => 0, defn => 'gm g0', type => '',
-	  dims => [1,1,-2,0,0,0,0,0], dmix => ("g0"=>1,"gm"=>1).MixHash, 
+	  dims => [1,1,-2,0,0,0,0,0], dmix => ("gm"=>1,"g0"=>1).MixHash, 
 	  names => ['gram-force','gram-forces'] , stock => True  );
 
 Unit.new( factor => 10000, offset => 0, defn => '100 ares', type => '',
@@ -1190,7 +1067,7 @@ Unit.new( factor => 3600000, offset => 0, defn => 'kilowatt hour', type => '',
 	  names => ['kWh','kWhs'] , stock => True  );
 
 Unit.new( factor => 1, offset => 0, defn => 'mol s^-1', type => '',
-	  dims => [0,0,-1,0,0,1,0,0], dmix => ("s"=>-1,"mol"=>1).MixHash, 
+	  dims => [0,0,-1,0,0,1,0,0], dmix => ("mol"=>1,"s"=>-1).MixHash, 
 	  names => ['kat','kats','katal','katals'] , stock => True  );
 
 Unit.new( factor => 4184, offset => 0, defn => 'kilocalories', type => '',
@@ -1202,7 +1079,7 @@ Unit.new( factor => 1, offset => 0, defn => 'kg', type => '',
 	  names => ['kg','kilogram','kilograms'] , stock => True  );
 
 Unit.new( factor => 1, offset => 0, defn => 'kg m/s', type => '',
-	  dims => [1,1,-1,0,0,0,0,0], dmix => ("s"=>-1,"m"=>1,"kg"=>1).MixHash, 
+	  dims => [1,1,-1,0,0,0,0,0], dmix => ("s"=>-1,"kg"=>1,"m"=>1).MixHash, 
 	  names => ['kg m/s'] , stock => True  );
 
 Unit.new( factor => 1, offset => 0, defn => 'kg m^2', type => '',
@@ -1210,7 +1087,7 @@ Unit.new( factor => 1, offset => 0, defn => 'kg m^2', type => '',
 	  names => ['kg m^2'] , stock => True  );
 
 Unit.new( factor => 1, offset => 0, defn => 'kg m^2 / s', type => '',
-	  dims => [2,1,-1,0,0,0,0,0], dmix => ("kg"=>1,"m"=>2,"s"=>-1).MixHash, 
+	  dims => [2,1,-1,0,0,0,0,0], dmix => ("m"=>2,"kg"=>1,"s"=>-1).MixHash, 
 	  names => ['kg m^2/s'] , stock => True  );
 
 Unit.new( factor => 1, offset => 0, defn => 'kg / m^3', type => '',
@@ -1226,7 +1103,7 @@ Unit.new( factor => 1000, offset => 0, defn => 'kilometre', type => '',
 	  names => ['km'] , stock => True  );
 
 Unit.new( factor => 0.514444, offset => 0, defn => 'nmile per hour', type => '',
-	  dims => [1,0,-1,0,0,0,0,0], dmix => ("hour"=>-1,"nmile"=>1).MixHash, 
+	  dims => [1,0,-1,0,0,0,0,0], dmix => ("nmile"=>1,"hour"=>-1).MixHash, 
 	  names => ['knot','knots'] , stock => True  );
 
 Unit.new( factor => 0.277778, offset => 0, defn => 'kilometre per hour', type => '',
@@ -1242,7 +1119,7 @@ Unit.new( factor => 0.001, offset => 0, defn => 'm^3/1000', type => '',
 	  names => ['l','L','litre','litres','liter','liters'] , stock => True  );
 
 Unit.new( factor => 4.4482216152605, offset => 0, defn => 'slug foot / s^2', type => '',
-	  dims => [1,1,-2,0,0,0,0,0], dmix => ("foot"=>1,"s"=>-2,"slug"=>1).MixHash, 
+	  dims => [1,1,-2,0,0,0,0,0], dmix => ("slug"=>1,"foot"=>1,"s"=>-2).MixHash, 
 	  names => ['lb','lbs','pound','pounds','pound-force','pound-forces'] , stock => True  );
 
 Unit.new( factor => 0.45359237, offset => 0, defn => '0.45359237 kg', type => '',
@@ -1250,7 +1127,7 @@ Unit.new( factor => 0.45359237, offset => 0, defn => '0.45359237 kg', type => ''
 	  names => ['lbm','lbms','pounds-mass'] , stock => True  );
 
 Unit.new( factor => 1, offset => 0, defn => 'cd sr', type => '',
-	  dims => [0,0,0,0,0,0,1,2], dmix => ("cd"=>1,"sr"=>1).MixHash, 
+	  dims => [0,0,0,0,0,0,1,2], dmix => ("sr"=>1,"cd"=>1).MixHash, 
 	  names => ['lm','lumen','lumens'] , stock => True  );
 
 Unit.new( factor => 1016.0469088, offset => 0, defn => '2240 lbm', type => '',
@@ -1270,7 +1147,7 @@ Unit.new( factor => 1, offset => 0, defn => 'm', type => '',
 	  names => ['m','metre','metres','meter','meters'] , stock => True  );
 
 Unit.new( factor => 1, offset => 0, defn => 'm/s', type => '',
-	  dims => [1,0,-1,0,0,0,0,0], dmix => ("s"=>-1,"m"=>1).MixHash, 
+	  dims => [1,0,-1,0,0,0,0,0], dmix => ("m"=>1,"s"=>-1).MixHash, 
 	  names => ['m/s'] , stock => True  );
 
 Unit.new( factor => 1, offset => 0, defn => 'm/s^2', type => '',
@@ -1325,10 +1202,6 @@ Unit.new( factor => 1852, offset => 0, defn => '1852 m', type => '',
 	  dims => [1,0,0,0,0,0,0,0], dmix => ("m"=>1).MixHash, 
 	  names => ['nmile','nmiles','nautical-mile','nautical-miles'] , stock => True  );
 
-Unit.new( factor => 185.2, offset => 0, defn => '185.2 m', type => '',
-	  dims => [1,0,0,0,0,0,0,0], dmix => ("m"=>1).MixHash, 
-	  names => ['ca','cable','cables'] , stock => True  );
-
 Unit.new( factor => 1, offset => 0, defn => '1', type => '',
 	  dims => [0,0,0,0,0,0,0,0], dmix => ().MixHash, 
 	  names => ['one','ones','unity','unitys'] , stock => True  );
@@ -1353,10 +1226,6 @@ Unit.new( factor => 0.001555, offset => 0, defn => '1.555 gm', type => '',
 	  dims => [0,1,0,0,0,0,0,0], dmix => ("gm"=>1).MixHash, 
 	  names => ['pennyweight','pennyweights'] , stock => True  );
 
-Unit.new( factor => 1, offset => 0, defn => '1', type => '',
-	  dims => [0,0,0,0,0,0,0,0], dmix => ().MixHash, 
-	  names => ['ABV'] , stock => True  );
-
 Unit.new( factor => 3.1415926535897932385, offset => 0, defn => '3.1415926535897932385', type => '',
 	  dims => [0,0,0,0,0,0,0,0], dmix => ().MixHash, 
 	  names => ['pi'] , stock => True  );
@@ -1378,20 +1247,20 @@ Unit.new( factor => 4.4482216152605, offset => 0, defn => 'pound * s', type => '
 	  names => ['pound-second','pound-seconds'] , stock => True  );
 
 Unit.new( factor => 6894.75729316836, offset => 0, defn => 'pounds per inch^2', type => '',
-	  dims => [-1,1,-2,0,0,0,0,0], dmix => ("inch"=>-2,"pounds"=>1).MixHash, 
+	  dims => [-1,1,-2,0,0,0,0,0], dmix => ("pounds"=>1,"inch"=>-2).MixHash, 
 	  names => ['psi','psis'] , stock => True  );
 
 Unit.new( factor => 0.0011365225, offset => 0, defn => 'gallon/4', type => '',
 	  dims => [3,0,0,0,0,0,0,0], dmix => ("gallon"=>1).MixHash, 
 	  names => ['quart','quarts'] , stock => True  );
 
-Unit.new( factor => 1, offset => 0, defn => 'rad', type => '',
-	  dims => [0,0,0,0,0,0,0,1], dmix => ("rad"=>1).MixHash, 
-	  names => ['radian','radians'] , stock => True  );
-
 Unit.new( factor => 0.01, offset => 0, defn => 'gray / 100', type => '',
 	  dims => [2,0,-2,0,0,0,0,0], dmix => ("gray"=>1).MixHash, 
 	  names => ['rad','rads'] , stock => True  );
+
+Unit.new( factor => 1, offset => 0, defn => 'radian', type => '',
+	  dims => [0,0,0,0,0,0,0,1], dmix => ("radian"=>1).MixHash, 
+	  names => ['radian','radians'] , stock => True  );
 
 Unit.new( factor => 1, offset => 0, defn => 'Hz', type => '',
 	  dims => [0,0,-1,0,0,0,0,0], dmix => ("Hz"=>1).MixHash, 
@@ -1414,7 +1283,7 @@ Unit.new( factor => 5.0292, offset => 0, defn => '5.5 yards', type => '',
 	  names => ['rod','rods','pole','poles','perch','perchs'] , stock => True  );
 
 Unit.new( factor => 0.016667, offset => 0, defn => 'revolutions per minute', type => '',
-	  dims => [0,0,-1,0,0,0,0,0], dmix => ("minute"=>-1,"revolutions"=>1).MixHash, 
+	  dims => [0,0,-1,0,0,0,0,0], dmix => ("revolutions"=>1,"minute"=>-1).MixHash, 
 	  names => ['rpm','rpms'] , stock => True  );
 
 Unit.new( factor => 376.99111843077518862, offset => 0, defn => '60 revs', type => '',
@@ -1433,24 +1302,20 @@ Unit.new( factor => 0.5, offset => 0, defn => '1/2', type => '',
 	  dims => [0,0,0,0,0,0,0,0], dmix => ().MixHash, 
 	  names => ['semi','semis','demi','demis','hemi','hemis'] , stock => True  );
 
-Unit.new( factor => 0.01, offset => 0, defn => '1/100', type => '',
-	  dims => [0,0,0,0,0,0,0,0], dmix => ().MixHash, 
-	  names => ['%','percent'] , stock => True  );
-
 Unit.new( factor => 14.5939029372064, offset => 0, defn => 'lbm g0 s^2/ft', type => '',
-	  dims => [0,1,0,0,0,0,0,0], dmix => ("lbm"=>1,"g0"=>1,"ft"=>-1,"s"=>2).MixHash, 
+	  dims => [0,1,0,0,0,0,0,0], dmix => ("ft"=>-1,"s"=>2,"lbm"=>1,"g0"=>1).MixHash, 
 	  names => ['slug','slugs'] , stock => True  );
 
 Unit.new( factor => 4.4482216152605, offset => 0, defn => 'slug feet/s', type => '',
-	  dims => [1,1,-1,0,0,0,0,0], dmix => ("s"=>-1,"slug"=>1,"feet"=>1).MixHash, 
+	  dims => [1,1,-1,0,0,0,0,0], dmix => ("feet"=>1,"slug"=>1,"s"=>-1).MixHash, 
 	  names => ['slug ft/s'] , stock => True  );
 
 Unit.new( factor => 12.566370614359172954, offset => 0, defn => '4 pi steradians', type => '',
 	  dims => [0,0,0,0,0,0,0,2], dmix => ("pi"=>1,"steradians"=>1).MixHash, 
 	  names => ['sp','spat','spats'] , stock => True  );
 
-Unit.new( factor => 1, offset => 0, defn => 'rad^2', type => '',
-	  dims => [0,0,0,0,0,0,0,2], dmix => ("rad"=>2).MixHash, 
+Unit.new( factor => 1, offset => 0, defn => 'radian^2', type => '',
+	  dims => [0,0,0,0,0,0,0,2], dmix => ("radian"=>2).MixHash, 
 	  names => ['sr','steradian','steradians'] , stock => True  );
 
 Unit.new( factor => 6.35029318, offset => 0, defn => '14 lbm', type => '',
@@ -1494,7 +1359,7 @@ Unit.new( factor => 0.003785411784, offset => 0, defn => '3.785411784 litre', ty
 	  names => ['us-gallon','us-gallons'] , stock => True  );
 
 Unit.new( factor => 745.69987158227022, offset => 0, defn => '550 foot pound-force / s', type => '',
-	  dims => [2,1,-3,0,0,0,0,0], dmix => ("pound-force"=>1,"foot"=>1,"s"=>-1).MixHash, 
+	  dims => [2,1,-3,0,0,0,0,0], dmix => ("pound-force"=>1,"s"=>-1,"foot"=>1).MixHash, 
 	  names => ['us-horsepower','us-horsepowers','us-hp','us-hps'] , stock => True  );
 
 Unit.new( factor => 0.000473176473, offset => 0, defn => 'us-gallon/8', type => '',
@@ -1515,11 +1380,7 @@ Unit.new( factor => 31557600, offset => 0, defn => '365.25 days', type => '',
 
 Unit.new( factor => 0.017453292519943295, offset => 0, defn => 'pi radians / 180', type => '',
 	  dims => [0,0,0,0,0,0,0,1], dmix => ("pi"=>1,"radians"=>1).MixHash, 
-	  names => ['°','degree','degrees','deg','degs','°'] , stock => True  );
-
-Unit.new( factor => 923, offset => 0, defn => '923 kg / m^3', type => '',
-	  dims => [-3,1,0,0,0,0,0,0], dmix => ("kg"=>1,"m"=>-3).MixHash, 
-	  names => ['°proof','°proofs'] , stock => True  );
+	  names => ['°','degree','degrees','deg','degs','º'] , stock => True  );
 
 Unit.new( factor => 1, offset => 273.15, defn => 'K + 273.15', type => '',
 	  dims => [0,0,0,0,1,0,0,0], dmix => ("K"=>1).MixHash, 
@@ -1533,12 +1394,16 @@ Unit.new( factor => 0.555556, offset => 0, defn => '5/9 * K', type => '',
 	  dims => [0,0,0,0,1,0,0,0], dmix => ("K"=>1).MixHash, 
 	  names => ['°R','Rankine','Rankines'] , stock => True  );
 
+Unit.new( factor => 923, offset => 0, defn => '923 kg / m^3', type => '',
+	  dims => [-3,1,0,0,0,0,0,0], dmix => ("m"=>-3,"kg"=>1).MixHash, 
+	  names => ['°proof','°proofs'] , stock => True  );
+
 Unit.new( factor => 1e-10, offset => 0, defn => '1e-10 m', type => '',
 	  dims => [1,0,0,0,0,0,0,0], dmix => ("m"=>1).MixHash, 
 	  names => ['å','angstrom','angstroms'] , stock => True  );
 
 Unit.new( factor => 1, offset => 0, defn => 'kg m^2 / A^2 s^3', type => '',
-	  dims => [2,1,-3,-2,0,0,0,0], dmix => ("A"=>-2,"m"=>2,"s"=>-3,"kg"=>1).MixHash, 
+	  dims => [2,1,-3,-2,0,0,0,0], dmix => ("s"=>-3,"kg"=>1,"m"=>2,"A"=>-2).MixHash, 
 	  names => ['Ω','ohm','ohms'] , stock => True  );
 
 Unit.new( factor => 1e-06, offset => 0, defn => '1e-6 m', type => '',
@@ -1546,10 +1411,10 @@ Unit.new( factor => 1e-06, offset => 0, defn => '1e-6 m', type => '',
 	  names => ['μ','micron','microns'] , stock => True  );
 
 Unit.new( factor => 0.015707963267948967, offset => 0, defn => 'pi radians / 200', type => '',
-	  dims => [0,0,0,0,0,0,0,1], dmix => ("pi"=>1,"radians"=>1).MixHash, 
+	  dims => [0,0,0,0,0,0,0,1], dmix => ("radians"=>1,"pi"=>1).MixHash, 
 	  names => ['ᵍ','gon','gons'] , stock => True  );
 
 ######## Stock Unit End ########
 }
- 
+
 #EOF
