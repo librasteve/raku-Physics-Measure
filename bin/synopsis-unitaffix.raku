@@ -1,6 +1,6 @@
 #!/usr/bin/env raku 
 use lib '../lib';
-use Physics::UnitAffix( :DEFAULT );
+use Physics::UnitAffixQ;
 use Physics::Measure;
 
 #`[[
@@ -13,6 +13,8 @@ We use the term Affix to indicate that both concepts are provided by this module
 2. Declaration of the resulting ~600 Unit instances and matching Raku Postfix operators
 
 Now you can simply go 'my $l = 1km;' to declare a new Measure with value => 1 and units => 'km'
+
+'use Physics::UnitAffixQ;' is the QUICK variant, equivalent to 'use Physics::UnitAffix :DEFAULT;'
 #]]
 
 my $l = 1m;				say ~$l;
