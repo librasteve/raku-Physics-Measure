@@ -1,10 +1,10 @@
 unit module Physics::Unit:ver<0.0.4>:auth<Steve Roe (p6steve@furnival.net)>; 
 #viz. https://en.wikipedia.org/wiki/International_System_of_Units
 
-##Read the Stock Unit Guidance (~line 825 below) prior to editing this module##
+##Read the Stock Unit Guidance (~line 725 below) prior to editing this module##
 
 my $db = 0;           #debug 
-my $fast-start = 1;   #[off ~ 68s / on ~ 8s / precomp ~ 1.7s ] 
+my $fast-start = 1;   #[off ~ 65s / on ~ 11s / precomp ~ 1.7s ] 
 
 ##### Constant Declarations ######
 constant \locale = "imp";   #Imperial="imp"; US="us' FIXME v2 make tag
@@ -127,13 +127,13 @@ class Unit is export {
         }
         return @dim-str.join('⋅')
     }
-    method raku {                #can make stock
-		my $s-str = $fast-start ?? '' !! ', stock => True ';
-		my $t-str = $fast-start ?? "'$!type'" !! "''";
+    method raku( :$stock ) {								#can make stock units
+		my $s-str = $stock ?? ', stock => True' !! '';
+		my $t-str = $stock ?? "''" !! "'$!type'";			#suppress type if stock
         return qq:to/END/;
         Unit.new( factor => $.factor, offset => $.offset, defn => '$.defn', type => $t-str,
 		  dims => [{@.dims.join(',')}], dmix => {$.dmix.raku}, 
-		  names => [{@.names.map( ->$n {"'$n'"}).join(',')}] $s-str );
+		  names => [{@.names.map( ->$n {"'$n'"}).join(',')}]$s-str );
         END
     }
 
@@ -734,7 +734,7 @@ say "";
 }
 
 
-####### Stock Units Guidance (aka fast-start)#######
+####### Stock Unit Guidance (aka fast-start)#######
 
 #|When editing this module, then the raw data for units can be edited in the InitUnit section
 #|above. The normal startup sequence is InitBaseUnit, InitPrefix, InitUnit, InitTypes. Many of
@@ -746,13 +746,13 @@ say "";
 #|
 #|This works by the DumpStockUnits subroutine - run this with bin/DumpStock.raku > temp.txt
 #|after any change to Unit Data and then paste the output at the end of this module between
-#|the Start/End comments (these Unit.new definitions are not ordered)...  
+#|the Start/End comments...
 
 sub DumpStockUnits is export {
     my %unique-unit{Unit} = %unit-by-name.kv.reverse;
 	my @unique-sort = %unique-unit.keys.sort({$^a.name cmp $^b.name});	
     for @unique-sort -> $u {
-        say $u.raku
+        say $u.raku( :stock );
     }
 }
 

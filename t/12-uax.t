@@ -5,7 +5,9 @@ use lib '../lib';
 use Test;
 plan 10;
 
-use Physics::UnitAffix;
+##NB This test uses the :DEFAULT only UnitAffixQ for faster install times
+
+use Physics::UnitAffixQ;
 use Physics::Measure;
 
 my $l = 1km;
