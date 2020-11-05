@@ -18,7 +18,7 @@ constant \isa-length = 'Distance' | 'Breadth' | 'Width' | 'Height' | 'Depth';
 
 my regex number is export {
 	\S+                     #grab chars
-	<?{ defined +"$/" }>    #assert coerces via '+' to Real
+	<?{ +"$/" ~~ Real }>    #assert coerces via '+' to Real
 }
 
 
@@ -104,8 +104,8 @@ class Measure is export {
 		#handle generic case
 		else {
 			$s ~~ /^ ( <number> ) \s* ( <-[±]>* ) $/;  
-			my $v = +"$0".Real if $0.defined;
-			my $u =  "$1".Str  if $1.defined;
+			my $v = +$0;
+			my $u = ~$1;
 
 			say "extracting «$s»: v is «$v», u is «$u»" if $db;
 			return($v, $u)
