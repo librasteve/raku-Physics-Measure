@@ -7,34 +7,7 @@ zef install --verbose https://github.com/p6steve/raku-Physics-Measure.git
 
 and, conversely, zef uninstall Physics::Measure
 
-# Synopsis - Physics::UnitPostfix
-[https://github.com/p6steve/raku-Physics-Measure/bin/synopsis-unitpostfix.raku](https://github.com/p6steve/raku-Physics-Measure/blob/master/bin/synopsis-unitpostfix.raku)
-
-```perl6
-#!/usr/bin/env raku
-use Physics::Measure;
-use Physics::UnitPostfix;
-
-my $l = 1km;			    say ~$l;        #1 km           (Length)
-my $t = 1ms;			    say ~$t;        #1 ms           (Time)
-my $s = $l/$t;			    say ~$s;        #1000000 m/s    (Speed)
-my $f = $l.in: <ft>;    	    say ~$f;        #3280.84 ft     (Length)
-my $m = 1kg;			    say ~$m;        #1 kg           (Mass)
-my $y ♎️ '5e1 km';                  say ~$y;        #50 km          (Length)
-my $x = Volume.new(value => 21.006, units => 'μl'); say "$x"; #21.006 μl (Volume)
-```
- 
-Physics::UnitPostfix takes the SI Base Units (7), SI Derived Units (20) and SI Prefixes (20):
-* defines Unit objects for all combinations of Prefixes x [Base|Derived]Unit short names
-* declares raku ```<postfix>``` operators for all of these combinations and exports them into your namespace
-
-IMPORTANT:
-* you will need to go in and uncomment if you want all compound SI units (~30) xx all Prefixes (~20) - as default these are limited to length(m), time(s), mass(kg) and volume(l) for installation performance reasons...
-* you will need to use Physics::UnitPostfix anytime you want compound units to be defined - even if you do not need the postfix variant of operator - e.g. for ```my $x = Length.new(value => 17, units => 'cm'); my $y ♎️ '5e1 km';``` and so on
-
-<img src="images/SIUnitPrefixTable.png" width="480">
-
-# Synopsis - Physics::Measure & Physics::Unit
+# Synopsis - Physics::Measure
 [https://github.com/p6steve/raku-Physics-Measure/bin/synopsis.raku](https://github.com/p6steve/raku-Physics-Measure/blob/master/bin/synopsis.raku)
 
 ```perl6
@@ -46,9 +19,6 @@ use Physics::Measure;
 
 #Unit objects can be selected or created with GetUnit:
     my Unit   $u  = GetUnit( 'm' );
-#Define your own unit named "ff" (named args)
-    my $ff = Unit.new( defn => 'furlong / fortnight', names => ['ff'] );
-
 #Measure objects such as Length can be formally constructed:
     my Length $a .=new(value => 1e4, units => $u);		say "$a";		#10000 m
 
