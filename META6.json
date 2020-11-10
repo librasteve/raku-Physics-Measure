@@ -9,12 +9,10 @@
     "license" : "Artistic-2.0",
     "provides" : {
         "Physics::Measure" : "lib/Physics/Measure.rakumod",
-        "Physics::Unit" : "lib/Physics/Unit.rakumod",
-        "Physics::UnitAffix" : "lib/Physics/UnitAffix.rakumod",
         "Physics::UnitAffixQ" : "lib/Physics/UnitAffixQ.rakumod"
     },
     "depends" : [
-        "SVG","SVG::Plot","Math::Polygons"
+        "SVG","SVG::Plot","Math::Polygons","Physics::Unit"
      ],
     "build-depends" : [ ],
     "test-depends" : [ ],
