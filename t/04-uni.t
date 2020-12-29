@@ -3,7 +3,7 @@
 #TESTALL$ prove6 ./t      [from root]
 use lib '../lib';
 use Test;
-plan 34;
+plan 33;
 
 use Physics::Measure;
 use Physics::Unit;
