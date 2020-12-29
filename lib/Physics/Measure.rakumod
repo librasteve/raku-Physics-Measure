@@ -1,4 +1,4 @@
-unit module Physics::Measure:ver<0.0.3>:auth<Steve Roe (p6steve@furnival.net)>;
+unit module Physics::Measure:ver<1.0.0>:auth<Steve Roe (p6steve@furnival.net)>;
 use Physics::Unit;
 
 #This module uses Type Variables such as ::T,::($s) 
