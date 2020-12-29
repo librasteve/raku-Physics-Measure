@@ -15,8 +15,6 @@ is $u.name,'m',           '$u.name exists';
 is ~$u.type,'Length',	  '$u.units made'; 
 
 my Length $a .=new(value => 1e4, units => $u);
-say "a.value is " ~ $a.value;
-say "a.value is " ~ $a.value.Str;
 is $a.WHAT,   Length,     '$a.WHAT';
 ok $a.value == 1e4,       '$a.value';
 is $a.units.name,'m',     '$a.units';

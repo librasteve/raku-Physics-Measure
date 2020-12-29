@@ -99,6 +99,8 @@ is $en3, '1134 J',																'$en3-J';
 my $en4 = $en3.rebase;
 is $en4, '1134 J',                                                              '$en4-J';
 
+my $mo1 ♎️ '27 kg m/s'; 
+
 my $mo2 ♎️ '27 kg m s^ -1  ';
 is "$mo2", '27 kg m/s',		                                                    '$mo2-kg m/s';
 is $mo2.WHAT, Physics::Measure::Momentum,                                       '$mo2-WHAT';

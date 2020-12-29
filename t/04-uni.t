@@ -3,7 +3,7 @@
 #TESTALL$ prove6 ./t      [from root]
 use lib '../lib';
 use Test;
-plan 32;
+plan 34;
 
 use Physics::Measure;
 use Physics::Unit;
@@ -77,7 +77,7 @@ is "$x", '2500 m^2',                                                        'mul
 is $x.WHAT, (Physics::Measure::Area),                                       'mul.type';
 # this should fail $s1 = $d * $d;
 
-my $θ1 ♎️ <45°30′30″>;  
+my $θ1 ♎️ <45°30′30″>;
 is "$θ1", <45°30′30″>,														'dms Str';
 my $θ2 ♎️ '2.141 radians';
 is "$θ2", '2.141 radian',													'radian Str';
@@ -94,6 +94,14 @@ my $sine = sin( $θ1 );
 is-approx $sine, 0.7133523847299412,										'sin.dms';
 my $arcsin = asin( $sine, units => '°' );
 is "$arcsin", <45°30′30″>,													'asin.dms';
+
+my $emission ♎️ "11 kg.s-1";
+is ~$emission, '11 kg.s-1',													'canonical-rt';
+
+#`[[FIXME - variable result 11 kg⋅s⁻¹ sometimes
+my $emission2 ♎️ "11 kg⋅s⁻¹";
+is ~$emission2, '11 kg.s-1',												'pretty-rt';
+#]]
 
 ##done-testing
 

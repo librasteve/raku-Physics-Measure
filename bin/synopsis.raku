@@ -3,6 +3,8 @@ use lib '../lib';
 use Physics::Unit;
 use Physics::Measure;
 
+##raku -I'../../../Plugin/raku-Physics-Unit/lib' synopsis.raku
+
 #SYNOPSIS
 
 #Unit objects can be selected or created with GetUnit:

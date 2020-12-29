@@ -83,8 +83,14 @@ class Measure is export {
     method Numeric   { $.value }
 	method value-r   { $round-to ?? $.value.round($round-to) !! $.value }
     method Str       { "{$.value-r} {$.units}" }
-    method canonical { "{$.value-r} {$.units.canonical}" }
-    method pretty    { "{$.value-r} {$.units.pretty}" }
+    method canonical { 
+		my $rebased = $.in( $.units.canonical);
+		"{$rebased.value-r} {$.units.canonical}" 
+	}
+    method pretty    { 
+		my $rebased = $.in( $.units.canonical);
+		"{$rebased.value-r} {$.units.pretty}" 
+	}
 
 	#### Class Method ####
 	#baby Grammar for initial extraction of definition from Str (value/unit/error)
@@ -301,6 +307,7 @@ class Current            is Measure is export {}
 class Temperature        is Measure is export {}
 class Substance          is Measure is export {}
 class Luminosity         is Measure is export {}
+
 #Derived Units
 class Dimensionless      is Measure is export {}
 class Solid-Angle        is Measure is export {}
@@ -328,7 +335,12 @@ class Capacitance        is Measure is export {}
 class Inductance         is Measure is export {}
 class Magnetic-Flux      is Measure is export {}
 class Magnetic-Field     is Measure is export {}
+class Luminous-Flux		 is Measure is export {}
+class Illuminance		 is Measure is export {}
+class Radioactivity		 is Measure is export {}
 class Dose               is Measure is export {}
+class Catalytic-Activity is Measure is export {}
+
 #Synonyms for Length... 
 class Distance           is Length is export {}
 class Breadth            is Length is export {}

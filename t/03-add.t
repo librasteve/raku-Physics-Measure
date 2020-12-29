@@ -70,7 +70,8 @@ ok $a.value == 23,                                                              
 ok $b.value == 42,                                                              'div:M/S';
 ok $c.value == <23/37>,                                                         'div:M/S';
 is $c.units.name, 'm',                                                          'div:M/S';
-##FIXME is this what we really want? also '1/m' parseth not
+#manually create NewType for 1 / m
+#note '1/m' will fail - need to sep with space
 my $id = Unit.new( defn => '1 / m', names => ['m-1'] );
 class iddy is Measure {}
 $id.NewType('iddy');

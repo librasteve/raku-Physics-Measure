@@ -45,10 +45,10 @@ $z2 = $x2 / $y2;
 is $z2, '147.637795',                                             '$z2-div-m.s-1/feet.mins-1';
 
 $z2 = $x2 + $y2;
-is $z2, '3.02032 m/s',                                            '$z2-add-m.s-1+feet.mins-1';
+is $z2, '3.02032 m.s^-1',                                         '$z2-add-m.s-1+feet.mins-1';
 
 $z2 = $x2 - $y2;
-is $z2, '2.97968 m/s',                                            '$z2-sub-m.s-1+feet.mins-1';
+is $z2, '2.97968 m.s^-1',                                         '$z2-sub-m.s-1+feet.mins-1';
 
 #done-testing;
 
