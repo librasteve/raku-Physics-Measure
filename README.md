@@ -11,7 +11,6 @@ and, conversely, zef uninstall Physics::Measure
 
 ```perl6
 #!/usr/bin/env raku
-use Physics::Unit;
 use Physics::Measure;
 
 #SYNOPSIS
