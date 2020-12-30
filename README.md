@@ -11,15 +11,14 @@ and, conversely, zef uninstall Physics::Measure
 
 ```perl6
 #!/usr/bin/env raku
-use Physics::Unit;
 use Physics::Measure;
 
 #SYNOPSIS
 
-#Unit objects can be selected or created with GetUnit:
-    my Unit   $u  = GetUnit( 'm' );
+#Unit objects can be selected or created with GetMeaUnit:
+    my $u  = GetMeaUnit( 'm' );
 #Measure objects such as Length can be formally constructed:
-    my Length $a .=new(value => 1e4, units => $u);		say "$a";		#10000 m
+    my Length $a .=new(value => 1e4, units => $u);  say "$a";       #10000 m
 
 #The libra operator ♎️ is a handy way to construct objects...
     my $b ♎️ '5e1 m';						say "$b";		#50 m
@@ -102,7 +101,6 @@ use Physics::Measure;
     my $en2 = $po * $t1;                #1250 J			(Energy)
     say $po.canonical;			#25 m2.s-3.kg   	(SI base units)
     say $po.pretty;			#25 m²⋅s⁻³⋅kg   	(SI recommends)
-    say ListBases(); say ListTypes(); say ListUnits();
 
 #Measures can be converted to base type with the .rebase() method
     my $v4 = $v3.rebase;		#5.352 m^3
