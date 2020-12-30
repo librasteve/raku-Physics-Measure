@@ -1,17 +1,11 @@
 #!/usr/bin/env raku 
 use lib '../lib';
-use Physics::Unit;
 use Physics::Measure;
-
-##raku -I'../../../Plugin/raku-Physics-Unit/lib' synopsis.raku
 
 #SYNOPSIS
 
-#Unit objects can be selected or created with GetUnit:
-	my Unit   $u  = GetUnit( 'm' );
-#Define your own unit named "ff" (named args)
-	my $ff = Unit.new( defn => 'furlong / fortnight', names => ['ff'] );
-
+#Unit objects can be selected or created with GetMeUnit:
+	my $u  = GetMeaUnit( 'm' );
 #Measure objects such as Length can be formally constructed:
 	my Length $a .=new(value => 1e4, units => $u);	say "$a";		#10000 m
 
@@ -95,7 +89,6 @@ use Physics::Measure;
     my $en2 = $po * $t1;                #1250 J			(Energy)
 	say $po.canonical;					#25 m2.s-3.kg   (SI base units)
 	say $po.pretty;						#25 m²⋅s⁻³⋅kg   (SI recommends)
-	say ListBases(); say ListTypes(); say ListUnits();
 
 #Measures can be converted to base type with the .rebase() method
     my $v4 = $v3.rebase;				#5.352 m^3

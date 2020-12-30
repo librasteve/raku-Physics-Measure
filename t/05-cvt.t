@@ -6,7 +6,6 @@ use Test;
 plan 43; 
 
 use Physics::Measure;
-use Physics::Unit; 
 
 my Length $d-me ♎️ '10 m'; 
 is "$d-me", '10 m',                                                         '$d.""';

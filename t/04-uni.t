@@ -6,9 +6,8 @@ use Test;
 plan 33;
 
 use Physics::Measure;
-use Physics::Unit;
 
-my Unit   $u = GetUnit('m');
+my $u = GetMeaUnit('m');
 my Length $a .=new(value => 1e4, units => $u);
 
 ok $a.value == 10000,                                                       '$a.value';
@@ -19,7 +18,7 @@ my $i2 = DateTime.new( '2017-08-10T14:15:27.26Z' );
 my $i3 = DateTime.new( '2017-08-10T14:15:37.26Z' );
 my Duration $dur = $i3-$i2;
 
-my Unit $v = GetUnit('s');
+my $v = GetMeaUnit('s');
 my Time $t1 .=new(value => $dur, units => $v);    #'10 s'
 
 ok $dur == 10,                                                              'dur';
@@ -58,7 +57,7 @@ is $t10, '2 hr',	                                                        '$t.uni
 
 #Speed = Length / Time
 my Speed $s1;
-my Unit $su1 = GetUnit('m/s');
+my $su1 = GetMeaUnit('m/s');
 $s1 .=new( value => 14, units => $su1 );
 is "$s1", '14 m/s',                                                         '$s.named';
 

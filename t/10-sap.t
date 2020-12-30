@@ -6,7 +6,6 @@ use Test;
 plan 19; 
 
 use Physics::Measure;
-use Physics::Unit;
 
 my $a0 ♎️ '4.3 m';
 is $a0, '4.3 m',                                                        '$a0-m';

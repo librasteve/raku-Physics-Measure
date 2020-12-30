@@ -6,7 +6,6 @@ use Test;
 plan 37; 
 
 use Physics::Measure;
-use Physics::Unit;
 
 my Speed $s-mph1 ♎️ '17 miles/hours';
 is $s-mph1, '17 miles/hours',                                                   '$s-mph1';

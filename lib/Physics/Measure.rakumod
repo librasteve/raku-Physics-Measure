@@ -7,6 +7,11 @@ use Physics::Unit;
 #Length = 12.5 ±0.05 m   (FIXME v2 cover errors)
 #viz. https://www.mathsisfun.com/measure/error-measurement.html
 
+##### Passthrough of Physics::Unit #####
+
+sub GetMeaUnit( $u ) is export {
+	GetUnit( $u )
+}
 
 ######## Constants & Definitions ########
 
