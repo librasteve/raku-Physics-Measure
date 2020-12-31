@@ -1,7 +1,17 @@
 #!/usr/bin/env raku 
 use lib '../lib';
-use Physics::UnitAffixQ;
+##use Physics::UnitAffixQ; #<=== must go first
 use Physics::Measure;
+
+
+sub postfix:<m> (Real:D $x) is export(:DEFAULT) { do-postfix($x,'m') }
+sub postfix:<cm> (Real:D $x) is export(:DEFAULT) { do-postfix($x,'cm') }
+sub postfix:<mm> (Real:D $x) is export(:DEFAULT) { do-postfix($x,'mm') }
+sub postfix:<μm> (Real:D $x) is export(:DEFAULT) { do-postfix($x,'μm') }
+
+my $l = 1m;				say ~$l;
+my $x = 1cm;			say ~$x;
+
 
 #`[[
 The Physics::UnitAffix module (see https://en.wikipedia.org/wiki/Affix) combines the notions of:
@@ -17,6 +27,8 @@ Now you can simply go 'my $l = 1km;' to declare a new Measure with value => 1 an
 'use Physics::UnitAffixQ;' is the QUICK variant, equivalent to 'use Physics::UnitAffix :DEFAULT;'
 #]]
 
+
+#`[[
 my $l = 1m;				say ~$l;
 my $m = 1kg;			say ~$m;
 my $t = 1ms;			say ~$t;
@@ -26,3 +38,4 @@ my $c = 17cm;			say ~$c;
 my $a-d = 7°;			say ~$a-d;
 my $y ♎️ '5e1 km';		say ~$y;
 my $x = Volume.new(value => 21.006, units => 'μl'); say ~$x;
+#]]

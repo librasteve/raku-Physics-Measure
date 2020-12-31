@@ -9,9 +9,28 @@ use Physics::Unit;
 
 ##### Passthrough of Physics::Unit #####
 
+#| design intent is for Measure (.new) to encapsulate Physics::Unit
+#| objective is to eliminate 'use lozenges' and to shorten 'use list'
+#| deprecated - this pass through function is transition support
+
 sub GetMeaUnit( $u ) is export {
 	GetUnit( $u )
 }
+
+##### Postfix Unit Support #####
+
+sub do-postfix( Real $v, Str $n ) is export {
+	my $codes = GetPrefixByCode.keys.join('|');
+
+	$n ~~ m|(<$codes>) (.*)|;
+	my $pfix = GetPrefixByCode{$0};
+	my $unit = $1;
+
+    my $u = Unit.new( defn => "$pfix$unit", names => "$n" );
+    my $t = $u.type( :just1 );
+    return ::($t).new(value => $v, units => $u);
+} 
+
 
 ######## Constants & Definitions ########
 
