@@ -2,6 +2,19 @@
 use lib '../lib';
 use Physics::Measure;
 
+my $al = 1m;             say ~$al;
+my $at = 1ms;            say ~$at;
+my $as = $al/$at;          say ~$as;
+my $ag = $al.in: <ft>;    say ~$ag;
+my $am = 1kg;            say ~$am;
+my $ac = 17cm;           say ~$ac;
+my $ad = 7°;             say ~$ad;
+my $ay ♎️ '5e1 km';      say ~$ay;
+my $av1 = 42μl;          say ~$av1;
+my $av2 ♎️ '91 μl';      say ~$av2;
+my $ax = Volume.new(value => 21.006, units => 'μl'); say ~$ax;
+my $az ♎️ '18 μ';        say ~$az; 
+
 #SYNOPSIS
 
 #Measure objects such as Length can be formally constructed:
