@@ -16,12 +16,10 @@ use Physics::Measure;
 
 #SYNOPSIS
 
-#Unit objects can be selected or created with GetUnit:
-    my Unit   $u  = GetUnit( 'm' );
 #Measure objects such as Length can be formally constructed:
-    my Length $a .=new(value => 1e4, units => $u);		say "$a";		#10000 m
+    my Length $a .=new(value => 1e4, units => 'm');		say "$a";		#10000 m
 
-#The libra operator ♎️ is a handy way to construct objects...
+#The libra operator ♎️ is shorthand to construct objects...
     my $b ♎️ '5e1 m';						say "$b";		#50 m
     my $c ♎️ $a;						say "$c";		#10000 m
     my Length $l ♎️ 42;						say "$l";		#42 m
