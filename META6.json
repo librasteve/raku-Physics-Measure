@@ -8,8 +8,7 @@
     "authors" : [ "p6steve" ],
     "license" : "Artistic-2.0",
     "provides" : {
-        "Physics::Measure" : "lib/Physics/Measure.rakumod",
-        "Physics::UnitAffixQ" : "lib/Physics/UnitAffixQ.rakumod"
+        "Physics::Measure" : "lib/Physics/Measure.rakumod"
     },
     "depends" : [
         "SVG","SVG::Plot","Math::Polygons","Physics::Unit"

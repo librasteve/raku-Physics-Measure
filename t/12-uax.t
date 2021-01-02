@@ -5,7 +5,7 @@ use lib '../lib';
 use Test;
 plan 17;
 
-use Physics::Measure;
+use Physics::Measure :ALL;
 
 my $l = 1km;
 is ~$l,'1 km',																'km';

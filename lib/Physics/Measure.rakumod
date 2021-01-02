@@ -1,6 +1,10 @@
 unit module Physics::Measure:ver<1.0.0>:auth<Steve Roe (p6steve@furnival.net)>;
 use Physics::Unit;
 
+#This module needs the export label :ALL to load postfix operators
+# use Physics::Measure;      ...10s first-, 1.2s pre- compiled 
+# use Physics::Measure :ALL; ...13s first-, 2.8s pre- compiled 
+
 #This module uses Type Variables such as ::T,::($s) 
 #viz. http://www.jnthn.net/papers/2008-yapc-eu-raku6types.pdf
 
@@ -11,7 +15,7 @@ use Physics::Unit;
 
 #| design intent is for Measure (.new) to encapsulate Physics::Unit
 #| objective is to eliminate 'use lozenges' and to shorten 'use list'
-#| deprecated - this pass through function is transition support
+#| eg. manually instantiate 'J' to autoreduce 'kg m^2/s^2'
 
 sub GetMeaUnit( $u ) is export {
 	GetUnit( $u )
@@ -216,7 +220,6 @@ class Measure is export {
 		my $ouo = $.units;				#aka old unit object
 		my $nuo = GetUnit( $to );		#aka new unit object
 		my $n-type = $nuo.type( just1 => 1 );
-
 		unless self ~~ ::($n-type) { die "cannot convert in to different type $n-type" }
 
 		my $n-value = ($.value + $ouo.offset) * ($ouo.factor / $nuo.factor) - $nuo.offset;
@@ -224,7 +227,7 @@ class Measure is export {
 		::($n-type).new( value => $n-value, units => $nuo )
 	}
 	method rebase {						#to base (prototype) unit of type
-		self.in( GetPrototype( self.units.type ))
+		self.in( GetPrototype( self.units.type( :just1 ) ))
 	}
     method cmp( $a: $b ) {
 		my ($an,$bn);
@@ -546,10 +549,10 @@ multi infix:<!=> ( Measure:D $a, Measure:D $b ) is equiv( &infix:<!=> ) is expor
     else { return True; } 
 }
 
-##### Affix Unit Support #####
+##### Affix Operators #####
 
 #`[[ 
-An 'Affix Operation' combines the combines the notions of: 
+An 'Affix Operators' combine the notions of: 
 1. SI Prefixes e.g. c(centi-), k(kilo-) that make compound units such as cm, km, kg  
 2. Raku Postfixes e.g. $l = 42cm; operators which work on the preceeding value
 
@@ -558,606 +561,30 @@ We use the term Affix to indicate that both concepts are provided by this module
 2. Declaration of the resulting ~600 Unit instances and matching Raku Postfix operators
 
 Now you can simply go 'my $l = 1km;' to declare a new Measure with value => 1 and units => 'km'
-
-NB. For load speed reasons, most of the 600 possible affix operations are commented out
-	(here delineated as :electical, :mechanical, :universal)
-
-	All 600 => first compile = 428s, pre-compile = 17s
-	Just 84 => first compile =  80s, pre-compile = ~2s
 #]]
 
+my %affix-by-name = GetAffixByName;
+
 sub do-postfix( Real $v, Str $cn ) is export {
-    my $u = Unit.new( defn => $cn, names => [GetAffixNames($cn)] );
+    my $u = Unit.new( defn => $cn, names => [$cn, %affix-by-name{$cn}] );
     my $t = $u.type(:just1);
     return ::($t).new(value => $v, units => $u);
 } 
 
-#e.g. sub postfix:<m> ( Real:D $x ) is export { do-postfix( $x, 'm' ) }
+#eg. sub postfix:<m> ( Real:D $x ) is export { do-postfix( $x, 'm' ) }
 
-LoadAffixOps();
-
-sub LoadAffixOps {
-
-#First a few "non-declining singletons"...
+#| first a few "non-declining singletons"...
 sub postfix:<°> (Real:D $x) is export { do-postfix($x,'°') }
+sub postfix:<°C> (Real:D $x) is export { do-postfix($x,'°C') }
 sub postfix:<radian> (Real:D $x) is export { do-postfix($x,'radian') }
 sub postfix:<steradian> (Real:D $x) is export { do-postfix($x,'steradian') }
-sub postfix:<°C> (Real:D $x) is export { do-postfix($x,'°C') }
 
-#Then approx. 84 [600] Affix Ops == ~ 84 [600] more lines...
-##### Affix Ops Start #####
-sub postfix:<m> (Real:D $x) is export(:DEFAULT) { do-postfix($x,'m') }
-sub postfix:<dam> (Real:D $x) is export(:DEFAULT) { do-postfix($x,'dam') }
-sub postfix:<hm> (Real:D $x) is export(:DEFAULT) { do-postfix($x,'hm') }
-sub postfix:<km> (Real:D $x) is export(:DEFAULT) { do-postfix($x,'km') }
-sub postfix:<Mm> (Real:D $x) is export(:DEFAULT) { do-postfix($x,'Mm') }
-sub postfix:<Gm> (Real:D $x) is export(:DEFAULT) { do-postfix($x,'Gm') }
-sub postfix:<Tm> (Real:D $x) is export(:DEFAULT) { do-postfix($x,'Tm') }
-sub postfix:<Pm> (Real:D $x) is export(:DEFAULT) { do-postfix($x,'Pm') }
-sub postfix:<Em> (Real:D $x) is export(:DEFAULT) { do-postfix($x,'Em') }
-sub postfix:<Zm> (Real:D $x) is export(:DEFAULT) { do-postfix($x,'Zm') }
-sub postfix:<Ym> (Real:D $x) is export(:DEFAULT) { do-postfix($x,'Ym') }
-sub postfix:<dm> (Real:D $x) is export(:DEFAULT) { do-postfix($x,'dm') }
-sub postfix:<cm> (Real:D $x) is export(:DEFAULT) { do-postfix($x,'cm') }
-sub postfix:<mm> (Real:D $x) is export(:DEFAULT) { do-postfix($x,'mm') }
-sub postfix:<μm> (Real:D $x) is export(:DEFAULT) { do-postfix($x,'μm') }
-sub postfix:<nm> (Real:D $x) is export(:DEFAULT) { do-postfix($x,'nm') }
-sub postfix:<pm> (Real:D $x) is export(:DEFAULT) { do-postfix($x,'pm') }
-sub postfix:<fm> (Real:D $x) is export(:DEFAULT) { do-postfix($x,'fm') }
-sub postfix:<am> (Real:D $x) is export(:DEFAULT) { do-postfix($x,'am') }
-sub postfix:<zm> (Real:D $x) is export(:DEFAULT) { do-postfix($x,'zm') }
-sub postfix:<ym> (Real:D $x) is export(:DEFAULT) { do-postfix($x,'ym') }
-sub postfix:<g> (Real:D $x) is export(:DEFAULT) { do-postfix($x,'g') }
-sub postfix:<dag> (Real:D $x) is export(:DEFAULT) { do-postfix($x,'dag') }
-sub postfix:<hg> (Real:D $x) is export(:DEFAULT) { do-postfix($x,'hg') }
-sub postfix:<kg> (Real:D $x) is export(:DEFAULT) { do-postfix($x,'kg') }
-sub postfix:<Mg> (Real:D $x) is export(:DEFAULT) { do-postfix($x,'Mg') }
-sub postfix:<Gg> (Real:D $x) is export(:DEFAULT) { do-postfix($x,'Gg') }
-sub postfix:<Tg> (Real:D $x) is export(:DEFAULT) { do-postfix($x,'Tg') }
-sub postfix:<Pg> (Real:D $x) is export(:DEFAULT) { do-postfix($x,'Pg') }
-sub postfix:<Eg> (Real:D $x) is export(:DEFAULT) { do-postfix($x,'Eg') }
-sub postfix:<Zg> (Real:D $x) is export(:DEFAULT) { do-postfix($x,'Zg') }
-sub postfix:<Yg> (Real:D $x) is export(:DEFAULT) { do-postfix($x,'Yg') }
-sub postfix:<dg> (Real:D $x) is export(:DEFAULT) { do-postfix($x,'dg') }
-sub postfix:<cg> (Real:D $x) is export(:DEFAULT) { do-postfix($x,'cg') }
-sub postfix:<mg> (Real:D $x) is export(:DEFAULT) { do-postfix($x,'mg') }
-sub postfix:<μg> (Real:D $x) is export(:DEFAULT) { do-postfix($x,'μg') }
-sub postfix:<ng> (Real:D $x) is export(:DEFAULT) { do-postfix($x,'ng') }
-sub postfix:<pg> (Real:D $x) is export(:DEFAULT) { do-postfix($x,'pg') }
-sub postfix:<fg> (Real:D $x) is export(:DEFAULT) { do-postfix($x,'fg') }
-sub postfix:<ag> (Real:D $x) is export(:DEFAULT) { do-postfix($x,'ag') }
-sub postfix:<zg> (Real:D $x) is export(:DEFAULT) { do-postfix($x,'zg') }
-sub postfix:<yg> (Real:D $x) is export(:DEFAULT) { do-postfix($x,'yg') }
-sub postfix:<s> (Real:D $x) is export(:DEFAULT) { do-postfix($x,'s') }
-sub postfix:<das> (Real:D $x) is export(:DEFAULT) { do-postfix($x,'das') }
-sub postfix:<hs> (Real:D $x) is export(:DEFAULT) { do-postfix($x,'hs') }
-sub postfix:<ks> (Real:D $x) is export(:DEFAULT) { do-postfix($x,'ks') }
-sub postfix:<Ms> (Real:D $x) is export(:DEFAULT) { do-postfix($x,'Ms') }
-sub postfix:<Gs> (Real:D $x) is export(:DEFAULT) { do-postfix($x,'Gs') }
-sub postfix:<Ts> (Real:D $x) is export(:DEFAULT) { do-postfix($x,'Ts') }
-sub postfix:<Ps> (Real:D $x) is export(:DEFAULT) { do-postfix($x,'Ps') }
-sub postfix:<Es> (Real:D $x) is export(:DEFAULT) { do-postfix($x,'Es') }
-sub postfix:<Zs> (Real:D $x) is export(:DEFAULT) { do-postfix($x,'Zs') }
-sub postfix:<Ys> (Real:D $x) is export(:DEFAULT) { do-postfix($x,'Ys') }
-sub postfix:<ds> (Real:D $x) is export(:DEFAULT) { do-postfix($x,'ds') }
-sub postfix:<cs> (Real:D $x) is export(:DEFAULT) { do-postfix($x,'cs') }
-sub postfix:<ms> (Real:D $x) is export(:DEFAULT) { do-postfix($x,'ms') }
-sub postfix:<μs> (Real:D $x) is export(:DEFAULT) { do-postfix($x,'μs') }
-sub postfix:<ns> (Real:D $x) is export(:DEFAULT) { do-postfix($x,'ns') }
-sub postfix:<ps> (Real:D $x) is export(:DEFAULT) { do-postfix($x,'ps') }
-sub postfix:<fs> (Real:D $x) is export(:DEFAULT) { do-postfix($x,'fs') }
-sub postfix:<as> (Real:D $x) is export(:DEFAULT) { do-postfix($x,'as') }
-sub postfix:<zs> (Real:D $x) is export(:DEFAULT) { do-postfix($x,'zs') }
-sub postfix:<ys> (Real:D $x) is export(:DEFAULT) { do-postfix($x,'ys') }
-sub postfix:<l> (Real:D $x) is export(:DEFAULT) { do-postfix($x,'l') }
-sub postfix:<dal> (Real:D $x) is export(:DEFAULT) { do-postfix($x,'dal') }
-sub postfix:<hl> (Real:D $x) is export(:DEFAULT) { do-postfix($x,'hl') }
-sub postfix:<kl> (Real:D $x) is export(:DEFAULT) { do-postfix($x,'kl') }
-sub postfix:<Ml> (Real:D $x) is export(:DEFAULT) { do-postfix($x,'Ml') }
-sub postfix:<Gl> (Real:D $x) is export(:DEFAULT) { do-postfix($x,'Gl') }
-sub postfix:<Tl> (Real:D $x) is export(:DEFAULT) { do-postfix($x,'Tl') }
-sub postfix:<Pl> (Real:D $x) is export(:DEFAULT) { do-postfix($x,'Pl') }
-sub postfix:<El> (Real:D $x) is export(:DEFAULT) { do-postfix($x,'El') }
-sub postfix:<Zl> (Real:D $x) is export(:DEFAULT) { do-postfix($x,'Zl') }
-sub postfix:<Yl> (Real:D $x) is export(:DEFAULT) { do-postfix($x,'Yl') }
-sub postfix:<dl> (Real:D $x) is export(:DEFAULT) { do-postfix($x,'dl') }
-sub postfix:<cl> (Real:D $x) is export(:DEFAULT) { do-postfix($x,'cl') }
-sub postfix:<ml> (Real:D $x) is export(:DEFAULT) { do-postfix($x,'ml') }
-sub postfix:<μl> (Real:D $x) is export(:DEFAULT) { do-postfix($x,'μl') }
-sub postfix:<nl> (Real:D $x) is export(:DEFAULT) { do-postfix($x,'nl') }
-sub postfix:<pl> (Real:D $x) is export(:DEFAULT) { do-postfix($x,'pl') }
-sub postfix:<fl> (Real:D $x) is export(:DEFAULT) { do-postfix($x,'fl') }
-sub postfix:<al> (Real:D $x) is export(:DEFAULT) { do-postfix($x,'al') }
-sub postfix:<zl> (Real:D $x) is export(:DEFAULT) { do-postfix($x,'zl') }
-sub postfix:<yl> (Real:D $x) is export(:DEFAULT) { do-postfix($x,'yl') }
-##### Affix Ops End #####
-
-#`[[ Uncomment me for full SI unit support and slow modile load (440s first / 17s precomp)
-sub postfix:<A> (Real:D $x) is export(:electrical) { do-postfix($x,'A') }
-sub postfix:<daA> (Real:D $x) is export(:electrical) { do-postfix($x,'daA') }
-sub postfix:<hA> (Real:D $x) is export(:electrical) { do-postfix($x,'hA') }
-sub postfix:<kA> (Real:D $x) is export(:electrical) { do-postfix($x,'kA') }
-sub postfix:<MA> (Real:D $x) is export(:electrical) { do-postfix($x,'MA') }
-sub postfix:<GA> (Real:D $x) is export(:electrical) { do-postfix($x,'GA') }
-sub postfix:<TA> (Real:D $x) is export(:electrical) { do-postfix($x,'TA') }
-sub postfix:<PA> (Real:D $x) is export(:electrical) { do-postfix($x,'PA') }
-sub postfix:<EA> (Real:D $x) is export(:electrical) { do-postfix($x,'EA') }
-sub postfix:<ZA> (Real:D $x) is export(:electrical) { do-postfix($x,'ZA') }
-sub postfix:<YA> (Real:D $x) is export(:electrical) { do-postfix($x,'YA') }
-sub postfix:<dA> (Real:D $x) is export(:electrical) { do-postfix($x,'dA') }
-sub postfix:<cA> (Real:D $x) is export(:electrical) { do-postfix($x,'cA') }
-sub postfix:<mA> (Real:D $x) is export(:electrical) { do-postfix($x,'mA') }
-sub postfix:<μA> (Real:D $x) is export(:electrical) { do-postfix($x,'μA') }
-sub postfix:<nA> (Real:D $x) is export(:electrical) { do-postfix($x,'nA') }
-sub postfix:<pA> (Real:D $x) is export(:electrical) { do-postfix($x,'pA') }
-sub postfix:<fA> (Real:D $x) is export(:electrical) { do-postfix($x,'fA') }
-sub postfix:<aA> (Real:D $x) is export(:electrical) { do-postfix($x,'aA') }
-sub postfix:<zA> (Real:D $x) is export(:electrical) { do-postfix($x,'zA') }
-sub postfix:<yA> (Real:D $x) is export(:electrical) { do-postfix($x,'yA') }
-sub postfix:<K> (Real:D $x) is export(:mechanical) { do-postfix($x,'K') }
-sub postfix:<daK> (Real:D $x) is export(:mechanical) { do-postfix($x,'daK') }
-sub postfix:<hK> (Real:D $x) is export(:mechanical) { do-postfix($x,'hK') }
-sub postfix:<kK> (Real:D $x) is export(:mechanical) { do-postfix($x,'kK') }
-sub postfix:<MK> (Real:D $x) is export(:mechanical) { do-postfix($x,'MK') }
-sub postfix:<GK> (Real:D $x) is export(:mechanical) { do-postfix($x,'GK') }
-sub postfix:<TK> (Real:D $x) is export(:mechanical) { do-postfix($x,'TK') }
-sub postfix:<PK> (Real:D $x) is export(:mechanical) { do-postfix($x,'PK') }
-sub postfix:<EK> (Real:D $x) is export(:mechanical) { do-postfix($x,'EK') }
-sub postfix:<ZK> (Real:D $x) is export(:mechanical) { do-postfix($x,'ZK') }
-sub postfix:<YK> (Real:D $x) is export(:mechanical) { do-postfix($x,'YK') }
-sub postfix:<dK> (Real:D $x) is export(:mechanical) { do-postfix($x,'dK') }
-sub postfix:<cK> (Real:D $x) is export(:mechanical) { do-postfix($x,'cK') }
-sub postfix:<mK> (Real:D $x) is export(:mechanical) { do-postfix($x,'mK') }
-sub postfix:<μK> (Real:D $x) is export(:mechanical) { do-postfix($x,'μK') }
-sub postfix:<nK> (Real:D $x) is export(:mechanical) { do-postfix($x,'nK') }
-sub postfix:<pK> (Real:D $x) is export(:mechanical) { do-postfix($x,'pK') }
-sub postfix:<fK> (Real:D $x) is export(:mechanical) { do-postfix($x,'fK') }
-sub postfix:<aK> (Real:D $x) is export(:mechanical) { do-postfix($x,'aK') }
-sub postfix:<zK> (Real:D $x) is export(:mechanical) { do-postfix($x,'zK') }
-sub postfix:<yK> (Real:D $x) is export(:mechanical) { do-postfix($x,'yK') }
-sub postfix:<mol> (Real:D $x) is export(:mechanical) { do-postfix($x,'mol') }
-sub postfix:<damol> (Real:D $x) is export(:mechanical) { do-postfix($x,'damol') }
-sub postfix:<hmol> (Real:D $x) is export(:mechanical) { do-postfix($x,'hmol') }
-sub postfix:<kmol> (Real:D $x) is export(:mechanical) { do-postfix($x,'kmol') }
-sub postfix:<Mmol> (Real:D $x) is export(:mechanical) { do-postfix($x,'Mmol') }
-sub postfix:<Gmol> (Real:D $x) is export(:mechanical) { do-postfix($x,'Gmol') }
-sub postfix:<Tmol> (Real:D $x) is export(:mechanical) { do-postfix($x,'Tmol') }
-sub postfix:<Pmol> (Real:D $x) is export(:mechanical) { do-postfix($x,'Pmol') }
-sub postfix:<Emol> (Real:D $x) is export(:mechanical) { do-postfix($x,'Emol') }
-sub postfix:<Zmol> (Real:D $x) is export(:mechanical) { do-postfix($x,'Zmol') }
-sub postfix:<Ymol> (Real:D $x) is export(:mechanical) { do-postfix($x,'Ymol') }
-sub postfix:<dmol> (Real:D $x) is export(:mechanical) { do-postfix($x,'dmol') }
-sub postfix:<cmol> (Real:D $x) is export(:mechanical) { do-postfix($x,'cmol') }
-sub postfix:<mmol> (Real:D $x) is export(:mechanical) { do-postfix($x,'mmol') }
-sub postfix:<μmol> (Real:D $x) is export(:mechanical) { do-postfix($x,'μmol') }
-sub postfix:<nmol> (Real:D $x) is export(:mechanical) { do-postfix($x,'nmol') }
-sub postfix:<pmol> (Real:D $x) is export(:mechanical) { do-postfix($x,'pmol') }
-sub postfix:<fmol> (Real:D $x) is export(:mechanical) { do-postfix($x,'fmol') }
-sub postfix:<amol> (Real:D $x) is export(:mechanical) { do-postfix($x,'amol') }
-sub postfix:<zmol> (Real:D $x) is export(:mechanical) { do-postfix($x,'zmol') }
-sub postfix:<ymol> (Real:D $x) is export(:mechanical) { do-postfix($x,'ymol') }
-sub postfix:<cd> (Real:D $x) is export(:universal) { do-postfix($x,'cd') }
-sub postfix:<dacd> (Real:D $x) is export(:universal) { do-postfix($x,'dacd') }
-sub postfix:<hcd> (Real:D $x) is export(:universal) { do-postfix($x,'hcd') }
-sub postfix:<kcd> (Real:D $x) is export(:universal) { do-postfix($x,'kcd') }
-sub postfix:<Mcd> (Real:D $x) is export(:universal) { do-postfix($x,'Mcd') }
-sub postfix:<Gcd> (Real:D $x) is export(:universal) { do-postfix($x,'Gcd') }
-sub postfix:<Tcd> (Real:D $x) is export(:universal) { do-postfix($x,'Tcd') }
-sub postfix:<Pcd> (Real:D $x) is export(:universal) { do-postfix($x,'Pcd') }
-sub postfix:<Ecd> (Real:D $x) is export(:universal) { do-postfix($x,'Ecd') }
-sub postfix:<Zcd> (Real:D $x) is export(:universal) { do-postfix($x,'Zcd') }
-sub postfix:<Ycd> (Real:D $x) is export(:universal) { do-postfix($x,'Ycd') }
-sub postfix:<dcd> (Real:D $x) is export(:universal) { do-postfix($x,'dcd') }
-sub postfix:<ccd> (Real:D $x) is export(:universal) { do-postfix($x,'ccd') }
-sub postfix:<mcd> (Real:D $x) is export(:universal) { do-postfix($x,'mcd') }
-sub postfix:<μcd> (Real:D $x) is export(:universal) { do-postfix($x,'μcd') }
-sub postfix:<ncd> (Real:D $x) is export(:universal) { do-postfix($x,'ncd') }
-sub postfix:<pcd> (Real:D $x) is export(:universal) { do-postfix($x,'pcd') }
-sub postfix:<fcd> (Real:D $x) is export(:universal) { do-postfix($x,'fcd') }
-sub postfix:<acd> (Real:D $x) is export(:universal) { do-postfix($x,'acd') }
-sub postfix:<zcd> (Real:D $x) is export(:universal) { do-postfix($x,'zcd') }
-sub postfix:<ycd> (Real:D $x) is export(:universal) { do-postfix($x,'ycd') }
-sub postfix:<Hz> (Real:D $x) is export(:mechanical) { do-postfix($x,'Hz') }
-sub postfix:<daHz> (Real:D $x) is export(:mechanical) { do-postfix($x,'daHz') }
-sub postfix:<hHz> (Real:D $x) is export(:mechanical) { do-postfix($x,'hHz') }
-sub postfix:<kHz> (Real:D $x) is export(:mechanical) { do-postfix($x,'kHz') }
-sub postfix:<MHz> (Real:D $x) is export(:mechanical) { do-postfix($x,'MHz') }
-sub postfix:<GHz> (Real:D $x) is export(:mechanical) { do-postfix($x,'GHz') }
-sub postfix:<THz> (Real:D $x) is export(:mechanical) { do-postfix($x,'THz') }
-sub postfix:<PHz> (Real:D $x) is export(:mechanical) { do-postfix($x,'PHz') }
-sub postfix:<EHz> (Real:D $x) is export(:mechanical) { do-postfix($x,'EHz') }
-sub postfix:<ZHz> (Real:D $x) is export(:mechanical) { do-postfix($x,'ZHz') }
-sub postfix:<YHz> (Real:D $x) is export(:mechanical) { do-postfix($x,'YHz') }
-sub postfix:<dHz> (Real:D $x) is export(:mechanical) { do-postfix($x,'dHz') }
-sub postfix:<cHz> (Real:D $x) is export(:mechanical) { do-postfix($x,'cHz') }
-sub postfix:<mHz> (Real:D $x) is export(:mechanical) { do-postfix($x,'mHz') }
-sub postfix:<μHz> (Real:D $x) is export(:mechanical) { do-postfix($x,'μHz') }
-sub postfix:<nHz> (Real:D $x) is export(:mechanical) { do-postfix($x,'nHz') }
-sub postfix:<pHz> (Real:D $x) is export(:mechanical) { do-postfix($x,'pHz') }
-sub postfix:<fHz> (Real:D $x) is export(:mechanical) { do-postfix($x,'fHz') }
-sub postfix:<aHz> (Real:D $x) is export(:mechanical) { do-postfix($x,'aHz') }
-sub postfix:<zHz> (Real:D $x) is export(:mechanical) { do-postfix($x,'zHz') }
-sub postfix:<yHz> (Real:D $x) is export(:mechanical) { do-postfix($x,'yHz') }
-sub postfix:<N> (Real:D $x) is export(:mechanical) { do-postfix($x,'N') }
-sub postfix:<daN> (Real:D $x) is export(:mechanical) { do-postfix($x,'daN') }
-sub postfix:<hN> (Real:D $x) is export(:mechanical) { do-postfix($x,'hN') }
-sub postfix:<kN> (Real:D $x) is export(:mechanical) { do-postfix($x,'kN') }
-sub postfix:<MN> (Real:D $x) is export(:mechanical) { do-postfix($x,'MN') }
-sub postfix:<GN> (Real:D $x) is export(:mechanical) { do-postfix($x,'GN') }
-sub postfix:<TN> (Real:D $x) is export(:mechanical) { do-postfix($x,'TN') }
-sub postfix:<PN> (Real:D $x) is export(:mechanical) { do-postfix($x,'PN') }
-sub postfix:<EN> (Real:D $x) is export(:mechanical) { do-postfix($x,'EN') }
-sub postfix:<ZN> (Real:D $x) is export(:mechanical) { do-postfix($x,'ZN') }
-sub postfix:<YN> (Real:D $x) is export(:mechanical) { do-postfix($x,'YN') }
-sub postfix:<dN> (Real:D $x) is export(:mechanical) { do-postfix($x,'dN') }
-sub postfix:<cN> (Real:D $x) is export(:mechanical) { do-postfix($x,'cN') }
-sub postfix:<mN> (Real:D $x) is export(:mechanical) { do-postfix($x,'mN') }
-sub postfix:<μN> (Real:D $x) is export(:mechanical) { do-postfix($x,'μN') }
-sub postfix:<nN> (Real:D $x) is export(:mechanical) { do-postfix($x,'nN') }
-sub postfix:<pN> (Real:D $x) is export(:mechanical) { do-postfix($x,'pN') }
-sub postfix:<fN> (Real:D $x) is export(:mechanical) { do-postfix($x,'fN') }
-sub postfix:<aN> (Real:D $x) is export(:mechanical) { do-postfix($x,'aN') }
-sub postfix:<zN> (Real:D $x) is export(:mechanical) { do-postfix($x,'zN') }
-sub postfix:<yN> (Real:D $x) is export(:mechanical) { do-postfix($x,'yN') }
-sub postfix:<Pa> (Real:D $x) is export(:mechanical) { do-postfix($x,'Pa') }
-sub postfix:<daPa> (Real:D $x) is export(:mechanical) { do-postfix($x,'daPa') }
-sub postfix:<hPa> (Real:D $x) is export(:mechanical) { do-postfix($x,'hPa') }
-sub postfix:<kPa> (Real:D $x) is export(:mechanical) { do-postfix($x,'kPa') }
-sub postfix:<MPa> (Real:D $x) is export(:mechanical) { do-postfix($x,'MPa') }
-sub postfix:<GPa> (Real:D $x) is export(:mechanical) { do-postfix($x,'GPa') }
-sub postfix:<TPa> (Real:D $x) is export(:mechanical) { do-postfix($x,'TPa') }
-sub postfix:<PPa> (Real:D $x) is export(:mechanical) { do-postfix($x,'PPa') }
-sub postfix:<EPa> (Real:D $x) is export(:mechanical) { do-postfix($x,'EPa') }
-sub postfix:<ZPa> (Real:D $x) is export(:mechanical) { do-postfix($x,'ZPa') }
-sub postfix:<YPa> (Real:D $x) is export(:mechanical) { do-postfix($x,'YPa') }
-sub postfix:<dPa> (Real:D $x) is export(:mechanical) { do-postfix($x,'dPa') }
-sub postfix:<cPa> (Real:D $x) is export(:mechanical) { do-postfix($x,'cPa') }
-sub postfix:<mPa> (Real:D $x) is export(:mechanical) { do-postfix($x,'mPa') }
-sub postfix:<μPa> (Real:D $x) is export(:mechanical) { do-postfix($x,'μPa') }
-sub postfix:<nPa> (Real:D $x) is export(:mechanical) { do-postfix($x,'nPa') }
-sub postfix:<pPa> (Real:D $x) is export(:mechanical) { do-postfix($x,'pPa') }
-sub postfix:<fPa> (Real:D $x) is export(:mechanical) { do-postfix($x,'fPa') }
-sub postfix:<aPa> (Real:D $x) is export(:mechanical) { do-postfix($x,'aPa') }
-sub postfix:<zPa> (Real:D $x) is export(:mechanical) { do-postfix($x,'zPa') }
-sub postfix:<yPa> (Real:D $x) is export(:mechanical) { do-postfix($x,'yPa') }
-sub postfix:<J> (Real:D $x) is export(:mechanical) { do-postfix($x,'J') }
-sub postfix:<daJ> (Real:D $x) is export(:mechanical) { do-postfix($x,'daJ') }
-sub postfix:<hJ> (Real:D $x) is export(:mechanical) { do-postfix($x,'hJ') }
-sub postfix:<kJ> (Real:D $x) is export(:mechanical) { do-postfix($x,'kJ') }
-sub postfix:<MJ> (Real:D $x) is export(:mechanical) { do-postfix($x,'MJ') }
-sub postfix:<GJ> (Real:D $x) is export(:mechanical) { do-postfix($x,'GJ') }
-sub postfix:<TJ> (Real:D $x) is export(:mechanical) { do-postfix($x,'TJ') }
-sub postfix:<PJ> (Real:D $x) is export(:mechanical) { do-postfix($x,'PJ') }
-sub postfix:<EJ> (Real:D $x) is export(:mechanical) { do-postfix($x,'EJ') }
-sub postfix:<ZJ> (Real:D $x) is export(:mechanical) { do-postfix($x,'ZJ') }
-sub postfix:<YJ> (Real:D $x) is export(:mechanical) { do-postfix($x,'YJ') }
-sub postfix:<dJ> (Real:D $x) is export(:mechanical) { do-postfix($x,'dJ') }
-sub postfix:<cJ> (Real:D $x) is export(:mechanical) { do-postfix($x,'cJ') }
-sub postfix:<mJ> (Real:D $x) is export(:mechanical) { do-postfix($x,'mJ') }
-sub postfix:<μJ> (Real:D $x) is export(:mechanical) { do-postfix($x,'μJ') }
-sub postfix:<nJ> (Real:D $x) is export(:mechanical) { do-postfix($x,'nJ') }
-sub postfix:<pJ> (Real:D $x) is export(:mechanical) { do-postfix($x,'pJ') }
-sub postfix:<fJ> (Real:D $x) is export(:mechanical) { do-postfix($x,'fJ') }
-sub postfix:<aJ> (Real:D $x) is export(:mechanical) { do-postfix($x,'aJ') }
-sub postfix:<zJ> (Real:D $x) is export(:mechanical) { do-postfix($x,'zJ') }
-sub postfix:<yJ> (Real:D $x) is export(:mechanical) { do-postfix($x,'yJ') }
-sub postfix:<W> (Real:D $x) is export(:mechanical) { do-postfix($x,'W') }
-sub postfix:<daW> (Real:D $x) is export(:mechanical) { do-postfix($x,'daW') }
-sub postfix:<hW> (Real:D $x) is export(:mechanical) { do-postfix($x,'hW') }
-sub postfix:<kW> (Real:D $x) is export(:mechanical) { do-postfix($x,'kW') }
-sub postfix:<MW> (Real:D $x) is export(:mechanical) { do-postfix($x,'MW') }
-sub postfix:<GW> (Real:D $x) is export(:mechanical) { do-postfix($x,'GW') }
-sub postfix:<TW> (Real:D $x) is export(:mechanical) { do-postfix($x,'TW') }
-sub postfix:<PW> (Real:D $x) is export(:mechanical) { do-postfix($x,'PW') }
-sub postfix:<EW> (Real:D $x) is export(:mechanical) { do-postfix($x,'EW') }
-sub postfix:<ZW> (Real:D $x) is export(:mechanical) { do-postfix($x,'ZW') }
-sub postfix:<YW> (Real:D $x) is export(:mechanical) { do-postfix($x,'YW') }
-sub postfix:<dW> (Real:D $x) is export(:mechanical) { do-postfix($x,'dW') }
-sub postfix:<cW> (Real:D $x) is export(:mechanical) { do-postfix($x,'cW') }
-sub postfix:<mW> (Real:D $x) is export(:mechanical) { do-postfix($x,'mW') }
-sub postfix:<μW> (Real:D $x) is export(:mechanical) { do-postfix($x,'μW') }
-sub postfix:<nW> (Real:D $x) is export(:mechanical) { do-postfix($x,'nW') }
-sub postfix:<pW> (Real:D $x) is export(:mechanical) { do-postfix($x,'pW') }
-sub postfix:<fW> (Real:D $x) is export(:mechanical) { do-postfix($x,'fW') }
-sub postfix:<aW> (Real:D $x) is export(:mechanical) { do-postfix($x,'aW') }
-sub postfix:<zW> (Real:D $x) is export(:mechanical) { do-postfix($x,'zW') }
-sub postfix:<yW> (Real:D $x) is export(:mechanical) { do-postfix($x,'yW') }
-sub postfix:<C> (Real:D $x) is export(:electrical) { do-postfix($x,'C') }
-sub postfix:<daC> (Real:D $x) is export(:electrical) { do-postfix($x,'daC') }
-sub postfix:<hC> (Real:D $x) is export(:electrical) { do-postfix($x,'hC') }
-sub postfix:<kC> (Real:D $x) is export(:electrical) { do-postfix($x,'kC') }
-sub postfix:<MC> (Real:D $x) is export(:electrical) { do-postfix($x,'MC') }
-sub postfix:<GC> (Real:D $x) is export(:electrical) { do-postfix($x,'GC') }
-sub postfix:<TC> (Real:D $x) is export(:electrical) { do-postfix($x,'TC') }
-sub postfix:<PC> (Real:D $x) is export(:electrical) { do-postfix($x,'PC') }
-sub postfix:<EC> (Real:D $x) is export(:electrical) { do-postfix($x,'EC') }
-sub postfix:<ZC> (Real:D $x) is export(:electrical) { do-postfix($x,'ZC') }
-sub postfix:<YC> (Real:D $x) is export(:electrical) { do-postfix($x,'YC') }
-sub postfix:<dC> (Real:D $x) is export(:electrical) { do-postfix($x,'dC') }
-sub postfix:<cC> (Real:D $x) is export(:electrical) { do-postfix($x,'cC') }
-sub postfix:<mC> (Real:D $x) is export(:electrical) { do-postfix($x,'mC') }
-sub postfix:<μC> (Real:D $x) is export(:electrical) { do-postfix($x,'μC') }
-sub postfix:<nC> (Real:D $x) is export(:electrical) { do-postfix($x,'nC') }
-sub postfix:<pC> (Real:D $x) is export(:electrical) { do-postfix($x,'pC') }
-sub postfix:<fC> (Real:D $x) is export(:electrical) { do-postfix($x,'fC') }
-sub postfix:<aC> (Real:D $x) is export(:electrical) { do-postfix($x,'aC') }
-sub postfix:<zC> (Real:D $x) is export(:electrical) { do-postfix($x,'zC') }
-sub postfix:<yC> (Real:D $x) is export(:electrical) { do-postfix($x,'yC') }
-sub postfix:<V> (Real:D $x) is export(:electrical) { do-postfix($x,'V') }
-sub postfix:<daV> (Real:D $x) is export(:electrical) { do-postfix($x,'daV') }
-sub postfix:<hV> (Real:D $x) is export(:electrical) { do-postfix($x,'hV') }
-sub postfix:<kV> (Real:D $x) is export(:electrical) { do-postfix($x,'kV') }
-sub postfix:<MV> (Real:D $x) is export(:electrical) { do-postfix($x,'MV') }
-sub postfix:<GV> (Real:D $x) is export(:electrical) { do-postfix($x,'GV') }
-sub postfix:<TV> (Real:D $x) is export(:electrical) { do-postfix($x,'TV') }
-sub postfix:<PV> (Real:D $x) is export(:electrical) { do-postfix($x,'PV') }
-sub postfix:<EV> (Real:D $x) is export(:electrical) { do-postfix($x,'EV') }
-sub postfix:<ZV> (Real:D $x) is export(:electrical) { do-postfix($x,'ZV') }
-sub postfix:<YV> (Real:D $x) is export(:electrical) { do-postfix($x,'YV') }
-sub postfix:<dV> (Real:D $x) is export(:electrical) { do-postfix($x,'dV') }
-sub postfix:<cV> (Real:D $x) is export(:electrical) { do-postfix($x,'cV') }
-sub postfix:<mV> (Real:D $x) is export(:electrical) { do-postfix($x,'mV') }
-sub postfix:<μV> (Real:D $x) is export(:electrical) { do-postfix($x,'μV') }
-sub postfix:<nV> (Real:D $x) is export(:electrical) { do-postfix($x,'nV') }
-sub postfix:<pV> (Real:D $x) is export(:electrical) { do-postfix($x,'pV') }
-sub postfix:<fV> (Real:D $x) is export(:electrical) { do-postfix($x,'fV') }
-sub postfix:<aV> (Real:D $x) is export(:electrical) { do-postfix($x,'aV') }
-sub postfix:<zV> (Real:D $x) is export(:electrical) { do-postfix($x,'zV') }
-sub postfix:<yV> (Real:D $x) is export(:electrical) { do-postfix($x,'yV') }
-sub postfix:<F> (Real:D $x) is export(:electrical) { do-postfix($x,'F') }
-sub postfix:<daF> (Real:D $x) is export(:electrical) { do-postfix($x,'daF') }
-sub postfix:<hF> (Real:D $x) is export(:electrical) { do-postfix($x,'hF') }
-sub postfix:<kF> (Real:D $x) is export(:electrical) { do-postfix($x,'kF') }
-sub postfix:<MF> (Real:D $x) is export(:electrical) { do-postfix($x,'MF') }
-sub postfix:<GF> (Real:D $x) is export(:electrical) { do-postfix($x,'GF') }
-sub postfix:<TF> (Real:D $x) is export(:electrical) { do-postfix($x,'TF') }
-sub postfix:<PF> (Real:D $x) is export(:electrical) { do-postfix($x,'PF') }
-sub postfix:<EF> (Real:D $x) is export(:electrical) { do-postfix($x,'EF') }
-sub postfix:<ZF> (Real:D $x) is export(:electrical) { do-postfix($x,'ZF') }
-sub postfix:<YF> (Real:D $x) is export(:electrical) { do-postfix($x,'YF') }
-sub postfix:<dF> (Real:D $x) is export(:electrical) { do-postfix($x,'dF') }
-sub postfix:<cF> (Real:D $x) is export(:electrical) { do-postfix($x,'cF') }
-sub postfix:<mF> (Real:D $x) is export(:electrical) { do-postfix($x,'mF') }
-sub postfix:<μF> (Real:D $x) is export(:electrical) { do-postfix($x,'μF') }
-sub postfix:<nF> (Real:D $x) is export(:electrical) { do-postfix($x,'nF') }
-sub postfix:<pF> (Real:D $x) is export(:electrical) { do-postfix($x,'pF') }
-sub postfix:<fF> (Real:D $x) is export(:electrical) { do-postfix($x,'fF') }
-sub postfix:<aF> (Real:D $x) is export(:electrical) { do-postfix($x,'aF') }
-sub postfix:<zF> (Real:D $x) is export(:electrical) { do-postfix($x,'zF') }
-sub postfix:<yF> (Real:D $x) is export(:electrical) { do-postfix($x,'yF') }
-sub postfix:<Ω> (Real:D $x) is export(:electrical) { do-postfix($x,'Ω') }
-sub postfix:<daΩ> (Real:D $x) is export(:electrical) { do-postfix($x,'daΩ') }
-sub postfix:<hΩ> (Real:D $x) is export(:electrical) { do-postfix($x,'hΩ') }
-sub postfix:<kΩ> (Real:D $x) is export(:electrical) { do-postfix($x,'kΩ') }
-sub postfix:<MΩ> (Real:D $x) is export(:electrical) { do-postfix($x,'MΩ') }
-sub postfix:<GΩ> (Real:D $x) is export(:electrical) { do-postfix($x,'GΩ') }
-sub postfix:<TΩ> (Real:D $x) is export(:electrical) { do-postfix($x,'TΩ') }
-sub postfix:<PΩ> (Real:D $x) is export(:electrical) { do-postfix($x,'PΩ') }
-sub postfix:<EΩ> (Real:D $x) is export(:electrical) { do-postfix($x,'EΩ') }
-sub postfix:<ZΩ> (Real:D $x) is export(:electrical) { do-postfix($x,'ZΩ') }
-sub postfix:<YΩ> (Real:D $x) is export(:electrical) { do-postfix($x,'YΩ') }
-sub postfix:<dΩ> (Real:D $x) is export(:electrical) { do-postfix($x,'dΩ') }
-sub postfix:<cΩ> (Real:D $x) is export(:electrical) { do-postfix($x,'cΩ') }
-sub postfix:<mΩ> (Real:D $x) is export(:electrical) { do-postfix($x,'mΩ') }
-sub postfix:<μΩ> (Real:D $x) is export(:electrical) { do-postfix($x,'μΩ') }
-sub postfix:<nΩ> (Real:D $x) is export(:electrical) { do-postfix($x,'nΩ') }
-sub postfix:<pΩ> (Real:D $x) is export(:electrical) { do-postfix($x,'pΩ') }
-sub postfix:<fΩ> (Real:D $x) is export(:electrical) { do-postfix($x,'fΩ') }
-sub postfix:<aΩ> (Real:D $x) is export(:electrical) { do-postfix($x,'aΩ') }
-sub postfix:<zΩ> (Real:D $x) is export(:electrical) { do-postfix($x,'zΩ') }
-sub postfix:<yΩ> (Real:D $x) is export(:electrical) { do-postfix($x,'yΩ') }
-sub postfix:<S> (Real:D $x) is export(:electrical) { do-postfix($x,'S') }
-sub postfix:<daS> (Real:D $x) is export(:electrical) { do-postfix($x,'daS') }
-sub postfix:<hS> (Real:D $x) is export(:electrical) { do-postfix($x,'hS') }
-sub postfix:<kS> (Real:D $x) is export(:electrical) { do-postfix($x,'kS') }
-sub postfix:<MS> (Real:D $x) is export(:electrical) { do-postfix($x,'MS') }
-sub postfix:<GS> (Real:D $x) is export(:electrical) { do-postfix($x,'GS') }
-sub postfix:<TS> (Real:D $x) is export(:electrical) { do-postfix($x,'TS') }
-sub postfix:<PS> (Real:D $x) is export(:electrical) { do-postfix($x,'PS') }
-sub postfix:<ES> (Real:D $x) is export(:electrical) { do-postfix($x,'ES') }
-sub postfix:<ZS> (Real:D $x) is export(:electrical) { do-postfix($x,'ZS') }
-sub postfix:<YS> (Real:D $x) is export(:electrical) { do-postfix($x,'YS') }
-sub postfix:<dS> (Real:D $x) is export(:electrical) { do-postfix($x,'dS') }
-sub postfix:<cS> (Real:D $x) is export(:electrical) { do-postfix($x,'cS') }
-sub postfix:<mS> (Real:D $x) is export(:electrical) { do-postfix($x,'mS') }
-sub postfix:<μS> (Real:D $x) is export(:electrical) { do-postfix($x,'μS') }
-sub postfix:<nS> (Real:D $x) is export(:electrical) { do-postfix($x,'nS') }
-sub postfix:<pS> (Real:D $x) is export(:electrical) { do-postfix($x,'pS') }
-sub postfix:<fS> (Real:D $x) is export(:electrical) { do-postfix($x,'fS') }
-sub postfix:<aS> (Real:D $x) is export(:electrical) { do-postfix($x,'aS') }
-sub postfix:<zS> (Real:D $x) is export(:electrical) { do-postfix($x,'zS') }
-sub postfix:<yS> (Real:D $x) is export(:electrical) { do-postfix($x,'yS') }
-sub postfix:<Wb> (Real:D $x) is export(:electrical) { do-postfix($x,'Wb') }
-sub postfix:<daWb> (Real:D $x) is export(:electrical) { do-postfix($x,'daWb') }
-sub postfix:<hWb> (Real:D $x) is export(:electrical) { do-postfix($x,'hWb') }
-sub postfix:<kWb> (Real:D $x) is export(:electrical) { do-postfix($x,'kWb') }
-sub postfix:<MWb> (Real:D $x) is export(:electrical) { do-postfix($x,'MWb') }
-sub postfix:<GWb> (Real:D $x) is export(:electrical) { do-postfix($x,'GWb') }
-sub postfix:<TWb> (Real:D $x) is export(:electrical) { do-postfix($x,'TWb') }
-sub postfix:<PWb> (Real:D $x) is export(:electrical) { do-postfix($x,'PWb') }
-sub postfix:<EWb> (Real:D $x) is export(:electrical) { do-postfix($x,'EWb') }
-sub postfix:<ZWb> (Real:D $x) is export(:electrical) { do-postfix($x,'ZWb') }
-sub postfix:<YWb> (Real:D $x) is export(:electrical) { do-postfix($x,'YWb') }
-sub postfix:<dWb> (Real:D $x) is export(:electrical) { do-postfix($x,'dWb') }
-sub postfix:<cWb> (Real:D $x) is export(:electrical) { do-postfix($x,'cWb') }
-sub postfix:<mWb> (Real:D $x) is export(:electrical) { do-postfix($x,'mWb') }
-sub postfix:<μWb> (Real:D $x) is export(:electrical) { do-postfix($x,'μWb') }
-sub postfix:<nWb> (Real:D $x) is export(:electrical) { do-postfix($x,'nWb') }
-sub postfix:<pWb> (Real:D $x) is export(:electrical) { do-postfix($x,'pWb') }
-sub postfix:<fWb> (Real:D $x) is export(:electrical) { do-postfix($x,'fWb') }
-sub postfix:<aWb> (Real:D $x) is export(:electrical) { do-postfix($x,'aWb') }
-sub postfix:<zWb> (Real:D $x) is export(:electrical) { do-postfix($x,'zWb') }
-sub postfix:<yWb> (Real:D $x) is export(:electrical) { do-postfix($x,'yWb') }
-sub postfix:<T> (Real:D $x) is export(:electrical) { do-postfix($x,'T') }
-sub postfix:<daT> (Real:D $x) is export(:electrical) { do-postfix($x,'daT') }
-sub postfix:<hT> (Real:D $x) is export(:electrical) { do-postfix($x,'hT') }
-sub postfix:<kT> (Real:D $x) is export(:electrical) { do-postfix($x,'kT') }
-sub postfix:<MT> (Real:D $x) is export(:electrical) { do-postfix($x,'MT') }
-sub postfix:<GT> (Real:D $x) is export(:electrical) { do-postfix($x,'GT') }
-sub postfix:<TT> (Real:D $x) is export(:electrical) { do-postfix($x,'TT') }
-sub postfix:<PT> (Real:D $x) is export(:electrical) { do-postfix($x,'PT') }
-sub postfix:<ET> (Real:D $x) is export(:electrical) { do-postfix($x,'ET') }
-sub postfix:<ZT> (Real:D $x) is export(:electrical) { do-postfix($x,'ZT') }
-sub postfix:<YT> (Real:D $x) is export(:electrical) { do-postfix($x,'YT') }
-sub postfix:<dT> (Real:D $x) is export(:electrical) { do-postfix($x,'dT') }
-sub postfix:<cT> (Real:D $x) is export(:electrical) { do-postfix($x,'cT') }
-sub postfix:<mT> (Real:D $x) is export(:electrical) { do-postfix($x,'mT') }
-sub postfix:<μT> (Real:D $x) is export(:electrical) { do-postfix($x,'μT') }
-sub postfix:<nT> (Real:D $x) is export(:electrical) { do-postfix($x,'nT') }
-sub postfix:<pT> (Real:D $x) is export(:electrical) { do-postfix($x,'pT') }
-sub postfix:<fT> (Real:D $x) is export(:electrical) { do-postfix($x,'fT') }
-sub postfix:<aT> (Real:D $x) is export(:electrical) { do-postfix($x,'aT') }
-sub postfix:<zT> (Real:D $x) is export(:electrical) { do-postfix($x,'zT') }
-sub postfix:<yT> (Real:D $x) is export(:electrical) { do-postfix($x,'yT') }
-sub postfix:<H> (Real:D $x) is export(:electrical) { do-postfix($x,'H') }
-sub postfix:<daH> (Real:D $x) is export(:electrical) { do-postfix($x,'daH') }
-sub postfix:<hH> (Real:D $x) is export(:electrical) { do-postfix($x,'hH') }
-sub postfix:<kH> (Real:D $x) is export(:electrical) { do-postfix($x,'kH') }
-sub postfix:<MH> (Real:D $x) is export(:electrical) { do-postfix($x,'MH') }
-sub postfix:<GH> (Real:D $x) is export(:electrical) { do-postfix($x,'GH') }
-sub postfix:<TH> (Real:D $x) is export(:electrical) { do-postfix($x,'TH') }
-sub postfix:<PH> (Real:D $x) is export(:electrical) { do-postfix($x,'PH') }
-sub postfix:<EH> (Real:D $x) is export(:electrical) { do-postfix($x,'EH') }
-sub postfix:<ZH> (Real:D $x) is export(:electrical) { do-postfix($x,'ZH') }
-sub postfix:<YH> (Real:D $x) is export(:electrical) { do-postfix($x,'YH') }
-sub postfix:<dH> (Real:D $x) is export(:electrical) { do-postfix($x,'dH') }
-sub postfix:<cH> (Real:D $x) is export(:electrical) { do-postfix($x,'cH') }
-sub postfix:<mH> (Real:D $x) is export(:electrical) { do-postfix($x,'mH') }
-sub postfix:<μH> (Real:D $x) is export(:electrical) { do-postfix($x,'μH') }
-sub postfix:<nH> (Real:D $x) is export(:electrical) { do-postfix($x,'nH') }
-sub postfix:<pH> (Real:D $x) is export(:electrical) { do-postfix($x,'pH') }
-sub postfix:<fH> (Real:D $x) is export(:electrical) { do-postfix($x,'fH') }
-sub postfix:<aH> (Real:D $x) is export(:electrical) { do-postfix($x,'aH') }
-sub postfix:<zH> (Real:D $x) is export(:electrical) { do-postfix($x,'zH') }
-sub postfix:<yH> (Real:D $x) is export(:electrical) { do-postfix($x,'yH') }
-sub postfix:<lm> (Real:D $x) is export(:universal) { do-postfix($x,'lm') }
-sub postfix:<dalm> (Real:D $x) is export(:universal) { do-postfix($x,'dalm') }
-sub postfix:<hlm> (Real:D $x) is export(:universal) { do-postfix($x,'hlm') }
-sub postfix:<klm> (Real:D $x) is export(:universal) { do-postfix($x,'klm') }
-sub postfix:<Mlm> (Real:D $x) is export(:universal) { do-postfix($x,'Mlm') }
-sub postfix:<Glm> (Real:D $x) is export(:universal) { do-postfix($x,'Glm') }
-sub postfix:<Tlm> (Real:D $x) is export(:universal) { do-postfix($x,'Tlm') }
-sub postfix:<Plm> (Real:D $x) is export(:universal) { do-postfix($x,'Plm') }
-sub postfix:<Elm> (Real:D $x) is export(:universal) { do-postfix($x,'Elm') }
-sub postfix:<Zlm> (Real:D $x) is export(:universal) { do-postfix($x,'Zlm') }
-sub postfix:<Ylm> (Real:D $x) is export(:universal) { do-postfix($x,'Ylm') }
-sub postfix:<dlm> (Real:D $x) is export(:universal) { do-postfix($x,'dlm') }
-sub postfix:<clm> (Real:D $x) is export(:universal) { do-postfix($x,'clm') }
-sub postfix:<mlm> (Real:D $x) is export(:universal) { do-postfix($x,'mlm') }
-sub postfix:<μlm> (Real:D $x) is export(:universal) { do-postfix($x,'μlm') }
-sub postfix:<nlm> (Real:D $x) is export(:universal) { do-postfix($x,'nlm') }
-sub postfix:<plm> (Real:D $x) is export(:universal) { do-postfix($x,'plm') }
-sub postfix:<flm> (Real:D $x) is export(:universal) { do-postfix($x,'flm') }
-sub postfix:<alm> (Real:D $x) is export(:universal) { do-postfix($x,'alm') }
-sub postfix:<zlm> (Real:D $x) is export(:universal) { do-postfix($x,'zlm') }
-sub postfix:<ylm> (Real:D $x) is export(:universal) { do-postfix($x,'ylm') }
-sub postfix:<lx> (Real:D $x) is export(:universal) { do-postfix($x,'lx') }
-sub postfix:<dalx> (Real:D $x) is export(:universal) { do-postfix($x,'dalx') }
-sub postfix:<hlx> (Real:D $x) is export(:universal) { do-postfix($x,'hlx') }
-sub postfix:<klx> (Real:D $x) is export(:universal) { do-postfix($x,'klx') }
-sub postfix:<Mlx> (Real:D $x) is export(:universal) { do-postfix($x,'Mlx') }
-sub postfix:<Glx> (Real:D $x) is export(:universal) { do-postfix($x,'Glx') }
-sub postfix:<Tlx> (Real:D $x) is export(:universal) { do-postfix($x,'Tlx') }
-sub postfix:<Plx> (Real:D $x) is export(:universal) { do-postfix($x,'Plx') }
-sub postfix:<Elx> (Real:D $x) is export(:universal) { do-postfix($x,'Elx') }
-sub postfix:<Zlx> (Real:D $x) is export(:universal) { do-postfix($x,'Zlx') }
-sub postfix:<Ylx> (Real:D $x) is export(:universal) { do-postfix($x,'Ylx') }
-sub postfix:<dlx> (Real:D $x) is export(:universal) { do-postfix($x,'dlx') }
-sub postfix:<clx> (Real:D $x) is export(:universal) { do-postfix($x,'clx') }
-sub postfix:<mlx> (Real:D $x) is export(:universal) { do-postfix($x,'mlx') }
-sub postfix:<μlx> (Real:D $x) is export(:universal) { do-postfix($x,'μlx') }
-sub postfix:<nlx> (Real:D $x) is export(:universal) { do-postfix($x,'nlx') }
-sub postfix:<plx> (Real:D $x) is export(:universal) { do-postfix($x,'plx') }
-sub postfix:<flx> (Real:D $x) is export(:universal) { do-postfix($x,'flx') }
-sub postfix:<alx> (Real:D $x) is export(:universal) { do-postfix($x,'alx') }
-sub postfix:<zlx> (Real:D $x) is export(:universal) { do-postfix($x,'zlx') }
-sub postfix:<ylx> (Real:D $x) is export(:universal) { do-postfix($x,'ylx') }
-sub postfix:<Bq> (Real:D $x) is export(:universal) { do-postfix($x,'Bq') }
-sub postfix:<daBq> (Real:D $x) is export(:universal) { do-postfix($x,'daBq') }
-sub postfix:<hBq> (Real:D $x) is export(:universal) { do-postfix($x,'hBq') }
-sub postfix:<kBq> (Real:D $x) is export(:universal) { do-postfix($x,'kBq') }
-sub postfix:<MBq> (Real:D $x) is export(:universal) { do-postfix($x,'MBq') }
-sub postfix:<GBq> (Real:D $x) is export(:universal) { do-postfix($x,'GBq') }
-sub postfix:<TBq> (Real:D $x) is export(:universal) { do-postfix($x,'TBq') }
-sub postfix:<PBq> (Real:D $x) is export(:universal) { do-postfix($x,'PBq') }
-sub postfix:<EBq> (Real:D $x) is export(:universal) { do-postfix($x,'EBq') }
-sub postfix:<ZBq> (Real:D $x) is export(:universal) { do-postfix($x,'ZBq') }
-sub postfix:<YBq> (Real:D $x) is export(:universal) { do-postfix($x,'YBq') }
-sub postfix:<dBq> (Real:D $x) is export(:universal) { do-postfix($x,'dBq') }
-sub postfix:<cBq> (Real:D $x) is export(:universal) { do-postfix($x,'cBq') }
-sub postfix:<mBq> (Real:D $x) is export(:universal) { do-postfix($x,'mBq') }
-sub postfix:<μBq> (Real:D $x) is export(:universal) { do-postfix($x,'μBq') }
-sub postfix:<nBq> (Real:D $x) is export(:universal) { do-postfix($x,'nBq') }
-sub postfix:<pBq> (Real:D $x) is export(:universal) { do-postfix($x,'pBq') }
-sub postfix:<fBq> (Real:D $x) is export(:universal) { do-postfix($x,'fBq') }
-sub postfix:<aBq> (Real:D $x) is export(:universal) { do-postfix($x,'aBq') }
-sub postfix:<zBq> (Real:D $x) is export(:universal) { do-postfix($x,'zBq') }
-sub postfix:<yBq> (Real:D $x) is export(:universal) { do-postfix($x,'yBq') }
-sub postfix:<Gy> (Real:D $x) is export(:universal) { do-postfix($x,'Gy') }
-sub postfix:<daGy> (Real:D $x) is export(:universal) { do-postfix($x,'daGy') }
-sub postfix:<hGy> (Real:D $x) is export(:universal) { do-postfix($x,'hGy') }
-sub postfix:<kGy> (Real:D $x) is export(:universal) { do-postfix($x,'kGy') }
-sub postfix:<MGy> (Real:D $x) is export(:universal) { do-postfix($x,'MGy') }
-sub postfix:<GGy> (Real:D $x) is export(:universal) { do-postfix($x,'GGy') }
-sub postfix:<TGy> (Real:D $x) is export(:universal) { do-postfix($x,'TGy') }
-sub postfix:<PGy> (Real:D $x) is export(:universal) { do-postfix($x,'PGy') }
-sub postfix:<EGy> (Real:D $x) is export(:universal) { do-postfix($x,'EGy') }
-sub postfix:<ZGy> (Real:D $x) is export(:universal) { do-postfix($x,'ZGy') }
-sub postfix:<YGy> (Real:D $x) is export(:universal) { do-postfix($x,'YGy') }
-sub postfix:<dGy> (Real:D $x) is export(:universal) { do-postfix($x,'dGy') }
-sub postfix:<cGy> (Real:D $x) is export(:universal) { do-postfix($x,'cGy') }
-sub postfix:<mGy> (Real:D $x) is export(:universal) { do-postfix($x,'mGy') }
-sub postfix:<μGy> (Real:D $x) is export(:universal) { do-postfix($x,'μGy') }
-sub postfix:<nGy> (Real:D $x) is export(:universal) { do-postfix($x,'nGy') }
-sub postfix:<pGy> (Real:D $x) is export(:universal) { do-postfix($x,'pGy') }
-sub postfix:<fGy> (Real:D $x) is export(:universal) { do-postfix($x,'fGy') }
-sub postfix:<aGy> (Real:D $x) is export(:universal) { do-postfix($x,'aGy') }
-sub postfix:<zGy> (Real:D $x) is export(:universal) { do-postfix($x,'zGy') }
-sub postfix:<yGy> (Real:D $x) is export(:universal) { do-postfix($x,'yGy') }
-sub postfix:<Sv> (Real:D $x) is export(:universal) { do-postfix($x,'Sv') }
-sub postfix:<daSv> (Real:D $x) is export(:universal) { do-postfix($x,'daSv') }
-sub postfix:<hSv> (Real:D $x) is export(:universal) { do-postfix($x,'hSv') }
-sub postfix:<kSv> (Real:D $x) is export(:universal) { do-postfix($x,'kSv') }
-sub postfix:<MSv> (Real:D $x) is export(:universal) { do-postfix($x,'MSv') }
-sub postfix:<GSv> (Real:D $x) is export(:universal) { do-postfix($x,'GSv') }
-sub postfix:<TSv> (Real:D $x) is export(:universal) { do-postfix($x,'TSv') }
-sub postfix:<PSv> (Real:D $x) is export(:universal) { do-postfix($x,'PSv') }
-sub postfix:<ESv> (Real:D $x) is export(:universal) { do-postfix($x,'ESv') }
-sub postfix:<ZSv> (Real:D $x) is export(:universal) { do-postfix($x,'ZSv') }
-sub postfix:<YSv> (Real:D $x) is export(:universal) { do-postfix($x,'YSv') }
-sub postfix:<dSv> (Real:D $x) is export(:universal) { do-postfix($x,'dSv') }
-sub postfix:<cSv> (Real:D $x) is export(:universal) { do-postfix($x,'cSv') }
-sub postfix:<mSv> (Real:D $x) is export(:universal) { do-postfix($x,'mSv') }
-sub postfix:<μSv> (Real:D $x) is export(:universal) { do-postfix($x,'μSv') }
-sub postfix:<nSv> (Real:D $x) is export(:universal) { do-postfix($x,'nSv') }
-sub postfix:<pSv> (Real:D $x) is export(:universal) { do-postfix($x,'pSv') }
-sub postfix:<fSv> (Real:D $x) is export(:universal) { do-postfix($x,'fSv') }
-sub postfix:<aSv> (Real:D $x) is export(:universal) { do-postfix($x,'aSv') }
-sub postfix:<zSv> (Real:D $x) is export(:universal) { do-postfix($x,'zSv') }
-sub postfix:<ySv> (Real:D $x) is export(:universal) { do-postfix($x,'ySv') }
-sub postfix:<kat> (Real:D $x) is export(:universal) { do-postfix($x,'kat') }
-sub postfix:<dakat> (Real:D $x) is export(:universal) { do-postfix($x,'dakat') }
-sub postfix:<hkat> (Real:D $x) is export(:universal) { do-postfix($x,'hkat') }
-sub postfix:<kkat> (Real:D $x) is export(:universal) { do-postfix($x,'kkat') }
-sub postfix:<Mkat> (Real:D $x) is export(:universal) { do-postfix($x,'Mkat') }
-sub postfix:<Gkat> (Real:D $x) is export(:universal) { do-postfix($x,'Gkat') }
-sub postfix:<Tkat> (Real:D $x) is export(:universal) { do-postfix($x,'Tkat') }
-sub postfix:<Pkat> (Real:D $x) is export(:universal) { do-postfix($x,'Pkat') }
-sub postfix:<Ekat> (Real:D $x) is export(:universal) { do-postfix($x,'Ekat') }
-sub postfix:<Zkat> (Real:D $x) is export(:universal) { do-postfix($x,'Zkat') }
-sub postfix:<Ykat> (Real:D $x) is export(:universal) { do-postfix($x,'Ykat') }
-sub postfix:<dkat> (Real:D $x) is export(:universal) { do-postfix($x,'dkat') }
-sub postfix:<ckat> (Real:D $x) is export(:universal) { do-postfix($x,'ckat') }
-sub postfix:<mkat> (Real:D $x) is export(:universal) { do-postfix($x,'mkat') }
-sub postfix:<μkat> (Real:D $x) is export(:universal) { do-postfix($x,'μkat') }
-sub postfix:<nkat> (Real:D $x) is export(:universal) { do-postfix($x,'nkat') }
-sub postfix:<pkat> (Real:D $x) is export(:universal) { do-postfix($x,'pkat') }
-sub postfix:<fkat> (Real:D $x) is export(:universal) { do-postfix($x,'fkat') }
-sub postfix:<akat> (Real:D $x) is export(:universal) { do-postfix($x,'akat') }
-sub postfix:<zkat> (Real:D $x) is export(:universal) { do-postfix($x,'zkat') }
-sub postfix:<ykat> (Real:D $x) is export(:universal) { do-postfix($x,'ykat') }
-#]]
+#| then put in all the regular combinations programmatically
+#| viz. https://docs.raku.org/language/modules#Exporting_and_selective_importing
+my package EXPORT::ALL {
+	for %affix-by-name.keys -> $u {
+        OUR::{'&postfix:<' ~ $u ~ '>'} := sub (Real:D $x) { do-postfix($x,"$u") };
+	}
 }
 
-##### Affix Operations End #####
 #EOF

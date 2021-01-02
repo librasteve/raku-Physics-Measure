@@ -1,8 +1,9 @@
 #!/usr/bin/env raku 
 use lib '../lib';
-use Physics::Measure;
+use Physics::Measure :ALL;
 
 my $al = 1m;             say ~$al;
+#`[[
 my $at = 1ms;            say ~$at;
 my $as = $al/$at;          say ~$as;
 my $ag = $al.in: <ft>;    say ~$ag;
@@ -116,5 +117,5 @@ my $az ♎️ '18 μ';        say ~$az;
 #Colloquial terms or unicode superscripts can be used for powers in unitname declarations 
     #square, sq, squared, cubic, cubed
     #x¹ x² x³ x⁴ and x⁻¹ x⁻² x⁻³ x⁻⁴
-
+#]]
 #EOF
