@@ -1,21 +1,27 @@
 #!/usr/bin/env raku 
 use lib '../lib';
-use Physics::Unit;
-use Physics::Measure;
+use Physics::Measure :ALL;
 
-##raku -I'../../../Plugin/raku-Physics-Unit/lib' synopsis.raku
+my $al = 1m;             say ~$al;
+#`[[
+my $at = 1ms;            say ~$at;
+my $as = $al/$at;          say ~$as;
+my $ag = $al.in: <ft>;    say ~$ag;
+my $am = 1kg;            say ~$am;
+my $ac = 17cm;           say ~$ac;
+my $ad = 7°;             say ~$ad;
+my $ay ♎️ '5e1 km';      say ~$ay;
+my $av1 = 42μl;          say ~$av1;
+my $av2 ♎️ '91 μl';      say ~$av2;
+my $ax = Volume.new(value => 21.006, units => 'μl'); say ~$ax;
+my $az ♎️ '18 μ';        say ~$az; 
 
 #SYNOPSIS
 
-#Unit objects can be selected or created with GetUnit:
-	my Unit   $u  = GetUnit( 'm' );
-#Define your own unit named "ff" (named args)
-	my $ff = Unit.new( defn => 'furlong / fortnight', names => ['ff'] );
-
 #Measure objects such as Length can be formally constructed:
-	my Length $a .=new(value => 1e4, units => $u);	say "$a";		#10000 m
+	my Length $a .=new(value => 1e4, units => 'm');	say "$a";		#10000 m
 
-#The libra operator ♎️ is a handy way to construct objects...
+#The libra operator ♎️ is shorthand to construct objects...
     my $b ♎️ '5e1 m';								say "$b";		#50 m
     my $c ♎️ $a;									say "$c";		#10000 m
 	my Length $l ♎️ 42;								say "$l";		#42 m
@@ -95,7 +101,6 @@ use Physics::Measure;
     my $en2 = $po * $t1;                #1250 J			(Energy)
 	say $po.canonical;					#25 m2.s-3.kg   (SI base units)
 	say $po.pretty;						#25 m²⋅s⁻³⋅kg   (SI recommends)
-	say ListBases(); say ListTypes(); say ListUnits();
 
 #Measures can be converted to base type with the .rebase() method
     my $v4 = $v3.rebase;				#5.352 m^3
@@ -112,5 +117,5 @@ use Physics::Measure;
 #Colloquial terms or unicode superscripts can be used for powers in unitname declarations 
     #square, sq, squared, cubic, cubed
     #x¹ x² x³ x⁴ and x⁻¹ x⁻² x⁻³ x⁻⁴
-
+#]]
 #EOF

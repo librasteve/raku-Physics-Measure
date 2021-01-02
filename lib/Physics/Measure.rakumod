@@ -1,12 +1,25 @@
 unit module Physics::Measure:ver<1.0.0>:auth<Steve Roe (p6steve@furnival.net)>;
 use Physics::Unit;
 
+#This module needs the export label :ALL to load postfix operators
+# use Physics::Measure;      ...10s first-, 1.2s pre- compiled 
+# use Physics::Measure :ALL; ...13s first-, 2.8s pre- compiled 
+
 #This module uses Type Variables such as ::T,::($s) 
 #viz. http://www.jnthn.net/papers/2008-yapc-eu-raku6types.pdf
 
 #Length = 12.5 ±0.05 m   (FIXME v2 cover errors)
 #viz. https://www.mathsisfun.com/measure/error-measurement.html
 
+##### Passthrough of Physics::Unit #####
+
+#| design intent is for Measure (.new) to encapsulate Physics::Unit
+#| objective is to eliminate 'use lozenges' and to shorten 'use list'
+#| eg. manually instantiate 'J' to autoreduce 'kg m^2/s^2'
+
+sub GetMeaUnit( $u ) is export {
+	GetUnit( $u )
+}
 
 ######## Constants & Definitions ########
 
@@ -202,11 +215,11 @@ class Measure is export {
     }
 
     #### Convert & Compare ####
+
     method in( $to ) {					#convert units and adjust value
 		my $ouo = $.units;				#aka old unit object
 		my $nuo = GetUnit( $to );		#aka new unit object
 		my $n-type = $nuo.type( just1 => 1 );
-
 		unless self ~~ ::($n-type) { die "cannot convert in to different type $n-type" }
 
 		my $n-value = ($.value + $ouo.offset) * ($ouo.factor / $nuo.factor) - $nuo.offset;
@@ -214,7 +227,7 @@ class Measure is export {
 		::($n-type).new( value => $n-value, units => $nuo )
 	}
 	method rebase {						#to base (prototype) unit of type
-		self.in( GetPrototype( self.units.type ))
+		self.in( GetPrototype( self.units.type( :just1 ) ))
 	}
     method cmp( $a: $b ) {
 		my ($an,$bn);
@@ -534,6 +547,44 @@ multi infix:<==> ( Measure:D $a, Measure:D $b ) is equiv( &infix:<==> ) is expor
 multi infix:<!=> ( Measure:D $a, Measure:D $b ) is equiv( &infix:<!=> ) is export {
     if $a.cmp( $b) ~~ Same { return False; }
     else { return True; } 
+}
+
+##### Affix Operators #####
+
+#`[[ 
+An 'Affix Operators' combine the notions of: 
+1. SI Prefixes e.g. c(centi-), k(kilo-) that make compound units such as cm, km, kg  
+2. Raku Postfixes e.g. $l = 42cm; operators which work on the preceeding value
+
+We use the term Affix to indicate that both concepts are provided by this module:
+1. Construction of the cross product of SI Prefixes (20) and SI Base (7) and Derived (20) Units
+2. Declaration of the resulting ~600 Unit instances and matching Raku Postfix operators
+
+Now you can simply go 'my $l = 1km;' to declare a new Measure with value => 1 and units => 'km'
+#]]
+
+my %affix-by-name = GetAffixByName;
+
+sub do-postfix( Real $v, Str $cn ) is export {
+    my $u = Unit.new( defn => $cn, names => [$cn, %affix-by-name{$cn}] );
+    my $t = $u.type(:just1);
+    return ::($t).new(value => $v, units => $u);
+} 
+
+#eg. sub postfix:<m> ( Real:D $x ) is export { do-postfix( $x, 'm' ) }
+
+#| first a few "non-declining singletons"...
+sub postfix:<°> (Real:D $x) is export { do-postfix($x,'°') }
+sub postfix:<°C> (Real:D $x) is export { do-postfix($x,'°C') }
+sub postfix:<radian> (Real:D $x) is export { do-postfix($x,'radian') }
+sub postfix:<steradian> (Real:D $x) is export { do-postfix($x,'steradian') }
+
+#| then put in all the regular combinations programmatically
+#| viz. https://docs.raku.org/language/modules#Exporting_and_selective_importing
+my package EXPORT::ALL {
+	for %affix-by-name.keys -> $u {
+        OUR::{'&postfix:<' ~ $u ~ '>'} := sub (Real:D $x) { do-postfix($x,"$u") };
+	}
 }
 
 #EOF

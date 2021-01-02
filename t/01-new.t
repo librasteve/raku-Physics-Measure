@@ -6,11 +6,10 @@ use Test;
 plan 21; 
 
 use Physics::Measure;
-use Physics::Unit;
 
 #Part 1: Default new Constructor
 
-my Unit $u .=new(defn => 'm', names => ['m']);
+my $u = GetMeaUnit( 'm' );
 is $u.name,'m',           '$u.name exists'; 
 is ~$u.type,'Length',	  '$u.units made'; 
 

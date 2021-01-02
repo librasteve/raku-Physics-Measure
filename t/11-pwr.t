@@ -6,9 +6,8 @@ use Test;
 plan 5;
 
 use Physics::Measure;
-use Physics::Unit;
 
-my Unit $u = GetUnit('m');
+my $u = GetMeaUnit('m');
 my Length $d .=new(value => 1e4, units => $u);
 
 my $sq1 = $d ** 2;

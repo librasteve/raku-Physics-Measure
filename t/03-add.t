@@ -6,9 +6,8 @@ use Test;
 plan 65;
 
 use Physics::Measure;
-use Physics::Unit;
 
-my Unit $u     = GetUnit('m');                  #get Unit object to construct a Measure
+my $u     = GetMeaUnit('m');                  #get Unit object to construct a Measure
 my Length $d .=new(value => 1e4, units => $u);
 my Length $e .=new(value => 42, units => $u);
 
@@ -72,14 +71,14 @@ ok $c.value == <23/37>,                                                         
 is $c.units.name, 'm',                                                          'div:M/S';
 #manually create NewType for 1 / m
 #note '1/m' will fail - need to sep with space
-my $id = Unit.new( defn => '1 / m', names => ['m-1'] );
+my $id = GetMeaUnit( '1 / m' );
 class iddy is Measure {}
 $id.NewType('iddy');
 $m = 37.0 / $b;
 ok $a.value == 23,                                                              'div:R/M'; 
 ok $b.value == 42,                                                              'div:R/M';
 ok $m.value == <37/42>,                                                         'div:R/M';
-is $m.units.name, 'm-1',                                                        'div:R/M';
+is $m.units.name, '1 / m',                                                      'div:R/M';
 $c = - $b;
 ok $a.value == 23,                                                              'neg:M'; 
 ok $b.value == 42,                                                              'neg:M';
@@ -89,7 +88,7 @@ $m = $b.reciprocal;
 ok $a.value == 23,                                                              'inv:M'; 
 ok $b.value == 42,                                                              'inv:M'; 
 ok $m.value == <1/42>,                                                          'inv:M';
-is $m.units.name, 'm-1',                                                        'inv:M';
+is $m.units.name, '1 / m',                                                      'inv:M';
 $c = $b.negate;
 ok $a.value == 23,                                                              'neg:M'; 
 ok $b.value == -42,                                                             'neg:M';

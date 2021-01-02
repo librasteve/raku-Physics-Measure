@@ -6,7 +6,6 @@ use Test;
 plan 36; 
 
 use Physics::Measure;
-use Physics::Unit;
 
 my $x2 ♎️ '1 N';
 

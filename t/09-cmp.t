@@ -6,7 +6,6 @@ use Test;
 plan 14; 
 
 use Physics::Measure;
-use Physics::Unit;
 
 my $a ♎️ '4.3 m';
 my $c = $a;

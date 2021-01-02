@@ -11,7 +11,6 @@ and, conversely, zef uninstall Physics::Measure
 
 ```perl6
 #!/usr/bin/env raku
-use Physics::Unit;
 use Physics::Measure;
 
 #SYNOPSIS
@@ -100,7 +99,6 @@ use Physics::Measure;
     my $en2 = $po * $t1;                #1250 J			(Energy)
     say $po.canonical;			#25 m2.s-3.kg   	(SI base units)
     say $po.pretty;			#25 m²⋅s⁻³⋅kg   	(SI recommends)
-    say ListBases(); say ListTypes(); say ListUnits();
 
 #Measures can be converted to base type with the .rebase() method
     my $v4 = $v3.rebase;		#5.352 m^3
