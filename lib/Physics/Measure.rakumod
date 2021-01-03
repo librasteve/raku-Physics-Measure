@@ -53,7 +53,7 @@ class Measure is export {
     multi method new( Str:D $s ) {					say "new from Str" if $db;
         my ($v, $u) = Measure.defn-extract( $s );
         my $nuo = GetUnit( $u );
-		my $n-type = $nuo.type( just1 => 1 ) || 'Measure';
+		my $n-type = $nuo.type( :just1 ) || 'Measure';
         ::($n-type).new( value => $v, units => $nuo )
     }
     multi method new( ::T: Real:D $r ) {			say "new from Real" if $db;
@@ -105,7 +105,7 @@ class Measure is export {
 		"{$rebased.value-r} {$.units.pretty}" 
 	}
 
-	#### Class Method ####
+	#### Class Methods ####
 	#baby Grammar for initial extraction of definition from Str (value/unit/error)
 	method defn-extract( Measure:U: Str:D $s ) {
 		#handle degrees-minutes-seconds
@@ -216,18 +216,63 @@ class Measure is export {
 
     #### Convert & Compare ####
 
-    method in( $to ) {					#convert units and adjust value
-		my $ouo = $.units;				#aka old unit object
-		my $nuo = GetUnit( $to );		#aka new unit object
-		my $n-type = $nuo.type( just1 => 1 );
-		unless self ~~ ::($n-type) { die "cannot convert in to different type $n-type" }
+    method in( $to ) {						#convert units and adjust value
+		my $ouo = $.units;					#aka old unit object
+		my $nuo = GetUnit( $to );			#aka new unit object
+
+		my $n-type = $nuo.type( :just1 );
+		if not self ~~ ::($n-type) { die "cannot convert in to different type $n-type" }
 
 		my $n-value = ($.value + $ouo.offset) * ($ouo.factor / $nuo.factor) - $nuo.offset;
-
 		::($n-type).new( value => $n-value, units => $nuo )
 	}
+	method norm {
+		my %abn = GetAffixByName;
+
+		#try to match via unit defn eg. petahertz
+		my $defn = self.units.defn;
+		my $afx-defn = %abn.values.grep(/^ $defn $/).first;
+		
+		#try to match via unit name eg. Hz
+		my $name = self.units.name;
+		my $afx-name = %abn.keys.grep(/^ $name $/ ).first;
+
+		#setup some hashes and arrays
+		my %pfix2fact = GetPrefixToFactor;						
+		   %pfix2fact<none> = 1;		#plug gap in factors
+		my %fact2pfix = %pfix2fact.kv.reverse;
+		my @pfixs = %pfix2fact.keys;
+
+		#what is initial prefix factor and base unit?
+		my ( $fact, $base, $combo );
+		if $afx-defn {
+			$afx-defn ~~ m|(<@pfixs>)(.*)|;
+			$fact = %pfix2fact{$0};
+			$base = ~$1;
+		} elsif $base = %abn{$afx-name} {
+			$fact = 1;
+		} else {
+			warn "cannot normalize this Unit type";
+			return self;
+		}	
+
+		my $res = self;	
+		#either shift-left
+		while $res.value > 1000 {
+			$fact *= 1000;	
+			$combo = qq|{%fact2pfix{$fact}}$base|;
+			$res = $res.in: $combo; 
+		}
+		#or shift-right
+		while $res.value < 1 {
+			$fact /= 1000;	
+			$combo = qq|{%fact2pfix{$fact}}$base|;
+			$res = $res.in: $combo; 
+		}
+		return $res;
+	}
 	method rebase {						#to base (prototype) unit of type
-		self.in( GetPrototype( self.units.type( :just1 ) ))
+		return self.in( GetPrototype( self.units.type( :just1 ) ))
 	}
     method cmp( $a: $b ) {
 		my ($an,$bn);
