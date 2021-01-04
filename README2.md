@@ -8,7 +8,7 @@ Provides raku Measure objects that have value, units and error(tbd) and that can
 ```zef install --verbose https://github.com/p6steve/raku-Physics-Measure.git```
 and, conversely, ```zef uninstall Physics::Measure```
 
-# Concept
+# Use Case Concept
 
 ```perl6
 use lib '../lib';
