@@ -5,8 +5,8 @@ Dear reader - this is a work in progress compete rewrite of the README.md...
 Provides raku Measure objects that have value, units and error(tbd) and that can be used in common physics calculations. Uses [Physics::Unit](https://github.com/p6steve/raku-Physics-Unit).
 
 # Instructions
-zef install --verbose https://github.com/p6steve/raku-Physics-Measure.git
-and, conversely, zef uninstall Physics::Measure
+```zef install --verbose https://github.com/p6steve/raku-Physics-Measure.git```
+and, conversely, ```zef uninstall Physics::Measure```
 
 # Concept
 
