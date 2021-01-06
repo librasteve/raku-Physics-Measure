@@ -96,7 +96,6 @@ say $po.pretty;                         #25 m²⋅s⁻³⋅kg   (SI recommended 
 
 As seen above, if you want to use SI prefixes, base and derived units (cm, kg, ml and so on), the :ALL export label will provide the following as raku postfix:<> custom operators. Here is another example, basic wave mecahnics, bringing in the Physics::Constants module:
 ```perl6
-#!/usr/bin/env raku 
 use Physics::Constants;  #<== must use before Physics::Measure 
 use Physics::Measure :ALL;
 
@@ -109,27 +108,7 @@ my \Ep = ℎ * ν;
 say "Wavelength of photon (λ) is " ~λ;              #2.5 nm
 say "Frequency of photon (ν) is " ~ν.norm;          #119.92 petahertz 
 say "Energy of photon (Ep) is " ~Ep.norm;           #79.46 attojoule
-
-$Physics::Measure::round-to = Nil;
-
-say ~kg-amu;                    #6.02214076e+23 mol^-1  (avogadro number = Na) 
-say ~plancks-h;                 #6.626070015e-34 J.s 
-say ~faraday-constant;          #96485.33212 C/mol
-say ~fine-structure-constant;   #0.0072973525693   (dimensionless)
-say ~μ0;                        #1.25663706212e-06 H/m 
-say ~ℏ;                         #1.054571817e-34 J.s
-#... and so on
 ```
-Here's how raku makes this possible:
-* unicode to keep familiar symbols such as λ (lambda) and ν (nu)
-* variable names without the $ sigil to keep equations clean
-* Physics::Constants – for c (speed of light) and ℎ (Planck’s constant)
-* Physics::Measure :ALL to imports all the SI unit postfix operators
-* postfix:<nm> to do Measure.new( value => 2.5, unit => ‘nanometre’ )
-* does Measure math with custom ‘/’ and ‘*’ operators
-* knows that a Frequency class type takes SI unit hertz
-* knows that an Energy class type takes SI unit joule
-* can normalise a Measure object and round the output
 
 The following SI units are provided in this way:
 ![image](https://github.com/p6steve/raku-Physics-Measure/blob/master/images/SIUnitPrefixTable.png)
