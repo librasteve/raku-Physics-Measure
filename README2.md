@@ -94,7 +94,7 @@ say $po.pretty;                         #25 m²⋅s⁻³⋅kg   (SI recommended 
 # Three ways to consume Physics::Measure
 ## 1 Raku postfixes (SI Units)
 
-As seen above, if you want to use SI prefixes, base and derived units (cm, kg, ml and so on), the :ALL export label will provide the following as raku postfix:<> custom operators. Here is another example, basic wave mecahnics, bringing in the Physics::Constants module:
+As seen above, if you just want SI prefixes, base and derived units (cm, kg, ml and so on), the :ALL export label provides them as raku postfix:<> custom operators. Here is another example, basic wave mechanics, bringing in the Physics::Constants module:
 ```perl6
 use Physics::Constants;  #<== must use before Physics::Measure 
 use Physics::Measure :ALL;
