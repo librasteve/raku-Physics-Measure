@@ -73,13 +73,53 @@ class Time   is Measure {}
 class Speed  is Measure {}
 #and so on
 ```
-Type classes represent physical measurement such as (Length), (Time), (Speed) and so on are child classes of the (Measure) parent class. 
+Type classes represent physical measurement such as (Length), (Time), (Speed), etc. They are child classes of the (Measure) parent class. 
 
-A benefit of this approach is that while you can do math operations on (Measure) objects - (Length) can add/subtract to (Length), (Time) can add/subtract to (Time), and so on. But a type mismatch like adding a (Length) to a (Time) gives a raku Type error _cannot convert in to different type Length_. You can, however, divide (Length) by (Time) and then get a (Speed) type back. (Length) ** 2 => (Area). (Length) ** 3 => (Volume). And so on - there are 36 pre-defined types provided. If you want to know what you have got, then go: ```say $s.WHAT;```. To grab the Real value use ```$s.value``` or ```+$x``` in numeric context and to output the measure as Str go ```"$s"``` or use ```~$s``` in string context.
+You can do math operations on (Measure) objects - (Length) can add/subtract to (Length), (Time) can add/subtract to (Time), and so on. A mismatch like adding a (Length) to a (Time) gives a raku Type error _cannot convert in to different type Length_. You can, however, divide e.g. (Length) by (Time) and then get a (Speed) type back. (Length) ** 2 => (Area). (Length) ** 3 => (Volume). And so on. There are 36 pre-defined types provided. Methods are provided to create custom units and types.
 
-While there are some occasions when it makes sense to create an instance of the Measure parent class - for example, the module will do this when it cannot use dimensional analysis to infer the type of a result. However, in the normal course, please make your objects as instances of the Child classes. Methods are provided to create custom units and types.
+Therefore, in the normal course, please make your objects as instances of the Child type classes.
+
+# Output Methods
+
+To see what you have got, then go:
+```perl6
+my $po = 25W;   
+say ~$po; say "$po"; say $po.Str;       #25 W  (defaults to derived unit)
+say +$po; say $po.value; say $po.Real;  #25 
+say $po.WHAT;                           #(Power)
+say $po.canonical;                      #25 m2.s-3.kg   (SI base units)
+say $po.pretty;                         #25 m²⋅s⁻³⋅kg   (SI recommended style)
+```
 
 # Three ways to consume
+## 1 Raku postfixes 
+
+As seen above, if you want to use SI prefixes, base and derived units (cm, kg, ml and so on), the :ALL export label will provide the following as raku postfix:<> custom operators. Here is another example, basic wave mecahnics, bringing in the Physics::Constants module:
+```perl6
+#!/usr/bin/env raku 
+use Physics::Constants;  #<== must use before Physics::Measure 
+use Physics::Measure :ALL;
+
+$Physics::Measure::round-to = 0.01;
+
+my \λ = 2.5nm; 
+my \ν = c / λ;  
+my \Ep = ℎ * ν;  
+
+say "Wavelength of photon (λ) is " ~λ;              #2.5 nm
+say "Frequency of photon (ν) is " ~ν.norm;          #119.92 petahertz 
+say "Energy of photon (Ep) is " ~Ep.norm;           #79.46 attojoule
+
+$Physics::Measure::round-to = Nil;
+
+say ~kg-amu;                    #6.02214076e+23 mol^-1  (avogadro number = Na) 
+say ~plancks-h;                 #6.626070015e-34 J.s 
+say ~faraday-constant;          #96485.33212 C/mol
+say ~fine-structure-constant;   #0.0072973525693   (dimensionless)
+say ~μ0;                        #1.25663706212e-06 H/m 
+say ~ℏ;                         #1.054571817e-34 J.s 
+```
+The following SI units are provided in this way:
 
 (4) Right now there are 3 ways provided to make child objects:
 (a) ```my Length $s = Length.new(value => 5.1, units => 'm');``` which is good raku (and OO in general), but is quite long hand where you want to work with many Measure objects in your code. .
