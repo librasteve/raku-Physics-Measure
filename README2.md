@@ -120,7 +120,7 @@ say ~μ0;                        #1.25663706212e-06 H/m
 say ~ℏ;                         #1.054571817e-34 J.s 
 ```
 The following SI units are provided in this way:
-!(https://github.com/p6steve/raku-Physics-Measure/blob/master/images/SIUnitPrefixTable.png)
+![image](https://github.com/p6steve/raku-Physics-Measure/blob/master/images/SIUnitPrefixTable.png)
 
 (4) Right now there are 3 ways provided to make child objects:
 (a) ```my Length $s = Length.new(value => 5.1, units => 'm');``` which is good raku (and OO in general), but is quite long hand where you want to work with many Measure objects in your code. .
