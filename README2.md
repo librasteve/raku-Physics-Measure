@@ -136,6 +136,15 @@ The following SI units are provided in this way:
 
 ## 2 Raku object constructors & methods
 
+All of the postfix SI Units can also be used in the standard raku object constructor syntax:
+```perl6
+my Length $l = Length.new(value => 42, units => 'μm'); say ~$l; #42 micrometre
+```
+In addition, the Physics::Measure / Physics::Unit modules provide a comprehensive set of US units and Imperial units (feet, miles, knots, hours, ergs, eV and over 200 more).
+```perl6
+my Length $d = Length.new(value => 42, units => 'miles'); say ~$d; #42 micrometre
+my Time $t = Time.new(value => 7, units => 'hours'); say ~$t; #7 minutes
+```
 
 
 (4) Right now there are 3 ways provided to make child objects:
