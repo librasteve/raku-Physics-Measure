@@ -91,8 +91,8 @@ say $po.canonical;                      #25 m2.s-3.kg   (SI base units)
 say $po.pretty;                         #25 m²⋅s⁻³⋅kg   (SI recommended style)
 ```
 
-# Three ways to consume
-## 1 Raku postfixes 
+# Three ways to consume Physics::Measure
+## 1 Raku postfixes (SI Units)
 
 As seen above, if you want to use SI prefixes, base and derived units (cm, kg, ml and so on), the :ALL export label will provide the following as raku postfix:<> custom operators. Here is another example, basic wave mecahnics, bringing in the Physics::Constants module:
 ```perl6
@@ -117,15 +117,31 @@ say ~plancks-h;                 #6.626070015e-34 J.s
 say ~faraday-constant;          #96485.33212 C/mol
 say ~fine-structure-constant;   #0.0072973525693   (dimensionless)
 say ~μ0;                        #1.25663706212e-06 H/m 
-say ~ℏ;                         #1.054571817e-34 J.s 
+say ~ℏ;                         #1.054571817e-34 J.s
+#... and so on
 ```
+Here's how raku makes this possible:
+* unicode to keep familiar symbols such as λ (lambda) and ν (nu)
+* variable names without the $ sigil to keep equations clean
+* Physics::Constants – for c (speed of light) and ℎ (Planck’s constant)
+* Physics::Measure :ALL to imports all the SI unit postfix operators
+* postfix:<nm> to do Measure.new( value => 2.5, unit => ‘nanometre’ )
+* does Measure math with custom ‘/’ and ‘*’ operators
+* knows that a Frequency class type takes SI unit hertz
+* knows that an Energy class type takes SI unit joule
+* can normalise a Measure object and round the output
+
 The following SI units are provided in this way:
 ![image](https://github.com/p6steve/raku-Physics-Measure/blob/master/images/SIUnitPrefixTable.png)
+
+## 2 Raku object constructors & methods
+
+
 
 (4) Right now there are 3 ways provided to make child objects:
 (a) ```my Length $s = Length.new(value => 5.1, units => 'm');``` which is good raku (and OO in general), but is quite long hand where you want to work with many Measure objects in your code. .
 (b) Thus the 'libra' notation came about as a short hand trick to cut out the constructor boilerplate that will take a unit Str and auto 'look up' the child type thusly ```my $s ♎️ '5.1m'; say $s.WHAT; #(Length)```
-(c) The Postfix notation does a similar but different trick using raku Postfixes ```my $s = 5.1m; say ~$s.WHAT;``` this is super handy BUT this is limited to common combinations of SI prefixes and unit names for performance reasons.
+
 
 So, while I agree it is a little odd with the ♎️ emoji code, it is a very quick way to do something like ```my $s ♎️ '5.1 feet ±2%'; say ~$s.in('m');``` Basically it's a 
 
