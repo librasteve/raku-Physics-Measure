@@ -8,14 +8,14 @@ use Physics::Unit;
 #This module uses Type Variables such as ::T,::($s) 
 #viz. http://www.jnthn.net/papers/2008-yapc-eu-raku6types.pdf
 
-#Length = 12.5 ±0.05 m   (FIXME v2 cover errors)
+#Conecptutally 'Length = 12.5 ±0.05 m'   (FIXME v2 cover errors)
 #viz. https://www.mathsisfun.com/measure/error-measurement.html
 
 ##### Passthrough of Physics::Unit #####
 
 #| design intent is for Measure (.new) to encapsulate Physics::Unit
 #| objective is to eliminate 'use lozenges' and to shorten 'use list'
-#| eg. manually instantiate 'J' to autoreduce 'kg m^2/s^2'
+#| occasionally need this for eg. instantiate 'J' to autoreduce 'kg m^2/s^2'
 
 sub GetMeaUnit( $u ) is export {
 	GetUnit( $u )
@@ -33,7 +33,6 @@ my regex number is export {
 	\S+                     #grab chars
 	<?{ +"$/" ~~ Real }>    #assert coerces via '+' to Real
 }
-
 
 ########## Classes & Methods ##########
 
@@ -195,7 +194,7 @@ class Measure is export {
         my Dimensionless $nmo .= new( value => 1, units => $nuo );
         return $nmo.divide( self )
     } 
-    method power( Real:D $n ) {						#eg. Area ** 2 => Distance
+    method power( Int:D $n ) {						#eg. Area ** 2 => Distance
         my $result = self;
         my $factor = self;
         for 2..$n {
@@ -400,6 +399,7 @@ class Dose               is Measure is export {}
 class Catalytic-Activity is Measure is export {}
 
 #Synonyms for Length... 
+#FIXME need eg. my Distance $d = 42cm  
 class Distance           is Length is export {}
 class Breadth            is Length is export {}
 class Width              is Length is export {}
@@ -566,7 +566,7 @@ multi infix:</> ( $left, Measure:D $right ) is export {
     return $result.divide( $argument );
 }
 
-multi infix:<**> ( Measure:D $left, Real:D $right where 2..4 ) is equiv( &infix:<**> ) is export {
+multi infix:<**> ( Measure:D $left, Int:D $right where 2..4 ) is equiv( &infix:<**> ) is export {
     # 2(square),3(cube),4(fourth) e.g. T**4 for Boltzmann constant
     my $result   = $left.clone;
     my $argument = $right;
@@ -603,7 +603,7 @@ An 'Affix Operators' combine the notions of:
 
 We use the term Affix to indicate that both concepts are provided by this module:
 1. Construction of the cross product of SI Prefixes (20) and SI Base (7) and Derived (20) Units
-2. Declaration of the resulting ~600 Unit instances and matching Raku Postfix operators
+2. Declaration of the resulting ~540 Unit instances and matching Raku Postfix operators
 
 Now you can simply go 'my $l = 1km;' to declare a new Measure with value => 1 and units => 'km'
 #]]
