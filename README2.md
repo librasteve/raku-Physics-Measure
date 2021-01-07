@@ -114,6 +114,8 @@ say "Frequency of photon (ν) is " ~ν.norm;          #119.92 petahertz
 say "Energy of photon (Ep) is " ~Ep.norm;           #79.46 attojoule
 ```
 
+The following SI units are provided in this way:
+
 | SI Base Unit (7)  | SI Derived Unit (20)                           | SI Prefix (20) |
 |-------------------|------------------------------------------------|----------------|
 | 'm',   'metre',   | 'Hz',  'hertz',                                | 'da', 'deka',  |
@@ -136,10 +138,8 @@ say "Energy of photon (Ep) is " ~Ep.norm;           #79.46 attojoule
 |                   | 'Sv',  'sievert',                              | 'a',  'atto',  |
 |                   | 'kat', 'katal',                                | 'z',  'zepto', |
 |                   | 'l',   'litre',                                | 'y',  'yocto', |
-|                   | #litre added due to common use of ml, dl, etc. |                |
 
-The following SI units are provided in this way:
-![image](https://github.com/p6steve/raku-Physics-Measure/blob/master/images/SIUnitPrefixTable.png)
+#litre added due to common use of ml, dl, etc.
 
 ## 2 Raku Object Constructors
 
