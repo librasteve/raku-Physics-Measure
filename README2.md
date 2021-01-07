@@ -95,20 +95,8 @@ You can do math operations on (Measure) objects - (Length) can add/subtract to (
 
 Therefore, in the normal course, please make your objects as instances of the Child type classes.
 
-# Output Methods
-
-To see what you have got, then go:
-```perl6
-my $po = 25W;   
-say ~$po; say "$po"; say $po.Str;       #25 W  (defaults to derived unit)
-say +$po; say $po.value; say $po.Real;  #25 
-say $po.WHAT;                           #(Power)
-say $po.canonical;                      #25 m2.s-3.kg   (SI base units)
-say $po.pretty;                         #25 m²⋅s⁻³⋅kg   (SI recommended style)
-```
-
-# Three ways to consume Physics::Measure
-## 1 Raku postfixes (SI Units)
+# Three Consumer Options
+## 1 Postfixes (SI Units)
 
 As seen above, if you just want SI prefixes, base and derived units (cm, kg, ml and so on), the :ALL export label provides them as raku postfix:<> custom operators. Here is another example, basic wave mechanics, bringing in the Physics::Constants module:
 ```perl6
@@ -126,10 +114,34 @@ say "Frequency of photon (ν) is " ~ν.norm;          #119.92 petahertz
 say "Energy of photon (Ep) is " ~Ep.norm;           #79.46 attojoule
 ```
 
+| SI Base Unit (7)  | SI Derived Unit (20)                           | SI Prefix (20) |
+|-------------------|------------------------------------------------|----------------|
+| 'm',   'metre',   | 'Hz',  'hertz',                                | 'da', 'deka',  |
+| 'g',   'gram',    | 'N',   'newton',                               | 'h',  'hecto', |
+| 's',   'second',  | 'Pa',  'pascal',                               | 'k',  'kilo',  |
+| 'A',   'amp',     | 'J',   'joule',                                | 'M',  'mega',  |
+| 'K',   'kelvin',  | 'W',   'watt',                                 | 'G',  'giga',  |
+| 'mol', 'mol',     | 'C',   'coulomb',                              | 'T',  'tera',  |
+| 'cd',  'candela', | 'V',   'volt',                                 | 'P',  'peta',  |
+|                   | 'F',   'farad',                                | 'E',  'exa',   |
+|                   | 'Ω',   'ohm',                                  | 'Z',  'zetta', |
+|                   | 'S',   'siemens',                              | 'Y',  'yotta', |
+|                   | 'Wb',  'weber',                                | 'd',  'deci',  |
+|                   | 'T',   'tesla',                                | 'c',  'centi', |
+|                   | 'H',   'henry',                                | 'm',  'milli', |
+|                   | 'lm',  'lumen',                                | 'μ',  'micro', |
+|                   | 'lx',  'lux',                                  | 'n',  'nano',  |
+|                   | 'Bq',  'becquerel',                            | 'p',  'pico',  |
+|                   | 'Gy',  'gray',                                 | 'f',  'femto', |
+|                   | 'Sv',  'sievert',                              | 'a',  'atto',  |
+|                   | 'kat', 'katal',                                | 'z',  'zepto', |
+|                   | 'l',   'litre',                                | 'y',  'yocto', |
+|                   | #litre added due to common use of ml, dl, etc. |                |
+
 The following SI units are provided in this way:
 ![image](https://github.com/p6steve/raku-Physics-Measure/blob/master/images/SIUnitPrefixTable.png)
 
-## 2 Raku object constructors & methods
+## 2 Raku Object Constructors
 
 All of the postfix SI Units can also be used in the standard raku object constructor syntax:
 ```perl6
@@ -140,6 +152,20 @@ In addition, the Physics::Measure / Physics::Unit modules provide a comprehensiv
 my Length $l = Length.new(value => 42, units => 'miles');   say ~$l;             #42 mile
 my Time $t = Time.new(value => 7, units => 'hours');        say ~$t;             #7 hr
 my $s = $d / $t;                                            say ~$s.in('mph');   #6 mph
+```
+
+
+
+# Output Methods
+
+To see what you have got, then go:
+```perl6
+my $po = 25W;   
+say ~$po; say "$po"; say $po.Str;       #25 W  (defaults to derived unit)
+say +$po; say $po.value; say $po.Real;  #25 
+say $po.WHAT;                           #(Power)
+say $po.canonical;                      #25 m2.s-3.kg   (SI base units)
+say $po.pretty;                         #25 m²⋅s⁻³⋅kg   (SI recommended style)
 ```
 
 Anyway I knew I would need unit expressions to cope with textual variants such as ‘miles per hour’ or ‘mph’, or ‘m/s’, ‘ms^-1’, ‘m.s-1’ (the SI derived unit representation) or ‘m⋅s⁻¹’ (the SI recommended string representation, with superscript powers). So a new unit expression parser was built into Physics::Unit from the start with raku Grammars. However, it became apparent that saying:
