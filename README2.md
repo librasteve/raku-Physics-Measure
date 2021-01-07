@@ -96,9 +96,10 @@ You can do math operations on (Measure) objects - (Length) can add/subtract to (
 Therefore, in the normal course, please make your objects as instances of the Child type classes.
 
 # Three Consumer Options
-## 1 Postfixes (SI Units)
+## OPtion 1: Postfix Operator Syntax (SI Units)
 
-As seen above, if you just want SI prefixes, base and derived units (cm, kg, ml and so on), the :ALL export label provides them as raku postfix:<> custom operators. Here is another example, basic wave mechanics, bringing in the Physics::Constants module:
+As seen above, if you just want SI prefixes, base and derived units (cm, kg, ml and so on), the :ALL export label provides them as raku postfix:<> custom operators.  This option is intended for scientist / coders who want fast and concise access to a modern Unit library. Here is another example, basic wave mechanics, bringing in the Physics::Constants module:
+
 ```perl6
 use Physics::Constants;  #<== must use before Physics::Measure 
 use Physics::Measure :ALL;
@@ -114,7 +115,7 @@ say "Frequency of photon (ν) is " ~ν.norm;          #119.92 petahertz
 say "Energy of photon (Ep) is " ~Ep.norm;           #79.46 attojoule
 ```
 
-The following SI units are provided in this way:
+The following SI units are provided in all Prefix-Unit combinations:
 
 | SI Base Unit (7)  | SI Derived Unit (20)                           | SI Prefix (20) |
 |-------------------|------------------------------------------------|----------------|
@@ -139,20 +140,125 @@ The following SI units are provided in this way:
 |                   | 'kat', 'katal',                                | 'z',  'zepto', |
 |                   | 'l',   'litre',                                | 'y',  'yocto', |
 
-#litre added due to common use of ml, dl, etc.
+#litre included due to common use of ml, dl, etc.
 
-## 2 Raku Object Constructors
+## Option 2: Object Constructor Syntax
 
-All of the postfix SI Units can also be used in the standard raku object constructor syntax:
+In addition to the SI units listed above, Physics::Measure (and Physics::Unit) offers a comprehensive library of non-metric units. US units and Imperial units include feet, miles, knots, hours, chains, tons and over 200 more. The non-metric units are not exposed as postfix operators.
+
+```perl6
+my Length $l = Length.new(value => 42, units => 'miles');   say ~$l;         #42 mile
+my Time   $t = Time.new(  value =>  7, units => 'hours');   say ~$t;         #7 hr
+my $s = $d / $t;                                  say ~$s.in('mph');         #6 mph
+```
+
+A flexible unit expression parser is included to cope with textual variants such as ‘miles per hour’ or ‘mph’; or ‘m/s’, ‘ms^-1’, ‘m.s-1’ (the SI derived unit representation) or ‘m⋅s⁻¹’ (the SI recommended string representation, with superscript powers). The unit expression parser decodes a valid unit string into its roots, extracting unit dimensions and inferring the appropriate type.
+
+Of course, the standard raku object constructor syntax may be used for SI units too:
+
 ```perl6
 my Length $l = Length.new(value => 42, units => 'μm'); say ~$l; #42 micrometre
 ```
-In addition, the Physics::Measure / Physics::Unit modules provide a comprehensive set of US units and Imperial units (feet, miles, knots, hours, chains, tons and over 200 more). In contrast to th
+
+The option is the most structured, allowing educators for example to use units and basic physics exercises as a way to introduce students to formal raku Object Orientation principles.
+
+## Option 3: Libra Shorthand Syntax
+
+In many cases, coders will want the flexibility of the unit expression parser and the wider range of non-metric units but they want a concise notation. In this case, the unicode libra emoji ♎️ can be used as shorthand for object construction:
+
 ```perl6
-my Length $l = Length.new(value => 42, units => 'miles');   say ~$l;             #42 mile
-my Time $t = Time.new(value => 7, units => 'hours');        say ~$t;             #7 hr
-my $s = $d / $t;                                            say ~$s.in('mph');   #6 mph
+#The libra ♎️ is shorthand to construct objects...
+    my $a ♎️ '10000 m';						say "$a";		#10000 m
+    my $b ♎️ '5e1 m';						say "$b";		#50 m
+    my $c ♎️ $a;						      say "$c";		#10000 m
+    my Length $l ♎️ 42;						say "$l";		#42 m (default to base unit of Length)
+#...there is an ASCII variant of <♎️> namely <libra> 
 ```
+_Use the emoji editor provided on your system (or just cut and paste)_
+
+```perl6
+#About 230 built in units are included, for example...
+    my $v2 ♎️ '7 yards^3';		      #7 yard^3		   (Volume)
+    my $v3 = $v2.in( 'm3' );		   #5.352 m^3		   (Volume) 
+    my $dsdt = $s / $t1;		      #0.009 m/s^2		(Acceleration)
+    my $sm ♎️ '70 mph';             #70 mph			   (Speed)
+    my $fo ♎️ '27 kg m / s^2';	   #27 N			      (Force)
+    my $en1 ♎️ '26 kg m^2 / s^2';	#26 J			      (Energy)
+    my $po ♎️ '25 kg m^2 / s^3';	   #25 W			      (Power)
+```
+
+# Special Measure Types
+
+## Angles
+
+```perl6
+#Angles use degrees/minutes/seconds or decimal radians
+    my $θ1 ♎️ <45°30′30″>;      #45°30′30″ (using <> to deconfuse quotation marks)
+    my $θ2 ♎️ '2.141 radians';  #'2.141 radian'
+#NB. The unit name 'rad' is reserved for the unit of radioactive Dose
+
+# Trigonometric functions sin, cos and tan (and arc-x) handle Angles
+    my $sine = sin( $θ1 );      #0.7133523847299412
+    my $arcsin = asin( $sine, units => '°' ); #45°30′30″
+#NB. Provide the units => '°' tag to tell asin you want degrees back
+```
+
+## Time
+
+```perl6
+#The Measure of Time has a raku Duration - i.e. the difference between two DateTime Instants:
+    my $i1 = DateTime.now;
+    my $i2 = DateTime.new( '2020-08-10T14:15:27.26Z' );
+    my $i3 = DateTime.new( '2020-08-10T14:15:37.26Z' );
+    my Duration $dur = $i3-$i2;
+
+#Here's how to us the libra assignment operator ♎️ for Time...
+    my Time $t1 ♎️ '5e1 s';     	#50 s
+    my Time $t2 ♎️ $dur;        	#10 s
+    my $t3 = $t1 + $t2;         	#60 s
+    my Time $t4 ♎️ '2 hours';   	#2 hr
+    $dur = $t4.Duration;		   #7200
+```
+
+# Unit Conversion
+
+```perl6
+#Unit Conversion uses the .in() method - specify the new units as a String
+    my Length $df ♎️ '12.0 feet';
+    my $dm = $df.in( 'm' );		         #3.658 m
+       $dm = $df.in: <m> ;		            #alternate form
+    my Temperature $deg-c ♎️ '39 ºC';
+    my $deg-k = $deg-c.in( 'K' );         #312.15 K
+    my $deg-cr = $deg-k.in( 'ºC' );       #39 ºC
+
+#Use arithmetic to get high order or inverse Unit types such as Area, Volume, Frequency, etc.
+    my Area	      $x = $a * $a;           #18.49 m^2
+    my Speed      $s = $a / $t2;          #0.43 m/s
+    my Frequency  $f = 1  / $t2;          #0.1 Hz
+
+#Use powers & roots in a similar way
+    my Volume     $v = $a ** 3;           #79.507 m^3
+    my Length	   $d = $v ** <1/3>;       #0.43 m
+```
+
+
+#Measures can be converted to base type with the .rebase() method
+    my $v4 = $v3.rebase;		#5.352 m^3
+#Measures can be compared with $a cmp $b
+    my $af = $a.in: 'feet';             #4.3 m => 14.108 feet
+    say $af cmp $a;                     #Same
+#Measures can be tested for equality with Numeric ==,!=
+    say $af == $a;                      #True
+    say $af != $a;                      #False
+#Use string equality eq,ne to distinguish different units with same type  
+    say $af eq $a;                      #False
+    say $af ne $a;                      #True
+
+#Colloquial terms or unicode superscripts can be used for powers in unitname declarations 
+    #square, sq, squared, cubic, cubed
+    #x¹ x² x³ x⁴ and x⁻¹ x⁻² x⁻³ x⁻⁴
+
+
 
 
 
@@ -168,7 +274,7 @@ say $po.canonical;                      #25 m2.s-3.kg   (SI base units)
 say $po.pretty;                         #25 m²⋅s⁻³⋅kg   (SI recommended style)
 ```
 
-Anyway I knew I would need unit expressions to cope with textual variants such as ‘miles per hour’ or ‘mph’, or ‘m/s’, ‘ms^-1’, ‘m.s-1’ (the SI derived unit representation) or ‘m⋅s⁻¹’ (the SI recommended string representation, with superscript powers). So a new unit expression parser was built into Physics::Unit from the start with raku Grammars. However, it became apparent that saying:
+
 
 (4) Right now there are 3 ways provided to make child objects:
 (a) ```my Length $s = Length.new(value => 5.1, units => 'm');``` which is good raku (and OO in general), but is quite long hand where you want to work with many Measure objects in your code. .
