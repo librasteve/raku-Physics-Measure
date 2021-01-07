@@ -8,7 +8,7 @@ Provides raku Measure objects that have value, units and error(tbd) and that can
 ```zef install --verbose https://github.com/p6steve/raku-Physics-Measure.git```
 and, conversely, ```zef uninstall Physics::Measure```
 
-# Use Case Concept
+# Synopsis
 
 ```perl6
 use lib '../lib';
@@ -53,7 +53,23 @@ This example shows some key features of Physics::Measure...
 * inference of type class (Length, Time, Mass, etc.) from units
 * derivation of type class of results (Speed, Acceleration, etc.)
 
+# Use Cases
+
+The Physics::Measure and Physics::Unit modules were designed with the following use cases in mind:
+* convenient use for practical science - lab calculations and interactive presentation of data sets
+* a framework for educators and students to interactively explore basic physics via a modern OO language
+* an everyday unit conversion and calculation tool (not much point if it can't convert miles to km and so on)
+
+Some other use cases - use for physical chemistry calculations (eg. environmental) and for historic data ingestion - have also been seen on the horizon and the author would be happy to work with you to help adapt to meet a wider set of needs.
+
 # Design Model
+
+To address the Use Cases, the following consistent functional parts have been created:
+* a raku Class and Object model to represent Units and Measurements
+* methods for Measure math operations, output, comparison, conversion, normalisation and rebasing
+* a Unit Grammar to parse unit expressions and cope with textual variants such as ‘miles per hour’ or ‘mph’, or ‘m/s’, ‘ms^-1’, ‘m.s-1’
+* an extensible library of about 800 built in unit types covering SI base, derived, US and imperial
+* a set of "API" options to meet a variety of consumption needs
 
 Together Physics::Measure and Physics::Unit follow this high level class design model:
 
@@ -119,12 +135,14 @@ All of the postfix SI Units can also be used in the standard raku object constru
 ```perl6
 my Length $l = Length.new(value => 42, units => 'μm'); say ~$l; #42 micrometre
 ```
-In addition, the Physics::Measure / Physics::Unit modules provide a comprehensive set of US units and Imperial units (feet, miles, knots, hours, ergs, eV and over 200 more).
+In addition, the Physics::Measure / Physics::Unit modules provide a comprehensive set of US units and Imperial units (feet, miles, knots, hours, chains, tons and over 200 more). In contrast to th
 ```perl6
-my Length $d = Length.new(value => 42, units => 'miles'); say ~$d; #42 micrometre
-my Time $t = Time.new(value => 7, units => 'hours'); say ~$t; #7 minutes
+my Length $l = Length.new(value => 42, units => 'miles');   say ~$l;             #42 mile
+my Time $t = Time.new(value => 7, units => 'hours');        say ~$t;             #7 hr
+my $s = $d / $t;                                            say ~$s.in('mph');   #6 mph
 ```
 
+Anyway I knew I would need unit expressions to cope with textual variants such as ‘miles per hour’ or ‘mph’, or ‘m/s’, ‘ms^-1’, ‘m.s-1’ (the SI derived unit representation) or ‘m⋅s⁻¹’ (the SI recommended string representation, with superscript powers). So a new unit expression parser was built into Physics::Unit from the start with raku Grammars. However, it became apparent that saying:
 
 (4) Right now there are 3 ways provided to make child objects:
 (a) ```my Length $s = Length.new(value => 5.1, units => 'm');``` which is good raku (and OO in general), but is quite long hand where you want to work with many Measure objects in your code. .
