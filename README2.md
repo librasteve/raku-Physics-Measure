@@ -168,10 +168,10 @@ In many cases, coders will want the flexibility of the unit expression parser an
 
 ```perl6
 #The libra ♎️ is shorthand to construct objects...
-    my $a ♎️ '4.3 m';						say "$a";		#4.3 m
-    my $b ♎️ '5e1 m';						say "$b";		#50 m
+    my $a ♎️ '4.3 m';                  say "$a";		#4.3 m
+    my $b ♎️ '5e1 m';                  say "$b";		#50 m
     my $c ♎️ $a;                       say "$c";		#10000 m
-    my Length $l ♎️ 42;						say "$l";		#42 m (default to base unit of Length)
+    my Length $l ♎️ 42;                say "$l";		#42 m (default to base unit of Length)
 #...there is an ASCII variant of <♎️> namely <libra> 
 ```
 _Use the emoji editor provided on your system (or just cut and paste)_
