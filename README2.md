@@ -178,13 +178,13 @@ _Use the emoji editor provided on your system (or just cut and paste)_
 
 ```perl6
 #About 230 built in units are included, for example...
-    my $v2 ♎️ '7 yards^3';		      #7 yard^3		   (Volume)
-    my $v3 = $v2.in( 'm3' );		   #5.352 m^3		   (Volume) 
-    my $dsdt = $s / $t1;		      #0.009 m/s^2		(Acceleration)
+    my $v2 ♎️ '7 yards^3';          #7 yard^3		   (Volume)
+    my $v3 = $v2.in( 'm3' );        #5.352 m^3		   (Volume) 
+    my $dsdt = $s / $t1;            #0.009 m/s^2		(Acceleration)
     my $sm ♎️ '70 mph';             #70 mph			   (Speed)
-    my $fo ♎️ '27 kg m / s^2';	   #27 N			      (Force)
-    my $en1 ♎️ '26 kg m^2 / s^2';	#26 J			      (Energy)
-    my $po ♎️ '25 kg m^2 / s^3';	   #25 W			      (Power)
+    my $fo ♎️ '27 kg m / s2';       #27 N			      (Force)
+    my $en ♎️ '26 kg m^2 / s^2';    #26 J			      (Energy)
+    my $po ♎️ '25 kg m^2 / s^3';    #25 W			      (Power)
 ```
 
 # Special Measure Types
