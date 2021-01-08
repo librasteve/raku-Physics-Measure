@@ -1,8 +1,6 @@
-Dear reader - this is a work in progress compete rewrite of the README.md...
-
 [![Build Status](https://travis-ci.com/p6steve/raku-Physics-Measure.svg?branch=master)](https://travis-ci.com/p6steve/raku-Physics-Measure)
 # raku-Physics-Measure
-Provides raku Measure objects that have value, units and error(tbd) and that can be used in common physics calculations. Uses [Physics::Unit](https://github.com/p6steve/raku-Physics-Unit).
+Provides raku Measure objects that have value, units and error(tbd) and that can be used in common physics calculations. Uses raku [Physics::Unit](https://github.com/p6steve/raku-Physics-Unit).
 
 # Instructions
 ```zef install --verbose https://github.com/p6steve/raku-Physics-Measure.git```
