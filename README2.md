@@ -154,17 +154,23 @@ my $s = $d / $t;                                  say ~$s.in('mph');         #6 
 
 A flexible unit expression parser is included to cope with textual variants such as ‘miles per hour’ or ‘mph’; or ‘m/s’, ‘ms^-1’, ‘m.s-1’ (the SI derived unit representation) or ‘m⋅s⁻¹’ (the SI recommended string representation, with superscript powers). The unit expression parser decodes a valid unit string into its roots, extracting unit dimensions and inferring the appropriate type.
 
+```perl6
+#Colloquial terms or unicode superscripts can be used for powers in unit declarations 
+    #square, sq, squared, cubic, cubed
+    #x¹ x² x³ x⁴ and x⁻¹ x⁻² x⁻³ x⁻⁴
+```
+
 Of course, the standard raku object constructor syntax may be used for SI units too:
 
 ```perl6
 my Length $l = Length.new(value => 42, units => 'μm'); say ~$l; #42 micrometre
 ```
 
-The option is the most structured, allowing educators for example to use units and basic physics exercises as a way to introduce students to formal raku Object Orientation principles.
+This syntax option is the most structured and raku native. For example, it helps educators to use units and basic physics exercises as a way to introduce students to formal raku Object Orientation principles.
 
 ## Option 3: Libra Shorthand Syntax
 
-In many cases, coders will want the flexibility of the unit expression parser and the wider range of non-metric units but they want a concise notation. In this case, the unicode libra emoji ♎️ can be used as shorthand for object construction:
+In many cases, coders will want the flexibility of the unit expression parser and the wider range of non-metric units but they also want a concise notation. In this case, the unicode libra emoji ♎️ is provided as shorthand for object construction:
 
 ```perl6
 #The libra ♎️ is shorthand to construct objects...
@@ -217,33 +223,44 @@ _Use the emoji editor provided on your system (or just cut and paste)_
     my Time $t2 ♎️ $dur;        	#10 s
     my $t3 = $t1 + $t2;         	#60 s
     my Time $t4 ♎️ '2 hours';   	#2 hr
-    $dur = $t4.Duration;		   #7200
+    $dur = $t4.Duration;         #7200
 ```
 
 # Unit Conversion
 
 ```perl6
 #Unit Conversion uses the .in() method - specify the new units as a String
-    my Length $df ♎️ '12.0 feet';
-    my $dm = $df.in( 'm' );		         #3.658 m
-       $dm = $df.in: <m> ;		            #alternate form
-    my Temperature $deg-c ♎️ '39 ºC';
+    my Length $df ♎️ '12.0 feet';         #12 ft
+    my $dm = $df.in( 'm' );               #3.658 m
+       $dm = $df.in: <m>;                 #alternate form
+    my Temperature $deg-c ♎️ '39 °C';
     my $deg-k = $deg-c.in( 'K' );         #312.15 K
-    my $deg-cr = $deg-k.in( 'ºC' );       #39 ºC
+    my $deg-cr = $deg-k.in( '°C' );       #39 °C
 
 #Use arithmetic to get high order or inverse Unit types such as Area, Volume, Frequency, etc.
     my Area	      $x = $a * $a;           #18.49 m^2
     my Speed      $s = $a / $t2;          #0.43 m/s
     my Frequency  $f = 1  / $t2;          #0.1 Hz
 
-#Use powers & roots in a similar way
+#Use powers & roots with Int or Rat (<1/2>, <1/3> or <1/4>)
     my Volume     $v = $a ** 3;           #79.507 m^3
     my Length	   $d = $v ** <1/3>;       #0.43 m
 ```
 
+# Rounding & Normalisation
 
-#Measures can be converted to base type with the .rebase() method
-    my $v4 = $v3.rebase;		#5.352 m^3
+```perl6
+#Set rounding precision (or reset with Nil) - does not reduce internal precision
+    $Physics::Measure::round-to = 0.01;
+#Normalize SI Units to the best SI prefix (from example above)
+    say "Frequency of photon (ν) is " ~ν.norm;    #119.92 petahertz
+#Reset to SI base type with the .rebase() method
+    my $v4 = $v2.rebase;                  #5.35 m^3
+```
+
+# Comparison Methods
+
+```perl6
 #Measures can be compared with $a cmp $b
     my $af = $a.in: 'feet';             #4.3 m => 14.108 feet
     say $af cmp $a;                     #Same
@@ -253,14 +270,7 @@ _Use the emoji editor provided on your system (or just cut and paste)_
 #Use string equality eq,ne to distinguish different units with same type  
     say $af eq $a;                      #False
     say $af ne $a;                      #True
-
-#Colloquial terms or unicode superscripts can be used for powers in unitname declarations 
-    #square, sq, squared, cubic, cubed
-    #x¹ x² x³ x⁴ and x⁻¹ x⁻² x⁻³ x⁻⁴
-
-
-
-
+```
 
 # Output Methods
 
@@ -274,19 +284,8 @@ say $po.canonical;                      #25 m2.s-3.kg   (SI base units)
 say $po.pretty;                         #25 m²⋅s⁻³⋅kg   (SI recommended style)
 ```
 
+# Summary
 
+The family of Physics::Measure, Physics::Unit and Physics::Constants raku modules is a consistent and extensible toolkit intended for science and education. It provides a comprehensive library of both metric (SI) and non-metric units, it is built on a Type Object foundation, it has a unit expression Grammar and implements math, conversion and comparison methods.
 
-(4) Right now there are 3 ways provided to make child objects:
-(a) ```my Length $s = Length.new(value => 5.1, units => 'm');``` which is good raku (and OO in general), but is quite long hand where you want to work with many Measure objects in your code. .
-(b) Thus the 'libra' notation came about as a short hand trick to cut out the constructor boilerplate that will take a unit Str and auto 'look up' the child type thusly ```my $s ♎️ '5.1m'; say $s.WHAT; #(Length)```
-
-
-So, while I agree it is a little odd with the ♎️ emoji code, it is a very quick way to do something like ```my $s ♎️ '5.1 feet ±2%'; say ~$s.in('m');``` Basically it's a 
-
-In summary - very much appreciate the feedback ... I hope that you are in tune with the class model benefits. My main use cases are teaching (thus having most non SI in the mix for historical aspects) and to provide a scientific / navigation / engineering calculator tool. 
-
-I am wondering how best to balance (b) and (c) ... based on your (and other) f/back probably I will push the emoji option way down in the doc as there are many other concepts to convey first...
-
-Meantime I have reopened this ticket and will keep open as a reminder to fix the docs for v0.0.4.
-
-(2) I 100% agree about errors and this will be added to the module in a future release ... the initial f/back I got was that the Postfix notation ```my $x = 20ml;``` e.g. to give ```Volume.new( value => 20, units => 'ml' );``` was higher priority ... so that was the last big addition to this module.
+Any feedback is welcome to p6steve / via the github Issues above.
