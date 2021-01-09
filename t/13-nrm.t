@@ -3,14 +3,15 @@
 #TESTALL$ prove6 ./t      [from root]
 use lib '../lib';
 use Test;
-#plan 3;
+plan 3;
 
-#`[
+#`[[
 FIXME test corner cases
 - name both PHz and petahertz (maybe subst?)
 - check crossing 1
 - check guardrails
 - add autonorm (check use of bless)
+#]]
 
 use Physics::Measure :ALL;
 $Physics::Measure::round-to = 0.01;
@@ -26,6 +27,5 @@ is ~ν.norm, '119.92 petahertz',						'~ν.norm';
 
 my \Ep = $ℎ * ν;  
 is ~Ep.norm, '79.46 attojoule',						'~Ep.norm';
-#]
 
-done-testing;
+#done-testing;
