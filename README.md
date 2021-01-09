@@ -145,7 +145,7 @@ The following SI units are provided in all Prefix-Unit combinations:
 In addition to the SI units listed above, Physics::Measure (and Physics::Unit) offers a comprehensive library of non-metric units. US units and Imperial units include feet, miles, knots, hours, chains, tons and over 200 more. The non-metric units are not exposed as postfix operators.
 
 ```perl6
-my Length $d = Length.new(value => 42, units => 'miles');   say ~$l;         #42 mile
+my Length $d = Length.new(value => 42, units => 'miles');   say ~$d;         #42 mile
 my Time   $t = Time.new(  value =>  7, units => 'hours');   say ~$t;         #7 hr
 my $s = $d / $t;                                  say ~$s.in('mph');         #6 mph
 ```
