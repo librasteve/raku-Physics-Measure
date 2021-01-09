@@ -3,7 +3,7 @@
 Provides raku Measure objects that have value, units and error(tbd) and that can be used in common physics calculations. Uses raku [Physics::Unit](https://github.com/p6steve/raku-Physics-Unit).
 
 # Instructions
-```zef install --verbose https://github.com/p6steve/raku-Physics-Measure.git```
+```zef --verbose install https://github.com/p6steve/raku-Physics-Measure.git```
 
 and, conversely, ```zef uninstall Physics::Measure```
 
