@@ -145,7 +145,7 @@ The following SI units are provided in all Prefix-Unit combinations:
 In addition to the SI units listed above, Physics::Measure (and Physics::Unit) offers a comprehensive library of non-metric units. US units and Imperial units include feet, miles, knots, hours, chains, tons and over 200 more. The non-metric units are not exposed as postfix operators.
 
 ```perl6
-my Length $l = Length.new(value => 42, units => 'miles');   say ~$l;         #42 mile
+my Length $d = Length.new(value => 42, units => 'miles');   say ~$d;         #42 mile
 my Time   $t = Time.new(  value =>  7, units => 'hours');   say ~$t;         #7 hr
 my $s = $d / $t;                                  say ~$s.in('mph');         #6 mph
 ```
@@ -174,7 +174,7 @@ In many cases, coders will want the flexibility of the unit expression parser an
 #The libra ♎️ is shorthand to construct objects...
     my $a ♎️ '4.3 m';                  say "$a";		#4.3 m
     my $b ♎️ '5e1 m';                  say "$b";		#50 m
-    my $c ♎️ $a;                       say "$c";		#10000 m
+    my $c ♎️ $a;                       say "$c";		#4.3 m
     my Length $l ♎️ 42;                say "$l";		#42 m (default to base unit of Length)
 #...there is an ASCII variant of <♎️> namely <libra> 
 ```
@@ -184,7 +184,7 @@ _Use the emoji editor provided on your system (or just cut and paste)_
 #About 230 built in units are included, for example...
     my $v2 ♎️ '7 yards^3';          #7 yard^3         (Volume)
     my $v3 = $v2.in( 'm3' );        #5.352 m^3        (Volume) 
-    my $dsdt = $s / $t1;            #0.009 m/s^2      (Acceleration)
+    my $dsdt = $s / $t;             #0.000106438 m/s^2 (Acceleration)
     my $sm ♎️ '70 mph';             #70 mph           (Speed)
     my $fo ♎️ '27 kg m / s2';       #27 N             (Force)
     my $en ♎️ '26 kg m^2 / s^2';    #26 J             (Energy)
