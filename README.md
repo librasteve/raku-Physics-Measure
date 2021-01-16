@@ -283,6 +283,23 @@ say $po.canonical;                      #25 m2.s-3.kg   (SI base units)
 say $po.pretty;                         #25 m²⋅s⁻³⋅kg   (SI recommended style)
 ```
 
+# Custom Measures
+
+To make a custom Measure, you can use this incantation:
+```perl6
+GetMeaUnit('nmile').NewType('Reach');
+
+class Reach is Measure {
+    has $.units where *.name eq <nm nmile nmiles>.any;
+
+    #| override .in to perform identity 1' (Latitude) == 1 nmile
+    method in( Str $s where * eq <Latitude> ) { 
+        my $nv = $.value / 60; 
+        Latitude.new( value => $nv, compass => <N> )
+    }   
+}
+```
+
 # Summary
 
 The family of Physics::Measure, Physics::Unit and Physics::Constants raku modules is a consistent and extensible toolkit intended for science and education. It provides a comprehensive library of both metric (SI) and non-metric units, it is built on a Type Object foundation, it has a unit expression Grammar and implements math, conversion and comparison methods.
