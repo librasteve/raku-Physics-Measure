@@ -87,7 +87,7 @@ use Physics::Measure :ALL;
     say $af ne $a;                      #True
 
 #To see what you have got, then go:
-	my $po = 25W;   
+	$po = 25W;   
 	say ~$po; say "$po"; say $po.Str;       #25 W  (defaults to derived unit)
 	say +$po; say $po.value; say $po.Real;  #25 
 	say $po.WHAT;                           #(Power)
