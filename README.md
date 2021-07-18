@@ -95,7 +95,7 @@ You can do math operations on (Measure) objects - (Length) can add/subtract to (
 Therefore, in the normal course, please make your objects as instances of the Child type classes.
 
 # Three Consumer Options
-## OPtion 1: Postfix Operator Syntax (SI Units)
+## Option 1: Postfix Operator Syntax (SI Units)
 
 As seen above, if you just want SI prefixes, base and derived units (cm, kg, ml and so on), the :ALL export label provides them as raku postfix:<> custom operators.  This option is intended for scientist / coders who want fast and concise access to a modern Unit library. Here is another example, basic wave mechanics, bringing in the [Physics::Constants](https://github.com/p6steve/raku-Physics-Constants) module:
 
