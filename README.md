@@ -1,6 +1,6 @@
 [![Build Status](https://travis-ci.com/p6steve/raku-Physics-Measure.svg?branch=master)](https://travis-ci.com/p6steve/raku-Physics-Measure)
 # raku-Physics-Measure
-Provides Measure objects that have value, units and error(tbd) and can be used in common physics calculations. Uses raku [Physics::Unit](https://github.com/p6steve/raku-Physics-Unit).
+Provides Measure objects that have value, units and error(tbd) and can be used in common physics calculations. Uses raku [Physics::Unit](https://github.com/p6steve/raku-Physics-Unit) and raku [Physics::Error](https://github.com/p6steve/raku-Physics-Error) (wip)
 
 # Instructions
 ```zef --verbose install https://github.com/p6steve/raku-Physics-Measure.git```
