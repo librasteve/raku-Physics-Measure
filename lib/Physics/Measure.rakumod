@@ -8,7 +8,7 @@ use Physics::Unit;
 #This module uses Type Variables such as ::T,::($s) 
 #viz. http://www.jnthn.net/papers/2008-yapc-eu-raku6types.pdf
 
-#Conecptutally 'Length = 12.5 ±0.05 m'   (FIXME v2 cover errors)
+#Conceptually 'Length = 12.5 ±0.05 m' && Length = 12.5nm ±[1.25nm|1.25|10%]   (FIXME v2 will implement errors)
 #viz. https://www.mathsisfun.com/measure/error-measurement.html
 
 ##### Passthrough of Physics::Unit #####
@@ -39,7 +39,7 @@ my regex number is export {
 class Dimensionless { ... }
 
 class Measure is export {
-    #Parent class for physical quantities with value, units & error(tbd)
+    #Parent class for physical quantities with value, units & error(wip)
     #Builds child classes such as Distance, Mass, Power, etc. 
 
     has	Real $.value is rw;
