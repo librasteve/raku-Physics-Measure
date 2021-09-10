@@ -1,5 +1,6 @@
 unit module Physics::Measure:ver<1.0.0>:auth<Steve Roe (p6steve@furnival.net)>;
 use Physics::Unit;
+use Physics::Error;
 
 #This module needs the export label :ALL to load postfix operators
 # use Physics::Measure;      ...10s first-, 1.2s pre- compiled 
@@ -11,7 +12,7 @@ use Physics::Unit;
 #Conceptually 'Length = 12.5 ±0.05 m' && Length = 12.5nm ±[1.25nm|1.25|10%]   (FIXME v2 will implement errors)
 #viz. https://www.mathsisfun.com/measure/error-measurement.html
 
-##### Passthrough of Physics::Unit #####
+##### Passthrough of Physics::Unit::GetUnit #####
 
 #| design intent is for Measure (.new) to encapsulate Physics::Unit
 #| objective is to eliminate 'use lozenges' and to shorten 'use list'
@@ -25,11 +26,12 @@ sub GetMeaUnit( $u ) is export {
 
 my $db = 0;					#debug
 
-our $round-to;				#optional round for output methods.. Str etc.
+our $round-to;				#optional round for output methods.. Str etc
+#FIXME ... add Error logic
 
-constant \isa-length = 'Distance' | 'Breadth' | 'Width' | 'Height' | 'Depth'; 
+constant \isa-length = 'Distance' | 'Breadth' | 'Width' | 'Height' | 'Depth';
 
-my regex number is export {
+my regex number {
 	\S+                     #grab chars
 	<?{ +"$/" ~~ Real }>    #assert coerces via '+' to Real
 }
@@ -42,12 +44,13 @@ class Measure is export {
     #Parent class for physical quantities with value, units & error(wip)
     #Builds child classes such as Distance, Mass, Power, etc. 
 
-    has	Real $.value is rw;
-    has Unit $.units is rw;
+    has	Real  $.value is rw;
+    has Unit  $.units is rw;    #FIXME need is rw??
+    has Error $.error;
 
 	#### Constructors ####
-    multi method new( :$value, :$units ) {			say "new from attrs" if $db;
-        self.bless( value => $value, units => GetUnit($units) )
+    multi method new( :$value, :$units, :$error ) {			say "new from attrs" if $db;
+        self.bless( :$value, units => GetUnit($units), error => Error.new(:$error, :$value) )
     }
     multi method new( Str:D $s ) {					say "new from Str" if $db;
         my ($v, $u) = Measure.defn-extract( $s );
@@ -70,14 +73,14 @@ class Measure is export {
     }
     method clone( ::T: ) {							say "cloning " ~ T.^name if $db;
         T.new: self
-    }  
+    }
 
 	#### Assignment ####
     multi method assign( Str:D $r ) {				say "assign from Str" if $db;
-        my ($v, $u) = Measure.defn-extract( $r );  
+        my ($v, $u) = Measure.defn-extract( $r );
 		$.value = $v;
 		$.units = GetUnit($u);
-    }   
+    }
     multi method assign( Real:D $r ) {				say "assign from Real" if $db;
         $.value = $r;
     }
@@ -95,13 +98,13 @@ class Measure is export {
     method Numeric   { $.value }
 	method value-r   { $round-to ?? $.value.round($round-to) !! $.value }
     method Str       { "{$.value-r} {$.units}" }
-    method canonical { 
+    method canonical {
 		my $rebased = $.in( $.units.canonical);
-		"{$rebased.value-r} {$.units.canonical}" 
+		"{$rebased.value-r} {$.units.canonical}"
 	}
-    method pretty    { 
+    method pretty    {
 		my $rebased = $.in( $.units.canonical);
-		"{$rebased.value-r} {$.units.pretty}" 
+		"{$rebased.value-r} {$.units.pretty}"
 	}
 
 	#### Class Methods ####
@@ -109,7 +112,7 @@ class Measure is export {
 	method defn-extract( Measure:U: Str:D $s ) {
 		#handle degrees-minutes-seconds
 		#<°> is U+00B0 <′> is U+2032 <″> is U+2033
-		if $s ~~ /(\d*)\°(\d*)\′(\d*)\″?/ {			
+		if $s ~~ /(\d*)\°(\d*)\′(\d*)\″?/ {
 			my $deg where 0 <= * < 360 = $0 % 360;
 			my $min where 0 <= * <  60 = $1 // 0;
 			my $sec where 0 <= * <  60 = $2 // 0;
@@ -121,7 +124,7 @@ class Measure is export {
 		#put hh:mm:ss in here ;-)
 		#handle generic case
 		else {
-			$s ~~ /^ ( <number> ) \s* ( <-[±]>* ) $/;  
+			$s ~~ /^ ( <number> ) \s* ( <-[±]>* ) $/;
 			my $v = +$0;
 			my $u = ~$1;
 
@@ -129,6 +132,14 @@ class Measure is export {
 			return($v, $u)
 		}
 	}
+
+    ##### Error Methods ######
+    method error-relative {
+        self.error.relative( $.value )
+    }
+    method error-percent {
+        self.error.percent( $.value )
+    }
 
 	#### Maths Operations ####
 	sub make-same( $l, $r ) {
@@ -151,13 +162,13 @@ class Measure is export {
     method subtract( $r is rw ) {
 		my $l = self;
 		$r = make-same( $l, $r );
-		$l.value -= $r.value; 
+		$l.value -= $r.value;
 		return $l
-    }   
+    }
     method negate {
         $.value *= -1;
         return self
-    } 
+    }
 
     method multiply( Measure:D $right ) {			#eg. Distance * Distance => Area
         my $l = self.rebase;
@@ -167,11 +178,11 @@ class Measure is export {
 		my $nmo = ::($nuo.type).new( value => $l.value, units => $nuo );
         $nmo.value *= $r.value;
         return $nmo
-    }   
+    }
     method multiply-const(Real:D $r) {
-        $.value *= $r; 
+        $.value *= $r;
         return self
-    }   
+    }
     method divide( Measure:D $right ) {				#eg. Distance / Time => Speed
         my $l = self.rebase;
 		my $r = $right.rebase;
@@ -184,24 +195,24 @@ class Measure is export {
 		my $nmo = ::($nuo.type).new( value => $l.value, units => $nuo );
         $nmo.value /= $r.value;
         return $nmo
-    }   
+    }
     method divide-const( Real:D $right ) {
-        $.value /= $right; 
+        $.value /= $right;
         return self
     }
     method reciprocal {								#eg. 1 / Time => Frequency
 		my $nuo = GetUnit( 'unity' );
         my Dimensionless $nmo .= new( value => 1, units => $nuo );
         return $nmo.divide( self )
-    } 
+    }
     method power( Int:D $n ) {						#eg. Area ** 2 => Distance
         my $result = self;
         my $factor = self;
         for 2..$n {
-            $result .= multiply( $factor ); 
+            $result .= multiply( $factor );
         }
         return $result
-    } 
+    }
     method root( Int:D $n where 1 <= $n <= 4 ) {
 		my $l = self.rebase;
         my $nuo = $.units.root-extract( $n );
@@ -214,10 +225,9 @@ class Measure is export {
     }
 
     #### Convert & Compare ####
-
-    method in( $to ) {						#convert units and adjust value
-		my $ouo = $.units;					#aka old unit object
-		my $nuo = GetUnit( $to );			#aka new unit object
+    method in( $to ) {						        #convert units and adjust value
+		my $ouo = $.units;					        #aka old unit object
+		my $nuo = GetUnit( $to );			        #aka new unit object
 
 		my $n-type = $nuo.type( :just1 );
 		if not self ~~ ::($n-type) { die "cannot convert in to different type $n-type" }
@@ -231,13 +241,13 @@ class Measure is export {
 		#try to match via unit defn eg. petahertz
 		my $defn = self.units.defn;
 		my $afx-defn = %abn.values.grep(/^ $defn $/).first;
-		
+
 		#try to match via unit name eg. Hz
 		my $name = self.units.name;
 		my $afx-name = %abn.keys.grep(/^ $name $/ ).first;
 
 		#setup some hashes and arrays
-		my %pfix2fact = GetPrefixToFactor;						
+		my %pfix2fact = GetPrefixToFactor;
 		   %pfix2fact<none> = 1;		#plug gap in factors
 		my %fact2pfix = %pfix2fact.kv.reverse;
 		my @pfixs = %pfix2fact.keys;
@@ -253,20 +263,20 @@ class Measure is export {
 		} else {
 			warn "cannot normalize this Unit type";
 			return self;
-		}	
+		}
 
-		my $res = self;	
+		my $res = self;
 		#either shift-left
 		while $res.value > 1000 {
-			$fact *= 1000;	
+			$fact *= 1000;
 			$combo = qq|{%fact2pfix{$fact}}$base|;
-			$res = $res.in: $combo; 
+			$res = $res.in: $combo;
 		}
 		#or shift-right
 		while $res.value < 1 {
-			$fact /= 1000;	
+			$fact /= 1000;
 			$combo = qq|{%fact2pfix{$fact}}$base|;
-			$res = $res.in: $combo; 
+			$res = $res.in: $combo;
 		}
 		return $res;
 	}
@@ -307,10 +317,10 @@ class Angle is Measure is export {
 	method dms(*%h)  {
 		my $abs = %h<negate> ?? -$.value !! $.value;
 
-		my $deg = $abs.floor; 
-		my $rem = ( $abs - $deg ) * 60; 
+		my $deg = $abs.floor;
+		my $rem = ( $abs - $deg ) * 60;
 		my $min = $rem.floor;
-		my $sec = ( $rem - $min ) * 60; 
+		my $sec = ( $rem - $min ) * 60;
 
 		if %h<no-secs> {
 			return( $deg, $rem )
@@ -320,7 +330,7 @@ class Angle is Measure is export {
 	}
 	method Str {
 		if self.units.name eq <°> {
-			my ( $deg, $min, $sec ) = self.dms;	
+			my ( $deg, $min, $sec ) = self.dms;
 			$sec = $round-to ?? $sec.round($round-to) !! $sec;
 			qq{$deg°$min′$sec″}
 		} else {
@@ -342,15 +352,15 @@ multi tan( Angle:D $a ) is export {
 }
 
 #| Override asin/acos/atan accept unitsof arg and return Angle object
-multi asin( Numeric:D $x, Str :$units! ) is export { 
+multi asin( Numeric:D $x, Str :$units! ) is export {
     my $a = Angle.new( value => asin( $x ), units => 'radians' );
     return $a.in( $units );
 }
-multi acos( Numeric:D $x, Str :$units! ) is export { 
+multi acos( Numeric:D $x, Str :$units! ) is export {
     my $a = Angle.new( value => acos( $x ), units => 'radians' );
     return $a.in( $units );
 }
-multi atan( Numeric:D $x, Str :$units! ) is export { 
+multi atan( Numeric:D $x, Str :$units! ) is export {
     my $a = Angle.new( value => atan( $x ), units => 'radians' );
     return $a.in( $units );
 }
@@ -591,7 +601,7 @@ multi infix:<==> ( Measure:D $a, Measure:D $b ) is equiv( &infix:<==> ) is expor
 }
 multi infix:<!=> ( Measure:D $a, Measure:D $b ) is equiv( &infix:<!=> ) is export {
     if $a.cmp( $b) ~~ Same { return False; }
-    else { return True; } 
+    else { return True; }
 }
 
 ##### Affix Operators #####
@@ -614,7 +624,7 @@ sub do-postfix( Real $v, Str $cn ) is export {
     my $u = Unit.new( defn => $cn, names => [$cn, %affix-by-name{$cn}] );
     my $t = $u.type(:just1);
     return ::($t).new(value => $v, units => $u);
-} 
+}
 
 #eg. sub postfix:<m> ( Real:D $x ) is export { do-postfix( $x, 'm' ) }
 
