@@ -12,16 +12,6 @@ use Physics::Error;
 #Conceptually 'Length = 12.5 ±0.05 m' && Length = 12.5nm ±[1.25nm|1.25|10%]   (FIXME v2 will implement errors)
 #viz. https://www.mathsisfun.com/measure/error-measurement.html
 
-##### Passthrough of Physics::Unit::GetUnit #####
-
-#| design intent is for Measure (.new) to encapsulate Physics::Unit
-#| objective is to eliminate 'use lozenges' and to shorten 'use list'
-#| occasionally need this for eg. instantiate 'J' to autoreduce 'kg m^2/s^2'
-
-sub GetMeaUnit( $u ) is export {
-	GetUnit( $u )
-}
-
 ######## Constants & Definitions ########
 
 my $db = 0;					#debug
@@ -34,6 +24,16 @@ constant \isa-length = 'Distance' | 'Breadth' | 'Width' | 'Height' | 'Depth';
 my regex number {
 	\S+                     #grab chars
 	<?{ +"$/" ~~ Real }>    #assert coerces via '+' to Real
+}
+
+##### Passthrough of Physics::Unit::GetUnit #####
+
+#| design intent is for Measure (.new) to encapsulate Physics::Unit
+#| objective is to eliminate 'use lozenges' and to shorten 'use list'
+#| occasionally need this for eg. instantiate 'J' to autoreduce 'kg m^2/s^2'
+
+sub GetMeaUnit( $u ) is export {
+    GetUnit( $u )
 }
 
 ########## Classes & Methods ##########
@@ -65,11 +65,14 @@ class Measure is export {
 		my $u = GetPrototype($s);
         self.bless( value => $r, units => $u )
     }
-    multi method new( Duration:D $d ) {				say "new from Duration" if $db;
+    multi method new( Duration:D $d ) {				say "new from Duration" if $db;     #FIXME ... add error see vvv
         self.bless( value => $d.Real, units => GetUnit('s') )
     }
     multi method new( Measure:D $m ) {				say "new from Measure" if $db;
-        self.bless( value => $m.value, units => $m.units )
+        my $value = $m.value;
+        my $units = $m.units;
+        my $error = $m.error.absolute with $m.error;
+        self.bless( :$value, :$units, error => Error.new(:$error, :$value) )
     }
     method clone( ::T: ) {							say "cloning " ~ T.^name if $db;
         T.new: self
@@ -142,28 +145,28 @@ class Measure is export {
     }
 
 	#### Maths Operations ####
-	sub make-same( $l, $r ) {
-        if ! $l.units.type eq $r.units.type {
+	method make-same( $r ) {
+        if ! self.units.type eq $r.units.type {
             die "Cannot combine Measures of different Types!"
         }
-        if ! $l.units.same-unit( $r.units ) {
+        if ! self.units.same-unit( $r.units ) {
 			say "Converting right hand Measure to combine!" if $db;
-			return $r.in( $l.units )
+			return $r.in( self.units )
 		}
 		return $r
 	}
 
     method add( $r is rw ) {
-		my $l = self;
-		$r = make-same( $l, $r );
-		$l.value += $r.value;
-		return $l
+		$r = self.make-same( $r );
+		self.value += $r.value;
+        self.error.absolute += $r.error.absolute with self.error;
+		return self
     }
     method subtract( $r is rw ) {
-		my $l = self;
-		$r = make-same( $l, $r );
-		$l.value -= $r.value;
-		return $l
+		$r = self.make-same( $r );
+		self.value -= $r.value;
+        self.error.absolute += $r.error.absolute with self.error;
+		return self
     }
     method negate {
         $.value *= -1;
