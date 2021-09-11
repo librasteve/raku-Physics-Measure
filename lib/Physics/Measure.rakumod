@@ -45,7 +45,7 @@ class Measure is export {
     #Builds child classes such as Distance, Mass, Power, etc. 
 
     has	Real  $.value is rw;
-    has Unit  $.units is rw;    #FIXME need is rw??
+    has Unit  $.units is rw;
     has Error $.error;
 
 	#### Constructors ####
@@ -65,7 +65,7 @@ class Measure is export {
 		my $u = GetPrototype($s);
         self.bless( value => $r, units => $u )
     }
-    multi method new( Duration:D $d ) {				say "new from Duration" if $db;     #FIXME ... add error see vvv
+    multi method new( Duration:D $d ) {				say "new from Duration" if $db;
         self.bless( value => $d.Real, units => GetUnit('s') )
     }
     multi method new( Measure:D $m ) {				say "new from Measure" if $db;
@@ -235,8 +235,10 @@ class Measure is export {
 		my $n-type = $nuo.type( :just1 );
 		if not self ~~ ::($n-type) { die "cannot convert in to different type $n-type" }
 
-		my $n-value = ($.value + $ouo.offset) * ($ouo.factor / $nuo.factor) - $nuo.offset;
-		::($n-type).new( value => $n-value, units => $nuo )
+		my $value = ($.value + $ouo.offset) * ($ouo.factor / $nuo.factor) - $nuo.offset;
+        my $error = self.error.absolute with self.error;
+
+		::($n-type).new( :$value, units => $nuo, :$error )
 	}
 	method norm {
 		my %abn = GetAffixByName;
