@@ -46,7 +46,7 @@ class Measure is export {
 
     has	Real  $.value is rw;
     has Unit  $.units is rw;
-    has Error $.error;
+    has Error $.error is rw;
 
 	#### Constructors ####
     multi method new( :$value, :$units, :$error ) {			say "new from attrs" if $db;
@@ -145,7 +145,7 @@ class Measure is export {
     }
 
 	#### Maths Operations ####
-	method make-same( $r ) {
+	method make-same-unit( $r ) {
         if ! self.units.type eq $r.units.type {
             die "Cannot combine Measures of different Types!"
         }
@@ -155,17 +155,24 @@ class Measure is export {
 		}
 		return $r
 	}
+    method add-error-abs( $r ) {
+        with self.error {
+            self.error.absolute += $r.error.absolute with $r.error;
+        } else {
+            self.error = $r.error with $r.error;
+        }
+    }
 
     method add( $r is rw ) {
-		$r = self.make-same( $r );
+		$r = self.make-same-unit( $r );
 		self.value += $r.value;
-        self.error.absolute += $r.error.absolute with self.error;
+        self.add-error-abs( $r );
 		return self
     }
     method subtract( $r is rw ) {
-		$r = self.make-same( $r );
+		$r = self.make-same-unit( $r );
 		self.value -= $r.value;
-        self.error.absolute += $r.error.absolute with self.error;
+        self.add-error-abs( $r );
 		return self
     }
     method negate {
@@ -236,7 +243,8 @@ class Measure is export {
 		if not self ~~ ::($n-type) { die "cannot convert in to different type $n-type" }
 
 		my $value = ($.value + $ouo.offset) * ($ouo.factor / $nuo.factor) - $nuo.offset;
-        my $error = self.error.absolute with self.error;
+
+        my $error = self.error.absolute * ($ouo.factor / $nuo.factor) with self.error;
 
 		::($n-type).new( :$value, units => $nuo, :$error )
 	}
