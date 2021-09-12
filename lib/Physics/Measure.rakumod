@@ -186,11 +186,11 @@ class Measure is export {
 		return self
     }
     method negate {
-        $.value *= -1;
+        self.value *= -1;                           #abs error is same
         return self
     }
 
-    method multiply( Measure:D $r is copy ) {			#eg. Distance * Distance => Area
+    method multiply( Measure:D $r is copy ) {	    #eg. Distance * Distance => Area
         my $l = self.rebase;
         $r.rebase;
 
@@ -201,30 +201,28 @@ class Measure is export {
         ::($units.type).new( :$value, :$units, :$error );
     }
     method multiply-const(Real:D $r) {
-        $.value *= $r;
+        self.value *= $r;
+        self.error.absolute *= $r with self.error;
         return self
     }
     method divide( Measure:D $r is copy ) {			#eg. Distance / Time => Speed
         my $l = self.rebase;
         $r.rebase;
 
-        if $l.units.same-unit( $r.units ) {			#eg. Distance / Distance => Real
-			return $l.value / $r.value;
-		}
-
         my $value = $l.value / $r.value;
         my $units = $l.units.divide( $r.units );
+        my $error = $l.add-error-rel( $r, $value );
 
-        ::($units.type).new( :$value, :$units );
+        ::($units.type).new( :$value, :$units, :$error );
     }
-    method divide-const( Real:D $right ) {
-        $.value /= $right;
+    method divide-const( Real:D $r ) {
+        self.value /= $r;
+        self.error.absolute /= $r with self.error;
         return self
     }
     method reciprocal {								#eg. 1 / Time => Frequency
-		my $nuo = GetUnit( 'unity' );
-        my Dimensionless $nmo .= new( value => 1, units => $nuo );
-        return $nmo.divide( self )
+        my Dimensionless $one .= new( value => 1, units => GetUnit( 'unity' ) );
+        return $one.divide( self )
     }
     method power( Int:D $n ) {						#eg. Area ** 2 => Distance
         my $result = self;
