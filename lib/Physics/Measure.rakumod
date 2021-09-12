@@ -66,7 +66,8 @@ class Measure is export {
         self.bless( value => $r, units => $u )
     }
     multi method new( Duration:D $d ) {				say "new from Duration" if $db;
-        self.bless( value => $d.Real, units => GetUnit('s') )
+        my $value = +"$d";                          #extract value of Duration in s
+        self.bless( :$value, units => GetUnit('s') )
     }
     multi method new( Measure:D $m ) {				say "new from Measure" if $db;
         my $value = $m.value;
@@ -88,7 +89,7 @@ class Measure is export {
         $.value = $r;
     }
     multi method assign( Duration:D $r ) {			say "assign from Duration" if $db;
-        $.value = $r.Real;
+        $.value = +"$r";                           #extract value of Duration in s
 		$.units = GetUnit('s');
     }
     multi method assign( Measure:D $r ) {			say "assign from Measure" if $db;
@@ -162,14 +163,23 @@ class Measure is export {
             self.error = $r.error with $r.error;
         }
     }
+    method add-error-rel( $r, $value ) {
+        my $l-errr = self.error.relative( self.value ) with self.error;
+        my $r-errr = $r.error.relative( $r.value ) with $r.error;
+        with self.error {
+            self.error.absolute = ( $l-errr + $r-errr ) * $value with $r.error;
+        } else {
+            self.error = $r-errr * $value with $r.error;
+        }
+    }
 
-    method add( $r is rw ) {
+    method add( $r is copy ) {
 		$r = self.make-same-unit( $r );
 		self.value += $r.value;
         self.add-error-abs( $r );
 		return self
     }
-    method subtract( $r is rw ) {
+    method subtract( $r is copy ) {
 		$r = self.make-same-unit( $r );
 		self.value -= $r.value;
         self.add-error-abs( $r );
@@ -180,31 +190,32 @@ class Measure is export {
         return self
     }
 
-    method multiply( Measure:D $right ) {			#eg. Distance * Distance => Area
+    method multiply( Measure:D $r is copy ) {			#eg. Distance * Distance => Area
         my $l = self.rebase;
-		my $r = $right.rebase;
+        $r.rebase;
 
-        my $nuo = $l.units.multiply( $r.units );
-		my $nmo = ::($nuo.type).new( value => $l.value, units => $nuo );
-        $nmo.value *= $r.value;
-        return $nmo
+        my $value = $l.value * $r.value;
+        my $units = $l.units.multiply( $r.units );
+        my $error = $l.add-error-rel( $r, $value );
+
+        ::($units.type).new( :$value, :$units, :$error );
     }
     method multiply-const(Real:D $r) {
         $.value *= $r;
         return self
     }
-    method divide( Measure:D $right ) {				#eg. Distance / Time => Speed
+    method divide( Measure:D $r is copy ) {			#eg. Distance / Time => Speed
         my $l = self.rebase;
-		my $r = $right.rebase;
+        $r.rebase;
 
         if $l.units.same-unit( $r.units ) {			#eg. Distance / Distance => Real
-			return $l.value /= $r.value;
+			return $l.value / $r.value;
 		}
 
-        my $nuo = $l.units.divide( $r.units );
-		my $nmo = ::($nuo.type).new( value => $l.value, units => $nuo );
-        $nmo.value /= $r.value;
-        return $nmo
+        my $value = $l.value / $r.value;
+        my $units = $l.units.divide( $r.units );
+
+        ::($units.type).new( :$value, :$units );
     }
     method divide-const( Real:D $right ) {
         $.value /= $right;
@@ -248,7 +259,7 @@ class Measure is export {
 
 		::($n-type).new( :$value, units => $nuo, :$error )
 	}
-	method norm {
+	method norm {                                   #adjust prefix (affix) to optimize value significance
 		my %abn = GetAffixByName;
 
 		#try to match via unit defn eg. petahertz
@@ -294,7 +305,7 @@ class Measure is export {
 		return $res;
 	}
 	method rebase {						#to base (prototype) unit of type
-		return self.in( GetPrototype( self.units.type( :just1 ) ))
+		self.in( GetPrototype( self.units.type( :just1 ) ))
 	}
     method cmp( $a: $b ) {
 		my ($an,$bn);
@@ -471,6 +482,9 @@ multi infix:<♎️> ( Measure:U $left is rw, Real:D $right ) is equiv( &infix:<
 multi infix:<♎️> ( Any:U $left is rw, Duration:D $right ) is equiv( &infix:<=> ) is export {
     do-decl( $left, $right );
 }
+multi infix:<♎️> ( Time:U $left is rw, Duration:D $right ) is equiv( &infix:<=> ) is export {
+    do-decl( $left, $right );
+}
 #texas
 multi infix:<libra> ( Any:U $left is rw, Measure:D $right ) is equiv( &infix:<=> ) is export {
     do-decl( $left, $right );
@@ -482,6 +496,9 @@ multi infix:<libra> ( Measure:U $left is rw, Real:D $right ) is equiv( &infix:<=
     do-decl( $left, $right );
 }
 multi infix:<libra> ( Any:U $left is rw, Duration:D $right ) is equiv( &infix:<=> ) is export {
+    do-decl( $left, $right );
+}
+multi infix:<libra️> ( Time:U $left is rw, Duration:D $right ) is equiv( &infix:<=> ) is export {
     do-decl( $left, $right );
 }
 
