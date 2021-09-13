@@ -240,10 +240,17 @@ class Measure is export {
     }
     method root( Int:D $n where 1 <= $n <= 4 ) {
 		my $l = self.rebase;
-        my $nuo = $.units.root-extract( $n );
-		my $nmo = ::($nuo.type).new( value => $l.value, units => $nuo );
-        $nmo.value = $l.value ** ( 1 / $n );
-        return $nmo
+
+#        my $nuo = $.units.root-extract( $n );
+#		my $nmo = ::($nuo.type).new( value => $l.value, units => $nuo );
+#        $nmo.value = $l.value ** ( 1 / $n );
+#        return $nmo
+
+        my $value = $l.value ** ( 1 / $n );
+        my $units = $.units.root-extract( $n );
+        my $error = $l.error.relative( $l.value ) / $n * $value with $l.error;
+
+        ::($units.type).new( :$value, :$units, :$error );
     }
     method sqrt() {
         return self.root( 2 )
