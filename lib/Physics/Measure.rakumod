@@ -100,8 +100,12 @@ class Measure is export {
 	#### Output ####
     method Real      { $.value }
     method Numeric   { $.value }
-	method value-r   { $round-to ?? $.value.round($round-to) !! $.value }
-    method Str       { "{$.value-r} {$.units}" }
+	method value-r   {
+        $round-to ?? $.value.round($round-to) !! $.value
+    }
+    method Str       {
+        "{$.value-r}{$.units}"
+    }
     method canonical {
 		my $rebased = $.in( $.units.canonical);
 		"{$rebased.value-r} {$.units.canonical}"
@@ -283,7 +287,7 @@ class Measure is export {
 		my @pfixs = %pfix2fact.keys;
 
 		#what is initial prefix factor and base unit?
-		my ( $fact, $base, $combo );
+		my ( $fact, $base );
 		if $afx-defn {
 			$afx-defn ~~ m|(<@pfixs>)(.*)|;
 			$fact = %pfix2fact{$0};
@@ -291,25 +295,20 @@ class Measure is export {
 		} elsif $base = %abn{$afx-name} {
 			$fact = 1;
 		} else {
-			warn "cannot normalize this Unit type";
+			warn "Cannot normalize this Unit type";
 			return self;
 		}
 
 		my $res = self;
-        say $res;
-        say $res.value;
-        say $res.value.abs;
 		# either shift-left
 		while $res.value.abs > 1000 {
 			$fact *= 1000;
-			$combo = qq|{%fact2pfix{$fact}}$base|;
-			$res = $res.in: $combo;
+			$res = $res.in: qq|{%fact2pfix{$fact}}$base|;
 		}
 		# or shift-right
 		while $res.value.abs < 1 {
 			$fact /= 1000;
-			$combo = qq|{%fact2pfix{$fact}}$base|;
-			$res = $res.in: $combo;
+			$res = $res.in: qq|{%fact2pfix{$fact}}$base|;
 		}
 		return $res;
 	}
@@ -330,17 +329,16 @@ class Measure is export {
 			$an = $a.rebase;
 			$bn = $b.rebase;
 		}
-
-        say $an; say $bn;
+        
         my $an-max = my $an-min = $an.value;
         with $an.error {
-            say $an-max = $an.value + $an.error.absolute;
-            say $an-min = $an.value - $an.error.absolute;
+            $an-max = $an.value + $an.error.absolute;
+            $an-min = $an.value - $an.error.absolute;
         }
         my $bn-max = my $bn-min = $bn.value;
         with $bn.error {
-            say $bn-max = $bn.value + $bn.error.absolute;
-            say $bn-min = $bn.value - $bn.error.absolute;
+            $bn-max = $bn.value + $bn.error.absolute;
+            $bn-min = $bn.value - $bn.error.absolute;
         }
 
         if $an.value == $bn.value {
@@ -675,10 +673,10 @@ multi infix:<!=> ( Measure:D $a, Measure:D $b ) is equiv( &infix:<!=> ) is expor
 #`[[ 
 An 'Affix Operators' combine the notions of: 
 1. SI Prefixes e.g. c(centi-), k(kilo-) that make compound units such as cm, km, kg  
-2. Raku Postfixes e.g. $l = 42cm; operators which work on the preceeding value
+2. Raku Postfixes e.g. $l = 42cm; operators which work on the preceding value
 
-We use the term Affix to indicate that both concepts are provided by this module:
-1. Construction of the cross product of SI Prefixes (20) and SI Base (7) and Derived (20) Units
+We use the term Affix to indicate that both concepts are provided by this code:
+1. Construction of the cross product of SI Prefixes (20) with ( SI Base (7) + Derived (20) ) Units
 2. Declaration of the resulting ~540 Unit instances and matching Raku Postfix operators
 
 Now you can simply go 'my $l = 1km;' to declare a new Measure with value => 1 and units => 'km'
