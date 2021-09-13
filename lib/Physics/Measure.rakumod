@@ -301,7 +301,6 @@ class Measure is export {
         say $res.value.abs;
 		# either shift-left
 		while $res.value.abs > 1000 {
-            say "yo";   #iamerejh
 			$fact *= 1000;
 			$combo = qq|{%fact2pfix{$fact}}$base|;
 			$res = $res.in: $combo;
@@ -318,7 +317,7 @@ class Measure is export {
 		self.in( GetPrototype( self.units.type( :just1 ) ))
 	}
     method cmp( $a: $b ) {
-		my ($an,$bn);
+		my ($an, $bn);
         if ! $a.units.type eq $b.units.type {
             die "Cannot cmp two Measures of different Type!"
         }
@@ -331,7 +330,34 @@ class Measure is export {
 			$an = $a.rebase;
 			$bn = $b.rebase;
 		}
-		return $an.value cmp $bn.value
+
+        say $an; say $bn;
+        my $an-max = my $an-min = $an.value;
+        with $an.error {
+            say $an-max = $an.value + $an.error.absolute;
+            say $an-min = $an.value - $an.error.absolute;
+        }
+        my $bn-max = my $bn-min = $bn.value;
+        with $bn.error {
+            say $bn-max = $bn.value + $bn.error.absolute;
+            say $bn-min = $bn.value - $bn.error.absolute;
+        }
+
+        if $an.value == $bn.value {
+            return Order::Same
+        } elsif $an.value > $bn.value {
+            if $an-min > $bn-max {
+                return Order::More
+            } else {
+                return Order::Same
+            }
+        } elsif $an.value < $bn.value {
+            if $an-max < $bn-min {
+                return Order::Less
+            } else {
+                return Order::Same
+            }
+        }
     }
 }
 
