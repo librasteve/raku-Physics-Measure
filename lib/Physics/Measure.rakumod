@@ -168,8 +168,9 @@ class Measure is export {
         my $r-errr = $r.error.relative( $r.value ) with $r.error;
         with self.error {
             self.error.absolute = ( $l-errr + $r-errr ) * $value with $r.error;
-        } else {
-            self.error = $r-errr * $value with $r.error;
+        } orwith $r.error {
+            $r.error.absolute = $r-errr * $value;
+            self.error = $r.error;
         }
     }
 
@@ -211,18 +212,23 @@ class Measure is export {
 
         my $value = $l.value / $r.value;
         my $units = $l.units.divide( $r.units );
-        my $error = $l.add-error-rel( $r, $value );
+        my $error = $l.add-error-rel( $r, $value ) with $l.error;
 
         ::($units.type).new( :$value, :$units, :$error );
     }
-    method divide-const( Real:D $r ) {
+    method divide-by-const( Real:D $r ) {
         self.value /= $r;
         self.error.absolute /= $r with self.error;
         return self
     }
     method reciprocal {								#eg. 1 / Time => Frequency
-        my Dimensionless $one .= new( value => 1, units => GetUnit( 'unity' ) );
-        return $one.divide( self )
+        my $r = self.rebase;
+
+        my $value = 1 / $r.value;
+        my $units = GetUnit('unity').divide( $r.units );
+        my $error = $r.error.relative( $value ) with $r.error;
+
+        ::($units.type).new( :$value, :$units, :$error );
     }
     method power( Int:D $n ) {						#eg. Area ** 2 => Distance
         my $result = self;
@@ -583,7 +589,7 @@ multi infix:<*> ( $left, Measure:D $right ) is export {
 multi infix:</> ( Measure:D $left, Real:D $right ) is equiv( &infix:</> ) is export {
     my $result   = $left.clone;
     my $argument = $right;
-    return $result.divide-const( $argument );
+    return $result.divide-by-const( $argument );
 }
 multi infix:</> ( Real:D $left, Measure:D $right ) is equiv( &infix:</> ) is export {
     my $result   = $right.clone;
