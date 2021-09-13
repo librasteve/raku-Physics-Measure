@@ -241,11 +241,6 @@ class Measure is export {
     method root( Int:D $n where 1 <= $n <= 4 ) {
 		my $l = self.rebase;
 
-#        my $nuo = $.units.root-extract( $n );
-#		my $nmo = ::($nuo.type).new( value => $l.value, units => $nuo );
-#        $nmo.value = $l.value ** ( 1 / $n );
-#        return $nmo
-
         my $value = $l.value ** ( 1 / $n );
         my $units = $.units.root-extract( $n );
         my $error = $l.error.relative( $l.value ) / $n * $value with $l.error;
@@ -271,7 +266,7 @@ class Measure is export {
 		::($n-type).new( :$value, units => $nuo, :$error )
 	}
 	method norm {                                   #adjust prefix (affix) to optimize value significance
-		my %abn = GetAffixByName;
+        my %abn = GetAffixByName;
 
 		#try to match via unit defn eg. petahertz
 		my $defn = self.units.defn;
@@ -301,14 +296,18 @@ class Measure is export {
 		}
 
 		my $res = self;
-		#either shift-left
-		while $res.value > 1000 {
+        say $res;
+        say $res.value;
+        say $res.value.abs;
+		# either shift-left
+		while $res.value.abs > 1000 {
+            say "yo";   #iamerejh
 			$fact *= 1000;
 			$combo = qq|{%fact2pfix{$fact}}$base|;
 			$res = $res.in: $combo;
 		}
-		#or shift-right
-		while $res.value < 1 {
+		# or shift-right
+		while $res.value.abs < 1 {
 			$fact /= 1000;
 			$combo = qq|{%fact2pfix{$fact}}$base|;
 			$res = $res.in: $combo;
