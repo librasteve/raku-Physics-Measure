@@ -17,6 +17,7 @@ use Physics::Error;
 my $db = 0;					#debug
 
 our $round-to;				#optional round for output methods.. Str etc
+our $percent = 1;           #optional set =0 to give absolute error
 #FIXME ... add Error logic
 
 constant \isa-length = 'Distance' | 'Breadth' | 'Width' | 'Height' | 'Depth';
@@ -103,8 +104,12 @@ class Measure is export {
 	method value-r   {
         $round-to ?? $.value.round($round-to) !! $.value
     }
+    method error-s   {
+        return '' without self.error;
+        $percent ?? $.error-percent !! "$.error.absolute"
+    }
     method Str       {
-        "{$.value-r}{$.units}"
+        "{$.value-r}{$.units} ±{$.error-s}"
     }
     method canonical {
 		my $rebased = $.in( $.units.canonical);
@@ -264,7 +269,6 @@ class Measure is export {
 		if not self ~~ ::($n-type) { die "cannot convert in to different type $n-type" }
 
 		my $value = ($.value + $ouo.offset) * ($ouo.factor / $nuo.factor) - $nuo.offset;
-
         my $error = self.error.absolute * ($ouo.factor / $nuo.factor) with self.error;
 
 		::($n-type).new( :$value, units => $nuo, :$error )
@@ -300,12 +304,12 @@ class Measure is export {
 		}
 
 		my $res = self;
-		# either shift-left
+		# either shift-right
 		while $res.value.abs > 1000 {
 			$fact *= 1000;
 			$res = $res.in: qq|{%fact2pfix{$fact}}$base|;
 		}
-		# or shift-right
+		# or shift-left
 		while $res.value.abs < 1 {
 			$fact /= 1000;
 			$res = $res.in: qq|{%fact2pfix{$fact}}$base|;
@@ -683,9 +687,10 @@ Now you can simply go 'my $l = 1km;' to declare a new Measure with value => 1 an
 #]]
 
 my %affix-by-name = GetAffixByName;
+my %affix-syns-by-name = GetAffixSynsByName;
 
 sub do-postfix( Real $v, Str $cn ) is export {
-    my $u = Unit.new( defn => $cn, names => [$cn, %affix-by-name{$cn}] );
+    my $u = Unit.new( defn => $cn, names => %affix-syns-by-name{$cn} );
     my $t = $u.type(:just1);
     return ::($t).new(value => $v, units => $u);
 }
@@ -693,9 +698,9 @@ sub do-postfix( Real $v, Str $cn ) is export {
 #eg. sub postfix:<m> ( Real:D $x ) is export { do-postfix( $x, 'm' ) }
 
 #| first a few "non-declining singletons"...
-sub postfix:<°> (Real:D $x) is export { do-postfix($x,'°') }
-sub postfix:<°C> (Real:D $x) is export { do-postfix($x,'°C') }
-sub postfix:<radian> (Real:D $x) is export { do-postfix($x,'radian') }
+sub postfix:<°>         (Real:D $x) is export { do-postfix($x,'°') }
+sub postfix:<°C>        (Real:D $x) is export { do-postfix($x,'°C') }
+sub postfix:<radian>    (Real:D $x) is export { do-postfix($x,'radian') }
 sub postfix:<steradian> (Real:D $x) is export { do-postfix($x,'steradian') }
 
 #| then put in all the regular combinations programmatically

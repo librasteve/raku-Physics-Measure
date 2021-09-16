@@ -23,9 +23,9 @@ my \λ = 2.5nm;
 is ~λ, '2.5 nm',									'~λ';
 
 my \ν = $c / λ;  
-is ~ν.norm, '119.92 petahertz',						'~ν.norm';
+is ~ν.norm, '119.92 PHz',						    '~ν.norm';
 
 my \Ep = $ℎ * ν;  
-is ~Ep.norm, '79.46 attojoule',						'~Ep.norm';
+is ~Ep.norm, '79.46 aJ',						    '~Ep.norm';
 
 #done-testing;

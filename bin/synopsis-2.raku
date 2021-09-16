@@ -72,7 +72,8 @@ use Physics::Measure :ALL;
 #Set rounding precision (or reset with Nil) - does not reduce internal precision
     $Physics::Measure::round-to = 0.01;
 #Normalize SI Units to the optimal SI prefix
-	my \λ = 2500pm;		say ~λ.norm;	#2.5nm
+	my \λ = 2500pm;                     #2500pm
+    say ~λ.norm;	                    #2.5nm
 #Reset to SI base type with the .rebase() method
     my $v4 = $v2.rebase;                #5.35m^3
 
@@ -87,7 +88,7 @@ use Physics::Measure :ALL;
     say $af ne $a;                      #True
 
 #To see what you have got, then go:
-	$po = 25W;   
+	$po = 25W;
 	say ~$po; say "$po"; say $po.Str;       #25W  (defaults to derived unit)
 	say +$po; say $po.value; say $po.Real;  #25 
 	say $po.WHAT;                           #(Power)
