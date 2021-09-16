@@ -109,7 +109,9 @@ class Measure is export {
         $percent ?? $.error-percent !! "$.error.absolute"
     }
     method Str       {
-        "{$.value-r}{$.units} ±{$.error-s}"
+        my $s = "{$.value-r}{$.units}";
+        return $s without self.error;
+        $s ~ " ±{$.error-s}"
     }
     method canonical {
 		my $rebased = $.in( $.units.canonical);
