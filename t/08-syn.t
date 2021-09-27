@@ -19,10 +19,10 @@ my $di1 = $d1 / $d2;
 is "$di1", '2.187227',                                                          '$di1-div-mixed';
 
 my $ad1 = $d1 + $d2;
-is "$ad1", '2.9144 m',                                                          '$ad1-add-mixed';
+is "$ad1", '2.9144m',                                                          '$ad1-add-mixed';
 
 my $su1 = $d1 - $d2;
-is "$su1", '1.0856 m',                                                          '$su1-sub-mixed';
+is "$su1", '1.0856m',                                                          '$su1-sub-mixed';
 
 my $a2 = $d1 * $d1;
 is ~$a2, '4m^2',                                                                '$a2-mul-m';
@@ -45,10 +45,10 @@ $z2 = $x2 / $y2;
 is $z2, '147.637795',                                             '$z2-div-m.s-1/feet.mins-1';
 
 $z2 = $x2 + $y2;
-is ~$z2, '3.02032 m.s^-1',                                         '$z2-add-m.s-1+feet.mins-1';
+is ~$z2, '3.02032m.s^-1',                                         '$z2-add-m.s-1+feet.mins-1';
 
 $z2 = $x2 - $y2;
-is ~$z2, '2.97968 m.s^-1',                                         '$z2-sub-m.s-1+feet.mins-1';
+is ~$z2, '2.97968m.s^-1',                                         '$z2-sub-m.s-1+feet.mins-1';
 
 #done-testing;
 

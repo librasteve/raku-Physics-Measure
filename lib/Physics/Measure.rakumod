@@ -54,50 +54,39 @@ class Measure is export {
     multi method new( :$value, :$units, :$error ) {		say "new from attrs" if $db;
         self.bless( :$value, units => GetUnit($units), error => Error.new(:$error, :$value) )
     }
-    multi method new( Str:D $s ) {					    say "new from Str" if $db;
-        my ($v, $u) = Measure.defn-extract( $s );
-        my $nuo = GetUnit( $u );
-		my $n-type = $nuo.type( :just1 ) || 'Measure';
-        ::($n-type).new( value => $v, units => $nuo )
-    }
-    multi method new( ::T: Real:D $value ) {			say "new from Real" if $db;
-		my $s = ~T.^name;
-		$s ~~ s/'Physics::Measure::'//;
-		$s = 'Length' if $s ~~ isa-length;
-        self.bless( :$value, units => GetPrototype($s) )
-    }
-    multi method new( Duration:D $d ) {				    say "new from Duration" if $db;
-        my $value = +"$d";                              #extract value of Duration in s
-        Time.new( :$value, units => GetUnit('s') )
-    }
     multi method new( Measure:D $m ) {				    say "new from Measure" if $db;
         my $value = $m.value;
         my $units = $m.units;
         my $error = $m.error.absolute with $m.error;
         self.bless( :$value, :$units, error => Error.new(:$error, :$value) )
     }
+    multi method new( Str:D $string ) {					say "new from Str" if $db;
+        my ( $value, $units ) = Measure.defn-extract( $string );
+        $units = GetUnit( $units );
+        my $type = $units.type( :just1 ) || 'Measure';
+        ::($type).new( :$value, :$units )
+    }
+    multi method new( Duration:D $d ) {				    say "new from Duration" if $db;
+        my $value = +"$d";                              #extract value of Duration in s
+        Time.new( :$value, units => GetUnit('s') )
+    }
     method clone( ::T: ) {							    say "cloning " ~ T.^name if $db;
         T.new: self
     }
-
     method TWEAK {
         $!error.bind-mea-value: $!value with $!error;
     }
 
-	#### Output ####
+	#### Coercion & Output ####
     method Real      { $.value }
     method Numeric   { $.value }
 	method value-r   {
         $round-to ?? $.value.round($round-to) !! $.value
     }
-    method error-s   {
-        return '' without self.error;
-        $percent ?? $.error.percent !! ~$.error.absolute
-    }
     method Str       {
         my $s = "{$.value-r}{$.units}";
         return $s without self.error;
-        $s ~ " ±{$.error-s}"
+        $s ~ " ±{$percent ?? $.error.percent !! ~$.error.absolute}"
     }
     method canonical {
 		my $rebased = $.in( $.units.canonical);
@@ -168,14 +157,26 @@ class Measure is export {
         self.add-error-abs( $r );
 		return self
     }
+    method add-const(Real:D $r) {
+        self.value += $r;
+        #abs error is same
+        return self
+    }
+
     method subtract( $r is copy ) {
 		$r = self.make-same-unit( $r );
 		self.value -= $r.value;
         self.add-error-abs( $r );
 		return self
     }
+    method subtract-const(Real:D $r) {
+        self.value -= $r;
+        #abs error is same
+        return self
+    }
     method negate {
-        self.value *= -1;                           #abs error is same
+        self.value *= -1;
+        #abs error is same
         return self
     }
 
@@ -489,6 +490,18 @@ multi prefix:<-> ( Measure:D $right) is export {
     my $result = $right.clone;
     return $result.negate;
 }
+
+multi infix:<+> ( Measure:D $left, Real:D $right ) is export {
+    my $result   = $left.clone;
+    my $argument = $right;
+    return $result.add-const( $argument );
+}
+multi infix:<+> ( Real:D $left, Measure:D $right ) is export {
+    my $result   = $right.clone;
+    my $argument = $left;
+    return $result.add-const( $argument );
+}
+
 multi infix:<+> ( Measure:D $left, Measure:D $right ) is export {
     my ( $result, $argument ) = infix-prep( $left, $right );
     return $result.add( $argument );
@@ -501,6 +514,18 @@ multi infix:<+> ( $left, Measure:D $right ) is export {
     my ( $result, $argument ) = infix-prep( $left, $right );
     return $result.add( $argument );
 }
+
+multi infix:<-> ( Measure:D $left, Real:D $right ) is export {
+    my $result   = $left.clone;
+    my $argument = $right;
+    return $result.subtract-const( $argument );
+}
+multi infix:<-> ( Real:D $left, Measure:D $right ) is export {
+    my $result   = $right.clone;
+    my $argument = $left;
+    return $result.subtract-const( $argument );
+}
+
 multi infix:<-> ( Measure:D $left, Measure:D $right ) is export {
     my ( $result, $argument ) = infix-prep( $left, $right );
     return $result.subtract( $argument );
