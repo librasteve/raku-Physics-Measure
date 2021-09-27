@@ -16,16 +16,16 @@ FIXME test corner cases
 use Physics::Measure :ALL;
 $Physics::Measure::round-to = 0.01;
 
-my $c ♎️ '299792458 m/s';
-my $ℎ ♎️ '6.626070015e-34 J.s';
+my $c = ♎️ '299792458 m/s';
+my $ℎ = ♎️ '6.626070015e-34 J.s';
 
 my \λ = 2.5nm; 
-is ~λ, '2.5 nm',									'~λ';
+is ~λ, '2.5nm',									'~λ';
 
 my \ν = $c / λ;  
-is ~ν.norm, '119.92 PHz',						    '~ν.norm';
+is ~ν.norm, '119.92PHz',						    '~ν.norm';
 
 my \Ep = $ℎ * ν;  
-is ~Ep.norm, '79.46 aJ',						    '~Ep.norm';
+is ~Ep.norm, '79.46aJ',						    '~Ep.norm';
 
 #done-testing;

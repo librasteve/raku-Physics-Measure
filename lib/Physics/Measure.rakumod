@@ -40,6 +40,7 @@ sub GetMeaUnit( $u ) is export {
 ########## Classes & Methods ##########
 
 class Dimensionless { ... }
+class Time { ... }
 
 class Measure is export {
     #Parent class for physical quantities with value, units & error(wip)
@@ -50,52 +51,37 @@ class Measure is export {
     has Error $.error is rw;
 
 	#### Constructors ####
-    multi method new( :$value, :$units, :$error ) {			say "new from attrs" if $db;
+    multi method new( :$value, :$units, :$error ) {		say "new from attrs" if $db;
         self.bless( :$value, units => GetUnit($units), error => Error.new(:$error, :$value) )
     }
-    multi method new( Str:D $s ) {					say "new from Str" if $db;
+    multi method new( Str:D $s ) {					    say "new from Str" if $db;
         my ($v, $u) = Measure.defn-extract( $s );
         my $nuo = GetUnit( $u );
 		my $n-type = $nuo.type( :just1 ) || 'Measure';
         ::($n-type).new( value => $v, units => $nuo )
     }
-    multi method new( ::T: Real:D $r ) {			say "new from Real" if $db;
+    multi method new( ::T: Real:D $value ) {			say "new from Real" if $db;
 		my $s = ~T.^name;
 		$s ~~ s/'Physics::Measure::'//;
 		$s = 'Length' if $s ~~ isa-length;
-		my $u = GetPrototype($s);
-        self.bless( value => $r, units => $u )
+        self.bless( :$value, units => GetPrototype($s) )
     }
-    multi method new( Duration:D $d ) {				say "new from Duration" if $db;
-        my $value = +"$d";                          #extract value of Duration in s
-        self.bless( :$value, units => GetUnit('s') )
+    multi method new( Duration:D $d ) {				    say "new from Duration" if $db;
+        my $value = +"$d";                              #extract value of Duration in s
+        Time.new( :$value, units => GetUnit('s') )
     }
-    multi method new( Measure:D $m ) {				say "new from Measure" if $db;
+    multi method new( Measure:D $m ) {				    say "new from Measure" if $db;
         my $value = $m.value;
         my $units = $m.units;
         my $error = $m.error.absolute with $m.error;
         self.bless( :$value, :$units, error => Error.new(:$error, :$value) )
     }
-    method clone( ::T: ) {							say "cloning " ~ T.^name if $db;
+    method clone( ::T: ) {							    say "cloning " ~ T.^name if $db;
         T.new: self
     }
 
-	#### Assignment ####
-    multi method assign( Str:D $r ) {				say "assign from Str" if $db;
-        my ($v, $u) = Measure.defn-extract( $r );
-		$.value = $v;
-		$.units = GetUnit($u);
-    }
-    multi method assign( Real:D $r ) {				say "assign from Real" if $db;
-        $.value = $r;
-    }
-    multi method assign( Duration:D $r ) {			say "assign from Duration" if $db;
-        $.value = +"$r";                           #extract value of Duration in s
-		$.units = GetUnit('s');
-    }
-    multi method assign( Measure:D $r ) {			say "assign from Measure" if $db;
-        $.value = $r.value;
-        $.units = $r.units;
+    method TWEAK {
+        $!error.bind-mea-value: $!value with $!error;
     }
 
 	#### Output ####
@@ -106,7 +92,7 @@ class Measure is export {
     }
     method error-s   {
         return '' without self.error;
-        $percent ?? $.error-percent !! "$.error.absolute"
+        $percent ?? $.error.percent !! ~$.error.absolute
     }
     method Str       {
         my $s = "{$.value-r}{$.units}";
@@ -148,14 +134,6 @@ class Measure is export {
 		}
 	}
 
-    ##### Error Methods ######
-    method error-relative {
-        self.error.relative( $.value )
-    }
-    method error-percent {
-        self.error.percent( $.value )
-    }
-
 	#### Maths Operations ####
 	method make-same-unit( $r ) {
         if ! self.units.type eq $r.units.type {
@@ -167,21 +145,20 @@ class Measure is export {
 		}
 		return $r
 	}
+
     method add-error-abs( $r ) {
-        with self.error {
-            self.error.absolute += $r.error.absolute with $r.error;
-        } else {
-            self.error = $r.error with $r.error;
+        with $!error {
+            $!error.add-abs($r.error)
+        } orwith $r.error {
+            $!error = $r.error;
+            $!error.bind-mea-value: $!value
         }
     }
-    method add-error-rel( $r, $value ) {
-        my $l-errr = self.error.relative( self.value ) with self.error;
-        my $r-errr = $r.error.relative( $r.value ) with $r.error;
-        with self.error {
-            self.error.absolute = ( $l-errr + $r-errr ) * $value with $r.error;
+    method add-error-rel( $r, $combined-value ) {
+        with $!error {
+            $!error.add-rel($r.error) * $combined-value
         } orwith $r.error {
-            $r.error.absolute = $r-errr * $value;
-            self.error = $r.error;
+            $r.error.relative * $combined-value
         }
     }
 
@@ -223,7 +200,7 @@ class Measure is export {
 
         my $value = $l.value / $r.value;
         my $units = $l.units.divide( $r.units );
-        my $error = $l.add-error-rel( $r, $value ) with $l.error;
+        my $error = $l.add-error-rel( $r, $value );
 
         ::($units.type).new( :$value, :$units, :$error );
     }
@@ -290,6 +267,7 @@ class Measure is export {
 		my %pfix2fact = GetPrefixToFactor;
 		   %pfix2fact<none> = 1;		#plug gap in factors
 		my %fact2pfix = %pfix2fact.kv.reverse;
+           %fact2pfix{'0'} = 1;         #plug gap in factors  (need this?)
 		my @pfixs = %pfix2fact.keys;
 
 		#what is initial prefix factor and base unit?
@@ -482,6 +460,12 @@ class Depth              is Length is export {}
 
 ######## Functional Operator Overrides ########
 
+multi prefix:<♎️>    ( Str:D $new )      is export { Measure.new: $new }
+multi prefix:<♎️>    ( Duration:D $new ) is export { Measure.new: $new }
+
+multi prefix:<libra> ( Str:D $new )      is export { Measure.new: $new }
+multi prefix:<libra️> ( Duration:D $new ) is export { Measure.new: $new }
+
 sub infix-prep( $left, $right ) {
     #clone Measure child object (e.g. Distance) as container for result
     #coerce other arg. to Measure child with new unless already isa
@@ -500,75 +484,7 @@ sub infix-prep( $left, $right ) {
     }
     return( $result, $argument );
 }
-sub do-decl( $left is rw, $right ) {
-    #declaration with default
-    if $left ~~ Measure {
-        $left .=new( $right );
-    } else {
-        $left = Measure.new( $right );
-    }
-}
 
-#declaration with default
-multi infix:<♎️> ( Any:U $left is rw, Measure:D $right ) is equiv( &infix:<=> ) is export {
-    do-decl( $left, $right );
-}
-multi infix:<♎️> ( Any:U $left is rw, Str:D $right ) is equiv( &infix:<=> ) is export {
-    do-decl( $left, $right );
-}
-multi infix:<♎️> ( Measure:U $left is rw, Real:D $right ) is equiv( &infix:<=> ) is export {
-    do-decl( $left, $right );
-}
-multi infix:<♎️> ( Any:U $left is rw, Duration:D $right ) is equiv( &infix:<=> ) is export {
-    do-decl( $left, $right );
-}
-multi infix:<♎️> ( Time:U $left is rw, Duration:D $right ) is equiv( &infix:<=> ) is export {
-    do-decl( $left, $right );
-}
-#texas
-multi infix:<libra> ( Any:U $left is rw, Measure:D $right ) is equiv( &infix:<=> ) is export {
-    do-decl( $left, $right );
-}
-multi infix:<libra> ( Any:U $left is rw, Str:D $right ) is equiv( &infix:<=> ) is export {
-    do-decl( $left, $right );
-}
-multi infix:<libra> ( Measure:U $left is rw, Real:D $right ) is equiv( &infix:<=> ) is export {
-    do-decl( $left, $right );
-}
-multi infix:<libra> ( Any:U $left is rw, Duration:D $right ) is equiv( &infix:<=> ) is export {
-    do-decl( $left, $right );
-}
-multi infix:<libra️> ( Time:U $left is rw, Duration:D $right ) is equiv( &infix:<=> ) is export {
-    do-decl( $left, $right );
-}
-
-#assignment
-multi infix:<♎️> ( Measure:D $left, Measure:D $right ) is equiv( &infix:<=> ) is export {
-    $left.assign( $right );
-}
-multi infix:<♎️> ( Measure:D $left, Str:D $right ) is equiv( &infix:<=> ) is export {
-    $left.assign( $right );
-}
-multi infix:<♎️> ( Measure:D $left, Real:D $right ) is equiv( &infix:<=> ) is export {
-    $left.assign( $right );
-}
-multi infix:<♎️> ( Measure:D $left, Duration:D $right ) is equiv( &infix:<=> ) is export {
-    $left.assign( $right );
-}
-multi infix:<libra> ( Measure:D $left, Measure:D $right ) is equiv( &infix:<=> ) is export {
-    $left.assign( $right );
-}
-multi infix:<libra> ( Measure:D $left, Str:D $right ) is equiv( &infix:<=> ) is export {
-    $left.assign( $right );
-}
-multi infix:<libra> ( Measure:D $left, Real:D $right ) is equiv( &infix:<=> ) is export {
-    $left.assign( $right );
-}
-multi infix:<libra> ( Measure:D $left, Duration:D $right ) is equiv( &infix:<=> ) is export {
-    $left.assign( $right );
-}
-
-#math
 multi prefix:<-> ( Measure:D $right) is export {
     my $result = $right.clone;
     return $result.negate;
@@ -711,6 +627,17 @@ my package EXPORT::ALL {
 	for %affix-by-name.keys -> $u {
         OUR::{'&postfix:<' ~ $u ~ '>'} := sub (Real:D $x) { do-postfix($x,"$u") };
 	}
+}
+
+##### Error ± Operators #####
+sub postfix:<%> ( Real:D $x ) is export {
+    "$x%"
+}
+multi infix:<±> ( Measure:D $a, Real:D $b ) is export {
+    say "yo";
+}
+multi infix:<±> ( Measure:D $a, Str:D $b ) is export {
+    say $b;
 }
 
 #EOF

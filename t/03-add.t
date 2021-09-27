@@ -17,18 +17,18 @@ ok $f.value == 10042,                                                           
 $f = $d + $e;
 ok $f.value == 10042,                                                           'add:M+S';
 
-my Length $a ♎️ '23 m'; 
-my Length $b ♎️ '42 m'; 
+my Length $a = ♎️ '23 m';
+my Length $b = ♎️ '42 m';
 my Length $c;
 my Area $area;
-my Rat $r;
+my Dimensionless $r;
 my Measure $m;
 
 $c = $a + $b;  
 ok $a.value == 23,                                                              'add:M+S';
 ok $b.value == 42,                                                              'add:M+S';
 ok $c.value == 65,                                                              'add:M+S';
-$c = $a + 17;
+# $c = $a + 17;
 ok $a.value == 23,                                                              'add:M+R';
 ok $b.value == 42,                                                              'add:M+R';
 ok $c.value == 40,                                                              'add:M+R';
@@ -95,8 +95,8 @@ ok $b.value == -42,                                                             
 ok $c.value == -42,                                                             'neg:M';
 is $b.units.name, 'm',                                                          'neg:M';
 is $c.units.name, 'm',                                                          'neg:M';
-$a ♎️ '4.3 m';
-$b ♎️ '42 m';
+$a = ♎️ '4.3 m';
+$b = ♎️ '42 m';
 $c = - $a + $b;
 ok $a.value == 4.3,                                                             '2op:M'; 
 ok $b.value == 42,                                                              '2op:M';
