@@ -182,7 +182,7 @@ class Measure is export {
 
     method multiply( Measure:D $r is copy ) {	    #eg. Distance * Distance => Area
         my $l = self.rebase;
-        $r.rebase;
+        $r .= rebase;
 
         my $value = $l.value * $r.value;
         my $units = $l.units.multiply( $r.units );
@@ -197,7 +197,7 @@ class Measure is export {
     }
     method divide( Measure:D $r is copy ) {			#eg. Distance / Time => Speed
         my $l = self.rebase;
-        $r.rebase;
+        $r .= rebase;
 
         my $value = $l.value / $r.value;
         my $units = $l.units.divide( $r.units );
