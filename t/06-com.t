@@ -26,7 +26,7 @@ my Speed $s-mph3 = $s-fpm1.in( 'miles/hours' );
 is ~$s-mph3, '0.886364miles/hours',                                             '$s-mph3';
 
 my Length $a = ♎️ '4.3 m';      #'4.3 m'
-my Length $b = ♎️ '-2.3m';      #'-2.3 m'
+my Length $b = ♎️ '-2.3 m';      #'-2.3 m'
 
 my $x2 = $a * $b;
 is ~$x2, '-9.89m^2',                                                            '$x2-m2';
@@ -35,7 +35,7 @@ my $x3 = $a * $b * $b;
 is ~$x3, '22.747m^3',                                                           '$x3-m3';
 
 my $d = ♎️ '5e1 m';
-my Time $t6 = ♎️ '42s';
+my Time $t6 = ♎️ '42 s';
 my Speed $sp = $d / $t6;
 is ~$sp, '1.1904761904761905m/s',                                               '$sp-m.s-1';
 
@@ -45,12 +45,10 @@ is ~$dsdt, '0.02834467120181406m/s^2',                                          
 my Acceleration $dsdt2 = ♎️ '9.8 m/s^2';
 is ~$dsdt2, '9.8m/s^2',                                                         '$dsdt2-m/s^2';
 
-#`[FIXME - fails]
 my Length $d-fe = ♎️ '12.0 feet';
 my $d-fe2 = ($d-fe * $d-fe).in('sq ft');
 is ~$d-fe2, '144sq ft',                                                         '$d-fe2-feet2';
 
-#`[FIXME - fails]
 my $d-fe3 = ($d-fe * $d-fe2).in('cubic ft');
 is ~$d-fe3, '1728cubic ft',                                                     '$d-fe3-feet3';
 

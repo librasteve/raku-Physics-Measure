@@ -3,7 +3,7 @@
 #TESTALL$ prove6 ./t      [from root]
 use lib '../lib';
 use Test;
-plan 36; 
+plan 41;
 
 use Physics::Measure;
 
@@ -34,24 +34,28 @@ is ~$v, '8l',                                                           '$v-l';
 is $v.WHAT, Physics::Measure::Volume,                                   '$v.WHAT';
 is $v.units.type, 'Volume',			                                    '$v-unitsof';
 
-#`[[ FIXME postwords not parsing
-my $x8 = ♎️ '8 m squared',
-is ~$x8, '8m^2',                                                        '$x8-m sq';
-is $x8.WHAT, Physics::Measure::Area,                                    '$x8.WHAT';
-is $x8.units.type, 'Area',                                              '$x8-unitsof';
+#`[FIXME - fails
+# Couldn't parse defn Str m squared
+#   in sub CreateUnit at /Users/stephenroe/Dropbox/DockerWorld/raku-Physics-Unit/lib/Physics/Unit.rakumod (Physics::Unit) line 524
+# my $x8 = ♎️ '8 m squared',
+# is ~$x8, '8m^2',                                                        '$x8-m sq';
+# is $x8.WHAT, Physics::Measure::Area,                                    '$x8.WHAT';
+# is $x8.units.type, 'Area',                                              '$x8-unitsof';
+#]
 
-my $x10 = ♎️ '10 kg.m squared';
-is ~$x10, '10kg.m squared',                                             '$x10-kg.m squared';
-is $x10.WHAT, Physics::Measure::Moment-of-Inertia,                      '$x10.WHAT';
-is $x10.units.type, 'Moment-of-Inertia',								'$x10-unitsof';
-#]]
+#`[FIXME - fails
+# Couldn't parse defn Str kg.m squared
+#   in sub CreateUnit at /Users/stephenroe/Dropbox/DockerWorld/raku-Physics-Unit/lib/Physics/Unit.rakumod (Physics::Unit) line 524
+# my $x10 = ♎️ '10 kg.m squared';
+# is ~$x10, '10kg.m squared',                                             '$x10-kg.m squared';
+# is $x10.WHAT, Physics::Measure::Moment-of-Inertia,                      '$x10.WHAT';
+# is $x10.units.type, 'Moment-of-Inertia',								'$x10-unitsof';
+#]
 
-#`[[ FIXME this returns both 'kg m^2' and 'kg.m^2' 
-my $x10 = ♎️ '10 kg.m^2';
-is ~$x10, '10kg.m^2',		                                            '$x10-kg.m squared';
-is $x10.WHAT, Physics::Measure::Moment-of-Inertia,                      '$x10.WHAT';
-is $x10.units.type, 'Moment-of-Inertia',                                '$x10-unitsof';
-#]]
+my $x10a = ♎️ '10 kg.m^2';
+is ~$x10a, '10kg.m^2',		                                            '$x10a-kg.m squared';
+is $x10a.WHAT, Physics::Measure::Moment-of-Inertia,                     '$x10a.WHAT';
+is $x10a.units.type, 'Moment-of-Inertia',                               '$x10a-unitsof';
 
 my $x11 = ♎️ '11 sq m',
 is ~$x11, '11sq m',                                                     '$x11-sq m';
@@ -68,13 +72,14 @@ is ~$x14, '14m',                                                        '$x14-m�
 is $x14.WHAT, Physics::Measure::Length,                                 '$x14.WHAT';
 is $x14.units.type, 'Length',				                            '$x14-unitsof';
 
-my $x15a = ♎️ '15 kg m^2'; 
-#`[[ FIXME this returns both '15 kg m²' and '15 kg m2'
-my $x15 = ♎️ '15 kg m²';
-is ~$x15, '15kg m²',                                                    '$x15-kg m²';
-is $x15.WHAT, Physics::Measure::Moment-of-Inertia,                      '$x15.WHAT';
-is $x15.units.type, 'Moment-of-Inertia',	                            '$x15-unitsof';
-#]]
+#`[FIXME -sometime fails
+# Expected :'15kg m2'
+# my $x15a = ♎️ '15 kg m^2';
+# my $x15 = ♎️ '15 kg m²';
+# is ~$x15, '15kg m²',                                                    '$x15-kg m²';
+# is $x15.WHAT, Physics::Measure::Moment-of-Inertia,                      '$x15.WHAT';
+# is $x15.units.type, 'Moment-of-Inertia',	                            '$x15-unitsof';
+#]
 
 my $x16 = ♎️ '16 m³';
 is ~$x16, '16m^3',                                                      '$x16-m³';

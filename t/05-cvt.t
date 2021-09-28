@@ -78,7 +78,6 @@ is $am2, '2500m^2',                                                         '$a.
 my Area $a-m21 = ♎️ '42 m2';
 is $a-m21, '42m^2',                                                         '$a.new';
 
-#`[FIXME - conversion error]
 my Area $af2 = ($d-fe * $d-fe).in('sq ft');
 is $af2, '144sq ft',                                                        '$a.$d*$d';
 
@@ -126,7 +125,7 @@ is $t-s2, '58s',                                                            '$t.
 my $t-m1 = $t-s1.in( 'mins' );
 is $t-m1, '0.5min',                                                         '$t.in-mins';
 
-#`[FIXME these fail for now]
+#`[FIXME these fail for now ... do we really need 's1' to parse?]
 #`[[
 my Measure $m-s1 = ♎️ '30 s1';
 is $m-s1, '30s',                                                            '$t.new-strip1';

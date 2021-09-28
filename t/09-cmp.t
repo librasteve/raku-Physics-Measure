@@ -14,7 +14,7 @@ is $a cmp $c, Order::Same,                                                      
 my $b = ♎️ '-2.3 m';
 is $a cmp $b, Order::More,                                                      '$a cmp $b';
 
-$b = ♎️ '23m';
+$b = ♎️ '23 m';
 is $a cmp $b, Order::Less,                                                      '$a cmp $b';
 
 my $t2 = ♎️ '2 mins';

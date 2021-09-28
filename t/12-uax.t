@@ -3,7 +3,7 @@
 #TESTALL$ prove6 ./t      [from root]
 use lib '../lib';
 use Test;
-#plan 17;
+plan 22;
 
 use Physics::Measure :ALL;
 
@@ -20,7 +20,7 @@ is ~$s,'1000000m/s',														'm/s';
 is $s.^name,'Physics::Measure::Speed',										'Speed';
 
 my $f = $l.in: <ft>;
-is ~$f,'3280.839895ft',													'ft';
+is ~$f,'3280.839895ft',													    'ft';
 is $f.^name,'Physics::Measure::Length',										'.in';
 
 my $m = 1kg;
@@ -30,19 +30,26 @@ is $m.^name,'Physics::Measure::Mass',										'Mass';
 my $c = 17cm;           
 is ~$c,'17cm',																'cm';
 
-#`[[FIXME - fails
 my $d = 7°;
 is ~$d,<7°0′0″>,															'°';
-]]
+is $d.^name,'Physics::Measure::Angle',                                       'Angle';
+
+my $T = 7°C;
+is ~$T,'7°C',													    		'°C';
+is $T.^name,'Physics::Measure::Temperature',                                'Temperature';
+
+my $r = 7radian;
+is ~$r,'7radian',															'radian';
+is $r.^name,'Physics::Measure::Angle',                                      'Angle';
 
 my $y = ♎️ '5e1 km';
 is ~$y,'50km',																'km';
 
 my $v1 = 42μl;
-is ~$v1,'42μl',															'42 μl';
+is ~$v1,'42μl',															    '42 μl';
 
 my $v2 = ♎️ '91 μl';
-is ~$v2,'91μl',															'91 μl';
+is ~$v2,'91μl',															    '91 μl';
 
 my $x = Volume.new(value => 21.006, units => 'μl');
 is ~$x,'21.006μl',															'21.006 μl';
@@ -50,4 +57,4 @@ is ~$x,'21.006μl',															'21.006 μl';
 my $z = ♎️ '18 μ';
 is ~$z,'18μ',																'18 μ';
 
-done-testing;
+# done-testing;

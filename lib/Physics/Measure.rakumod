@@ -618,7 +618,7 @@ multi infix:<!=> ( Measure:D $a, Measure:D $b ) is equiv( &infix:<!=> ) is expor
 ##### Affix Operators #####
 
 #`[[ 
-An 'Affix Operators' combine the notions of: 
+'Affix Operators' combine the notions of:
 1. SI Prefixes e.g. c(centi-), k(kilo-) that make compound units such as cm, km, kg  
 2. Raku Postfixes e.g. $l = 42cm; operators which work on the preceding value
 
@@ -626,7 +626,7 @@ We use the term Affix to indicate that both concepts are provided by this code:
 1. Construction of the cross product of SI Prefixes (20) with ( SI Base (7) + Derived (20) ) Units
 2. Declaration of the resulting ~540 Unit instances and matching Raku Postfix operators
 
-Now you can simply go 'my $l = 1km;' to declare a new Measure with value => 1 and units => 'km'
+Now you can simply go 'my $l = 1km;' to construct a new Measure object with value => 1 and units => 'km'
 #]]
 
 my %affix-by-name = GetAffixByName;
