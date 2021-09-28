@@ -61,10 +61,10 @@ class Measure is export {
         self.bless( :$value, :$units, error => Error.new(:$error, :$value) )
     }
     multi method new( Str:D $string ) {					say "new from Str" if $db;
-        my ( $value, $units ) = Measure.defn-extract( $string );
+        my ( $value, $units, $error ) = Measure.defn-extract( $string );
         $units = GetUnit( $units );
         my $type = $units.type( :just1 ) || 'Measure';
-        ::($type).new( :$value, :$units )
+        ::($type).new( :$value, :$units, :$error )
     }
     multi method new( Duration:D $d ) {				    say "new from Duration" if $db;
         my $value = +"$d";                              #extract value of Duration in s
@@ -75,6 +75,38 @@ class Measure is export {
     }
     method TWEAK {
         $!error.bind-mea-value: $!value with $!error;
+    }
+
+    #### Class Methods ####
+    #baby Grammar for initial extraction of definition from Str (value/unit/error)
+    method defn-extract( Measure:U: Str:D $s ) {
+        #handle degrees-minutes-seconds
+        #<°> is U+00B0 <′> is U+2032 <″> is U+2033
+        if $s ~~ /(\d*)\°(\d*)\′(\d*)\″?/ {
+            my $deg where 0 <= * < 360 = $0 % 360;
+            my $min where 0 <= * <  60 = $1 // 0;
+            my $sec where 0 <= * <  60 = $2 // 0;
+            my $v = ( ($deg * 3600) + ($min * 60) + $sec ) / 3600;
+
+            say "extracting «$s»: v is $deg°$min′$sec″, u is degrees, e is Any" if $db;
+            return($v, 'degrees', Any)
+        }
+        #put hh:mm:ss in here ;-)
+
+        #handle generic case
+        else {
+            $s ~~ /^ ( <number> ) \s* ( <-[±\s]>* ) [\s* '±' \s* ( <number>? ) ('%'?)]? $/;
+            my $v = +$0;
+            my $u = ~$1;
+            my $e;
+            with $2 {
+                $e = +$2;
+                $e = "$e%" if ~$3 eq '%';
+            }
+
+            say "extracting «$s»: v is «$v», u is «$u», e is «$e» as {$e.^name}" if $db;
+            return($v, $u, $e)
+        }
     }
 
 	#### Coercion & Output ####
@@ -95,32 +127,6 @@ class Measure is export {
     method pretty    {
 		my $rebased = $.in( $.units.canonical);
 		"{$rebased.value-r} {$.units.pretty}"
-	}
-
-	#### Class Methods ####
-	#baby Grammar for initial extraction of definition from Str (value/unit/error)
-	method defn-extract( Measure:U: Str:D $s ) {
-		#handle degrees-minutes-seconds
-		#<°> is U+00B0 <′> is U+2032 <″> is U+2033
-		if $s ~~ /(\d*)\°(\d*)\′(\d*)\″?/ {
-			my $deg where 0 <= * < 360 = $0 % 360;
-			my $min where 0 <= * <  60 = $1 // 0;
-			my $sec where 0 <= * <  60 = $2 // 0;
-			my $v = ( ($deg * 3600) + ($min * 60) + $sec ) / 3600;
-
-			say "extracting «$s»: v is $deg°$min′$sec″, u is degrees" if $db;
-			return($v, 'degrees')
-		}
-		#put hh:mm:ss in here ;-)
-		#handle generic case
-		else {
-			$s ~~ /^ ( <number> ) \s* ( <-[±]>* ) $/;
-			my $v = +$0;
-			my $u = ~$1;
-
-			say "extracting «$s»: v is «$v», u is «$u»" if $db;
-			return($v, $u)
-		}
 	}
 
 	#### Maths Operations ####
@@ -266,7 +272,7 @@ class Measure is export {
 
 		#setup some hashes and arrays
 		my %pfix2fact = GetPrefixToFactor;
-		   %pfix2fact<none> = 1;		#plug gap in factors
+		   %pfix2fact<none> = 1;		#plug gap in factors  iamerejh
 		my %fact2pfix = %pfix2fact.kv.reverse;
            %fact2pfix{'0'} = 1;         #plug gap in factors  (need this?)
 		my @pfixs = %pfix2fact.keys;
