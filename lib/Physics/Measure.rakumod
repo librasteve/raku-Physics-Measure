@@ -655,14 +655,18 @@ my package EXPORT::ALL {
 }
 
 ##### Error ± Operators #####
-sub postfix:<%> ( Real:D $x ) is export {
+sub postfix:<%> ( Real:D $x --> Str ) is export {
     "$x%"
 }
-multi infix:<±> ( Measure:D $a, Real:D $b ) is export {
-    say "yo";
+multi infix:<±> ( Measure:D $m, Real:D $error --> Measure ) is export {
+    $m.error = Error.new( :$error, value => $m.value );
+    $m.error.bind-mea-value: $m.value;
+    return $m
 }
-multi infix:<±> ( Measure:D $a, Str:D $b ) is export {
-    say $b;
+multi infix:<±> ( Measure:D $m, Str:D $error --> Measure ) is export {
+    $m.error = Error.new( :$error, value => $m.value );
+    $m.error.bind-mea-value: $m.value;
+    return $m
 }
 
 #EOF
