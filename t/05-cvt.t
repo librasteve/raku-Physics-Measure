@@ -125,18 +125,6 @@ is $t-s2, '58s',                                                            '$t.
 my $t-m1 = $t-s1.in( 'mins' );
 is $t-m1, '0.5min',                                                         '$t.in-mins';
 
-#`[FIXME these fail for now ... do we really need 's1' to parse?]
-#`[[
-my Measure $m-s1 = ♎️ '30 s1';
-is $m-s1, '30s',                                                            '$t.new-strip1';
-
-my $m-h12 = $m-s1.in( 'hours' );
-is $m-h12, '0.008333hours',                                                 '$t.in-hours';
-
-my $m-s12 = $m-h12.in( 's1' );
-is $m-s12, '30s',                                                           '$t.in-strip';
-#]]
-
 my Measure $m-s1 = ♎️ '30 s';
 my $m-h12 = $m-s1.in( 'hours' );
 my $m-s12 = $m-h12.in( 's' );

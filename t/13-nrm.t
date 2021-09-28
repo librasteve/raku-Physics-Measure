@@ -8,9 +8,9 @@ plan 3;
 #`[[
 FIXME test corner cases
 - name both PHz and petahertz (maybe subst?)
-- check crossing 1
+- check crossing 1 (ie. base)
 - check guardrails
-- add autonorm (check use of bless)
+- add autonorm
 #]]
 
 use Physics::Measure :ALL;
@@ -23,7 +23,7 @@ my \λ = 2.5nm;
 is ~λ, '2.5nm',									'~λ';
 
 my \ν = $c / λ;  
-is ~ν.norm, '119.92PHz',						    '~ν.norm';
+is ~ν.norm, '119.92PHz',						'~ν.norm';
 
 my \Ep = $ℎ * ν;  
 is ~Ep.norm, '79.46aJ',						    '~Ep.norm';

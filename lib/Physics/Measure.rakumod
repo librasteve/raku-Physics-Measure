@@ -39,8 +39,8 @@ sub GetMeaUnit( $u ) is export {
 
 ########## Classes & Methods ##########
 
-class Dimensionless { ... }
 class Time { ... }
+class Dimensionless { ... }
 
 class Measure is export {
     #Parent class for physical quantities with value, units & error(wip)
@@ -58,7 +58,8 @@ class Measure is export {
         my $value = $m.value;
         my $units = $m.units;
         my $error = $m.error.absolute with $m.error;
-        self.bless( :$value, :$units, error => Error.new(:$error, :$value) )
+        my $type = $m.^name;
+        ::($type).new( :$value, :$units, :$error )
     }
     multi method new( Str:D $string ) {					say "new from Str" if $db;
         my ( $value, $units, $error ) = Measure.defn-extract( $string );
@@ -68,7 +69,7 @@ class Measure is export {
     }
     multi method new( Duration:D $d ) {				    say "new from Duration" if $db;
         my $value = +"$d";                              #extract value of Duration in s
-        Time.new( :$value, units => GetUnit('s') )
+        Time.new( :$value, units => GetUnit('s') )      #error => Any
     }
     method clone( ::T: ) {							    say "cloning " ~ T.^name if $db;
         T.new: self
@@ -95,7 +96,7 @@ class Measure is export {
 
         #handle generic case
         else {
-            $s ~~ /^ ( <number> ) \s* ( <-[±\s]>* ) [\s* '±' \s* ( <number>? ) ('%'?)]? $/;
+            $s ~~ /^ ( <number> ) \s* ( <-[±]>* ) [\s* '±' \s* ( <number>? ) ('%'?)]? $/;
             my $v = +$0;
             my $u = ~$1;
             my $e;
@@ -104,7 +105,7 @@ class Measure is export {
                 $e = "$e%" if ~$3 eq '%';
             }
 
-            say "extracting «$s»: v is «$v», u is «$u», e is «$e» as {$e.^name}" if $db;
+            say "extracting «$s»: v is «$v», u is «$u»#`[ ,e is «$e» as {$e.^name}]" if $db;
             return($v, $u, $e)
         }
     }
@@ -272,9 +273,8 @@ class Measure is export {
 
 		#setup some hashes and arrays
 		my %pfix2fact = GetPrefixToFactor;
-		   %pfix2fact<none> = 1;		#plug gap in factors  iamerejh
 		my %fact2pfix = %pfix2fact.kv.reverse;
-           %fact2pfix{'0'} = 1;         #plug gap in factors  (need this?)
+           %fact2pfix{'1'} = '';         #plug gap in factors for vanilla base units
 		my @pfixs = %pfix2fact.keys;
 
 		#what is initial prefix factor and base unit?
