@@ -16,8 +16,7 @@ use Physics::Error;
 
 my $db = 0;					#debug
 
-our $round-to;				#optional round for output methods.. Str etc
-our $percent = 0;           #optional set =0 to give absolute error ... move to Error module
+our $round-val = 0.00000000000001;  #round output (default 14 decimal places)
 
 constant \isa-length = 'Distance' | 'Breadth' | 'Width' | 'Height' | 'Depth';
 
@@ -113,12 +112,12 @@ class Measure is export {
     method Real      { $.value }
     method Numeric   { $.value }
 	method value-r   {
-        $round-to ?? $.value.round($round-to) !! $.value
+        $round-val ?? $.value.round($round-val) !! $.value
     }
     method Str       {
         my $s = "{$.value-r}{$.units}";
-        return $s without self.error;
-        $s ~ " ±{$percent ?? $.error.percent !! ~$.error.absolute}"
+        $s ~= " ±{self.error}" with self.error;
+        return $s
     }
     method canonical {
 		my $rebased = $.in( $.units.canonical);
@@ -273,15 +272,15 @@ class Measure is export {
 		#setup some hashes and arrays
 		my %pfix2fact = GetPrefixToFactor;
 		my %fact2pfix = %pfix2fact.kv.reverse;
-           %fact2pfix{'1'} = '';         #plug gap in factors for vanilla base units
+           %fact2pfix{'1'} = '';                    #plug gap in factors for vanilla base units
 		my @pfixs = %pfix2fact.keys;
 
 		#what is initial prefix factor and base unit?
 		my ( $fact, $base );
 		if $afx-defn {
 			$afx-defn ~~ m|(<@pfixs>)(.*)|;
-			$fact = $0.so ?? %pfix2fact{$0} !! 1;    #handle no prefix case
-			$base = $1.so ?? ~$1 !! $afx-defn;       #handle no prefix case
+			$fact = $0.so ?? %pfix2fact{$0} !! 1;   #handle no prefix case
+			$base = $1.so ?? ~$1 !! $afx-defn;      #handle no prefix case
 		} elsif $base = %abn{$afx-name} {
 			$fact = 1;
 		} else {
@@ -307,14 +306,6 @@ class Measure is export {
 	method rebase {						#to base (prototype) unit of type
 		self.in( GetPrototype( self.units.type( :just1 ) ))
 	}
-    method magnitude {
-        # use after norm
-        given $!value.abs {
-            when   0 < * <= 10   { 1 }
-            when  10 < * <= 100  { 2 }
-            when 100 < * <= 1000 { 3 }
-        }
-    }
     method cmp( $a: $b ) {
 		my ($an, $bn);
         if ! $a.units.type eq $b.units.type {
@@ -389,7 +380,7 @@ class Angle is Measure is export {
 	method Str {
 		if self.units.name eq <°> {
 			my ( $deg, $min, $sec ) = self.dms;
-			$sec = $round-to ?? $sec.round($round-to) !! $sec;
+			$sec = $round-val ?? $sec.round($round-val) !! $sec;
 			qq{$deg°$min′$sec″}
 		} else {
 			nextsame
@@ -516,16 +507,7 @@ multi infix:<+> ( Real:D $left, Measure:D $right ) is export {
     my $argument = $left;
     return $result.add-const( $argument );
 }
-
 multi infix:<+> ( Measure:D $left, Measure:D $right ) is export {
-    my ( $result, $argument ) = infix-prep( $left, $right );
-    return $result.add( $argument );
-}
-multi infix:<+> ( Measure:D $left, $right ) is export {
-    my ( $result, $argument ) = infix-prep( $left, $right );
-    return $result.add( $argument );
-}
-multi infix:<+> ( $left, Measure:D $right ) is export {
     my ( $result, $argument ) = infix-prep( $left, $right );
     return $result.add( $argument );
 }
@@ -540,16 +522,7 @@ multi infix:<-> ( Real:D $left, Measure:D $right ) is export {
     my $argument = $left;
     return $result.subtract-const( $argument );
 }
-
 multi infix:<-> ( Measure:D $left, Measure:D $right ) is export {
-    my ( $result, $argument ) = infix-prep( $left, $right );
-    return $result.subtract( $argument );
-}
-multi infix:<-> ( Measure:D $left, $right ) is export {
-    my ( $result, $argument ) = infix-prep( $left, $right );
-    return $result.subtract( $argument );
-}
-multi infix:<-> ( $left, Measure:D $right ) is export {
     my ( $result, $argument ) = infix-prep( $left, $right );
     return $result.subtract( $argument );
 }
@@ -564,16 +537,7 @@ multi infix:<*> ( Real:D $left, Measure:D $right ) is export {
     my $argument = $left;
     return $result.multiply-const( $argument );
 }
-
 multi infix:<*> ( Measure:D $left, Measure:D $right ) is export {
-    my ( $result, $argument ) = infix-prep( $left, $right );
-    return $result.multiply( $argument );
-}
-multi infix:<*> ( Measure:D $left, $right ) is export {
-    my ( $result, $argument ) = infix-prep( $left, $right );
-    return $result.multiply( $argument );
-}
-multi infix:<*> ( $left, Measure:D $right ) is export {
     my ( $result, $argument ) = infix-prep( $left, $right );
     return $result.multiply( $argument );
 }
@@ -590,14 +554,6 @@ multi infix:</> ( Real:D $left, Measure:D $right ) is equiv( &infix:</> ) is exp
     return $recip.multiply-const( $argument );
 }
 multi infix:</> ( Measure:D $left, Measure:D $right ) is export {
-    my ( $result, $argument ) = infix-prep( $left, $right );
-    return $result.divide( $argument );
-}
-multi infix:</> ( Measure:D $left, $right ) is export {
-    my ( $result, $argument ) = infix-prep( $left, $right );
-    return $result.divide( $argument );
-}
-multi infix:</> ( $left, Measure:D $right ) is export {
     my ( $result, $argument ) = infix-prep( $left, $right );
     return $result.divide( $argument );
 }

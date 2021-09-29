@@ -7,6 +7,8 @@ plan 22;
 
 use Physics::Measure :ALL;
 
+$Physics::Measure::round-val = 0.000001;
+
 my $l = 1km;
 is ~$l,'1km',																'km';
 is $l.^name,'Physics::Measure::Length',										'Length';

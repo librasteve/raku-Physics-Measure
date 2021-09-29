@@ -7,6 +7,8 @@ plan 12;
 
 use Physics::Measure;
 
+$Physics::Measure::round-val = 0.000001;
+
 #test simple +-*/ diff units 
 my $d1 = ♎️ '2 m';
 my $d2 = ♎️ '3 feet';

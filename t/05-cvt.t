@@ -7,6 +7,8 @@ plan 43;
 
 use Physics::Measure;
 
+$Physics::Measure::round-val = 0.000001;
+
 my Length $d-me = ♎️ '10 m';
 is "$d-me", '10m',                                                          '$d.""';
 is $d-me.WHAT, (Length),                                                    '$d.WHAT';
@@ -91,7 +93,7 @@ my Volume $v-y31 = ♎️ '7 cubic yard';
 is $v-y31, '7cubic yard',                                                   '$v.new-yards3';
 
 my $v-m31 = $v-y31.in( 'm3' );
-is $v-m31, '5.35188400589m^3',                                              '$v.in-m3';
+is $v-m31, '5.351884m^3',                                                   '$v.in-m3';
 
 my $v-y32 = $v-m31.in( 'cubic yard' );
 is $v-y32, '7cubic yard',                                                   '$v.in-cubic yard';
@@ -100,7 +102,7 @@ my Volume $v-l1 = ♎️ '6 l';
 is $v-l1, '6l',                                                             '$v.new-l';
 
 my $v-y33 = $v-l1.in( 'cubic yard' );
-is $v-y33, '0.0078477037cubic yard',                                        '$v.in-cubic yard';
+is $v-y33, '0.007848cubic yard',                                        '$v.in-cubic yard';
 
 my $v-l2 = $v-y33.in( 'l' );
 is $v-l2, '6l',                                                             '$v.in-l';

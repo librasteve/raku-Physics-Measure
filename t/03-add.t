@@ -5,13 +5,13 @@ use lib '../lib';
 use Test;
 plan 26;
 
-use Physics::Measure;
+use Physics::Measure :ALL;
 
 my $u     = GetMeaUnit('m');                  #get Unit object to construct a Measure
 my Length $d .=new(value => 1e4, units => $u);
 my Length $e .=new(value => 42, units => $u);
 
-my $f = $d + '42 m';
+my $f = $d + ♎️'42 m';
 ok $f.value == 10042,                                                           'add:M+S';
 
 $f = $d + $e;
@@ -32,13 +32,13 @@ $c = 1.12 + $b;
 ok $c.value == 43.12,                                                           'add:R+M';
 $c = $a - $b;
 ok $c.value == -19,                                                             'sub:M-M';
-$c = $a - '1 m';
+$c = $a - ♎️'1 m';
 ok $c.value == 22,                                                              'sub:M-S';
-$c = '1 m' - $a;
+$c = ♎️'1 m' - $a;
 ok $c.value == -22,                                                             'sub:S-M';
 $area = $a * $b;
 ok $area.value == 966,                                                          'mul:M*M';
-$area = '22 m' * $b;
+$area = ♎️'22 m' * $b;
 ok $area.value == 924,                                                          'mul:S*M';
 $c = $a * 2;
 ok $c.value == 46,                                                              'mul:M*R';

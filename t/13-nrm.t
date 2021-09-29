@@ -8,15 +8,17 @@ plan 6;
 use Physics::Measure :ALL;
 
 my \Em = 9.109_383_7015e-31kg ±0.000_000_0028e-31;
-is ~Em.norm, '0.0009109383701500001yg ±2.8000000000000007e-13',     '± ~Em,norm';
+is ~Em.norm, '0.00091093837015yg ±2.800000e-13',            '± ~Em,norm';
 
-my \Xh = 9.109_383_7015e-31m ±0.000_000_0028e-31;
-is ~Xh.norm, '9.1093837015e-07ym ±2.8e-16',                         '± ~Xh lower';
+my \Xl = 9.109_383_7015e-31m ±0.000_000_0028e-31;
+is ~Xl.norm, '0.00000091093837ym ±2.800000e-16',            '± ~Xl lower';
 
-my \Xl = 9109_383_7015e30kg ±28e30;
-is ~Xl.norm, '9.1093837015e+19Yg ±28000000000.000004',              '± ~Xh lower';
+$Physics::Measure::round-val = 1000000;
 
-$Physics::Measure::round-to = 0.01;
+my \Xh = 9109_383_7015e30kg ±28e30;
+is ~Xh.norm, '91093837015000000000Yg ±2.800000e+10',       '± ~Xh upper';
+
+$Physics::Measure::round-val = 0.01;
 
 my $c = ♎️ '299792458 m/s';
 my $ℎ = ♎️ '6.626070015e-34 J.s';

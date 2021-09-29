@@ -45,7 +45,7 @@ my $t8 = $t3 - $t4;             #-162 s
 is ~$t8, '-162s',                                                           '$t-sub-T';
 my Duration $d8 = $t8.Duration;
 is $d8, -162,                                                               '$t-get Duration';
-my Time $t9 = ♎️ '42s';
+my Time $t9 = ♎️ '42 s';
 $t9 = ♎️ $dur;
 is $t9.Duration, 10,                                                        '$t-set Duration';
 $t9.value = 5e1;
@@ -69,7 +69,7 @@ is "$s3", '17.234m/s',                                                     '$s.a
 
 my Length $d = ♎️ '5e1 m';      #'50 m'
 $s2 = $d / $t6;
-is "$s2", '1.1904761904761905m/s',                                         'div.mixed';
+is "$s2", '1.19047619047619m/s',                                         'div.mixed';
 
 my $x = $d * $d;
 is "$x", '2500m^2',                                                        'mul.same';
@@ -83,7 +83,7 @@ is "$θ2", '2.141radian',													'radian Str';
 my $θ3 = $θ1 + $θ2;
 ok $θ3.dms( :no-secs ) == (168, 10.71583625055526423),						'add.angles';
 
-$Physics::Measure::round-to = 0.01;
+$Physics::Measure::round-val = 0.01;
 my $nmiles = ♎️ "7 nmiles";
 my $hours = ♎️ "3.5 hr";
 my $speed = $nmiles / $hours;

@@ -7,6 +7,8 @@ plan 37;
 
 use Physics::Measure;
 
+$Physics::Measure::round-val = 0.000001;
+
 my Speed $s-mph1 = ♎️ '17 miles/hours';
 is ~$s-mph1, '17miles/hours',                                                   '$s-mph1';
  
@@ -37,10 +39,10 @@ is ~$x3, '22.747m^3',                                                           
 my $d = ♎️ '5e1 m';
 my Time $t6 = ♎️ '42 s';
 my Speed $sp = $d / $t6;
-is ~$sp, '1.1904761904761905m/s',                                               '$sp-m.s-1';
+is ~$sp, '1.190476m/s',                                                          '$sp-m.s-1';
 
 my Acceleration $dsdt = $sp / $t6;
-is ~$dsdt, '0.02834467120181406m/s^2',                                          '$dsdt-m.s-2';
+is ~$dsdt, '0.028345m/s^2',                                                       '$dsdt-m.s-2';
 
 my Acceleration $dsdt2 = ♎️ '9.8 m/s^2';
 is ~$dsdt2, '9.8m/s^2',                                                         '$dsdt2-m/s^2';
