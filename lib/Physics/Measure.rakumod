@@ -17,8 +17,7 @@ use Physics::Error;
 my $db = 0;					#debug
 
 our $round-to;				#optional round for output methods.. Str etc
-our $percent = 1;           #optional set =0 to give absolute error
-#FIXME ... add Error logic
+our $percent = 0;           #optional set =0 to give absolute error ... move to Error module
 
 constant \isa-length = 'Distance' | 'Breadth' | 'Width' | 'Height' | 'Depth';
 
@@ -281,8 +280,8 @@ class Measure is export {
 		my ( $fact, $base );
 		if $afx-defn {
 			$afx-defn ~~ m|(<@pfixs>)(.*)|;
-			$fact = %pfix2fact{$0};
-			$base = ~$1;
+			$fact = $0.so ?? %pfix2fact{$0} !! 1;    #handle no prefix case
+			$base = $1.so ?? ~$1 !! $afx-defn;       #handle no prefix case
 		} elsif $base = %abn{$afx-name} {
 			$fact = 1;
 		} else {
@@ -293,11 +292,13 @@ class Measure is export {
 		my $res = self;
 		# either shift-right
 		while $res.value.abs > 1000 {
+            last if $fact >= 1e24;
 			$fact *= 1000;
 			$res = $res.in: qq|{%fact2pfix{$fact}}$base|;
 		}
 		# or shift-left
 		while $res.value.abs < 1 {
+            last if $fact <= 1e-24;
 			$fact /= 1000;
 			$res = $res.in: qq|{%fact2pfix{$fact}}$base|;
 		}
@@ -306,6 +307,14 @@ class Measure is export {
 	method rebase {						#to base (prototype) unit of type
 		self.in( GetPrototype( self.units.type( :just1 ) ))
 	}
+    method magnitude {
+        # use after norm
+        given $!value.abs {
+            when   0 < * <= 10   { 1 }
+            when  10 < * <= 100  { 2 }
+            when 100 < * <= 1000 { 3 }
+        }
+    }
     method cmp( $a: $b ) {
 		my ($an, $bn);
         if ! $a.units.type eq $b.units.type {

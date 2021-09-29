@@ -3,17 +3,19 @@
 #TESTALL$ prove6 ./t      [from root]
 use lib '../lib';
 use Test;
-plan 3;
-
-#`[[
-FIXME test corner cases
-- name both PHz and petahertz (maybe subst?)
-- check crossing 1 (ie. base)
-- check guardrails
-- add autonorm
-#]]
+plan 6;
 
 use Physics::Measure :ALL;
+
+my \Em = 9.109_383_7015e-31kg ±0.000_000_0028e-31;
+is ~Em.norm, '0.0009109383701500001yg ±2.8000000000000007e-13',     '± ~Em,norm';
+
+my \Xh = 9.109_383_7015e-31m ±0.000_000_0028e-31;
+is ~Xh.norm, '9.1093837015e-07ym ±2.8e-16',                         '± ~Xh lower';
+
+my \Xl = 9109_383_7015e30kg ±28e30;
+is ~Xl.norm, '9.1093837015e+19Yg ±28000000000.000004',              '± ~Xh lower';
+
 $Physics::Measure::round-to = 0.01;
 
 my $c = ♎️ '299792458 m/s';
