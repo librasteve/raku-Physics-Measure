@@ -79,7 +79,7 @@ class Measure is export {
     #### Class Methods ####
     #baby Grammar for initial extraction of definition from Str (value/unit/error)
     method defn-extract( Measure:U: Str:D $s ) {
-        #handle degrees-minutes-seconds
+        #handle eg. <45°30′30″>
         #<°> is U+00B0 <′> is U+2032 <″> is U+2033
         if $s ~~ /(\d*)\°(\d*)\′(\d*)\″?/ {
             my $deg where 0 <= * < 360 = $0 % 360;
@@ -90,7 +90,19 @@ class Measure is export {
             say "extracting «$s»: v is $deg°$min′$sec″, u is degrees, e is Any" if $db;
             return($v, 'degrees', Any)
         }
-        #put hh:mm:ss in here ;-)
+
+        #handle hh:mm:ss
+        elsif $s ~~ /('-'?)(\d*)\:(\d*)\:(\d*)/ {
+            my $neg = $0 // '';
+            my $hrs = $1 //  0;
+            my $min where 0 <= * < 60 = $2 // 0;
+            my $sec where 0 <= * < 60 = $3 // 0;
+            my $v = ( ($hrs * 3600) + ($min * 60) + $sec );
+            $v = -$v if $neg eq '-';
+
+            say "extracting «$s»: sign is $neg, v is $hrs:$min:$sec (thus $v), u is seconds, e is Any" if $db;
+            return($v, 'seconds', Any)
+        }
 
         #handle generic case
         else {
@@ -353,12 +365,31 @@ class Measure is export {
 ######## Special Measures ########
 
 class Time is Measure is export {
-    #FIXME v2 compound Time e.g. hh:mm:ss 
     #Duration ops <+> <-> <mod>
 
     multi method Duration {				#ie. $d = $t.Duration
 		my $nmo = self.in('s');
         return Duration.new( $nmo.value );
+    }
+    method hms(*%h)  {
+        my $abs = $.value.abs;
+        my $neg = $.value < 0 ?? '-' !! '';
+
+        my $hrs = ( $abs / 3600 ).floor;
+        my $rem = ( $abs - ($hrs * 3600) );
+        my $min = ( $rem /   60 ).floor;
+        my $sec = ( $rem - ($min *   60) );
+
+        return( $neg, $hrs, $min, $sec )
+    }
+    method Str {
+        if self.units.name eq <s> && self.value.abs >= 60 {
+            my ( $neg, $hrs, $min, $sec ) = self.in('s').hms;
+            $sec = $round-val ?? $sec.round($round-val) !! $sec;
+            $neg ~ sprintf( '%02d:%02d:%02d', $hrs, $min, $sec );
+        } else {
+            nextsame
+        }
     }
 }
 

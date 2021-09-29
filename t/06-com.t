@@ -118,7 +118,7 @@ is ~$sms, '31.2928m/s',                                                         
 my $t1 = ♎️ '10 s';
 my $t2 = ♎️ '2 hours';
 my $t3 = $t1 + $t2;         #   
-is ~$t3, '7210s',                                                               '$t-add.diff';
+is ~$t3, '02:00:10',                                                               '$t-add.diff';
 
 my $dn1 = ♎️ '2 m';
 my $dn2 = ♎️ '3 feet';
