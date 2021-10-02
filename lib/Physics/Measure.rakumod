@@ -16,7 +16,8 @@ use Physics::Error;
 
 my $db = 0;					#debug
 
-our $round-val = 0.00000000000001;  #round output (default 14 decimal places)
+#our $round-val = 0.00000000000001;  #round output (default 14 decimal places)
+our $round-val = Nil;
 
 constant \isa-length = 'Distance' | 'Breadth' | 'Width' | 'Height' | 'Depth';
 
@@ -122,14 +123,21 @@ class Measure is export {
 
 	#### Coercion & Output ####
     method Real      { $.value }
+
     method Numeric   { $.value }
-	method value-r   {
-        $round-val ?? $.value.round($round-val) !! $.value
+
+    method value-r   {
+        return( $round-val ?? $.value.round($round-val) !! $.value )
     }
-    method Str       {
-        my $s = "{$.value-r}{$.units}";
-        $s ~= " ±{self.error}" with self.error;
-        return $s
+
+    method Str {
+        with self.error {
+            my ( $error, $round-to ) = self.error.denorm;
+            my $value = $round-to ?? $.value.round($round-to) !! $.value-r;
+            return "{ $value }{ $.units } ±{ $error }"
+        } else {
+            return "{ $.value-r }{ $.units }"
+        }
     }
     method canonical {
 		my $rebased = $.in( $.units.canonical);
