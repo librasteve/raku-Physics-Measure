@@ -240,7 +240,7 @@ class Measure is export {
 
         my $value = 1 / $r.value;
         my $units = GetUnit('unity').divide( $r.units );
-        my $error = $r.error.relative with $r.error;
+        my $error = $r.error.relative * $value with $r.error;
 
         ::($units.type).new( :$value, :$units, :$error );
     }
