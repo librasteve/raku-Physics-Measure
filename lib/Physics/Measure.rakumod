@@ -162,18 +162,30 @@ class Measure is export {
 
     method add-error-abs( $r ) {
         with $!error {
-            $!error.add-abs($r.error)
+            my $rnd-l = $.error.denorm[1];
+            my $rnd-r = $r.error.denorm[1];
+            my $round = $rnd-l cmp $rnd-r ?? $rnd-l !! $rnd-r;
+
+            $!error.add-abs($r.error);
+            $!error.absolute = $!error.absolute.round($round)    #FIXME - clean up (make round.Rat?)
         } orwith $r.error {
             $!error = $r.error;
             $!error.bind-mea-value: $!value
         }
     }
     method add-error-rel( $r, $combined-value ) {
+        my ( $err-abs, $round );
         with $!error {
-            $!error.add-rel($r.error) * $combined-value
+            $err-abs = $!error.add-rel($r.error) * $combined-value;
+
+            my $rnd-l = $.error.denorm[1];
+            my $rnd-r = $r.error.denorm[1];
+            $round = $rnd-l cmp $rnd-r ?? $rnd-l !! $rnd-r;
         } orwith $r.error {
-            $r.error.relative * $combined-value
+            $err-abs = $r.error.relative * $combined-value;
+            $round = $r.error.denorm[1]
         }
+        return ( $err-abs, $round )
     }
 
     method add( $r is copy ) {
@@ -211,7 +223,8 @@ class Measure is export {
 
         my $value = $l.value * $r.value;
         my $units = $l.units.multiply( $r.units );
-        my $error = $l.add-error-rel( $r, $value );
+        my ( $error, $round ) = $l.add-error-rel( $r, $value );
+        $error .= round($round) with $round;
 
         ::($units.type).new( :$value, :$units, :$error );
     }
@@ -226,13 +239,15 @@ class Measure is export {
 
         my $value = $l.value / $r.value;
         my $units = $l.units.divide( $r.units );
-        my $error = $l.add-error-rel( $r, $value );
+        my ( $error, $round ) = $l.add-error-rel( $r, $value );
+        $error .= round($round) with $round;
 
         ::($units.type).new( :$value, :$units, :$error );
     }
     method divide-by-const( Real:D $r ) {
         self.value /= $r;
-        self.error.absolute /= $r with self.error;
+        my $round = self.error.denorm[1] with self.error;
+        self.error.absolute = ( self.error.absolute / $r ).round($round) with self.error;
         return self
     }
     method reciprocal {								#eg. 1 / Time => Frequency
@@ -240,7 +255,8 @@ class Measure is export {
 
         my $value = 1 / $r.value;
         my $units = GetUnit('unity').divide( $r.units );
-        my $error = $r.error.relative * $value with $r.error;
+        my $round = $r.error.denorm[1] with $r.error;
+        my $error = ( $r.error.relative * $value ).round($round) with $r.error;
 
         ::($units.type).new( :$value, :$units, :$error );
     }
@@ -257,7 +273,8 @@ class Measure is export {
 
         my $value = $l.value ** ( 1 / $n );
         my $units = $.units.root-extract( $n );
-        my $error = ( $l.error.relative / $n * $value ) with $l.error;
+        my $round = $l.error.denorm[1] / (10 ** $n) with $l.error;
+        my $error = ( $l.error.relative / $n * $value ).round($round) with $l.error;
 
         ::($units.type).new( :$value, :$units, :$error );
     }
