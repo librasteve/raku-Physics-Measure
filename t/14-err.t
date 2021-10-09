@@ -99,21 +99,26 @@ sub check-maths( $x ) {
     }
 }
 
-# say check-maths( @o3-xs[1] );
+say check-maths( @o3-xs[1] ); die;
+
 my $maths31-re = <
 -12.5ft ±1.313
-12.50000410104987ft ±1.3130000000000002
-3810001250nm ±400202453.75
+12.5ft ±1.313
+3810001250nm ±400202450
 29.5ft ±1.313
 12.3ft ±1.313
 1267nm ±53.75
-12.499995898950129ft ±1.3130000000000002
--3809998750nm ±400202453.75
-0ft ±2.6260000000000003
+12.5ft ±1.313
+-3809998750nm ±400202450
+0ft ±2.626
 4.763e-06m^2 ±0.71e-6
 212.5ft ±22.321
 3048000① ±451225.92
 >;
+
+
+
+
 
 is check-maths( @o3-xs[1] ) eq $maths31-re, True,                'maths ok';
 
@@ -121,7 +126,7 @@ my Time $t = Time.new(value => 10, units => 'ms', error => '4.3%');
 is ~$t, '10ms ±0.43',                                            'Time ms';
 is ~( 17 / $t ), '1700Hz ±73.1',                                 'Frequency Hz' ;
 
-is ~( $y / $t ), '0.000125m/s ±0.000010749999999999999e0',       'Speed m/s';
+is ~( $y / $t ), '0.000125m/s ±0.000011e0',                      'Speed m/s';
 
 my Length $w = Length.new(value => 10, units => 'm', error => '2%');
 

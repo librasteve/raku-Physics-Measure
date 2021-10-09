@@ -162,12 +162,14 @@ class Measure is export {
 
     method add-error-abs( $r ) {
         with $!error {
+            #take larger value as argument for round()
             my $rnd-l = $.error.denorm[1];
             my $rnd-r = $r.error.denorm[1];
-            my $round = $rnd-l cmp $rnd-r ?? $rnd-l !! $rnd-r;
+            my $round = $rnd-l > $rnd-r ?? $rnd-l !! $rnd-r;   #iamerejh apply as-percent
 
             $!error.add-abs($r.error);
-            $!error.absolute = $!error.absolute.round($round)    #FIXME - clean up (make round.Rat?)
+            #coerce to Rat to suppress any synthetic floating point lsb s
+            $!error.absolute = $!error.absolute.round($round).Rat;
         } orwith $r.error {
             $!error = $r.error;
             $!error.bind-mea-value: $!value
@@ -178,9 +180,10 @@ class Measure is export {
         with $!error {
             $err-abs = $!error.add-rel($r.error) * $combined-value;
 
+            #take larger value as argument for round()
             my $rnd-l = $.error.denorm[1];
             my $rnd-r = $r.error.denorm[1];
-            $round = $rnd-l cmp $rnd-r ?? $rnd-l !! $rnd-r;
+            $round = $rnd-l > $rnd-r ?? $rnd-l !! $rnd-r;
         } orwith $r.error {
             $err-abs = $r.error.relative * $combined-value;
             $round = $r.error.denorm[1]
@@ -224,13 +227,17 @@ class Measure is export {
         my $value = $l.value * $r.value;
         my $units = $l.units.multiply( $r.units );
         my ( $error, $round ) = $l.add-error-rel( $r, $value );
-        $error .= round($round) with $round;
+        $error .= round($round) if $round && $round != 0;
 
         ::($units.type).new( :$value, :$units, :$error );
     }
     method multiply-const(Real:D $r) {
         self.value *= $r;
-        self.error.absolute *= $r with self.error;
+        with self.error {
+            my $round = self.error.denorm[1];
+            self.error.absolute *= $r;
+            self.error.absolute .= round($round);
+        }
         return self
     }
     method divide( Measure:D $r is copy ) {			#eg. Distance / Time => Speed
@@ -240,14 +247,17 @@ class Measure is export {
         my $value = $l.value / $r.value;
         my $units = $l.units.divide( $r.units );
         my ( $error, $round ) = $l.add-error-rel( $r, $value );
-        $error .= round($round) with $round;
+        $error .= round($round) if $round && $round != 0;
 
         ::($units.type).new( :$value, :$units, :$error );
     }
     method divide-by-const( Real:D $r ) {
         self.value /= $r;
-        my $round = self.error.denorm[1] with self.error;
-        self.error.absolute = ( self.error.absolute / $r ).round($round) with self.error;
+        with self.error {
+            my $round = self.error.denorm[1];
+            self.error.absolute /= $r;
+            self.error.absolute .= round($round);
+        }
         return self
     }
     method reciprocal {								#eg. 1 / Time => Frequency
