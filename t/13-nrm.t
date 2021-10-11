@@ -20,7 +20,8 @@ my \Xh = 9109_383_7015e30kg ±28e30;
 is ~Xh.norm, '91093837015000000000Yg ±2.80e+10',       '± ~Xh upper';
 #]]
 
-my $x= ♎️ '12.5 ft ±10.5%';
+my $w = ♎️ '12.5 ft';
+my $x = ♎️ '12.5 ft ±10.5%';
 my $y = Length.new(value => 12.5e2, units => 'nm', error => '4.3%');
 
 say $x.error.as-percent;

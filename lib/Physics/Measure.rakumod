@@ -17,7 +17,7 @@ use Physics::Error;
 my $db = 0;					#debug
 
 #our $round-val = 0.00000000000001;  #round output (default 14 decimal places)
-our $round-val = Nil;
+our $round-val = Nil;   #FIXME
 
 constant \isa-length = 'Distance' | 'Breadth' | 'Width' | 'Height' | 'Depth';
 
@@ -107,16 +107,23 @@ class Measure is export {
 
         #handle generic case
         else {
-            $s ~~ /^ ( <number> ) \s* ( <-[±]>* ) [\s* '±' \s* ( <number>? ) ('%'?)]? $/;
+            $s ~~ /^ ( <number> ) \s* ( <-[± \s]>* ) \s* ( '±' \s* .* )? $/;
             my $v = +$0;
             my $u = ~$1;
-            my $e;
-            with $2 {
-                $e = +$2;
-                $e = "$e%" if ~$3 eq '%';
+            my $e = $2 // '';
+               $e ~~ s/'±'//;
+
+            given $e {
+                when /'%'/ {
+                    $e ~~ s/'%'//;
+                    $e = "$e%" if $e ~~ /<number>/;
+                }
+                default {
+                    $e = +$e if $e ~~ /<number>/;
+                }
             }
 
-            say "extracting «$s»: v is «$v», u is «$u»#`[ ,e is «$e» as {$e.^name}]" if $db;
+            say "extracting «$s»: v is «$v», u is «$u», e is «$e» as {$e.^name}" if $db;
             return($v, $u, $e)
         }
     }
