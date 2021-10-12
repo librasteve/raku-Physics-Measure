@@ -16,7 +16,7 @@ use Physics::Error;
 
 my $db = 0;					#debug
 
-#our $round-val = 0.00000000000001;  #round output (default 14 decimal places)
+#our $round-val = 0.00000000000000001;  #round output (default 17 decimal places)
 our $round-val = Nil;   #FIXME
 
 constant \isa-length = 'Distance' | 'Breadth' | 'Width' | 'Height' | 'Depth';
@@ -107,7 +107,7 @@ class Measure is export {
 
         #handle generic case
         else {
-            $s ~~ /^ ( <number> ) \s* ( <-[± \s]>* ) \s* ( '±' \s* .* )? $/;
+            $s ~~ /^ ( <number> ) \s* ( <-[±]>* ) \s* ( '±' \s* .* )? $/;
             my $v = +$0;
             my $u = ~$1;
             my $e = $2 // '';
@@ -139,8 +139,12 @@ class Measure is export {
 
     method Str {
         with self.error {
-            my ( $error, $round-to ) = self.error.denorm;
-            my $value = $round-to ?? $.value.round($round-to) !! $.value-r;
+            my ( $error, $round ) = self.error.denorm;
+            if $round-val && $round-val > $round {
+                $round = $round-val;
+                $error = $error.round($round);
+            }
+            my $value = $.value.round($round);
             return "{ $value }{ $.units } ±{ $error }"
         } else {
             return "{ $.value-r }{ $.units }"
@@ -172,11 +176,11 @@ class Measure is export {
             #take larger value as argument for round()
             my $rnd-l = $.error.denorm[1];
             my $rnd-r = $r.error.denorm[1];
-            my $round = $rnd-l > $rnd-r ?? $rnd-l !! $rnd-r;   #iamerejh apply as-percent
+            my $round = $rnd-l > $rnd-r ?? $rnd-l !! $rnd-r;
 
+            #take larger value as argument for round()
             $!error.add-abs($r.error);
-            #coerce to Rat to suppress any synthetic floating point lsb s
-            $!error.absolute = $!error.absolute.round($round).Rat;
+            $!error.absolute .= round($round);
         } orwith $r.error {
             $!error = $r.error;
             $!error.bind-mea-value: $!value
@@ -190,7 +194,7 @@ class Measure is export {
             #take larger value as argument for round()
             my $rnd-l = $.error.denorm[1];
             my $rnd-r = $r.error.denorm[1];
-            $round = $rnd-l > $rnd-r ?? $rnd-l !! $rnd-r;
+            $round = $rnd-l > $rnd-r ?? $rnd-l !! $rnd-r
         } orwith $r.error {
             $err-abs = $r.error.relative * $combined-value;
             $round = $r.error.denorm[1]

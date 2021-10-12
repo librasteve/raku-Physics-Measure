@@ -99,8 +99,7 @@ sub check-maths( $x ) {
     }
 }
 
-say check-maths( @o3-xs[1] ); die;
-
+# say check-maths( @o3-xs[1] ); die;
 my $maths31-re = <
 -12.5ft ±1.313
 12.5ft ±1.313
@@ -115,10 +114,6 @@ my $maths31-re = <
 212.5ft ±22.321
 3048000① ±451225.92
 >;
-
-
-
-
 
 is check-maths( @o3-xs[1] ) eq $maths31-re, True,                'maths ok';
 
@@ -145,6 +140,6 @@ my \Em2 = 9000kg ±900;
 is ~Em2, '9000kg ±900',                                          'precision2';
 
 my \Em3 = -.09kg ±0.009;
-is ~Em3, '-0.09000000000000001kg ±0.009',                        'precision3';
+is ~Em3, '-0.09kg ±0.009',                                       'precision3';
 
 # done-testing;
