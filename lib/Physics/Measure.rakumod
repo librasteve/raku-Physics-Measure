@@ -1,4 +1,4 @@
-unit module Physics::Measure:ver<1.0.0>:auth<Steve Roe (p6steve@furnival.net)>;
+unit module Physics::Measure:ver<1.0.1>:auth<Steve Roe (p6steve@furnival.net)>;
 use Physics::Unit;
 use Physics::Error;
 
@@ -16,8 +16,8 @@ use Physics::Error;
 
 my $db = 0;					#debug
 
-#our $round-val = 0.00000000000000001;  #round output (default 17 decimal places)
-our $round-val = Nil;   #FIXME
+#our $round-val = 0.00000000000000001;  (17 decimal places ~ limit of Num)
+our $round-val = Nil;
 
 constant \isa-length = 'Distance' | 'Breadth' | 'Width' | 'Height' | 'Depth';
 

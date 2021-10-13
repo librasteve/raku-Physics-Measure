@@ -1,12 +1,12 @@
 {
   "name": "Physics::Measure",
   "description": "Some support for physical measurements.",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "perl": "6.d",
   "authors": [
     "p6steve"
   ],
-  "auth": "github:p6steve",
+  "auth": "zef:p6steve",
   "depends": [
     "SVG",
     "SVG::Plot",
@@ -17,7 +17,7 @@
   "build-depends": [],
   "test-depends": [],
   "provides": {
-    "Physics::Measure": "lib/Physics/Measure.rakumod"
+    "Physics::Measure": "lib/Physics/Measure.pm6"
   },
   "resources": [],
   "license": "Artistic-2.0",
