@@ -17,7 +17,7 @@
   "build-depends": [],
   "test-depends": [],
   "provides": {
-    "Physics::Measure": "lib/Physics/Measure.pm6"
+    "Physics::Measure": "lib/Physics/Measure.rakumod"
   },
   "resources": [],
   "license": "Artistic-2.0",
