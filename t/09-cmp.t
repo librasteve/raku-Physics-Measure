@@ -7,21 +7,21 @@ plan 14;
 
 use Physics::Measure;
 
-my $a ♎️ '4.3 m';
+my $a = ♎️ '4.3 m';
 my $c = $a;
 is $a cmp $c, Order::Same,                                                      '$a cmp $c';
 
-my $b ♎️ '-2.3 m';
+my $b = ♎️ '-2.3 m';
 is $a cmp $b, Order::More,                                                      '$a cmp $b';
 
-$b ♎️ 23;
+$b = ♎️ '23 m';
 is $a cmp $b, Order::Less,                                                      '$a cmp $b';
 
-my $t2 ♎️ '2 mins';
-my $t3 ♎️ '43 hours';
+my $t2 = ♎️ '2 mins';
+my $t3 = ♎️ '43 hours';
 is $t2 cmp $t3, Less,                                                            '$t cmp $t3';
 
-my $d ♎️ '44 feet';
+my $d = ♎️ '44 feet';
 is $a cmp $d, Less,                                                             '$a cmp $d';
 
 my $e = $a.in: 'feet';
