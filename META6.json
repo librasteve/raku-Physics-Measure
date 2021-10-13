@@ -1,23 +1,31 @@
 {
-    "perl" : "6.d",
-    "name" : "Physics::Measure",
-    "auth" : "zef:p6steve",
-    "api" : "1",
-    "version" : "1.0.0",
-    "description" : "Some support for physical measurements.",
-    "authors" : [ "p6steve" ],
-    "license" : "Artistic-2.0",
-    "provides" : {
-        "Physics::Measure" : "lib/Physics/Measure.rakumod"
-    },
-    "depends" : [
-        "SVG","SVG::Plot","Math::Polygons","Physics::Unit"
-     ],
-    "build-depends" : [ ],
-    "test-depends" : [ ],
-    "resources" : [ ],
-    "tags": [
-      "Physics", "Measure", "Units"
-    ],
-    "source-url" : "git://github.com/p6steve/raku-Physics-Measure.git"
+  "name": "Physics::Measure",
+  "description": "Some support for physical measurements.",
+  "version": "1.0.1",
+  "perl": "6.d",
+  "authors": [
+    "p6steve"
+  ],
+  "auth": "zef:p6steve",
+  "depends": [
+    "SVG",
+    "SVG::Plot",
+    "Math::Polygons",
+    "Physics::Unit",
+    "Physics::Error"
+  ],
+  "build-depends": [],
+  "test-depends": [],
+  "provides": {
+    "Physics::Measure": "lib/Physics/Measure.rakumod"
+  },
+  "resources": [],
+  "license": "Artistic-2.0",
+  "tags": [
+    "Physics",
+    "Measure",
+    "Units"
+  ],
+  "api": "1",
+  "source-url": "git://github.com/p6steve/raku-Physics-Measure.git"
 }

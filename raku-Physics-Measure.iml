@@ -52,5 +52,14 @@
         </SOURCES>
       </library>
     </orderEntry>
+    <orderEntry type="module-library">
+      <library name="Physics::Error" type="perl6">
+        <CLASSES />
+        <JAVADOC />
+        <SOURCES>
+          <root url="raku://1165981606:Physics::Error!/" />
+        </SOURCES>
+      </library>
+    </orderEntry>
   </component>
 </module>
