@@ -144,7 +144,6 @@ class Measure is export {
                 $round = $round-val;
                 $error = $error.round($round);
             }
-            say $round;
             my $value = $round ?? $!value.round($round) !! $!value;
             return "{ $value }{ $.units } ±{ $error }"
         } else {
