@@ -42,7 +42,7 @@ my @o2-re = <
 12.5nm ±0.538
 >;
 
- @o2-xs.map( { .Str.say } );
+# @o2-xs.map( { .Str.say } );
 is @o2-xs.map( {.Str } ) eq @o2-re, True,                        'option 2';
 
 #Option 3
