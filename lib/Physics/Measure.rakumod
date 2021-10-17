@@ -144,11 +144,15 @@ class Measure is export {
                 $round = $round-val;
                 $error = $error.round($round);
             }
-            my $value = $.value.round($round);
+            say $round;
+            my $value = $round ?? $!value.round($round) !! $!value;
             return "{ $value }{ $.units } ±{ $error }"
         } else {
             return "{ $.value-r }{ $.units }"
         }
+    }
+    method gist {
+        return self.Str
     }
     method canonical {
 		my $rebased = $.in( $.units.canonical);

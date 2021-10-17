@@ -3,7 +3,7 @@
 #TESTALL$ prove6 ./t      [from root]
 use lib '../lib';
 use Test;
-# plan 6;
+plan 6;
 
 use Physics::Measure :ALL;
 
@@ -35,4 +35,4 @@ is ~ν.norm, '119.92PHz',						'~ν.norm';
 my \Ep = $ℎ * ν;  
 is ~Ep.norm, '79.46aJ',						    '~Ep.norm';
 
-done-testing;
+#done-testing;
