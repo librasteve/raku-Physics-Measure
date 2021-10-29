@@ -53,12 +53,11 @@ class Measure is export {
     multi method new( :$value, :$units, :$error ) {		say "new from attrs" if $db;
         self.bless( :$value, units => GetUnit($units), error => Error.new(:$error, :$value) )
     }
-    multi method new( Measure:D $m ) {				    say "new from Measure" if $db;
+    multi method new( ::T: Measure:D $m ) {				    say "new from Measure" if $db;
         my $value = $m.value;
         my $units = $m.units;
         my $error = $m.error.absolute with $m.error;
-        my $type = $m.^name;
-        ::($type).new( :$value, :$units, :$error )
+        ::T.new( :$value, :$units, :$error )
     }
     multi method new( Str:D $string ) {					say "new from Str" if $db;
         my ( $value, $units, $error ) = Measure.defn-extract( $string );
@@ -239,11 +238,11 @@ class Measure is export {
         $r .= rebase;
 
         my $value = $l.value * $r.value;
-        my $units = $l.units.multiply( $r.units );
+        my ( $type, $units ) = $l.units.multiply( $r.units );
         my ( $error, $round ) = $l.add-error-rel( $r, $value );
         $error .= round($round) if $round && $round != 0;
 
-        ::($units.type).new( :$value, :$units, :$error );
+        ::($type).new( :$value, :$units, :$error );
     }
     method multiply-const(Real:D $r) {
         self.value *= $r;
@@ -259,11 +258,11 @@ class Measure is export {
         $r .= rebase;
 
         my $value = $l.value / $r.value;
-        my $units = $l.units.divide( $r.units );
+        my ( $type, $units ) = $l.units.divide( $r.units );
         my ( $error, $round ) = $l.add-error-rel( $r, $value );
         $error .= round($round) if $round && $round != 0;
 
-        ::($units.type).new( :$value, :$units, :$error );
+        ::($type).new( :$value, :$units, :$error );
     }
     method divide-by-const( Real:D $r ) {
         self.value /= $r;
@@ -278,11 +277,11 @@ class Measure is export {
         my $r = self.rebase;
 
         my $value = 1 / $r.value;
-        my $units = GetUnit('unity').divide( $r.units );
+        my ( $type, $units ) = GetUnit('unity').divide( $r.units );
         my $round = $r.error.denorm[1] with $r.error;
         my $error = ( $r.error.relative * $value ).round($round) with $r.error;
 
-        ::($units.type).new( :$value, :$units, :$error );
+        ::($type).new( :$value, :$units, :$error );
     }
     method power( Int:D $n ) {						#eg. Area ** 2 => Distance
         my $result = self;
@@ -296,30 +295,37 @@ class Measure is export {
 		my $l = self.rebase;
 
         my $value = $l.value ** ( 1 / $n );
-        my $units = $.units.root-extract( $n );
+        my ( $type, $units ) = $.units.root-extract( $n );
         my $round = $l.error.denorm[1] / (10 ** $n) with $l.error;
         my $error = ( $l.error.relative / $n * $value ).round($round) with $l.error;
 
-        ::($units.type).new( :$value, :$units, :$error );
+        ::($type).new( :$value, :$units, :$error );
     }
     method sqrt() {
         return self.root( 2 )
     }
 
     #### Convert & Compare ####
-    method in( $to ) {						        #convert units and adjust value
-		my $ouo = $.units;					        #aka old unit object
-		my $nuo = GetUnit( $to );			        #aka new unit object
+
+    #| convert units and adjust value
+    method in( ::O: $to ) {
+		my $ouo = $.units;					        #old unit object
+		my $nuo = GetUnit( $to );			        #new unit object
 
 		my $n-type = $nuo.type( :just1 );
-		if not self ~~ ::($n-type) { die "cannot convert in to different type $n-type" }
+
+		if not ::($n-type) ~~ ::O {                 #allows new type to match old if allomorph
+            die "cannot convert in to different type $n-type"
+        }
 
 		my $value = ($.value + $ouo.offset) * ($ouo.factor / $nuo.factor) - $nuo.offset;
         my $error = self.error.absolute * ($ouo.factor / $nuo.factor) with self.error;
 
 		::($n-type).new( :$value, units => $nuo, :$error )
 	}
-	method norm {                                   #adjust prefix (affix) to optimize value significance
+
+    #| adjust prefix (affix) to optimize value significance
+	method norm {
         my %abn = GetAffixByName;
 
 		#try to match via unit defn eg. petahertz
@@ -364,9 +370,13 @@ class Measure is export {
 		}
 		return $res;
 	}
-	method rebase {						#to base (prototype) unit of type
+
+    #| convert to base (prototype) unit of type
+	method rebase {
 		self.in( GetPrototype( self.units.type( :just1 ) ))
 	}
+
+    #| compare units
     method cmp( $a: $b ) {
 		my ($an, $bn);
         if ! $a.units.type eq $b.units.type {
@@ -506,16 +516,16 @@ class Luminosity         is Measure is export {}
 
 #Derived Units
 class Dimensionless      is Measure is export {}
-class Solid-Angle        is Measure is export {}
+class SolidAngle         is Measure is export {}
 class Frequency          is Measure is export {}
 class Area               is Measure is export {}
 class Volume             is Measure is export {}
 class Speed              is Measure is export {}
-class Angular-Speed      is Measure is export {}
+class AngularSpeed       is Measure is export {}
 class Acceleration       is Measure is export {}
-class Moment-of-Inertia  is Measure is export {}
+class MomentOfInertia    is Measure is export {}
 class Momentum           is Measure is export {}
-class Angular-Momentum   is Measure is export {}
+class AngularMomentum    is Measure is export {}
 class Force              is Measure is export {}
 class Torque             is Measure is export {}
 class Impulse            is Measure is export {}
@@ -529,16 +539,17 @@ class Resistance         is Measure is export {}
 class Conductance        is Measure is export {}
 class Capacitance        is Measure is export {}
 class Inductance         is Measure is export {}
-class Magnetic-Flux      is Measure is export {}
-class Magnetic-Field     is Measure is export {}
-class Luminous-Flux		 is Measure is export {}
+class MagneticFlux       is Measure is export {}
+class MagneticField      is Measure is export {}
+class LuminousFlux		 is Measure is export {}
 class Illuminance		 is Measure is export {}
 class Radioactivity		 is Measure is export {}
 class Dose               is Measure is export {}
-class Catalytic-Activity is Measure is export {}
+class CatalyticActivity  is Measure is export {}
+class FuelConsumption    is Measure is export {}
+class FuelEfficiency     is Measure is export {}
 
-#Synonyms for Length... 
-#FIXME need eg. my Distance $d = 42cm  
+#Synonyms for Length...
 class Distance           is Length is export {}
 class Breadth            is Length is export {}
 class Width              is Length is export {}

@@ -3,7 +3,7 @@
 #TESTALL$ prove6 ./t      [from root]
 use lib '../lib';
 use Test;
-plan 43; 
+# plan 43;
 
 use Physics::Measure;
 
@@ -74,7 +74,7 @@ is $deg-f2r, '98.6°F',                                                      '$t
 #Conversion of high order Units such as Area, Volume, etc. also uses .in()
 
 my Length $d = ♎️ '5e1 m';
-my Area $am2 = $d * $d;
+my Area $am2 = ( $d * $d );
 is $am2, '2500m^2',                                                         '$a.in-m2';
 
 my Area $a-m21 = ♎️ '42 m2';
@@ -139,5 +139,31 @@ my Density $de1 = ♎️ '2 kg.m^-3';
 my $de2 = $de1.in( 'gm per m^3' );
 is $de2, '2000gm per m^3',                                                  '$de1.in-gm per m^3';
 
-#done-testing
+#Some new units
+my Pressure $pre1 = ♎️ '20 psi';
+my $pre2 = $pre1.in('mmHg');
+is $pre2, '1034.30151mmHg',                                                 '$pre1.in-mmHg';
+
+
+my Volume $vol1 = ♎️ '2 gallons';
+my Length $dis1 = ♎️ '60 miles';
+
+my $fc1 = ( $dis1 / $vol1 );
+say $fc1; say $fc1.^name;
+
+
+my Volume $vol2 = ♎️ '2 l';
+my Length $dis2 = ♎️ '60 km';
+
+#iamerejh - make disam be a setting
+
+# my $fc2 = ( $vol2 / $dis2 ).in('L/100km');
+# say $fc2; say $fc2.^name;
+
+
+# my FuelConsumption $fc2 = ♎️ '30 mpg';
+# my $fc3 = $fc2.in('l/100km'); say $fc3;
+# is $pre2, '1034.30151mmHg',                                                 '$pre1.in-mmHg';
+
+done-testing;
 

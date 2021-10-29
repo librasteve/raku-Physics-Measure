@@ -48,24 +48,24 @@ is $v.units.type, 'Volume',			                                    '$v-unitsof';
 #   in sub CreateUnit at /Users/stephenroe/Dropbox/DockerWorld/raku-Physics-Unit/lib/Physics/Unit.rakumod (Physics::Unit) line 524
 # my $x10 = ♎️ '10 kg.m squared';
 # is ~$x10, '10kg.m squared',                                             '$x10-kg.m squared';
-# is $x10.WHAT, Physics::Measure::Moment-of-Inertia,                      '$x10.WHAT';
-# is $x10.units.type, 'Moment-of-Inertia',								'$x10-unitsof';
+# is $x10.WHAT, Physics::Measure::MomentOfInertia,                      '$x10.WHAT';
+# is $x10.units.type, 'MomentOfInertia',								'$x10-unitsof';
 #]
 
 my $x10a = ♎️ '10 kg.m^2';
 is ~$x10a, '10kg.m^2',		                                            '$x10a-kg.m squared';
-is $x10a.WHAT, Physics::Measure::Moment-of-Inertia,                     '$x10a.WHAT';
-is $x10a.units.type, 'Moment-of-Inertia',                               '$x10a-unitsof';
+is $x10a.WHAT, Physics::Measure::MomentOfInertia,                       '$x10a.WHAT';
+is $x10a.units.type, 'MomentOfInertia',                                 '$x10a-unitsof';
 
 my $x11 = ♎️ '11 sq m',
 is ~$x11, '11sq m',                                                     '$x11-sq m';
 is $x11.WHAT, Physics::Measure::Area,                                   '$x11.WHAT';
-is $x11.units.type, 'Area',                                             '$x11-unitsof';
+is $x11.units.type( :just1 ), 'Area',                                   '$x11-unitsof';
 
 my $x12 = ♎️ '12 kg m2';
 is ~$x12, '12kg m2',		                                            '$x12-kg.m squared';
-is $x12.WHAT, Physics::Measure::Moment-of-Inertia,                      '$x12.WHAT';
-is $x12.units.type, 'Moment-of-Inertia',	                            '$x12-unitsof';
+is $x12.WHAT, Physics::Measure::MomentOfInertia,                        '$x12.WHAT';
+is $x12.units.type, 'MomentOfInertia',	                                '$x12-unitsof';
 
 my $x14 = ♎️ '14 m¹';
 is ~$x14, '14m',                                                        '$x14-m¹';
@@ -77,8 +77,8 @@ is $x14.units.type, 'Length',				                            '$x14-unitsof';
 # my $x15a = ♎️ '15 kg m^2';
 # my $x15 = ♎️ '15 kg m²';
 # is ~$x15, '15kg m²',                                                    '$x15-kg m²';
-# is $x15.WHAT, Physics::Measure::Moment-of-Inertia,                      '$x15.WHAT';
-# is $x15.units.type, 'Moment-of-Inertia',	                            '$x15-unitsof';
+# is $x15.WHAT, Physics::Measure::MomentOfInertia,                      '$x15.WHAT';
+# is $x15.units.type, 'MomentOfInertia',	                            '$x15-unitsof';
 #]
 
 my $x16 = ♎️ '16 m³';
