@@ -8,7 +8,7 @@ use Test;
 use Physics::Measure;
 
 $Physics::Measure::round-val = 0.000001;
-
+#[
 my Length $d-me = ♎️ '10 m';
 is "$d-me", '10m',                                                          '$d.""';
 is $d-me.WHAT, (Length),                                                    '$d.WHAT';
@@ -144,26 +144,49 @@ my Pressure $pre1 = ♎️ '20 psi';
 my $pre2 = $pre1.in('mmHg');
 is $pre2, '1034.30151mmHg',                                                 '$pre1.in-mmHg';
 
+my Length $dis1 = ♎️'60 miles';
+my Volume $vol1 = ♎️'2 gallons';
 
-my Volume $vol1 = ♎️ '2 gallons';
-my Length $dis1 = ♎️ '60 miles';
+my FuelEfficiency $fc1 = ( $dis1 / $vol1 ).in('mpg');
+is $fc1, '30mpg',                                                           '$fc1.in-mpg';
 
-my $fc1 = ( $dis1 / $vol1 );
-say $fc1; say $fc1.^name;
+my $fc2 = $fc1.in('km/l');
+is $fc2, '10.620186km/l',                                                   '$fc2.in-km/l';
+
+#default behaviour
+my $en1 = ♎️'60 J';
+ok $en1 ~~ Energy,                                                          '$en1 ~~ Energy';
+my $tq1 = ♎️'5 Nm';
+ok $tq1 ~~ Torque,                                                          '$tq1 ~~ Torque';
+
+#altered behaviour
+my %th := %Physics::Unit::type-hints;
+%th<Energy>:delete;
+%th<Torque> = <Energy Torque>;
+
+my $fo3 = ♎️'7.2 N';
+ok $fo3 ~~ Force,                                                           '$fo2 ~~ Force';
+my $le2 = ♎️'2.2 m';
+ok $le2 ~~ Length,                                                          '$le2 ~~ Length';
+
+my $tq2 = $fo3 * $le2;
+ok $tq2 ~~ Torque,                                                          '$tq2 ~~ Torque';
+
+#]
 
 
-my Volume $vol2 = ♎️ '2 l';
-my Length $dis2 = ♎️ '60 km';
-
-#iamerejh - make disam be a setting
-
-# my $fc2 = ( $vol2 / $dis2 ).in('L/100km');
-# say $fc2; say $fc2.^name;
 
 
-# my FuelConsumption $fc2 = ♎️ '30 mpg';
+
+
+
+
+
+#edit settings
+# my FuelConsumption $fc3 = ♎️ '30 mpg';
 # my $fc3 = $fc2.in('l/100km'); say $fc3;
-# is $pre2, '1034.30151mmHg',                                                 '$pre1.in-mmHg';
+
+# say $fc2.reciprocal;
 
 done-testing;
 

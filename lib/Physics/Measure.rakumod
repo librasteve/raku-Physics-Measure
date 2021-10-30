@@ -16,8 +16,8 @@ use Physics::Error;
 
 my $db = 0;					#debug
 
-#our $round-val = 0.00000000000000001;  (17 decimal places ~ limit of Num)
-our $round-val = Nil;
+#our $round-val = 0.00000000000000001;  (eg. this is 17 decimal places ~ the limit of Num precision)
+our $round-val = Nil;       #default off - so uses the precision of Error to control value rounding
 
 constant \isa-length = 'Distance' | 'Breadth' | 'Width' | 'Height' | 'Depth';
 
@@ -478,8 +478,8 @@ class Angle is Measure is export {
 	}
 }
 
-#| Override sin/cos/tan for Unit type Angle
-#| Automatically convert argument to radians
+#| override sin/cos/tan for Unit type Angle
+#| automatically convert argument to radians
 multi sin( Angle:D $a ) is export {
     sin( $a.in('radian').value );
 }
@@ -490,7 +490,7 @@ multi tan( Angle:D $a ) is export {
     tan( $a.in('radian').value );
 }
 
-#| Override asin/acos/atan accept unitsof arg and return Angle object
+#| override asin/acos/atan accept unitsof arg and return Angle object
 multi asin( Numeric:D $x, Str :$units! ) is export {
     my $a = Angle.new( value => asin( $x ), units => 'radians' );
     return $a.in( $units );
