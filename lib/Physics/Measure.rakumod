@@ -53,7 +53,7 @@ class Measure is export {
     multi method new( :$value, :$units, :$error ) {		say "new from attrs" if $db;
         self.bless( :$value, units => GetUnit($units), error => Error.new(:$error, :$value) )
     }
-    multi method new( ::T: Measure:D $m ) {				    say "new from Measure" if $db;
+    multi method new( ::T: Measure:D $m ) {				say "new from Measure" if $db;
         my $value = $m.value;
         my $units = $m.units;
         my $error = $m.error.absolute with $m.error;
@@ -391,7 +391,7 @@ class Measure is export {
 			$an = $a.rebase;
 			$bn = $b.rebase;
 		}
-        
+
         my $an-max = my $an-min = $an.value;
         with $an.error {
             $an-max = $an.value + $an.error.absolute;

@@ -3,12 +3,13 @@
 #TESTALL$ prove6 ./t      [from root]
 use lib '../lib';
 use Test;
-# plan 43;
+plan 52;
 
 use Physics::Measure;
 
 $Physics::Measure::round-val = 0.000001;
-#[
+my %th := %Physics::Unit::type-hints;
+
 my Length $d-me = ♎️ '10 m';
 is "$d-me", '10m',                                                          '$d.""';
 is $d-me.WHAT, (Length),                                                    '$d.WHAT';
@@ -139,28 +140,13 @@ my Density $de1 = ♎️ '2 kg.m^-3';
 my $de2 = $de1.in( 'gm per m^3' );
 is $de2, '2000gm per m^3',                                                  '$de1.in-gm per m^3';
 
-#Some new units
-my Pressure $pre1 = ♎️ '20 psi';
-my $pre2 = $pre1.in('mmHg');
-is $pre2, '1034.30151mmHg',                                                 '$pre1.in-mmHg';
-
-my Length $dis1 = ♎️'60 miles';
-my Volume $vol1 = ♎️'2 gallons';
-
-my FuelEfficiency $fc1 = ( $dis1 / $vol1 ).in('mpg');
-is $fc1, '30mpg',                                                           '$fc1.in-mpg';
-
-my $fc2 = $fc1.in('km/l');
-is $fc2, '10.620186km/l',                                                   '$fc2.in-km/l';
-
-#default behaviour
+#default type-hints
 my $en1 = ♎️'60 J';
 ok $en1 ~~ Energy,                                                          '$en1 ~~ Energy';
 my $tq1 = ♎️'5 Nm';
 ok $tq1 ~~ Torque,                                                          '$tq1 ~~ Torque';
 
-#altered behaviour
-my %th := %Physics::Unit::type-hints;
+#altered type-hints
 %th<Energy>:delete;
 %th<Torque> = <Energy Torque>;
 
@@ -172,21 +158,28 @@ ok $le2 ~~ Length,                                                          '$le
 my $tq2 = $fo3 * $le2;
 ok $tq2 ~~ Torque,                                                          '$tq2 ~~ Torque';
 
-#]
+#some new units
+my Pressure $pre1 = ♎️ '20 psi';
+my $pre2 = $pre1.in('mmHg');
+is $pre2, '1034.30151mmHg',                                                 '$pre1.in-mmHg';
 
+my Length $dis1 = ♎️'60 miles';
+my Volume $vol1 = ♎️'2 gallons';
 
+my FuelEfficiency $fe1 = ( $dis1 / $vol1 ).in('mpg');
+is $fe1, '30mpg',                                                           '$fe1.in-mpg';
 
+my $fe2 = $fe1.in('km/l');
+is $fe2, '10.620186km/l',                                                   '$fe2.in-km/l';
 
+my Volume $vol2 = ♎️'4 l';
+my Length $dis2 = ♎️'10 m';
 
+%th<Area>:delete;
+%th<FuelConsumption> = <Area FuelConsumption>;
 
+my FuelConsumption $fc1 = ( $vol2 / $dis2 ).in('l/100km');
+is $fc1, '4l/100km',                                                        '$fc1.in-l/100km';
 
-
-
-#edit settings
-# my FuelConsumption $fc3 = ♎️ '30 mpg';
-# my $fc3 = $fc2.in('l/100km'); say $fc3;
-
-# say $fc2.reciprocal;
-
-done-testing;
+# done-testing;
 
