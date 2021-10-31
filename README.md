@@ -297,28 +297,21 @@ our %type-hints = %(
 );
 ```
 
-The out of the box logic is steered by the %type-hints hash. To adjust this, you
-can delete the built in key and replace it with your own:
+To adjust this, you can delete the built in key and replace it with your own:
 ```perl6
 my %th := %Physics::Unit::type-hints;
 
 #default type-hints
-my $en1 = ♎️'60 J';
-ok $en1 ~~ Energy,            '$en1 ~~ Energy';
-my $tq1 = ♎️'5 Nm';
-ok $tq1 ~~ Torque,            '$tq1 ~~ Torque';
+my $en1 = ♎️'60 J';     #'$en1 ~~ Energy';
+my $tq1 = ♎️'5 Nm';     #'$tq1 ~~ Torque';
 
 #altered type-hints
 %th<Energy>:delete;
 %th<Torque> = <Energy Torque>;
 
 my $fo3 = ♎️'7.2 N';
-   ok $fo3 ~~ Force,          '$fo2 ~~ Force';
 my $le2 = ♎️'2.2 m';
-ok $le2 ~~ Length,            '$le2 ~~ Length';
-
-my $tq2 = $fo3 * $le2;
-ok $tq2 ~~ Torque,            '$tq2 ~~ Torque';
+my $tq2 = $fo3 * $le2;  #'$tq2 ~~ Torque';
 ```
 
 # Custom Measures
