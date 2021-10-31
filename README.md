@@ -284,6 +284,43 @@ say $po.canonical;                      #25 m2.s-3.kg   (SI base units)
 say $po.pretty;                         #25 m²⋅s⁻³⋅kg   (SI recommended style)
 ```
 
+# Dealing with Ambiguous Types
+
+In a small number of case, the same units are used by different unit Types. Type hints 
+steer type inference:
+```perl6
+our %type-hints = %(
+    Area        => <Area FuelConsumption>,
+    Energy      => <Energy Torque>,
+    Momentum    => <Momentum Impulse>,
+    Frequency   => <Frequency Radioactivity>,
+);
+```
+
+The out of the box logic is steered by the %type-hints hash. To adjust this, you
+can delete the built in key and replace it with your own:
+```perl6
+my %th := %Physics::Unit::type-hints;
+
+#default type-hints
+my $en1 = ♎️'60 J';
+ok $en1 ~~ Energy,            '$en1 ~~ Energy';
+my $tq1 = ♎️'5 Nm';
+ok $tq1 ~~ Torque,            '$tq1 ~~ Torque';
+
+#altered type-hints
+%th<Energy>:delete;
+%th<Torque> = <Energy Torque>;
+
+my $fo3 = ♎️'7.2 N';
+   ok $fo3 ~~ Force,          '$fo2 ~~ Force';
+my $le2 = ♎️'2.2 m';
+ok $le2 ~~ Length,            '$le2 ~~ Length';
+
+my $tq2 = $fo3 * $le2;
+ok $tq2 ~~ Torque,            '$tq2 ~~ Torque';
+```
+
 # Custom Measures
 
 To make a custom Measure, you can use this incantation:
