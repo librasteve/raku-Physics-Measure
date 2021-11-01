@@ -80,7 +80,7 @@ class Unit {
 class Measure {
    has Real $.value;
    has Unit $.units;
-   has Error $.error;  #tbd in version 2
+   has Error $.error;
    #...
 }
 class Length is Measure {}
