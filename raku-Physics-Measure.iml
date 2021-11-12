@@ -35,15 +35,6 @@
       </library>
     </orderEntry>
     <orderEntry type="module-library">
-      <library name="XML::Writer" type="perl6">
-        <CLASSES />
-        <JAVADOC />
-        <SOURCES>
-          <root url="raku://1165981606:XML::Writer!/" />
-        </SOURCES>
-      </library>
-    </orderEntry>
-    <orderEntry type="module-library">
       <library name="Math::Polygons" type="perl6">
         <CLASSES />
         <JAVADOC />

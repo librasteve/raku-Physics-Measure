@@ -8,9 +8,6 @@
   ],
   "auth": "zef:p6steve",
   "depends": [
-    "SVG",
-    "SVG::Plot",
-    "Math::Polygons",
     "Physics::Unit",
     "Physics::Error"
   ],
