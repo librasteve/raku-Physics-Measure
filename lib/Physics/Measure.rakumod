@@ -314,6 +314,9 @@ class Measure is export {
 
 		my $n-type = $nuo.type( :just1 );
 
+        dd ::O;
+        dd $n-type;
+
         #allow new type to match old eg. if allomorph
 		if not ::($n-type) ~~ ::O {
             die "cannot convert in to different type $n-type"
