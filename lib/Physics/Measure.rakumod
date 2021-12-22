@@ -318,7 +318,7 @@ class Measure is export {
         dd $n-type;
 
         #allow new type to match old eg. if allomorph
-		if not ::($n-type) ~~ ::O {
+		if not ::($n-type) ~~ "Physics::Measure::{::O}" {
             die "cannot convert in to different type $n-type"
         }
 
