@@ -321,6 +321,8 @@ class Measure is export {
 
         ::O ~~ /'Physics::Measure::'(.*)/;
 
+        dd $0;
+
         if $0 ~~ isa-length.any {
             say "yo"
         }
