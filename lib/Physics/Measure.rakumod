@@ -319,7 +319,7 @@ class Measure is export {
 
         dd ::O;
 
-        ::O ~~ /'Physics::Measure::'(.*)/;
+        ::O.Str ~~ /'Physics::Measure::'(.*)/;
 
         dd $0;
 
