@@ -319,7 +319,7 @@ class Measure is export {
 
         dd ::O;
 
-        if ::O ~~ isa-length.Any {
+        if ::O ~~ isa-length.any {
             say "yo"
         }
 
