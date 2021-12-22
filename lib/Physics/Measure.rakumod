@@ -314,18 +314,19 @@ class Measure is export {
 
 		my $n-type = $nuo.type( :just1 );
 
-        dd $n-type;
-        dd ::($n-type);
-
-        dd ::O;
-
-        ::O.Str ~~ /'Physics::Measure::'(.*)/;
-
-        dd $0;
-
-        if $0 ~~ isa-length.any {
-            say "yo"
-        }
+#        iamerejh
+#        dd $n-type;
+#        dd ::($n-type);
+#
+#        dd ::O;
+#
+#        ::O.Str ~~ /'Physics::Measure::'(.*)/;
+#
+#        dd $0;
+#
+#        if $0 ~~ isa-length.any {
+#            say "yo"
+#        }
 
         #allow new type to match old eg. if allomorph
 		if not ::($n-type) ~~ ::O {
