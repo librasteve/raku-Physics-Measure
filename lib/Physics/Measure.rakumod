@@ -319,6 +319,9 @@ class Measure is export {
 
         dd ::O;
 
+        if ::O ~~ isa-length.Any {
+            say "yo"
+        }
 
         #allow new type to match old eg. if allomorph
 		if not ::($n-type) ~~ ::O {
