@@ -320,7 +320,8 @@ class Measure is export {
         dd ::O;
 
         #allow new type to match old eg. if allomorph
-		if not ::($n-type) ~~ ::O {
+#		if not ::($n-type) ~~ ::O {
+        if not ::O ~~ ::($n-type) {
             die "cannot convert in to different type $n-type"
         }
 
