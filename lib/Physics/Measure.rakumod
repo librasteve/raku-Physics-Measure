@@ -42,7 +42,7 @@ class Time { ... }
 class Dimensionless { ... }
 
 class Measure is export {
-    #Parent class for physical quantities with value, units & error(wip)
+    #Parent class for physical quantities with value, units & error
     #Builds child classes such as Distance, Mass, Power, etc. 
 
     has	Real  $.value is rw;
