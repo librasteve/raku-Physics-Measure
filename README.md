@@ -3,7 +3,7 @@
 Provides Measure objects that have value, units and error and can be used in many common physics calculations. Uses [Physics::Unit](https://github.com/p6steve/raku-Physics-Unit) and [Physics::Error](https://github.com/p6steve/raku-Physics-Error).
 
 # Instructions
-```zef --verbose install Physics-Measure```
+```zef --verbose install Physics::Measure```
 
 and, conversely, ```zef uninstall Physics::Measure```
 
