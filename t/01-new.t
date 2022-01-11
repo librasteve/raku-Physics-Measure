@@ -20,7 +20,7 @@ is $a.units.name,'m',       '$a.units';
 
 #Part 2: Custom new Constructor multis
 
-my Length $b .= new:        '1e1 m';
+my Length $b .= new: '1e1 m';
 ok $b.value == 10e0,        '$b.value';
 is $b.units,  'm',          '$b.units';
 
