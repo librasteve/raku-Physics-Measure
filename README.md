@@ -282,6 +282,7 @@ say +$po; say $po.value; say $po.Real;  #25
 say $po.WHAT;                           #(Power)
 say $po.canonical;                      #25 m2.s-3.kg   (SI base units)
 say $po.pretty;                         #25 m²⋅s⁻³⋅kg   (SI recommended style)
+                                              ^...^......unicode Dot Operator U+22C5
 ```
 
 # Dealing with Ambiguous Types
