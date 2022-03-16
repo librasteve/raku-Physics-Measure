@@ -1,4 +1,4 @@
-![Test Status](https://github.com/p6steve/raku-physics-measure/actions/workflows/prove6.xml/badge.svg)
+![Test Status](https://github.com/p6steve/raku-Physics-Measure/actions/workflows/prove6.xml/badge.svg)
 # raku-Physics-Measure
 Provides Measure objects that have value, units and error and can be used in many common physics calculations. Uses [Physics::Unit](https://github.com/p6steve/raku-Physics-Unit) and [Physics::Error](https://github.com/p6steve/raku-Physics-Error).
 
