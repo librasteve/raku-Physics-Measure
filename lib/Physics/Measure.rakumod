@@ -109,8 +109,11 @@ class Measure is export {
             $s ~~ /^ ( <number> ) \s* ( <-[±]>* ) \s* ( '±' \s* .* )? $/;
             my $v = +$0;
             my $u = ~$1;
-            my $e = $2 // '';
-               $e ~~ s/'±'//;
+            my $e = $2;
+
+            return($v, $u, Any) unless $e;
+
+            $e ~~ s/'±'//;
 
             given $e {
                 when /'%'/ {
