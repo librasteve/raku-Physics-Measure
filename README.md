@@ -48,7 +48,7 @@ my \Δke = ke2 - ke1;
 This example shows some key features of Physics::Measure...
 * support for SI prefixes, base and derived units (cm, kg, ml and so on)
 * imported as raku postfix operators for convenience and clarity
-* custom maths operators ```(+-*/)``` for easy inclusion in calculations
+* custom math operators ```(+-*/)``` for easy inclusion in calculations
 * inference of type class (Length, Time, Mass, etc.) from units
 * derivation of type class of results (Speed, Acceleration, etc.)
 
