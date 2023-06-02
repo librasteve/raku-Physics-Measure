@@ -1,6 +1,8 @@
-![Test Status](https://github.com/librasteve/raku-Physics-Measure/actions/workflows/prove6.yml/badge.svg)
 # raku-Physics-Measure
 Provides Measure objects that have value, units and error and can be used in many common physics calculations. Uses [Physics::Unit](https://github.com/librasteve/raku-Physics-Unit) and [Physics::Error](https://github.com/librasteve/raku-Physics-Error).
+
+[![License: Artistic-2.0](https://img.shields.io/badge/License-Artistic%202.0-0298c3.svg)](https://opensource.org/licenses/Artistic-2.0)
+[![raku-physics-measure -> DH](https://github.com/librasteve/raku-Physics-Measure/actions/workflows/measure-weekly.yaml/badge.svg)](https://github.com/librasteve/raku-Physics-Measure/actions/workflows/measure-weekly.yaml)
 
 # Instructions
 ```zef --verbose install Physics::Measure```
@@ -337,3 +339,5 @@ class Reach is Measure {
 The family of Physics::Measure, Physics::Unit and Physics::Constants raku modules is a consistent and extensible toolkit intended for science and education. It provides a comprehensive library of both metric (SI) and non-metric units, it is built on a Type Object foundation, it has a unit expression Grammar and implements math, conversion and comparison methods.
 
 Any feedback is welcome to librasteve / via the github Issues above.
+
+Copyright (c) Henley Cloud Consulting Ltd. 2021-2023
