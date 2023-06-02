@@ -18,33 +18,6 @@
       </library>
     </orderEntry>
     <orderEntry type="module-library">
-      <library name="SVG" type="perl6">
-        <CLASSES />
-        <JAVADOC />
-        <SOURCES>
-          <root url="raku://-1954356261:SVG!/" />
-        </SOURCES>
-      </library>
-    </orderEntry>
-    <orderEntry type="module-library">
-      <library name="SVG::Plot" type="perl6">
-        <CLASSES />
-        <JAVADOC />
-        <SOURCES>
-          <root url="raku://-1954356261:SVG::Plot!/" />
-        </SOURCES>
-      </library>
-    </orderEntry>
-    <orderEntry type="module-library">
-      <library name="XML::Writer" type="perl6">
-        <CLASSES />
-        <JAVADOC />
-        <SOURCES>
-          <root url="raku://-1954356261:XML::Writer!/" />
-        </SOURCES>
-      </library>
-    </orderEntry>
-    <orderEntry type="module-library">
       <library name="Physics::Error" type="perl6">
         <CLASSES />
         <JAVADOC />
