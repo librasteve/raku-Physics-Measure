@@ -1,20 +1,12 @@
-FROM jjmerelo/alpine-raku:latest
-LABEL version="6.0.2" maintainer="JJ Merelo <jjmerelo@GMail.com>"
+FROM librasteve/rakudo:ipyjk
 
-ARG DIR="/test"
 USER root
 
-# Add raku-physics-measure depedencies
-RUN zef install Physics::Unit Physics::Error
+RUN zef install https://github.com/librasteve/raku-physics-measure.git
 
-# Set up dirs
-RUN mkdir $DIR && chown raku $DIR
-COPY --chown=raku test.sh /home/raku
-VOLUME $DIR
-WORKDIR $DIR
+#USER ${NB_UID}
 
-# Change to non-privileged user
-USER raku
+ENTRYPOINT ["/bin/bash"]
 
-# Will run this
-ENTRYPOINT ["/home/raku/test.sh"]
+#EXPOSE 8888
+#CMD ["jupyter", "notebook", "--port=8888", "--no-browser", "--ip=0.0.0.0", "--allow-root"]
