@@ -2,7 +2,7 @@
 use lib '../lib';
 use Physics::Measure :ALL;
 
-#see https://github.com/p6steve/raku-Physics-Measure/blob/master/README.md for explanation
+#see https://github.com/librasteve/raku-Physics-Measure/blob/master/README.md for explanation
 
 my \d = 42m;				say ~d;		#42m
 dd d;

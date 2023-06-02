@@ -1,6 +1,6 @@
-![Test Status](https://github.com/p6steve/raku-Physics-Measure/actions/workflows/prove6.yml/badge.svg)
+![Test Status](https://github.com/librasteve/raku-Physics-Measure/actions/workflows/prove6.yml/badge.svg)
 # raku-Physics-Measure
-Provides Measure objects that have value, units and error and can be used in many common physics calculations. Uses [Physics::Unit](https://github.com/p6steve/raku-Physics-Unit) and [Physics::Error](https://github.com/p6steve/raku-Physics-Error).
+Provides Measure objects that have value, units and error and can be used in many common physics calculations. Uses [Physics::Unit](https://github.com/librasteve/raku-Physics-Unit) and [Physics::Error](https://github.com/librasteve/raku-Physics-Error).
 
 # Instructions
 ```zef --verbose install Physics::Measure```
@@ -97,7 +97,7 @@ Therefore, in the normal course, please make your objects as instances of the Ch
 # Three Consumer Options
 ## Option 1: Postfix Operator Syntax (SI Units)
 
-As seen above, if you just want SI prefixes, base and derived units (cm, kg, ml and so on), the :ALL export label provides them as raku postfix:<> custom operators.  This option is intended for scientist / coders who want fast and concise access to a modern Unit library. Here is another example, basic wave mechanics, bringing in the [Physics::Constants](https://github.com/p6steve/raku-Physics-Constants) module:
+As seen above, if you just want SI prefixes, base and derived units (cm, kg, ml and so on), the :ALL export label provides them as raku postfix:<> custom operators.  This option is intended for scientist / coders who want fast and concise access to a modern Unit library. Here is another example, basic wave mechanics, bringing in the [Physics::Constants](https://github.com/librasteve/raku-Physics-Constants) module:
 
 ```perl6
 use Physics::Constants;  #<== must use before Physics::Measure 
@@ -336,4 +336,4 @@ class Reach is Measure {
 
 The family of Physics::Measure, Physics::Unit and Physics::Constants raku modules is a consistent and extensible toolkit intended for science and education. It provides a comprehensive library of both metric (SI) and non-metric units, it is built on a Type Object foundation, it has a unit expression Grammar and implements math, conversion and comparison methods.
 
-Any feedback is welcome to p6steve / via the github Issues above.
+Any feedback is welcome to librasteve / via the github Issues above.

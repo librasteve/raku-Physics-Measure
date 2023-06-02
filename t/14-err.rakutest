@@ -7,7 +7,7 @@ plan 16;
 
 use Physics::Measure :ALL;
 
-#see https://github.com/p6steve/raku-Physics-Error/blob/master/README.md for explanation
+#see https://github.com/librasteve/raku-Physics-Error/blob/master/README.md for explanation
 
 #Option 1
 #--------

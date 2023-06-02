@@ -4,9 +4,9 @@
   "version": "1.0.6",
   "perl": "6.d",
   "authors": [
-    "p6steve"
+    "librasteve"
   ],
-  "auth": "zef:p6steve",
+  "auth": "zef:librasteve",
   "depends": [
     "Physics::Unit",
     "Physics::Error"
@@ -24,5 +24,5 @@
     "Units"
   ],
   "api": "1",
-  "source-url": "git://github.com/p6steve/raku-Physics-Measure.git"
+  "source-url": "git://github.com/librasteve/raku-Physics-Measure.git"
 }
