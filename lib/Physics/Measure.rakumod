@@ -9,7 +9,7 @@ use Physics::Error;
 #This module uses Type Variables such as ::T,::($s) 
 #viz. http://www.jnthn.net/papers/2008-yapc-eu-raku6types.pdf
 
-#Conceptually 'Length = 12.5 ±0.05 m' && Length = 12.5nm ±[1.25nm|1.25|10%]   (FIXME v2 will implement errors)
+#Conceptually 'Length = 12.5 ±0.05 m' && Length = 12.5nm ±[1.25nm|1.25|10%]
 #viz. https://www.mathsisfun.com/measure/error-measurement.html
 
 ######## Constants & Definitions ########
@@ -236,7 +236,7 @@ class Measure is export {
         return self
     }
 
-    method multiply( Measure:D $r is copy ) {	    #eg. Distance * Distance => Area
+    method multiply( Measure:D $r is copy ) {	    #eg. Distance * Distance => Area 0;
         my $l = self.rebase;
         $r .= rebase;
 

@@ -70,7 +70,7 @@ use Physics::Measure :ALL;
     my Length	  $d2 = $v ** <1/3>;    #0.43m
 
 #Set rounding precision (or reset with Nil) - does not reduce internal precision
-    $Physics::Measure::round-to = 0.01;
+    $Physics::Measure::round-val = 0.01;
 #Normalize SI Units to the optimal SI prefix
 	my \λ = 2500pm;                     #2500pm
     say ~λ.norm;	                    #2.5nm
