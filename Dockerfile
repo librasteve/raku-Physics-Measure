@@ -2,7 +2,7 @@ FROM librasteve/rakudo:ipyjk
 
 USER root
 
-RUN zef install https://github.com/librasteve/raku-physics-measure.git
+RUN zef install https://github.com/librasteve/raku-physics-measure.git --verbose
 
 #USER ${NB_UID}
 
