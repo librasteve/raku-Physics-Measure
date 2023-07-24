@@ -16,10 +16,13 @@ use Physics::Error;
 
 my $db = 0;					#debug
 
+constant \isa-length = 'Distance' | 'Breadth' | 'Width' | 'Height' | 'Depth';
+
 #our $round-val = 0.00000000000000001;  (eg. this is 17 decimal places ~ the limit of Num precision)
 our $round-val = Nil;       #default off - so uses the precision of Error to control value rounding
 
-constant \isa-length = 'Distance' | 'Breadth' | 'Width' | 'Height' | 'Depth';
+#use '' to allow as thousands sep / '.' to convert european style decimals
+our $number-comma = Nil;    #default off - just pass everything before the space to compiler literal parser
 
 my regex number {
 	\S+                     #grab chars
@@ -104,9 +107,12 @@ class Measure is export {
             return($v, 'seconds', Any)
         }
 
+#our $number-comma = Nil;    #default off - just pass everything before the space to compiler literal parser
         #handle generic case
         else {
-            $s ~~ /^ ( <number> ) \s* ( <-[±]>* ) \s* ( '±' \s* .* )? $/;
+            my $t = $s;                 # need is rw
+            $t .= subst(',', $number-comma, :g) with $number-comma;
+            $t ~~ /^ ( <number> ) \s* ( <-[±]>* ) \s* ( '±' \s* .* )? $/;
             my $v = +$0;
             my $u = ~$1;
             my $e = $2;

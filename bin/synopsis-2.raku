@@ -77,6 +77,10 @@ use Physics::Measure :ALL;
 #Reset to SI base type with the .rebase() method
     my $v4 = $v2.rebase;                #5.35m^3
 
+#Set behaviour if number part contains a comma ',' 
+    $Physics::Measure::number-comma = ''; #use '' to allow as thousands sep / '.' to convert european style decimals
+    my Speed $s2 = ♎️'24,000 miles per hour'; #24000mph
+
 #Measures can be compared with $a cmp $b
     my $af = $a.in: 'feet';             #4.3m => 14.108feet
     say $af cmp $a;                     #Same
