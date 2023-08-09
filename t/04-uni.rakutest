@@ -28,11 +28,11 @@ is "$t1", '10s',                                                            '$t.
 ok $t1.Duration == 10,                                                      '$t.Duration';
 ok $t1.Real == 10,                                                          '$t.Real';
 
-my Time $t2 = ♎️ '5e1 s';       #'50 s'
+my Time $t2 = ♎️ <5e1 s>;       #'50 s'
 is ~$t2, '50s',                                                             '$t.default-S';
 my Time $t3 = $t1;              #'10 s'
 is ~$t3, '10s',                                                             '$t.default-M';
-my Time $t4 = ♎️ '172 s';       #'10 s'
+my Time $t4 = ♎️ <172 s>;       #'10 s'
 is ~$t4, '00:02:52',                                                        '$t.default-R';
 my Time $t5 = ♎️ '3e1 s';       #'30 s'
 is ~$t5, '30s',                                                             '$t.assign-S';
@@ -64,10 +64,10 @@ is "$s1", '14m/s',                                                         '$s.n
 my Speed $s2;
 $s2 = $s1;
 is "$s2", '14m/s',                                                         '$s.assign-M';
-my Speed $s3 = ♎️ '17.234 m/s';
+my Speed $s3 = ♎️<17.234 m/s>;
 is "$s3", '17.234m/s',                                                     '$s.assign-S';
 
-my Length $d = ♎️ '5e1 m';      #'50 m'
+my Length $d = ♎️<5e1 m>;      #'50 m'
 $s2 = $d / $t6;
 is "$s2", '1.1904761904761905m/s',                                         'div.mixed';
 
