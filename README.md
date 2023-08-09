@@ -171,12 +171,12 @@ This syntax option is the most structured and raku native. For example, it helps
 
 ## Option 3: Libra Shorthand Syntax
 
-In many cases, coders will want the flexibility of the unit expression parser and the wider range of non-metric units but they also want a concise notation. In this case, the unicode libra emoji ♎️ is provided as raku prefix for object construction:
+In many cases, coders will want the flexibility of the unit expression parser and the wider range of non-metric units but they also want a concise notation. In this case, the unicode libra emoji ♎️ is provided as raku prefix for object construction. The subject can be enclosed in single quotes ♎️'', double quotes ♎️"" of (from v1.0.10) angle brackets ♎️<>. Separate the number from the units with a space.
 
 ```perl6
 #The libra ♎️ is shorthand to construct objects...
-    my $a = ♎️ '4.3 m';                  say "$a";		#4.3 m
-    my $b = ♎️ '5e1 m';                  say "$b";		#50 m
+    my $a = ♎️<4.3 m>;                  say "$a";		#4.3 m
+    my $b = ♎️<5e1 m>;                  say "$b";		#50 m
     my $c = $a;                          say "$c";		#4.3 m
     my Length $l = ♎️ 42;                say "$l";		#42 m (default to base unit of Length)
 #...there is an ASCII variant of <♎️> namely <libra> 
@@ -185,13 +185,13 @@ _Use the emoji editor provided on your system (or just cut and paste)_
 
 ```perl6
 #About 230 built in units are included, for example...
-    my $v2 = ♎️ '7 yards^3';          #7 yard^3         (Volume)
+    my $v2 = ♎️<7 yards^>;          #7 yard^3         (Volume)
     my $v3 = $v2.in( 'm3' );        #5.352 m^3        (Volume) 
     my $dsdt = $s / $t;             #0.000106438 m/s^2 (Acceleration)
-    my $sm = ♎️ '70 mph';             #70 mph           (Speed)
-    my $fo = ♎️ '27 kg m / s2';       #27 N             (Force)
-    my $en = ♎️ '26 kg m^2 / s^2';    #26 J             (Energy)
-    my $po = ♎️ '25 kg m^2 / s^3';    #25 W             (Power)
+    my $sm = ♎️<70 mph>;             #70 mph           (Speed)
+    my $fo = ♎️<27 kg m / s2>;       #27 N             (Force)
+    my $en = ♎️<26 kg m^2 / s^2>;    #26 J             (Energy)
+    my $po = ♎️<25 kg m^2 / s^3>;    #25 W             (Power)
 ```
 
 # Special Measure Types
@@ -200,8 +200,8 @@ _Use the emoji editor provided on your system (or just cut and paste)_
 
 ```perl6
 #Angles use degrees/minutes/seconds or decimal radians
-    my $θ1 = ♎️ <45°30′30″>;      #45°30′30″ (using <> to deconfuse quotation marks)
-    my $θ2 = ♎️ '2.141 radians';  #'2.141 radian'
+    my $θ1 = ♎️<45°30′30″>;      #45°30′30″ (using <> to deconfuse quotation marks)
+    my $θ2 = ♎️<2.141 radians>;  #'2.141 radian'
 #NB. The unit name 'rad' is reserved for the unit of radioactive Dose
 
 # Trigonometric functions sin, cos and tan (and arc-x) handle Angles
@@ -220,10 +220,10 @@ _Use the emoji editor provided on your system (or just cut and paste)_
     my Duration $dur = $i3-$i2;
 
 #Here's how to us the libra assignment operator ♎️ for Time...
-    my Time $t1 = ♎️ '5e1 s';     	#50 s
+    my Time $t1 = ♎️<5e1 s>';     	#50 s
     my Time $t2 = ♎️ $dur;        	#10 s
     my $t3 = $t1 + $t2;         	#60 s
-    my Time $t4 = ♎️ '2 hours';   	#2 hr
+    my Time $t4 = ♎️<2 hours>;   	#2 hr
     $dur = $t4.Duration;         #7200
 ```
 
@@ -231,10 +231,10 @@ _Use the emoji editor provided on your system (or just cut and paste)_
 
 ```perl6
 #Unit Conversion uses the .in() method - specify the new units as a String
-    my Length $df = ♎️ '12.0 feet';         #12 ft
+    my Length $df = ♎️<12.0 feet>;         #12 ft
     my $dm = $df.in( 'm' );               #3.658 m
        $dm = $df.in: <m>;                 #alternate form
-    my Temperature $deg-c = ♎️ '39 °C';
+    my Temperature $deg-c = ♎️<39 °C>;
     my $deg-k = $deg-c.in( 'K' );         #312.15 K
     my $deg-cr = $deg-k.in( '°C' );       #39 °C
 
