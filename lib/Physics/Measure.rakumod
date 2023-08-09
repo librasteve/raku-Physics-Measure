@@ -569,11 +569,11 @@ class Depth              is Length is export {}
 ######## Functional Operator Overrides ########
 
 multi prefix:<♎️>    ( Str:D $new )      is export { Measure.new: $new }
-multi prefix:<♎️>    ( List:D $new )     is export { Measure.new: $new.join }  #for ♎️<3 mph>
+multi prefix:<♎️>    ( List:D $new )     is export { Measure.new: $new.join(' ') }  #for ♎️<3 mph>
 multi prefix:<♎️>    ( Duration:D $new ) is export { Measure.new: $new }
 
 multi prefix:<libra> ( Str:D $new )      is export { Measure.new: $new }
-multi prefix:<libra> ( List:D $new )     is export { Measure.new: $new.join }
+multi prefix:<libra> ( List:D $new )     is export { Measure.new: $new.join(' ') }
 multi prefix:<libra️> ( Duration:D $new ) is export { Measure.new: $new }
 
 sub infix-prep( $left, $right ) {
