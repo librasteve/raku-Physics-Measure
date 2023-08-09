@@ -13,7 +13,7 @@
         <CLASSES />
         <JAVADOC />
         <SOURCES>
-          <root url="raku://-1954356261:Physics::Unit!/" />
+          <root url="raku://1166041188:Physics::Unit!/" />
         </SOURCES>
       </library>
     </orderEntry>
@@ -22,7 +22,7 @@
         <CLASSES />
         <JAVADOC />
         <SOURCES>
-          <root url="raku://-1954356261:Physics::Error!/" />
+          <root url="raku://1166041188:Physics::Error!/" />
         </SOURCES>
       </library>
     </orderEntry>
