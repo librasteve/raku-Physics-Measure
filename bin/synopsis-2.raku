@@ -17,7 +17,8 @@ use Physics::Measure :ALL;
 	my $s = $d / $t;                                  say ~$s.in('mph');         #6 mph
 
 #The libra operator ♎️ is shorthand to construct objects...
-	my $a = ♎️'4.3 m';								say "$a";		#4.3 m
+	my $a = ♎️<4.3 m>;								say "$a";		#4.3 m
+    dd $a;
     my $b = ♎️'5e1 m';								say "$b";		#50 m
     my $c = $a;									    say "$c";		#10000 m
 #Use the emoji editor provided on your system (or just cut and paste)

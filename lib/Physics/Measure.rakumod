@@ -558,6 +558,8 @@ class Dose               is Measure is export {}
 class CatalyticActivity  is Measure is export {}
 class FuelConsumption    is Measure is export {}
 class FuelEfficiency     is Measure is export {}
+class Irradiance         is Measure is export {}
+class Insolation         is Measure is export {}
 
 #Synonyms for Length...
 class Distance           is Length is export {}
