@@ -185,7 +185,7 @@ _Use the emoji editor provided on your system (or just cut and paste)_
 
 ```perl6
 #About 230 built in units are included, for example...
-    my $v2 = ♎️<7 yards^>;          #7 yard^3         (Volume)
+    my $v2 = ♎️<7 yards^3>;          #7 yard^3         (Volume)
     my $v3 = $v2.in( 'm3' );        #5.352 m^3        (Volume) 
     my $dsdt = $s / $t;             #0.000106438 m/s^2 (Acceleration)
     my $sm = ♎️<70 mph>;             #70 mph           (Speed)
