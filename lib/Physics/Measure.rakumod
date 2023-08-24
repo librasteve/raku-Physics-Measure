@@ -1,4 +1,4 @@
-unit module Physics::Measure:ver<1.0.14>:auth<Steve Roe (librasteve@furnival.net)>;
+unit module Physics::Measure:ver<1.0.15>:auth<Steve Roe (librasteve@furnival.net)>;
 use Physics::Unit;
 use Physics::Error;
 
@@ -162,11 +162,11 @@ class Measure is export {
         return self.Str
     }
     method canonical {
-		my $rebased = $.in( $.units.canonical);
+		my $rebased = $.in($.units.canonical);
 		"{$rebased.value-r} {$.units.canonical}"
 	}
     method pretty    {
-		my $rebased = $.in( $.units.canonical);
+		my $rebased = $.in($.units.canonical);
 		"{$rebased.value-r} {$.units.pretty}"
 	}
 
@@ -384,6 +384,9 @@ class Measure is export {
     #| convert to base (prototype) unit of type
 	method rebase {
 		self.in( GetPrototype( self.units.type( :just1 ) ))
+	}
+	method si {
+        self.rebase
 	}
 
     #| compare units
