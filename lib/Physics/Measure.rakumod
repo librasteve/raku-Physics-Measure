@@ -385,9 +385,11 @@ class Measure is export {
 	method rebase {
 		self.in( GetPrototype( self.units.type( :just1 ) ))
 	}
+    #`[
 	method si {
         self.rebase
 	}
+    #]
 
     #| compare units
     method cmp( $a: $b ) {
@@ -565,6 +567,8 @@ class ConsumptionRate    is Measure is export {}
 class SpecificEnergy     is Measure is export {}
 class Irradiance         is Measure is export {}
 class Insolation         is Measure is export {}
+class ThermalResistance  is Measure is export {}
+class ThermalConductance is Measure is export {}
 
 #Synonyms for Length...
 class Distance           is Length is export {}
