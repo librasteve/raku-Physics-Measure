@@ -40,7 +40,7 @@ is $y2.WHAT, Physics::Measure::Speed,                                           
 
 my $z2;
 $z2 = $x2 * $y2;
-is ~$z2, '0.06096Gy',                                             '$z2-mul-m.s-1*feet.mins-1';
+is ~$z2, '0.06096J/kg',                                             '$z2-mul-m.s-1*feet.mins-1';
 
 $z2 = $x2 / $y2;
 is $z2, '147.637795①',                                             '$z2-div-m.s-1/feet.mins-1';

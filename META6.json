@@ -1,7 +1,7 @@
 {
   "name": "Physics::Measure",
   "description": "Some support for physical measurements.",
-  "version": "1.0.16",
+  "version": "1.0.17",
   "perl": "6.d",
   "authors": [
     "librasteve"
