@@ -1,4 +1,4 @@
-unit module Physics::Measure:ver<1.0.17>:auth<Steve Roe (librasteve@furnival.net)>;
+unit module Physics::Measure:ver<1.0.18>:auth<Steve Roe (librasteve@furnival.net)>;
 use Physics::Unit;
 use Physics::Error;
 
