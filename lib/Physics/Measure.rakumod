@@ -563,7 +563,7 @@ class Dose               is Measure is export {}
 class CatalyticActivity  is Measure is export {}
 class FuelConsumption    is Measure is export {}
 class FuelEfficiency     is Measure is export {}
-class ConsumptionRate    is Measure is export {}
+class Flow               is Measure is export {}
 class SpecificEnergy     is Measure is export {}
 class Irradiance         is Measure is export {}
 class Insolation         is Measure is export {}
