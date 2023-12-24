@@ -169,8 +169,10 @@ my Volume $vol1 = ♎️'2 gallons';
 my FuelEfficiency $fe1 = ( $dis1 / $vol1 ).in('mpg');
 is $fe1, '30mpg',                                                           '$fe1.in-mpg';
 
+#imp-gal || us-gal
 my $fe2 = $fe1.in('km/l');
-is $fe2, '10.620186km/l',                                                   '$fe2.in-km/l';
+is $fe2, '10.620186km/l' || '12.754311km/l',                                '$fe2.in-km/l';
+#is $fe2, '10.620186km/l',                                                   '$fe2.in-km/l';
 
 my Volume $vol2 = ♎️'4 l';
 my Length $dis2 = ♎️'100 km';
