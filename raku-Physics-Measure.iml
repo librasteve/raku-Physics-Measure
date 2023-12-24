@@ -8,23 +8,5 @@
       <sourceFolder url="file://$MODULE_DIR$/t" isTestSource="true" />
     </content>
     <orderEntry type="sourceFolder" forTests="false" />
-    <orderEntry type="module-library">
-      <library name="Physics::Unit" type="perl6">
-        <CLASSES />
-        <JAVADOC />
-        <SOURCES>
-          <root url="raku://1166041188:Physics::Unit!/" />
-        </SOURCES>
-      </library>
-    </orderEntry>
-    <orderEntry type="module-library">
-      <library name="Physics::Error" type="perl6">
-        <CLASSES />
-        <JAVADOC />
-        <SOURCES>
-          <root url="raku://1166041188:Physics::Error!/" />
-        </SOURCES>
-      </library>
-    </orderEntry>
   </component>
 </module>
