@@ -3,8 +3,13 @@ use Physics::Unit;
 use Physics::Error;
 
 #This module needs the export label :ALL to load postfix operators
+
+# speed (2020)
 # use Physics::Measure;      ...10s first-, 1.2s pre- compiled 
 # use Physics::Measure :ALL; ...13s first-, 2.8s pre- compiled 
+
+# speed (2024)
+# use Physics::Measure :ALL; ...4.4s first-, 0.9s pre- compiled 
 
 #This module uses Type Variables such as ::T,::($s) 
 #viz. http://www.jnthn.net/papers/2008-yapc-eu-raku6types.pdf
