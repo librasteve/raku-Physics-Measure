@@ -708,7 +708,7 @@ multi infix:<!=> ( Measure:D $a, Measure:D $b ) is equiv( &infix:<!=> ) is expor
 ##### Affix Operators #####
 
 #`[[ 
-'Affix Operators' combine the notions of:
+Affix Operators combine the notions of:
 1. SI Prefixes e.g. c(centi-), k(kilo-) that make compound units such as cm, km, kg  
 2. Raku Postfixes e.g. $l = 42cm; operators which work on the preceding value
 
