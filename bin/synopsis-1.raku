@@ -6,6 +6,7 @@ use Physics::Measure :ALL;
 
 my \d = 42m;				say ~d;		#42m
 dd d;
+die;
 my \t = 10s;				say ~t;		#10s
 
 my \u = d / t;				say ~u;		#4.2m/s

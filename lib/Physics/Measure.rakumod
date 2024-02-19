@@ -1,4 +1,4 @@
-unit module Physics::Measure:ver<1.0.20>:auth<Steve Roe (librasteve@furnival.net)>;
+unit module Physics::Measure:ver<2.0.1>:auth<Steve Roe (librasteve@furnival.net)>;
 use Physics::Unit;
 use Physics::Error;
 
@@ -9,7 +9,8 @@ use Physics::Error;
 # use Physics::Measure :ALL; ...13s first-, 2.8s pre- compiled 
 
 # speed (2024)
-# use Physics::Measure :ALL; ...4.4s first-, 0.9s pre- compiled 
+# use Physics::Measure :ALL; ...4.4s first-, 0.9s pre- compiled
+
 
 #This module uses Type Variables such as ::T,::($s) 
 #viz. http://www.jnthn.net/papers/2008-yapc-eu-raku6types.pdf
@@ -339,9 +340,9 @@ class Measure is export {
 		::($n-type).new( :$value, units => $nuo, :$error )
 	}
 
-    #| adjust prefix (affix) to optimize value significance
+    #| adjust prefix (postfix) to optimize value significance
 	method norm {
-        my %abn = GetAffixByName;
+        my %abn = GetPostfixByName;
 
 		#try to match via unit defn eg. petahertz
 		my $defn = self.units.defn;
@@ -705,25 +706,25 @@ multi infix:<!=> ( Measure:D $a, Measure:D $b ) is equiv( &infix:<!=> ) is expor
     else { return True; }
 }
 
-##### Affix Operators #####
+##### Postfix Operators #####
 
 #`[[ 
-Affix Operators combine the notions of:
+Postfix Operators combine the notions of:
 1. SI Prefixes e.g. c(centi-), k(kilo-) that make compound units such as cm, km, kg  
 2. Raku Postfixes e.g. $l = 42cm; operators which work on the preceding value
 
-We use the term Affix to indicate that both concepts are provided by this code:
+We use the term Postfix to indicate that both concepts are provided by this code:
 1. Construction of the cross product of SI Prefixes (20) with ( SI Base (7) + Derived (20) ) Units
 2. Declaration of the resulting ~540 Unit instances and matching Raku Postfix operators
 
 Now you can simply go 'my $l = 1km;' to construct a new Measure object with value => 1 and units => 'km'
 #]]
 
-my %affix-by-name = GetAffixByName;
-my %affix-syns-by-name = GetAffixSynsByName;
+my %postfix-by-name = GetPostfixByName;
+my %postfix-syns-by-name = GetPostfixSynsByName;
 
 sub do-postfix( Real $v, Str $cn ) is export {
-    my $u = Unit.new( defn => $cn, names => %affix-syns-by-name{$cn} );
+    my $u = Unit.new( defn => $cn, names => %postfix-syns-by-name{$cn} );
     my $t = $u.type(:just1);
     return ::($t).new(value => $v, units => $u);
 }
@@ -739,7 +740,7 @@ sub postfix:<steradian> (Real:D $x) is export { do-postfix($x,'steradian') }
 #| then put in all the regular combinations programmatically
 #| viz. https://docs.raku.org/language/modules#Exporting_and_selective_importing
 my package EXPORT::ALL {
-	for %affix-by-name.keys -> $u {
+	for %postfix-by-name.keys -> $u {
         OUR::{'&postfix:<' ~ $u ~ '>'} := sub (Real:D $x) { do-postfix($x,"$u") };
 	}
 }
