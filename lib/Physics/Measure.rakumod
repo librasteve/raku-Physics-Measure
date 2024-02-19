@@ -71,7 +71,7 @@ class Measure is export {
     multi method new( Str:D $string ) {					say "new from Str" if $db;
         my ( $value, $units, $error ) = Measure.defn-extract( $string );
         $units = GetUnit( $units );
-        my $type = $units.type( :just1 ) || 'Measure';
+        my $type = $units.type || 'Measure';
         ::($type).new( :$value, :$units, :$error )
     }
     multi method new( Duration:D $d ) {				    say "new from Duration" if $db;
@@ -327,7 +327,7 @@ class Measure is export {
 		my $ouo = $.units;					        #old unit object
 		my $nuo = GetUnit( $to );			        #new unit object
 
-		my $n-type = $nuo.type( :just1 );
+		my $n-type = $nuo.type;
 
         #allow new type to match old eg. if allomorph
         if not ::O ~~ ::($n-type) {                 #ie. is Distance ~~ Length
@@ -389,7 +389,7 @@ class Measure is export {
 
     #| convert to base (prototype) unit of type
 	method rebase {
-		self.in( GetPrototype( self.units.type( :just1 ) ))
+		self.in( GetPrototype( self.units.type ))
 	}
     #`[
 	method si {
@@ -725,7 +725,7 @@ my %postfix-syns-by-name = GetPostfixSynsByName;
 
 sub do-postfix( Real $v, Str $cn ) is export {
     my $u = Unit.new( defn => $cn, names => %postfix-syns-by-name{$cn} );
-    my $t = $u.type(:just1);
+    my $t = $u.type;
     return ::($t).new(value => $v, units => $u);
 }
 

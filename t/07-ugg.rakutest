@@ -60,7 +60,7 @@ is $x10a.units.type, 'MomentOfInertia',                                 '$x10a-u
 my $x11 = ♎️ '11 sq m',
 is ~$x11, '11sq m',                                                     '$x11-sq m';
 is $x11.WHAT, Physics::Measure::Area,                                   '$x11.WHAT';
-is $x11.units.type( :just1 ), 'Area',                                   '$x11-unitsof';
+is $x11.units.type, 'Area',                                             '$x11-unitsof';
 
 my $x12 = ♎️ '12 kg m2';
 is ~$x12, '12kg m2',		                                            '$x12-kg.m squared';
