@@ -46,6 +46,7 @@ $r = $a / $b;
 ok $r == <23/42>,                                                               'div:M/M';
 $c = $a / 37.0;
 ok $c.value == <23/37>,                                                         'div:M/S';
+
 is $c.units.name, 'm',                                                          'div:M/S';
 
 my $id = GetMeaUnit( '1 / m' );
