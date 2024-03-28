@@ -388,9 +388,6 @@ class Measure is export {
 	}
 
     #| convert into base unit of type
-#	method rebase {
-#		self.in( GetPrototype( self.units.type ));
-#	}
     method rebase {
         self.in( self.units.rebase );
     }
