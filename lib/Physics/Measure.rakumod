@@ -389,7 +389,7 @@ class Measure is export {
 
     #| convert into base unit of type
     method rebase {
-        self.in( self.units.rebase );
+        self.in( self.units.basetype );
     }
     #`[
 	method si {
