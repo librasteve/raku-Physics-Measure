@@ -387,10 +387,13 @@ class Measure is export {
 		return $res;
 	}
 
-    #| convert to base (prototype) unit of type
-	method rebase {
-		self.in( GetPrototype( self.units.type ))
-	}
+    #| convert into base unit of type
+#	method rebase {
+#		self.in( GetPrototype( self.units.type ));
+#	}
+    method rebase {
+        self.in( self.units.rebase );
+    }
     #`[
 	method si {
         self.rebase
