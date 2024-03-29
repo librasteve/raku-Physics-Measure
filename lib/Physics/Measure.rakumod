@@ -387,9 +387,9 @@ class Measure is export {
 		return $res;
 	}
 
-    #| convert into base unit of type
+    #| convert into base unit for type
     method rebase {
-        self.in( self.units.basetype );
+        self.in( self.units.type-to-unit );
     }
     #`[
 	method si {
