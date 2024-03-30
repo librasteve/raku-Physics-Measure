@@ -35,14 +35,14 @@ my regex number {
 	<?{ +"$/" ~~ Real }>    #assert coerces via '+' to Real
 }
 
-##### Passthrough of Physics::Unit::GetUnit #####
+##### Passthrough of Physics::Unit::Unit.find #####
 
 #| design intent is for Measure (.new) to encapsulate Physics::Unit
 #| objective is to eliminate 'use lozenges' and to shorten 'use list'
 #| occasionally need this for eg. instantiate 'J' to autoreduce 'kg m^2/s^2'
 
 sub GetMeaUnit( $u ) is export {
-    GetUnit( $u )
+    Unit.find( $u )
 }
 
 ########## Classes & Methods ##########
@@ -60,7 +60,7 @@ class Measure is export {
 
 	#### Constructors ####
     multi method new( :$value, :$units, :$error ) {		say "new from attrs" if $db;
-        self.bless( :$value, units => GetUnit($units), error => Error.new(:$error, :$value) )
+        self.bless( :$value, units => Unit.find($units), error => Error.new(:$error, :$value) )
     }
     multi method new( ::T: Measure:D $m ) {				say "new from Measure" if $db;
         my $value = $m.value;
@@ -70,13 +70,13 @@ class Measure is export {
     }
     multi method new( Str:D $string ) {					say "new from Str" if $db;
         my ( $value, $units, $error ) = Measure.defn-extract( $string );
-        $units = GetUnit( $units );
+        $units = Unit.find( $units );
         my $type = $units.type || 'Measure';
         ::($type).new( :$value, :$units, :$error )
     }
     multi method new( Duration:D $d ) {				    say "new from Duration" if $db;
         my $value = +"$d";                              #extract value of Duration in s
-        Time.new( :$value, units => GetUnit('s') )      #error => Any
+        Time.new( :$value, units => Unit.find('s') )      #error => Any
     }
     method clone( ::T: ) {							    say "cloning " ~ T.^name if $db;
         T.new: self
@@ -292,7 +292,7 @@ class Measure is export {
         my $r = self.rebase;
 
         my $value = 1 / $r.value;
-        my ( $type, $units ) = GetUnit('unity').divide( $r.units );
+        my ( $type, $units ) = Unit.find('unity').divide( $r.units );
         my $round = $r.error.denorm[1] with $r.error;
         my $error = ( $r.error.relative * $value ).round($round) with $r.error;
 
@@ -325,7 +325,7 @@ class Measure is export {
     #| convert units and adjust value
     method in( ::O: $to ) {
 		my $ouo = $.units;					        #old unit object
-		my $nuo = GetUnit( $to );			        #new unit object
+		my $nuo = Unit.find( $to );			        #new unit object
 
 		my $n-type = $nuo.type;
 
