@@ -353,8 +353,9 @@ class Measure is export {
 		my $afx-name = %abn.keys.grep(/^ $name $/ ).first;
 
 		#setup some hashes and arrays
-		my %pfix2fact = GetPrefixToFactor;
-		my %fact2pfix = %pfix2fact.kv.reverse;
+        my %pfix2fact = Unit.prefix-to-factor;
+
+        my %fact2pfix = %pfix2fact.kv.reverse;
            %fact2pfix{'1'} = '';                    #plug gap in factors for vanilla base units
 		my @pfixs = %pfix2fact.keys;
 
