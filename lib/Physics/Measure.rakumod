@@ -342,7 +342,7 @@ class Measure is export {
 
     #| adjust prefix (postfix) to optimize value significance
 	method norm {
-        my %abn = GetPostfixByName;
+        my %abn = Unit.postfix-to-defn;
 
 		#try to match via unit defn eg. petahertz
 		my $defn = self.units.defn;
@@ -721,11 +721,11 @@ We use the term Postfix to indicate that both concepts are provided by this code
 Now you can simply go 'my $l = 1km;' to construct a new Measure object with value => 1 and units => 'km'
 #]]
 
-my %postfix-by-name = GetPostfixByName;
-my %postfix-syns-by-name = GetPostfixSynsByName;
+#my %postfix-to-defn = Unit.postfix-to-defn;
+#my %postfix-syns-by-name = Unit.postfix-to-syns;
 
 sub do-postfix( Real $v, Str $cn ) is export {
-    my $u = Unit.new( defn => $cn, names => %postfix-syns-by-name{$cn} );
+    my $u = Unit.new( defn => $cn, names => Unit.postfix-to-syns{$cn} );
     my $t = $u.type;
     return ::($t).new(value => $v, units => $u);
 }
@@ -741,7 +741,7 @@ sub postfix:<steradian> (Real:D $x) is export { do-postfix($x,'steradian') }
 #| then put in all the regular combinations programmatically
 #| viz. https://docs.raku.org/language/modules#Exporting_and_selective_importing
 my package EXPORT::ALL {
-	for %postfix-by-name.keys -> $u {
+	for Unit.postfix-to-defn.keys -> $u {
         OUR::{'&postfix:<' ~ $u ~ '>'} := sub (Real:D $x) { do-postfix($x,"$u") };
 	}
 }
