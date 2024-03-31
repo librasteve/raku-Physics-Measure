@@ -51,7 +51,7 @@ is $c.units.name, 'm',                                                          
 
 my $id = GetMeaUnit( '1 / m' );
 class iddy is Measure {}
-$id.NewType('iddy');
+$id.type-bind('iddy');
 $m = 37.0 / $b;
 ok $m.value == <37/42>,                                                         'div:R/M';
 is $m.units.name, '1 / m',                                                      'div:R/M';
