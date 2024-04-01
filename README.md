@@ -301,17 +301,18 @@ say $po.pretty;                         #25 m²⋅s⁻³⋅kg   (SI recommended 
 In a small number of case, the same units are used by different unit Types. Type hints 
 steer type inference:
 ```perl6
-our %type-hints = %(
-    Area        => <Area FuelConsumption>,
-    Energy      => <Energy Torque>,
-    Momentum    => <Momentum Impulse>,
-    Frequency   => <Frequency Radioactivity>,
+has %.type-hint = %(
+    Area           => <Area FuelConsumption>,
+    Energy         => <Energy Torque>,
+    Momentum       => <Momentum Impulse>,
+    Frequency      => <Frequency Radioactivity>,
+    SpecificEnergy => <SpecificEnergy Dose>,
 );
 ```
 
 To adjust this, you can delete the built in key and replace it with your own:
 ```perl6
-my %th := %Physics::Unit::type-hints;
+my %th := Unit.type-hint;
 
 #default type-hints
 my $en1 = ♎️'60 J';     #'$en1 ~~ Energy';

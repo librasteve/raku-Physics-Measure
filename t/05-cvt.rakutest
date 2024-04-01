@@ -5,6 +5,7 @@ use lib '../lib';
 use Test;
 plan 52;
 
+use Physics::Unit;
 use Physics::Measure;
 
 my $locale = 'imp';        # locale for 'us' or 'imp' gallons, pints, mpg etc.
@@ -12,7 +13,8 @@ $locale = ($_ ~~ /en_US/) ?? 'us' !! 'imp'   with %*ENV<LANG>;
 $locale = ($_ ~~ /en_US/) ?? 'us' !! $locale with %*ENV<RAKULANG>;
 
 $Physics::Measure::round-val = 0.000001;
-my %th := %Physics::Unit::type-hints;
+
+my %th := Unit.type-hint;
 
 my Length $d-me = ♎️ '10 m';
 is "$d-me", '10m',                                                          '$d.""';
