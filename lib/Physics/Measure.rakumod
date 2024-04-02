@@ -528,6 +528,8 @@ multi atan( Numeric:D $x, Str :$units! ) is export {
 
 ######## Child Classes ########
 
+say Unit.classes;
+
 #SI Base Units
 class Length             is Measure is export {}
 class Mass               is Measure is export {}
