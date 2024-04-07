@@ -39,6 +39,7 @@ my regex number {
 
 class Time { ... }
 class Dimensionless { ... }
+class Synthetic {...}
 
 class Measure is export {
     #Parent class for physical quantities with value, units & error
@@ -288,10 +289,11 @@ class Measure is export {
         my $r = self.rebase;
 
         my $value = 1 / $r.value;
-        my ( $type, $units ) = Unit.find('unity').divide( $r.units );
+        say my ( $type, $units ) = Unit.find('unity').divide( $r.units );
         my $round = $r.error.denorm[1] with $r.error;
         my $error = ( $r.error.relative * $value ).round($round) with $r.error;
 
+        $type = Synthetic if $type ~~ /Synthetic/;
         ::($type).new( :$value, :$units, :$error );
     }
     method power( Int:D $n ) {						#eg. Area ** 2 => Distance
@@ -525,6 +527,8 @@ multi atan( Numeric:D $x, Str :$units! ) is export {
 ######## Child Classes ########
 
 # FIXME - defile for localization override?
+
+class Synthetic          is Measure is export {}
 
 #SI Base Units
 class Length             is Measure is export {}
