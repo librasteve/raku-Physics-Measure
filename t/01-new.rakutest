@@ -9,7 +9,7 @@ use Physics::Measure;
 
 #Part 1: Default new Constructor
 
-my $u = GetMeaUnit( 'm' );
+my $u = Measure.unit-find( 'm' );
 is $u.name,'m',             '$u.name exists';
 is ~$u.type,'Length',	    '$u.units made';
 

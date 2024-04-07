@@ -9,7 +9,7 @@ use Physics::Measure;
 
 $Physics::Measure::round-val = 0.01;
 
-my $u = GetMeaUnit('m');
+my $u = Measure.unit-find('m');
 my Length $d .=new(value => 1e4, units => $u);
 
 my $sq1 = $d ** 2;

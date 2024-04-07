@@ -35,16 +35,6 @@ my regex number {
 	<?{ +"$/" ~~ Real }>    #assert coerces via '+' to Real
 }
 
-##### Passthrough of Physics::Unit::Unit.find #####
-
-#| design intent is for Measure (.new) to encapsulate Physics::Unit
-#| objective is to eliminate 'use lozenges' and to shorten 'use list'
-#| occasionally need this for eg. instantiate 'J' to autoreduce 'kg m^2/s^2'
-
-sub GetMeaUnit( $u ) is export {
-    Unit.find( $u )
-}
-
 ########## Classes & Methods ##########
 
 class Time { ... }
@@ -86,7 +76,8 @@ class Measure is export {
     }
 
     #### Class Methods ####
-    #baby Grammar for initial extraction of definition from Str (value/unit/error)
+
+    #| baby Grammar for initial extraction of definition from Str (value/unit/error)
     method defn-extract( Measure:U: Str:D $s ) {
         #handle eg. <45°30′30″>
         #<°> is U+00B0 <′> is U+2032 <″> is U+2033
@@ -140,6 +131,11 @@ class Measure is export {
             say "extracting «$s»: v is «$v», u is «$u», e is «$e» as {$e.^name}" if $db;
             return($v, $u, $e)
         }
+    }
+
+    #| passthrough of Physics::Unit.find top shorten 'use list'
+    method unit-find(Measure:U: $u ) {
+        Unit.find( $u )
     }
 
 	#### Coercion & Output ####
@@ -528,7 +524,7 @@ multi atan( Numeric:D $x, Str :$units! ) is export {
 
 ######## Child Classes ########
 
-say Unit.classes;
+# FIXME - defile for localization override?
 
 #SI Base Units
 class Length             is Measure is export {}

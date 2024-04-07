@@ -331,7 +331,7 @@ my $tq2 = $fo3 * $le2;  #'$tq2 ~~ Torque';
 
 To make a custom Measure, you can use this incantation:
 ```perl6
-GetMeaUnit('nmile').type-bind('Reach');
+Measure.unit-find('nmile').type-bind('Reach');
 
 class Reach is Measure {
     has $.units where *.name eq <nm nmile nmiles>.any;
