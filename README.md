@@ -290,7 +290,7 @@ To see what you have got, then go:
 my $po = 25W;   
 say ~$po; say "$po"; say $po.Str;       #25 W  (defaults to derived unit)
 say +$po; say $po.value; say $po.Real;  #25 
-say $po.WHAT;                           #(Power)
+say $po.^name;                          #(Power)
 say $po.canonical;                      #25 m2.s-3.kg   (SI base units)
 say $po.pretty;                         #25 m²⋅s⁻³⋅kg   (SI recommended style)
                                               ^...^......unicode Dot Operator U+22C5
