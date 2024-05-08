@@ -553,6 +553,7 @@ class Pressure           is Measure is export {}
 class Density            is Measure is export {}
 class Energy             is Measure is export {}
 class Power              is Measure is export {}
+class SpecificPower      is Measure is export {}
 class Charge             is Measure is export {}
 class Potential          is Measure is export {}
 class Resistance         is Measure is export {}
