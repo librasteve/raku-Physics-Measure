@@ -289,6 +289,7 @@ class Measure is export {
         my $r = self.rebase;
 
         my $value = 1 / $r.value;
+        #iamerejh
         say my ( $type, $units ) = Unit.find('unity').divide( $r.units );
         my $round = $r.error.denorm[1] with $r.error;
         my $error = ( $r.error.relative * $value ).round($round) with $r.error;
@@ -574,6 +575,7 @@ class FuelConsumption    is Measure is export {}
 class FuelEfficiency     is Measure is export {}
 class Flow               is Measure is export {}
 class SpecificEnergy     is Measure is export {}
+class SpecificPower      is Measure is export {}
 class Irradiance         is Measure is export {}
 class Insolation         is Measure is export {}
 class ThermalResistance  is Measure is export {}
