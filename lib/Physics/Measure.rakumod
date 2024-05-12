@@ -251,15 +251,8 @@ class Measure is export {
         my $l = self.rebase;
         $r .= rebase;
 
-        say 1;
-        say $l.raku;
-        say $r.raku;
-
         my $value = $l.value * $r.value;
         my ( $type, $units ) = $l.units.multiply( $r.units );
-
-        say $type;
-        say $units.raku;
 
         my ( $error, $round ) = $l.add-error-rel( $r, $value );
         $error .= round($round) if $round && $round != 0;
