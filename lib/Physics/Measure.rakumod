@@ -62,7 +62,9 @@ class Measure is export {
     multi method new( Str:D $string ) {					say "new from Str" if $db;
         my ( $value, $units, $error ) = Measure.defn-extract( $string );
         $units = Unit.find( $units );
+
         my $type = $units.type || 'Measure';
+        $type = 'Synthetic' if $type ~~ /synthetic/;
         ::($type).new( :$value, :$units, :$error )
     }
     multi method new( Duration:D $d ) {				    say "new from Duration" if $db;
@@ -249,11 +251,20 @@ class Measure is export {
         my $l = self.rebase;
         $r .= rebase;
 
+        say 1;
+        say $l.raku;
+        say $r.raku;
+
         my $value = $l.value * $r.value;
         my ( $type, $units ) = $l.units.multiply( $r.units );
+
+        say $type;
+        say $units.raku;
+
         my ( $error, $round ) = $l.add-error-rel( $r, $value );
         $error .= round($round) if $round && $round != 0;
 
+        $type = 'Synthetic' if $type ~~ /synthetic/;
         ::($type).new( :$value, :$units, :$error );
     }
     method multiply-const(Real:D $r) {
@@ -271,9 +282,11 @@ class Measure is export {
 
         my $value = $l.value / $r.value;
         my ( $type, $units ) = $l.units.divide( $r.units );
+
         my ( $error, $round ) = $l.add-error-rel( $r, $value );
         $error .= round($round) if $round && $round != 0;
 
+        $type = 'Synthetic' if $type ~~ /synthetic/;
         ::($type).new( :$value, :$units, :$error );
     }
     method divide-by-const( Real:D $r ) {
@@ -286,15 +299,18 @@ class Measure is export {
         return self
     }
     method reciprocal {								#eg. 1 / Time => Frequency
-        my $r = self.rebase;
+        my $r = self.rebase;    #ok
 
         my $value = 1 / $r.value;
-        #iamerejh
-        say my ( $type, $units ) = Unit.find('unity').divide( $r.units );
+
+        my $numerator = Unit.new: defn => 'unity';
+
+        my ( $type, $units ) = $numerator.divide( $r.units );
+
         my $round = $r.error.denorm[1] with $r.error;
         my $error = ( $r.error.relative * $value ).round($round) with $r.error;
 
-        $type = Synthetic if $type ~~ /Synthetic/;
+        $type = 'Synthetic' if $type ~~ /synthetic/;
         ::($type).new( :$value, :$units, :$error );
     }
     method power( Int:D $n ) {						#eg. Area ** 2 => Distance
@@ -313,6 +329,7 @@ class Measure is export {
         my $round = $l.error.denorm[1] / (10 ** $n) with $l.error;
         my $error = ( $l.error.relative / $n * $value ).round($round) with $l.error;
 
+        $type = 'Synthetic' if $type ~~ /synthetic/;
         ::($type).new( :$value, :$units, :$error );
     }
     method sqrt() {
@@ -391,11 +408,6 @@ class Measure is export {
     method rebase {
         self.in( self.units.type-to-unit );
     }
-    #`[
-	method si {
-        self.rebase
-	}
-    #]
 
     #| compare units
     method cmp( $a: $b ) {
