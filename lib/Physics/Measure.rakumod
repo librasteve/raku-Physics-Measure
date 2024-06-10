@@ -1,4 +1,4 @@
-unit module Physics::Measure:ver<1.0.21>:auth<Steve Roe (librasteve@furnival.net)>;
+unit module Physics::Measure:ver<1.0.22>:auth<Steve Roe (librasteve@furnival.net)>;
 use Physics::Unit;
 use Physics::Error;
 
@@ -733,6 +733,7 @@ sub do-postfix( Real $v, Str $cn ) is export {
 
 #| first a few "non-declining singletons"...
 sub postfix:<°>         (Real:D $x) is export { do-postfix($x,'°') }
+sub postfix:<%>         (Real:D $x) is export { do-postfix($x,'%') }
 sub postfix:<°C>        (Real:D $x) is export { do-postfix($x,'°C') }
 sub postfix:<radian>    (Real:D $x) is export { do-postfix($x,'radian') }
 sub postfix:<steradian> (Real:D $x) is export { do-postfix($x,'steradian') }
