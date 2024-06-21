@@ -1,4 +1,4 @@
-unit module Physics::Measure:ver<1.0.21>:auth<Steve Roe (librasteve@furnival.net)>;
+unit module Physics::Measure:ver<2.0.0>:auth<Steve Roe (librasteve@furnival.net)>;
 use Physics::Unit;
 use Physics::Error;
 
@@ -9,7 +9,8 @@ use Physics::Error;
 # use Physics::Measure :ALL; ...13s first-, 2.8s pre- compiled 
 
 # speed (2024)
-# use Physics::Measure :ALL; ...4.4s first-, 0.9s pre- compiled 
+# use Physics::Measure :ALL; ...4.4s first-, 0.9s pre- compiled
+
 
 #This module uses Type Variables such as ::T,::($s) 
 #viz. http://www.jnthn.net/papers/2008-yapc-eu-raku6types.pdf
@@ -34,20 +35,11 @@ my regex number {
 	<?{ +"$/" ~~ Real }>    #assert coerces via '+' to Real
 }
 
-##### Passthrough of Physics::Unit::GetUnit #####
-
-#| design intent is for Measure (.new) to encapsulate Physics::Unit
-#| objective is to eliminate 'use lozenges' and to shorten 'use list'
-#| occasionally need this for eg. instantiate 'J' to autoreduce 'kg m^2/s^2'
-
-sub GetMeaUnit( $u ) is export {
-    GetUnit( $u )
-}
-
 ########## Classes & Methods ##########
 
 class Time { ... }
 class Dimensionless { ... }
+class Synthetic {...}
 
 class Measure is export {
     #Parent class for physical quantities with value, units & error
@@ -59,7 +51,7 @@ class Measure is export {
 
 	#### Constructors ####
     multi method new( :$value, :$units, :$error ) {		say "new from attrs" if $db;
-        self.bless( :$value, units => GetUnit($units), error => Error.new(:$error, :$value) )
+        self.bless( :$value, units => Unit.find($units), error => Error.new(:$error, :$value) )
     }
     multi method new( ::T: Measure:D $m ) {				say "new from Measure" if $db;
         my $value = $m.value;
@@ -69,13 +61,15 @@ class Measure is export {
     }
     multi method new( Str:D $string ) {					say "new from Str" if $db;
         my ( $value, $units, $error ) = Measure.defn-extract( $string );
-        $units = GetUnit( $units );
-        my $type = $units.type( :just1 ) || 'Measure';
+        $units = Unit.find( $units );
+
+        my $type = $units.type || 'Measure';
+        $type = 'Synthetic' if $type ~~ /synthetic/;
         ::($type).new( :$value, :$units, :$error )
     }
     multi method new( Duration:D $d ) {				    say "new from Duration" if $db;
         my $value = +"$d";                              #extract value of Duration in s
-        Time.new( :$value, units => GetUnit('s') )      #error => Any
+        Time.new( :$value, units => Unit.find('s') )      #error => Any
     }
     method clone( ::T: ) {							    say "cloning " ~ T.^name if $db;
         T.new: self
@@ -85,7 +79,8 @@ class Measure is export {
     }
 
     #### Class Methods ####
-    #baby Grammar for initial extraction of definition from Str (value/unit/error)
+
+    #| baby Grammar for initial extraction of definition from Str (value/unit/error)
     method defn-extract( Measure:U: Str:D $s ) {
         #handle eg. <45°30′30″>
         #<°> is U+00B0 <′> is U+2032 <″> is U+2033
@@ -139,6 +134,11 @@ class Measure is export {
             say "extracting «$s»: v is «$v», u is «$u», e is «$e» as {$e.^name}" if $db;
             return($v, $u, $e)
         }
+    }
+
+    #| passthrough of Physics::Unit.find top shorten 'use list'
+    method unit-find(Measure:U: $u ) {
+        Unit.find( $u )
     }
 
 	#### Coercion & Output ####
@@ -253,9 +253,11 @@ class Measure is export {
 
         my $value = $l.value * $r.value;
         my ( $type, $units ) = $l.units.multiply( $r.units );
+
         my ( $error, $round ) = $l.add-error-rel( $r, $value );
         $error .= round($round) if $round && $round != 0;
 
+        $type = 'Synthetic' if $type ~~ /synthetic/;
         ::($type).new( :$value, :$units, :$error );
     }
     method multiply-const(Real:D $r) {
@@ -273,9 +275,11 @@ class Measure is export {
 
         my $value = $l.value / $r.value;
         my ( $type, $units ) = $l.units.divide( $r.units );
+
         my ( $error, $round ) = $l.add-error-rel( $r, $value );
         $error .= round($round) if $round && $round != 0;
 
+        $type = 'Synthetic' if $type ~~ /synthetic/;
         ::($type).new( :$value, :$units, :$error );
     }
     method divide-by-const( Real:D $r ) {
@@ -288,13 +292,18 @@ class Measure is export {
         return self
     }
     method reciprocal {								#eg. 1 / Time => Frequency
-        my $r = self.rebase;
+        my $r = self.rebase;    #ok
 
         my $value = 1 / $r.value;
-        my ( $type, $units ) = GetUnit('unity').divide( $r.units );
+
+        my $numerator = Unit.new: defn => 'unity';
+
+        my ( $type, $units ) = $numerator.divide( $r.units );
+
         my $round = $r.error.denorm[1] with $r.error;
         my $error = ( $r.error.relative * $value ).round($round) with $r.error;
 
+        $type = 'Synthetic' if $type ~~ /synthetic/;
         ::($type).new( :$value, :$units, :$error );
     }
     method power( Int:D $n ) {						#eg. Area ** 2 => Distance
@@ -313,6 +322,7 @@ class Measure is export {
         my $round = $l.error.denorm[1] / (10 ** $n) with $l.error;
         my $error = ( $l.error.relative / $n * $value ).round($round) with $l.error;
 
+        $type = 'Synthetic' if $type ~~ /synthetic/;
         ::($type).new( :$value, :$units, :$error );
     }
     method sqrt() {
@@ -324,12 +334,12 @@ class Measure is export {
     #| convert units and adjust value
     method in( ::O: $to ) {
 		my $ouo = $.units;					        #old unit object
-		my $nuo = GetUnit( $to );			        #new unit object
+		my $nuo = Unit.find( $to );			        #new unit object
 
-		my $n-type = $nuo.type( :just1 );
+		my $n-type = $nuo.type;
 
-        #allow new type to match old eg. if allomorph
-        if not ::O ~~ ::($n-type) {                 #ie. is Distance ~~ Length
+        #allow new type to match old eg. Distance ~~ Length
+        if not ::O ~~ ::($n-type) {
             die "cannot convert in to different type $n-type"
         }
 
@@ -339,9 +349,9 @@ class Measure is export {
 		::($n-type).new( :$value, units => $nuo, :$error )
 	}
 
-    #| adjust prefix (affix) to optimize value significance
+    #| adjust prefix (postfix) to optimize value significance
 	method norm {
-        my %abn = GetAffixByName;
+        my %abn = Unit.postfix-to-defn;
 
 		#try to match via unit defn eg. petahertz
 		my $defn = self.units.defn;
@@ -352,8 +362,9 @@ class Measure is export {
 		my $afx-name = %abn.keys.grep(/^ $name $/ ).first;
 
 		#setup some hashes and arrays
-		my %pfix2fact = GetPrefixToFactor;
-		my %fact2pfix = %pfix2fact.kv.reverse;
+        my %pfix2fact = Unit.prefix-to-factor;
+
+        my %fact2pfix = %pfix2fact.kv.reverse;
            %fact2pfix{'1'} = '';                    #plug gap in factors for vanilla base units
 		my @pfixs = %pfix2fact.keys;
 
@@ -386,15 +397,14 @@ class Measure is export {
 		return $res;
 	}
 
-    #| convert to base (prototype) unit of type
-	method rebase {
-		self.in( GetPrototype( self.units.type( :just1 ) ))
-	}
-    #`[
-	method si {
-        self.rebase
-	}
-    #]
+    #| convert into base unit for type
+    method rebase {
+        return self if self.units.type ~~ /synthetic/;
+
+        return self if self.units.same-unit: self.units.type-to-unit;
+
+        self.in( self.units.type-to-unit );
+    }
 
     #| compare units
     method cmp( $a: $b ) {
@@ -526,6 +536,10 @@ multi atan( Numeric:D $x, Str :$units! ) is export {
 
 ######## Child Classes ########
 
+# FIXME - defile for localization override?
+
+class Synthetic          is Measure is export {}
+
 #SI Base Units
 class Length             is Measure is export {}
 class Mass               is Measure is export {}
@@ -571,6 +585,7 @@ class FuelConsumption    is Measure is export {}
 class FuelEfficiency     is Measure is export {}
 class Flow               is Measure is export {}
 class SpecificEnergy     is Measure is export {}
+class SpecificPower      is Measure is export {}
 class Irradiance         is Measure is export {}
 class Insolation         is Measure is export {}
 class ThermalResistance  is Measure is export {}
@@ -706,26 +721,26 @@ multi infix:<!=> ( Measure:D $a, Measure:D $b ) is equiv( &infix:<!=> ) is expor
     else { return True; }
 }
 
-##### Affix Operators #####
+##### Postfix Operators #####
 
 #`[[ 
-Affix Operators combine the notions of:
+Postfix Operators combine the notions of:
 1. SI Prefixes e.g. c(centi-), k(kilo-) that make compound units such as cm, km, kg  
 2. Raku Postfixes e.g. $l = 42cm; operators which work on the preceding value
 
-We use the term Affix to indicate that both concepts are provided by this code:
+We use the term Postfix to indicate that both concepts are provided by this code:
 1. Construction of the cross product of SI Prefixes (20) with ( SI Base (7) + Derived (20) ) Units
 2. Declaration of the resulting ~540 Unit instances and matching Raku Postfix operators
 
 Now you can simply go 'my $l = 1km;' to construct a new Measure object with value => 1 and units => 'km'
 #]]
 
-my %affix-by-name = GetAffixByName;
-my %affix-syns-by-name = GetAffixSynsByName;
+#my %postfix-to-defn = Unit.postfix-to-defn;
+#my %postfix-syns-by-name = Unit.postfix-to-syns;
 
 sub do-postfix( Real $v, Str $cn ) is export {
-    my $u = Unit.new( defn => $cn, names => %affix-syns-by-name{$cn} );
-    my $t = $u.type(:just1);
+    my $u = Unit.new( defn => $cn, names => Unit.postfix-to-syns{$cn} );
+    my $t = $u.type;
     return ::($t).new(value => $v, units => $u);
 }
 
@@ -740,7 +755,7 @@ sub postfix:<steradian> (Real:D $x) is export { do-postfix($x,'steradian') }
 #| then put in all the regular combinations programmatically
 #| viz. https://docs.raku.org/language/modules#Exporting_and_selective_importing
 my package EXPORT::ALL {
-	for %affix-by-name.keys -> $u {
+	for Unit.postfix-to-defn.keys -> $u {
         OUR::{'&postfix:<' ~ $u ~ '>'} := sub (Real:D $x) { do-postfix($x,"$u") };
 	}
 }

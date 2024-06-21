@@ -7,9 +7,9 @@ plan 26;
 
 use Physics::Measure :ALL;
 
-my $u     = GetMeaUnit('m');                  #get Unit object to construct a Measure
-my Length $d .=new(value => 1e4, units => $u);
-my Length $e .=new(value => 42, units => $u);
+my $units = Measure.unit-find('m');       #get Unit object to construct a Measure
+my Length $d .=new(value => 1e4, :$units);
+my Length $e .=new(value => 42,  :$units);
 
 my $f = $d + ♎️'42 m';
 ok $f.value == 10042,                                                           'add:M+S';
@@ -45,15 +45,15 @@ ok $c.value == 46,                                                              
 $r = $a / $b;
 ok $r == <23/42>,                                                               'div:M/M';
 $c = $a / 37.0;
-ok $c.value == <23/37>,                                                         'div:M/S';
-is $c.units.name, 'm',                                                          'div:M/S';
+ok $c.value == <23/37>,                                                         'div:M/R';
+is $c.units.name, 'm',                                                          'div:M/R';
 
-my $id = GetMeaUnit( '1 / m' );
+my $id = Measure.unit-find( '1 / m' );
 class iddy is Measure {}
-$id.NewType('iddy');
+$id.type-bind('iddy');
 $m = 37.0 / $b;
 ok $m.value == <37/42>,                                                         'div:R/M';
-is $m.units.name, '1 / m',                                                      'div:R/M';
+is $m.units.name, '1 / m',                                                        'div:R/M';
 $c = - $b;
 ok $c.value == -42,                                                             'neg:M';
 is $c.units.name, 'm',                                                          'neg:M';

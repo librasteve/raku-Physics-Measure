@@ -43,7 +43,7 @@ is $v.units.type, 'Volume',			                                    '$v-unitsof';
 # is $x8.units.type, 'Area',                                              '$x8-unitsof';
 #]
 
-#`[FIXME - fails
+#`[ FIXME - fails
 # Couldn't parse defn Str kg.m squared
 #   in sub CreateUnit at /Users/stephenroe/Dropbox/DockerWorld/raku-Physics-Unit/lib/Physics/Unit.rakumod (Physics::Unit) line 524
 # my $x10 = ♎️ '10 kg.m squared';
@@ -60,7 +60,7 @@ is $x10a.units.type, 'MomentOfInertia',                                 '$x10a-u
 my $x11 = ♎️ '11 sq m',
 is ~$x11, '11sq m',                                                     '$x11-sq m';
 is $x11.WHAT, Physics::Measure::Area,                                   '$x11.WHAT';
-is $x11.units.type( :just1 ), 'Area',                                   '$x11-unitsof';
+is $x11.units.type, 'Area',                                             '$x11-unitsof';
 
 my $x12 = ♎️ '12 kg m2';
 is ~$x12, '12kg m2',		                                            '$x12-kg.m squared';
@@ -72,7 +72,7 @@ is ~$x14, '14m',                                                        '$x14-m�
 is $x14.WHAT, Physics::Measure::Length,                                 '$x14.WHAT';
 is $x14.units.type, 'Length',				                            '$x14-unitsof';
 
-#`[FIXME -sometime fails
+#`[ FIXME -sometime fails
 # Expected :'15kg m2'
 # my $x15a = ♎️ '15 kg m^2';
 # my $x15 = ♎️ '15 kg m²';

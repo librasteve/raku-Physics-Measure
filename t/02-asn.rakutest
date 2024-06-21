@@ -7,7 +7,7 @@ plan 11;
 
 use Physics::Measure;
 
-my $u  = GetMeaUnit('m');                  #get Unit object to construct a Measure
+my $u  = Measure.unit-find('m');                  #get Unit object to construct a Measure
 my Length $a .=new(value => 1e4, units => $u);
 
 is $a.WHAT,   Length,              'ass:2xdef';

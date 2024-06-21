@@ -1,6 +1,10 @@
 [![License: Artistic-2.0](https://img.shields.io/badge/License-Artistic%202.0-0298c3.svg)](https://opensource.org/licenses/Artistic-2.0)
 [![raku-physics-measure -> DH](https://github.com/librasteve/raku-Physics-Measure/actions/workflows/measure-weekly.yaml/badge.svg)](https://github.com/librasteve/raku-Physics-Measure/actions/workflows/measure-weekly.yaml)
 
+# Version 2+
+
+This version of Physics::Measure has been adapted to work with the new Physics::Unit:ver<2+>:api<2> release.
+
 # raku-Physics-Measure
 Provides Measure objects that have value, units and error and can be used in many common physics calculations. Uses [Physics::Unit](https://github.com/librasteve/raku-Physics-Unit) and [Physics::Error](https://github.com/librasteve/raku-Physics-Error).
 
@@ -301,17 +305,18 @@ say $po.pretty;                         #25 m²⋅s⁻³⋅kg   (SI recommended 
 In a small number of case, the same units are used by different unit Types. Type hints 
 steer type inference:
 ```perl6
-our %type-hints = %(
-    Area        => <Area FuelConsumption>,
-    Energy      => <Energy Torque>,
-    Momentum    => <Momentum Impulse>,
-    Frequency   => <Frequency Radioactivity>,
+has %.type-hint = %(
+    Area           => <Area FuelConsumption>,
+    Energy         => <Energy Torque>,
+    Momentum       => <Momentum Impulse>,
+    Frequency      => <Frequency Radioactivity>,
+    SpecificEnergy => <SpecificEnergy Dose>,
 );
 ```
 
 To adjust this, you can delete the built in key and replace it with your own:
 ```perl6
-my %th := %Physics::Unit::type-hints;
+my %th := Unit.type-hint;
 
 #default type-hints
 my $en1 = ♎️'60 J';     #'$en1 ~~ Energy';
@@ -330,7 +335,7 @@ my $tq2 = $fo3 * $le2;  #'$tq2 ~~ Torque';
 
 To make a custom Measure, you can use this incantation:
 ```perl6
-GetMeaUnit('nmile').NewType('Reach');
+Measure.unit-find('nmile').type-bind('Reach');
 
 class Reach is Measure {
     has $.units where *.name eq <nm nmile nmiles>.any;
