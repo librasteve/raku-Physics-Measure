@@ -1,6 +1,10 @@
 [![License: Artistic-2.0](https://img.shields.io/badge/License-Artistic%202.0-0298c3.svg)](https://opensource.org/licenses/Artistic-2.0)
 [![raku-physics-measure -> DH](https://github.com/librasteve/raku-Physics-Measure/actions/workflows/measure-weekly.yaml/badge.svg)](https://github.com/librasteve/raku-Physics-Measure/actions/workflows/measure-weekly.yaml)
 
+# Version 2+
+
+This version of Physics::Measure has been adapted to work with the new Physics::Unit:ver<2+>:api<2> release.
+
 # raku-Physics-Measure
 Provides Measure objects that have value, units and error and can be used in many common physics calculations. Uses [Physics::Unit](https://github.com/librasteve/raku-Physics-Unit) and [Physics::Error](https://github.com/librasteve/raku-Physics-Error).
 

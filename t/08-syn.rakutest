@@ -3,7 +3,7 @@
 #TESTALL$ prove6 ./t      [from root]
 use lib '../lib';
 use Test;
-plan 12; 
+plan 17;
 
 use Physics::Measure :ALL;
 
@@ -40,16 +40,25 @@ is $y2.WHAT, Physics::Measure::Speed,                                           
 
 my $z2;
 $z2 = $x2 * $y2;
-is ~$z2, '0.06096J/kg', '$z2-mul-m.s-1*feet.mins-1';
+is ~$z2, '0.06096J/kg',                                             '$z2-mul-m.s-1*feet.mins-1';
 
 $z2 = $x2 / $y2;
-is $z2, '147.637795①',                                            '$z2-div-m.s-1/feet.mins-1';
+is $z2, '147.637795①',                                             '$z2-div-m.s-1/feet.mins-1';
 
 $z2 = $x2 + $y2;
 is ~$z2, '3.02032m.s^-1',                                          '$z2-add-m.s-1+feet.mins-1';
 
 $z2 = $x2 - $y2;
 is ~$z2, '2.97968m.s^-1',                                          '$z2-sub-m.s-1+feet.mins-1';
+
+my $d = 42m;
+my $im = 1 / $d;
+
+is ~$im, '0.02381m-1',                                              'synthetic:m-1-create';
+is ~($im * 2), '0.047619m-1',                                       'synthetic:m-1-const-multiply';
+is ~($im * $d), '1unity',                                           'synthetic:m-1-reset';
+is ~($im * $im), '0.000567m/m^3',                                   'synthetic:m-1-multiply';
+is ~($im ** 2), '0.000567m/m^3',                                    'synthetic:m-1-power';
 
 #done-testing;
 

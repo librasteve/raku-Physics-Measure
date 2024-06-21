@@ -338,8 +338,8 @@ class Measure is export {
 
 		my $n-type = $nuo.type;
 
-        #allow new type to match old eg. if allomorph
-        if not ::O ~~ ::($n-type) {                 #ie. is Distance ~~ Length
+        #allow new type to match old eg. Distance ~~ Length
+        if not ::O ~~ ::($n-type) {
             die "cannot convert in to different type $n-type"
         }
 
@@ -399,6 +399,10 @@ class Measure is export {
 
     #| convert into base unit for type
     method rebase {
+        return self if self.units.type ~~ /synthetic/;
+
+        return self if self.units.same-unit: self.units.type-to-unit;
+
         self.in( self.units.type-to-unit );
     }
 

@@ -9,15 +9,6 @@
     </content>
     <orderEntry type="sourceFolder" forTests="false" />
     <orderEntry type="module-library">
-      <library name="Physics::Unit" type="perl6">
-        <CLASSES />
-        <JAVADOC />
-        <SOURCES>
-          <root url="raku://1166070976:Physics::Unit!/" />
-        </SOURCES>
-      </library>
-    </orderEntry>
-    <orderEntry type="module-library">
       <library name="Physics::Error" type="perl6">
         <CLASSES />
         <JAVADOC />
@@ -27,29 +18,29 @@
       </library>
     </orderEntry>
     <orderEntry type="module-library">
-      <library name="SVG" type="perl6">
+      <library name="YAMLish" type="perl6">
         <CLASSES />
         <JAVADOC />
         <SOURCES>
-          <root url="raku://1166070978:SVG!/" />
+          <root url="raku://1166070978:YAMLish!/" />
         </SOURCES>
       </library>
     </orderEntry>
     <orderEntry type="module-library">
-      <library name="SVG::Plot" type="perl6">
+      <library name="MIME::Base64" type="perl6">
         <CLASSES />
         <JAVADOC />
         <SOURCES>
-          <root url="raku://1166070978:SVG::Plot!/" />
+          <root url="raku://1166070978:MIME::Base64!/" />
         </SOURCES>
       </library>
     </orderEntry>
     <orderEntry type="module-library">
-      <library name="XML::Writer" type="perl6">
+      <library name="Physics::Unit:ver&lt;2+&gt;:api&lt;2&gt;" type="perl6">
         <CLASSES />
         <JAVADOC />
         <SOURCES>
-          <root url="raku://1166070978:XML::Writer!/" />
+          <root url="raku://1166070978:Physics::Unit:ver&lt;2+&gt;:api&lt;2&gt;!/" />
         </SOURCES>
       </library>
     </orderEntry>
