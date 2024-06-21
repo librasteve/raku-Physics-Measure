@@ -6,7 +6,7 @@ on:
       - Dockerfile
       - .github/workflows/measure-weekly.yaml
   schedule:
-      - cron: "43 4 * * 5"
+      - cron: "43 4 * * 6"
 
 jobs:
   build-unit:
