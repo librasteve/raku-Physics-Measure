@@ -1,6 +1,7 @@
 unit module Physics::Measure:ver<2.0.0>:auth<Steve Roe (librasteve@furnival.net)>;
 use Physics::Unit;
 use Physics::Error;
+use Math::Vector;
 
 #This module needs the export label :ALL to load postfix operators
 
@@ -45,12 +46,13 @@ class Measure is export {
     #Parent class for physical quantities with value, units & error
     #Builds child classes such as Distance, Mass, Power, etc. 
 
-    has	Real  $.value is rw;
+#    has	Real  $.value is rw;
+    has	      $.value is rw;
     has Unit  $.units is rw;
     has Error $.error is rw;
 
 	#### Constructors ####
-    multi method new( :$value, :$units, :$error ) {		say "new from attrs" if $db;
+    multi method new( :v(:$value), :u(:$units), :e(:$error) ) {		say "new from attrs" if $db;
         self.bless( :$value, units => Unit.find($units), error => Error.new(:$error, :$value) )
     }
     multi method new( ::T: Measure:D $m ) {				say "new from Measure" if $db;
