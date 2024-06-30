@@ -42,12 +42,14 @@ class Time { ... }
 class Dimensionless { ... }
 class Synthetic {...}
 
+subset MVal of Any where * ~~ Real | Math::Vector;
+
 class Measure is export {
     #Parent class for physical quantities with value, units & error
     #Builds child classes such as Distance, Mass, Power, etc. 
 
 #    has	Real  $.value is rw;
-    has	      $.value is rw;
+    has	MVal  $.value is rw;
     has Unit  $.units is rw;
     has Error $.error is rw;
 
