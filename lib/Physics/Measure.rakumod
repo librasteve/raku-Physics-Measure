@@ -1,7 +1,6 @@
 unit module Physics::Measure:ver<2.0.1>:auth<Steve Roe (librasteve@furnival.net)>;
 use Physics::Unit;
 use Physics::Error;
-use Math::Vector;
 
 #This module needs the export label :ALL to load postfix operators
 
@@ -10,7 +9,8 @@ use Math::Vector;
 # use Physics::Measure :ALL; ...13s first-, 2.8s pre- compiled 
 
 # speed (2024)
-# use Physics::Measure :ALL; ...4.4s first-, 0.9s pre- compiled
+# use Physics::Measure :ALL; ...5.3s first-, 1.6s pre- compiled
+
 
 
 #This module uses Type Variables such as ::T,::($s) 
@@ -42,14 +42,11 @@ class Time { ... }
 class Dimensionless { ... }
 class Synthetic {...}
 
-subset MVal of Any where * ~~ Real | Math::Vector;
-
 class Measure is export {
     #Parent class for physical quantities with value, units & error
     #Builds child classes such as Distance, Mass, Power, etc. 
 
-#    has	Real  $.value is rw;
-    has	MVal  $.value is rw;
+    has	      $.value is rw;    #drop type Real to allow Math::Vector as value
     has Unit  $.units is rw;
     has Error $.error is rw;
 
