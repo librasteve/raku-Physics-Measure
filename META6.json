@@ -9,8 +9,7 @@
   "auth": "zef:librasteve",
   "depends": [
     "Physics::Unit:ver<2+>:api<2>",
-    "Physics::Error",
-    "Math::Vector"
+    "Physics::Error"
   ],
   "build-depends": [],
   "test-depends": [],
