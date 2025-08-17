@@ -1,4 +1,4 @@
-unit module Physics::Measure:ver<2.0.1>:auth<Steve Roe (librasteve@furnival.net)>;
+unit module Physics::Measure:ver<2.0.2>:auth<Steve Roe (librasteve@furnival.net)>;
 use Physics::Unit;
 use Physics::Error;
 
@@ -586,6 +586,7 @@ class FuelEfficiency     is Measure is export {}
 class Flow               is Measure is export {}
 class SpecificEnergy     is Measure is export {}
 class SpecificPower      is Measure is export {}
+class SpecificHeat       is Measure is export {}
 class Irradiance         is Measure is export {}
 class Insolation         is Measure is export {}
 class ThermalResistance  is Measure is export {}
@@ -761,6 +762,7 @@ my package EXPORT::ALL {
 }
 
 ##### Error ± Operators #####
+# FIXME use % for percent
 sub postfix:<%> ( Real:D $x --> Str ) is export {
     "$x%"
 }
