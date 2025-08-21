@@ -1,28 +1,25 @@
 {
-  "name": "Physics::Measure",
-  "description": "Some support for physical measurements.",
-  "version": "2.0.2",
-  "perl": "6.d",
-  "authors": [
-    "librasteve"
-  ],
-  "auth": "zef:librasteve",
-  "depends": [
-    "Physics::Unit:ver<2+>:api<2>",
-    "Physics::Error"
-  ],
-  "build-depends": [],
-  "test-depends": [],
-  "provides": {
-    "Physics::Measure": "lib/Physics/Measure.rakumod"
-  },
-  "resources": [],
-  "license": "Artistic-2.0",
-  "tags": [
-    "Physics",
-    "Measure",
-    "Units"
-  ],
-  "api": "1",
-  "source-url": "git://github.com/librasteve/raku-Physics-Measure.git"
+    "name": "Physics::Measure",
+    "description": "Some support for physical measurements.",
+    "version": "2.0.3",
+    "authors": [
+        "librasteve"
+    ],
+    "auth": "zef:librasteve",
+    "depends": [
+        "Physics::Unit:ver<2+>:api<2>",
+        "Physics::Error"
+    ],
+    "build-depends": [],
+    "provides": {
+        "Physics::Measure": "lib/Physics/Measure.rakumod"
+    },
+    "license": "Artistic-2.0",
+    "tags": [
+        "Physics",
+        "Measure",
+        "Units"
+    ],
+    "api": "1",
+    "source-url": "git://github.com/librasteve/raku-Physics-Measure.git"
 }

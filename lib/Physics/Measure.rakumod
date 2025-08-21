@@ -1,4 +1,4 @@
-unit module Physics::Measure:ver<2.0.2>:auth<Steve Roe (librasteve@furnival.net)>;
+unit module Physics::Measure:ver<2.0.3>:auth<Steve Roe (librasteve@furnival.net)>;
 use Physics::Unit;
 use Physics::Error;
 
@@ -678,6 +678,21 @@ multi infix:<*> ( Measure:D $left, Measure:D $right ) is export {
     return $result.multiply( $argument );
 }
 
+multi infix:<×> ( Measure:D $left, Real:D $right ) is export {
+    my $result   = $left.clone;
+    my $argument = $right;
+    return $result.multiply-const( $argument );
+}
+multi infix:<×> ( Real:D $left, Measure:D $right ) is export {
+    my $result   = $right.clone;
+    my $argument = $left;
+    return $result.multiply-const( $argument );
+}
+multi infix:<×> ( Measure:D $left, Measure:D $right ) is export {
+    my ( $result, $argument ) = infix-prep( $left, $right );
+    return $result.multiply( $argument );
+}
+
 multi infix:</> ( Measure:D $left, Real:D $right ) is equiv( &infix:</> ) is export {
     my $result   = $left.clone;
     my $argument = $right;
@@ -690,6 +705,22 @@ multi infix:</> ( Real:D $left, Measure:D $right ) is equiv( &infix:</> ) is exp
     return $recip.multiply-const( $argument );
 }
 multi infix:</> ( Measure:D $left, Measure:D $right ) is export {
+    my ( $result, $argument ) = infix-prep( $left, $right );
+    return $result.divide( $argument );
+}
+
+multi infix:<÷> ( Measure:D $left, Real:D $right ) is equiv( &infix:</> ) is export {
+    my $result   = $left.clone;
+    my $argument = $right;
+    return $result.divide-by-const( $argument );
+}
+multi infix:<÷> ( Real:D $left, Measure:D $right ) is equiv( &infix:</> ) is export {
+    my $result   = $right.clone;
+    my $argument = $left;
+    my $recip = $result.reciprocal;
+    return $recip.multiply-const( $argument );
+}
+multi infix:<÷> ( Measure:D $left, Measure:D $right ) is export {
     my ( $result, $argument ) = infix-prep( $left, $right );
     return $result.divide( $argument );
 }

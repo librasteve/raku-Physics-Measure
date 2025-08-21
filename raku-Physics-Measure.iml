@@ -8,11 +8,38 @@
       <sourceFolder url="file://$MODULE_DIR$/t" isTestSource="true" />
     </content>
     <orderEntry type="module-library">
+      <library name="YAMLish" type="raku">
+        <CLASSES />
+        <JAVADOC />
+        <SOURCES>
+          <root url="raku://1166071006:YAMLish!/" />
+        </SOURCES>
+      </library>
+    </orderEntry>
+    <orderEntry type="module-library">
+      <library name="Physics::Unit" type="raku">
+        <CLASSES />
+        <JAVADOC />
+        <SOURCES>
+          <root url="raku://1166071006:Physics::Unit!/" />
+        </SOURCES>
+      </library>
+    </orderEntry>
+    <orderEntry type="module-library">
+      <library name="MIME::Base64" type="raku">
+        <CLASSES />
+        <JAVADOC />
+        <SOURCES>
+          <root url="raku://1166071006:MIME::Base64!/" />
+        </SOURCES>
+      </library>
+    </orderEntry>
+    <orderEntry type="module-library">
       <library name="Physics::Error" type="raku">
         <CLASSES />
         <JAVADOC />
         <SOURCES>
-          <root url="raku://1166070983:Physics::Error!/" />
+          <root url="raku://1166071006:Physics::Error!/" />
         </SOURCES>
       </library>
     </orderEntry>
