@@ -15,7 +15,7 @@ and, conversely, ```zef uninstall Physics::Measure```
 
 # Synopsis
 
-```perl6
+```raku
 #!/usr/bin/env raku
 use lib '../lib';
 use Physics::Measure :ALL;
@@ -70,7 +70,7 @@ To address the Use Cases, the following consistent functional parts have been cr
 
 Together Physics::Measure and Physics::Unit follow this high level class design model:
 
-```perl6
+```raku
 class Unit {
    has Str $.defn;
    #... 
@@ -97,7 +97,7 @@ Therefore, in the normal course, please make your objects as instances of the Ch
 
 As seen above, if you just want SI prefixes, base and derived units (cm, kg, ml and so on), the :ALL export label provides them as raku postfix:<> custom operators.  This option is intended for scientist / coders who want fast and concise access to a modern Unit library. Here is another example, basic wave mechanics, bringing in the [Physics::Constants](https://github.com/librasteve/raku-Physics-Constants) module:
 
-```perl6
+```raku
 use Physics::Constants;  #<== must use before Physics::Measure 
 use Physics::Measure :ALL;
 
@@ -143,7 +143,7 @@ The following SI units are provided in all Prefix-Unit combinations:
 
 In addition to the SI units listed above, Physics::Measure (and Physics::Unit) offers a comprehensive library of non-metric units. US units and Imperial units include feet, miles, knots, hours, chains, tons and over 200 more. The non-metric units are not exposed as postfix operators.
 
-```perl6
+```raku
 my Length $d = Length.new(value => 42, units => 'miles');   say ~$d;         #42 mile
 my Time   $t = Time.new(  value =>  7, units => 'hours');   say ~$t;         #7 hr
 my $s = $d / $t;                                  say ~$s.in('mph');         #6 mph
@@ -151,7 +151,7 @@ my $s = $d / $t;                                  say ~$s.in('mph');         #6 
 
 A flexible unit expression parser is included to cope with textual variants such as ‘miles per hour’ or ‘mph’; or ‘m/s’, ‘ms^-1’, ‘m.s-1’ (the SI derived unit representation) or ‘m⋅s⁻¹’ (the SI recommended string representation, with superscript powers). The unit expression parser decodes a valid unit string into its roots, extracting unit dimensions and inferring the appropriate type.
 
-```perl6
+```raku
 #Colloquial terms or unicode superscripts can be used for powers in unit declarations 
     #square, sq, squared, cubic, cubed
     #x¹ x² x³ x⁴ and x⁻¹ x⁻² x⁻³ x⁻⁴
@@ -159,7 +159,7 @@ A flexible unit expression parser is included to cope with textual variants such
 
 Of course, the standard raku object constructor syntax may be used for SI units too:
 
-```perl6
+```raku
 my Length $l = Length.new(value => 42, units => 'μm'); say ~$l; #42 micrometre
 ```
 
@@ -169,7 +169,7 @@ This syntax option is the most structured and raku native. For example, it helps
 
 In many cases, coders will want the flexibility of the unit expression parser and the wider range of non-metric units but they also want a concise notation. In this case, the unicode libra emoji ♎️ is provided as raku prefix for object construction. The subject can be enclosed in single quotes ♎️'', double quotes ♎️"" of (from v1.0.10) angle brackets ♎️<>. Separate the number from the units with a space.
 
-```perl6
+```raku
 #The libra ♎️ is shorthand to construct objects...
     my $a = ♎️<4.3 m>;                  say "$a";		#4.3 m
     my $b = ♎️<5e1 m>;                  say "$b";		#50 m
@@ -179,7 +179,7 @@ In many cases, coders will want the flexibility of the unit expression parser an
 ```
 _Use the emoji editor provided on your system (or just cut and paste)_
 
-```perl6
+```raku
 #About 230 built in units are included, for example...
     my $v2 = ♎️<7 yards^3>;          #7 yard^3         (Volume)
     my $v3 = $v2.in( 'm3' );        #5.352 m^3        (Volume) 
@@ -194,7 +194,7 @@ _Use the emoji editor provided on your system (or just cut and paste)_
 
 ## Angles
 
-```perl6
+```raku
 #Angles use degrees/minutes/seconds or decimal radians
     my $θ1 = ♎️<45°30′30″>;      #45°30′30″ (using <> to deconfuse quotation marks)
     my $θ2 = ♎️<2.141 radians>;  #'2.141 radian'
@@ -208,7 +208,7 @@ _Use the emoji editor provided on your system (or just cut and paste)_
 
 ## Time
 
-```perl6
+```raku
 #The Measure of Time has a raku Duration - i.e. the difference between two DateTime Instants:
     my $i1 = DateTime.now;
     my $i2 = DateTime.new( '2020-08-10T14:15:27.26Z' );
@@ -225,7 +225,7 @@ _Use the emoji editor provided on your system (or just cut and paste)_
 
 # Unit Conversion
 
-```perl6
+```raku
 #Unit Conversion uses the .in() method - specify the new units as a String
     my Length $df = ♎️<12.0 feet>;         #12 ft
     my $dm = $df.in( 'm' );               #3.658 m
@@ -247,7 +247,7 @@ The ① symbol is used to denote Dimensionless units.
 
 # Rounding & Normalisation
 
-```perl6
+```raku
 #Set rounding precision (or reset with Nil) - does not reduce internal precision
     $Physics::Measure::round-to = 0.01;
 #Normalize SI Units to the best SI prefix (from example above)
@@ -258,7 +258,7 @@ The ① symbol is used to denote Dimensionless units.
 
 # Thousand Separator | Euro Decimal
 
-```perl6
+```raku
 #Set behaviour if number part contains a comma ','
 #use '' to allow as thousands sep / '.' to convert european style decimals
     $Physics::Measure::number-comma = ''; 
@@ -267,7 +267,7 @@ The ① symbol is used to denote Dimensionless units.
 
 # Comparison Methods
 
-```perl6
+```raku
 #Measures can be compared with $a cmp $b
     my $af = $a.in: 'feet';             #4.3 m => 14.108 feet
     say $af cmp $a;                     #Same
@@ -282,7 +282,7 @@ The ① symbol is used to denote Dimensionless units.
 # Output Methods
 
 To see what you have got, then go:
-```perl6
+```raku
 my $po = 25W;   
 say ~$po; say "$po"; say $po.Str;       #25 W  (defaults to derived unit)
 say +$po; say $po.value; say $po.Real;  #25 
@@ -296,7 +296,7 @@ say $po.pretty;                         #25 m²⋅s⁻³⋅kg   (SI recommended 
 
 In a small number of case, the same units are used by different unit Types. Type hints 
 steer type inference:
-```perl6
+```raku
 has %.type-hint = %(
     Area           => <Area FuelConsumption>,
     Energy         => <Energy Torque>,
@@ -307,7 +307,7 @@ has %.type-hint = %(
 ```
 
 To adjust this, you can delete the built in key and replace it with your own:
-```perl6
+```raku
 my %th := Unit.type-hint;
 
 #default type-hints
@@ -326,7 +326,7 @@ my $tq2 = $fo3 * $le2;  #'$tq2 ~~ Torque';
 # Custom Measures
 
 To make a custom Measure, you can use this incantation:
-```perl6
+```raku
 Measure.unit-find('nmile').type-bind('Reach');
 
 class Reach is Measure {
