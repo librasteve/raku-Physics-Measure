@@ -7,16 +7,16 @@ plan 19;
 
 use Physics::Measure;
 
-my $a0 = ♎️ '4.3 m';
+my $a0 = ^'4.3 m';
 is ~$a0, '4.3m',                                                        '$a0-m';
 
-my $a1 = ♎️ '4.3 metres';
+my $a1 = ^'4.3 metres';
 is ~$a1, '4.3m',	                                                    '$a1-metres';
 
 my $a2 = $a1.rebase;
 is ~$a2, '4.3m',                                                        '$a2-rebase-metres';
 
-my $a3 = ♎️ '3 newtons';
+my $a3 = ^'3 newtons';
 is ~$a3, '3N',		                                                    '$a3-Newtons';
 is $a3.WHAT, Force,                                                     '$a3-WHAT';
 
@@ -24,7 +24,7 @@ my $a4 = $a3.rebase;
 is ~$a4, '3N',                                                          '$a4-rebase-Newtons';
 is $a4.WHAT, Force,                                                     '$a4-WHAT';
 
-my $a5 = ♎️ '5 kg m / s^2';
+my $a5 = ^'5 kg m / s^2';
 is ~$a5, '5N',		                                                    '$a5-5 kg m / s^2';
 is $a5.WHAT, Force,                                                     '$a5-WHAT';
 
@@ -46,7 +46,7 @@ is $r3.WHAT, Energy,                                                    '$r3-WHA
 my $r3n = $r3.rebase;
 is ~$r3n, '12.9J',                                                      '$r3-rebase-mul-mixed';
 
-my $a7 = ♎️ '10 s';
+my $a7 = ^'10 s';
 my $r4 = $r3 * $a7;
 is ~$r4, '129kg m^2/s',			                                        '$r4-mul-mixed';
 

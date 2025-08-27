@@ -3,6 +3,8 @@
 
 # Version 2+
 
+add ^<>
+
 This version of Physics::Measure has been adapted to work with the new Physics::Unit:ver<2+>:api<2> release.
 
 # raku-Physics-Measure
@@ -165,29 +167,27 @@ my Length $l = Length.new(value => 42, units => 'μm'); say ~$l; #42 micrometre
 
 This syntax option is the most structured and raku native. For example, it helps educators to use units and basic physics exercises as a way to introduce students to formal raku Object Orientation principles.
 
-## Option 3: Libra Shorthand Syntax
+## Option 3: Caret Prefix Syntax
 
-In many cases, coders will want the flexibility of the unit expression parser and the wider range of non-metric units but they also want a concise notation. In this case, the unicode libra emoji ♎️ is provided as raku prefix for object construction. The subject can be enclosed in single quotes ♎️'', double quotes ♎️"" of (from v1.0.10) angle brackets ♎️<>. Separate the number from the units with a space.
+In many cases, coders will want the flexibility of the unit expression parser and the wider range of non-metric units but they also want a concise notation. In this case, the unicode libra emoji ^ is provided as raku prefix for object construction. The subject can be enclosed in single quotes ^'', double quotes ^"" of (from v1.0.10) angle brackets ^<>. Separate the number from the units with a space.
 
 ```raku
-#The libra ♎️ is shorthand to construct objects...
-    my $a = ♎️<4.3 m>;                  say "$a";		#4.3 m
-    my $b = ♎️<5e1 m>;                  say "$b";		#50 m
+#The caret ^ is shorthand to construct objects...
+    my $a = ^<4.3 m>;                  say "$a";		#4.3 m
+    my $b = ^<5e1 m>;                  say "$b";		#50 m
     my $c = $a;                          say "$c";		#4.3 m
-    my Length $l = ♎️ 42;                say "$l";		#42 m (default to base unit of Length)
-#...there is an ASCII variant of <♎️> namely <libra> 
+    my Length $l = ^ 42;                say "$l";		#42 m (default to base unit of Length)
 ```
-_Use the emoji editor provided on your system (or just cut and paste)_
 
 ```raku
 #About 230 built in units are included, for example...
-    my $v2 = ♎️<7 yards^3>;          #7 yard^3         (Volume)
-    my $v3 = $v2.in( 'm3' );        #5.352 m^3        (Volume) 
+    my $v2 = ^<7 yards^3>;          #7 yard^3         (Volume)
+    my $v3 = $v2.in( 'm3' );        #5.352 m^3         (Volume) 
     my $dsdt = $s / $t;             #0.000106438 m/s^2 (Acceleration)
-    my $sm = ♎️<70 mph>;             #70 mph           (Speed)
-    my $fo = ♎️<27 kg m / s2>;       #27 N             (Force)
-    my $en = ♎️<26 kg m^2 / s^2>;    #26 J             (Energy)
-    my $po = ♎️<25 kg m^2 / s^3>;    #25 W             (Power)
+    my $sm = ^<70 mph>;             #70 mph           (Speed)
+    my $fo = ^<27 kg m / s2>;       #27 N             (Force)
+    my $en = ^<26 kg m^2 / s^2>;    #26 J             (Energy)
+    my $po = ^<25 kg m^2 / s^3>;    #25 W             (Power)
 ```
 
 # Special Measure Types
@@ -196,8 +196,8 @@ _Use the emoji editor provided on your system (or just cut and paste)_
 
 ```raku
 #Angles use degrees/minutes/seconds or decimal radians
-    my $θ1 = ♎️<45°30′30″>;      #45°30′30″ (using <> to deconfuse quotation marks)
-    my $θ2 = ♎️<2.141 radians>;  #'2.141 radian'
+    my $θ1 = ^<45°30′30″>;      #45°30′30″ (using <> to deconfuse quotation marks)
+    my $θ2 = ^<2.141 radians>;  #'2.141 radian'
 #NB. The unit name 'rad' is reserved for the unit of radioactive Dose
 
 # Trigonometric functions sin, cos and tan (and arc-x) handle Angles
@@ -215,22 +215,30 @@ _Use the emoji editor provided on your system (or just cut and paste)_
     my $i3 = DateTime.new( '2020-08-10T14:15:37.26Z' );
     my Duration $dur = $i3-$i2;
 
-#Here's how to us the libra assignment operator ♎️ for Time...
-    my Time $t1 = ♎️<5e1 s>';     	#50 s
-    my Time $t2 = ♎️ $dur;        	#10 s
+#Here's how to us the libra assignment operator ^ for Time...
+    my Time $t1 = ^<5e1 s>';     	#50 s
+    my Time $t2 = ^ $dur;        	#10 s
     my $t3 = $t1 + $t2;         	#60 s
-    my Time $t4 = ♎️<2 hours>;   	#2 hr
-    $dur = $t4.Duration;         #7200
+    my Time $t4 = ^<2 hours>;   	#2 hr
+    $dur = $t4.Duration;            #7200
+```
+
+## Currency
+
+```raku
+#You can use US dollars ($) as Currency
+    my $m1 = ^<2.141 $>;             #2.141 $
+    my $m2 = 42$;                     #42 $
 ```
 
 # Unit Conversion
 
 ```raku
 #Unit Conversion uses the .in() method - specify the new units as a String
-    my Length $df = ♎️<12.0 feet>;         #12 ft
+    my Length $df = ^<12.0 feet>;         #12 ft
     my $dm = $df.in( 'm' );               #3.658 m
        $dm = $df.in: <m>;                 #alternate form
-    my Temperature $deg-c = ♎️<39 °C>;
+    my Temperature $deg-c = ^<39 °C>;
     my $deg-k = $deg-c.in( 'K' );         #312.15 K
     my $deg-cr = $deg-k.in( '°C' );       #39 °C
 
@@ -262,7 +270,7 @@ The ① symbol is used to denote Dimensionless units.
 #Set behaviour if number part contains a comma ','
 #use '' to allow as thousands sep / '.' to convert european style decimals
     $Physics::Measure::number-comma = ''; 
-    my Speed $s2 = ♎️'24,000 miles per hour'; #24000mph
+    my Speed $s2 = ^'24,000 miles per hour'; #24000mph
 ```
 
 # Comparison Methods
@@ -311,15 +319,15 @@ To adjust this, you can delete the built in key and replace it with your own:
 my %th := Unit.type-hint;
 
 #default type-hints
-my $en1 = ♎️'60 J';     #'$en1 ~~ Energy';
-my $tq1 = ♎️'5 Nm';     #'$tq1 ~~ Torque';
+my $en1 = ^'60 J';     #'$en1 ~~ Energy';
+my $tq1 = ^'5 Nm';     #'$tq1 ~~ Torque';
 
 #altered type-hints
 %th<Energy>:delete;
 %th<Torque> = <Energy Torque>;
 
-my $fo3 = ♎️'7.2 N';
-my $le2 = ♎️'2.2 m';
+my $fo3 = ^'7.2 N';
+my $le2 = ^'2.2 m';
 my $tq2 = $fo3 * $le2;  #'$tq2 ~~ Torque';
 ```
 
@@ -346,4 +354,7 @@ The family of Physics::Measure, Physics::Unit and Physics::Constants raku module
 
 Any feedback is welcome to librasteve / via the github Issues above.
 
-Copyright (c) Henley Cloud Consulting Ltd. 2021-2023
+NB the ♎️ (libra prefix) has been replaced by the ^ (caret prefix) to simplify typing
+
+
+Copyright (c) Henley Cloud Consulting Ltd. 2021-2025

@@ -16,7 +16,7 @@ $Physics::Measure::round-val = 0.000001;
 
 my %th := Unit.type-hint;
 
-my Length $d-me = ♎️ '10 m';
+my Length $d-me = ^'10 m';
 is "$d-me", '10m',                                                          '$d.""';
 is $d-me.WHAT, (Length),                                                    '$d.WHAT';
 
@@ -24,7 +24,7 @@ my $d-me2 = $d-me.in( 'm' );
 is $d-me2.Str, '10m',                                                       '$d.in';
 is $d-me2.WHAT, (Length),                                                   '$d.WHAT';
 
-my Length $d-fe = ♎️ '12.0 feet';
+my Length $d-fe = ^'12.0 feet';
 is $d-fe, '12ft',                                                           '$d.new';
 
 my $d-me3 = $d-fe.in( 'm' );
@@ -33,43 +33,43 @@ is $d-me3, '3.6576m',                                                       '$d.
 $d-me3 = $d-fe.in: <m> ;
 is $d-me3, '3.6576m',                                                       '$d.in-alt';
 
-my Length $d-y = ♎️ '3 yards';
+my Length $d-y = ^'3 yards';
 my $d-f2 = $d-y.in( 'feet' );
 is $d-f2, '9ft',                                                            '$d.in-feet';
 
-my Length $d-m3 = ♎️ '43.3 m';
+my Length $d-m3 = ^'43.3 m';
 my $d-f3 = $d-m3.in( 'feet' );
 is $d-f3, '142.060367ft',	                                                '$d.in-feet';
 
 my $d-y2 = $d-m3.in( 'yards' );
 is $d-y2, '47.353456yard',	                                                '$d.in-yards';
 
-my Length $d-mi = ♎️ '10 miles';
+my Length $d-mi = ^'10 miles';
 is $d-mi, '10mile',                                                         '$d.in-miles';
 my $d-f = $d-mi.in( 'feet' );
 is $d-f, '52800ft',                                                         '$d.in-feet';
 my $d-m = $d-mi.in( 'm' );
 is $d-m, '16093.44m',                                                       '$d.in-m';
 
-my Length $d-mi2 = ♎️ '1 miles';
+my Length $d-mi2 = ^'1 miles';
 my $d-y3 = $d-mi2.in( 'yards' );
 is $d-y3, '1760yard',                                                       '$d.in-yards';
 
-my Temperature $deg-c = ♎️ '39 °C';
+my Temperature $deg-c = ^'39 °C';
 is $deg-c, '39°C',                                                          '$t.in-C';
 my $deg-k = $deg-c.in( 'K' );
 is $deg-k, '312.15K',                                                       '$t.in-K';
 my $deg-cr = $deg-k.in( '°C' );
 is $deg-cr, '39°C',                                                         '$t.in-C';
 
-my Temperature $deg-k2 = ♎️ '300 K';
+my Temperature $deg-k2 = ^'300 K';
 is $deg-k2, '300K',                                                         '$t.in-K';
 my $deg-f = $deg-k2.in( '°F' );
 is $deg-f, '80.33°F',	                                                    '$t.in-F';
 my $deg-k2r = $deg-f.in( 'K' );
 is $deg-k2r, '300K',                                                        '$t.in-K';
 
-my Temperature $deg-f2 = ♎️ '98.6 °F';
+my Temperature $deg-f2 = ^'98.6 °F';
 is $deg-f2, '98.6°F',                                                       '$t.in-F';
 
 my $deg-c2 = $deg-f2.in( '°C' );
@@ -80,23 +80,23 @@ is $deg-f2r, '98.6°F',                                                      '$t
 
 #Conversion of high order Units such as Area, Volume, etc. also uses .in()
 
-my Length $d = ♎️ '5e1 m';
+my Length $d = ^'5e1 m';
 my Area $am2 = ( $d * $d );
 is $am2, '2500m^2',                                                         '$a.in-m2';
 
-my Area $a-m21 = ♎️ '42 m2';
+my Area $a-m21 = ^'42 m2';
 is $a-m21, '42m^2',                                                         '$a.new';
 
 my Area $af2 = ($d-fe * $d-fe).in('sq ft');
 is $af2, '144sq ft',                                                        '$a.$d*$d';
 
-my Area $a-f21 = ♎️ '36 sq ft';
+my Area $a-f21 = ^'36 sq ft';
 is $a-f21, '36sq ft',                                                       '$a.new-feet2';
 
 my $a-f22 = $a-m21.in( 'sq ft' );
 is $a-f22, '452.084238sq ft',                                               '$a.in-feet2';
 
-my Volume $v-y31 = ♎️ '7 cubic yard';
+my Volume $v-y31 = ^'7 cubic yard';
 is $v-y31, '7cubic yard',                                                   '$v.new-yards3';
 
 my $v-m31 = $v-y31.in( 'm3' );
@@ -105,7 +105,7 @@ is $v-m31, '5.351884m^3',                                                   '$v.
 my $v-y32 = $v-m31.in( 'cubic yard' );
 is $v-y32, '7cubic yard',                                                   '$v.in-cubic yard';
 
-my Volume $v-l1 = ♎️ '6 l';
+my Volume $v-l1 = ^'6 l';
 is $v-l1, '6l',                                                             '$v.new-l';
 
 my $v-y33 = $v-l1.in( 'cubic yard' );
@@ -115,7 +115,7 @@ my $v-l2 = $v-y33.in( 'l' );
 is $v-l2, '6l',                                                             '$v.in-l';
 
 #Conversion of inverse order Units such as Frequency, etc. also uses .in()
-my Frequency $f-h1 = ♎️ '78 Hz';
+my Frequency $f-h1 = ^'78 Hz';
 is $f-h1.WHAT, (Frequency),                                                 '$f.WHAT';
 is $f-h1, '78Hz',                                                           '$f.new';
 
@@ -125,7 +125,7 @@ is $f-c1, '78cycle',                                                        '$f.
 my $f-h2 = $f-c1.in( 'Hz' );
 is $f-h2, '78Hz',                                                           '$f.in-Hz';
 
-my Time $t-s1 = ♎️ '30 s';
+my Time $t-s1 = ^'30 s';
 is $t-s1, '30s',                                                            '$t.new';
 
 my $t-s2 = $t-s1 + 28;
@@ -134,43 +134,43 @@ is $t-s2, '58s',                                                            '$t.
 my $t-m1 = $t-s1.in( 'mins' );
 is $t-m1, '0.5min',                                                         '$t.in-mins';
 
-my Measure $m-s1 = ♎️ '30 s';
+my Measure $m-s1 = ^'30 s';
 my $m-h12 = $m-s1.in( 'hours' );
 my $m-s12 = $m-h12.in( 's' );
 
-my Force $fo1 = ♎️ '27 kg m s^-2';
+my Force $fo1 = ^'27 kg m s^-2';
 my $fo2 = $fo1.in( 'N' );
 is $fo2, '27N',                                                             '$fo1.in-N';
 
-my Density $de1 = ♎️ '2 kg.m^-3';
+my Density $de1 = ^'2 kg.m^-3';
 my $de2 = $de1.in( 'gm per m^3' );
 is $de2, '2000gm per m^3',                                                  '$de1.in-gm per m^3';
 
 #default type-hints
-my $en1 = ♎️'60 J';
+my $en1 = ^'60 J';
 ok $en1 ~~ Energy,                                                          '$en1 ~~ Energy';
-my $tq1 = ♎️'5 Nm';
+my $tq1 = ^'5 Nm';
 ok $tq1 ~~ Torque,                                                          '$tq1 ~~ Torque';
 
 #altered type-hints
 %th<Energy>:delete;
 %th<Torque> = <Energy Torque>;
 
-my $fo3 = ♎️'7.2 N';
+my $fo3 = ^'7.2 N';
 ok $fo3 ~~ Force,                                                           '$fo2 ~~ Force';
-my $le2 = ♎️'2.2 m';
+my $le2 = ^'2.2 m';
 ok $le2 ~~ Length,                                                          '$le2 ~~ Length';
 
 my $tq2 = $fo3 * $le2;
 ok $tq2 ~~ Torque,                                                          '$tq2 ~~ Torque';
 
 #some new units
-my Pressure $pre1 = ♎️ '20 psi';
+my Pressure $pre1 = ^'20 psi';
 my $pre2 = $pre1.in('mmHg');
 is $pre2, '1034.30151mmHg',                                                 '$pre1.in-mmHg';
 
-my Length $dis1 = ♎️'60 miles';
-my Volume $vol1 = ♎️'2 gallons';
+my Length $dis1 = ^'60 miles';
+my Volume $vol1 = ^'2 gallons';
 
 my FuelEfficiency $fe1 = ( $dis1 / $vol1 ).in('mpg');
 is $fe1, '30mpg',                                                           '$fe1.in-mpg';
@@ -185,8 +185,8 @@ if $locale eq 'us' {
     is $fe2, '12.754311km/l',                                               '$fe2.in-km/l(us)';
 }
 
-my Volume $vol2 = ♎️'4 l';
-my Length $dis2 = ♎️'100 km';
+my Volume $vol2 = ^'4 l';
+my Length $dis2 = ^'100 km';
 
 %th<Area>:delete;
 %th<FuelConsumption> = <Area FuelConsumption>;

@@ -14,7 +14,7 @@ is $a.WHAT,   Length,              'ass:2xdef';
 ok $a.value == 10000,              'ass:2xdef';
 is $a.units.name, 'm',             'ass:2xdef';
 
-my Length $b = ♎️ '5e1 m';
+my Length $b = ^'5e1 m';
 my Length $c = $a;
 
 is $b.WHAT,   Length,              'ass:lunit:rstr';
@@ -25,7 +25,7 @@ is $c.WHAT,   Length,              'ass:lunit:rmea';
 ok $c.value == 10000e0,            'ass:lunit:rmea';
 is $c.units.name, 'm',             'ass:lunit:rmea';
 
-$b = ♎️ '3e1 m';
+$b = ^'3e1 m';
 ok $b.value == 3e1,                'ass:lunit:rstr';
 
 $b = libra '3e1 m';

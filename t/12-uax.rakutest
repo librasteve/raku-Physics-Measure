@@ -44,19 +44,19 @@ my $r = 7radian;
 is ~$r,'7radian',															'radian';
 is $r.^name,'Physics::Measure::Angle',                                      'Angle';
 
-my $y = ♎️ '5e1 km';
+my $y = ^'5e1 km';
 is ~$y,'50km',																'km';
 
 my $v1 = 42μl;
 is ~$v1,'42μl',															    '42 μl';
 
-my $v2 = ♎️ '91 μl';
+my $v2 = ^'91 μl';
 is ~$v2,'91μl',															    '91 μl';
 
 my $x = Volume.new(value => 21.006, units => 'μl');
 is ~$x,'21.006μl',															'21.006 μl';
 
-my $z = ♎️ '18 μ';
+my $z = ^'18 μ';
 is ~$z,'18μ',																'18 μ';
 
 # done-testing;

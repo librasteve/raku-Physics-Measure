@@ -11,8 +11,6 @@ use Physics::Error;
 # speed (2024)
 # use Physics::Measure :ALL; ...5.3s first-, 1.6s pre- compiled
 
-
-
 #This module uses Type Variables such as ::T,::($s) 
 #viz. http://www.jnthn.net/papers/2008-yapc-eu-raku6types.pdf
 
@@ -551,6 +549,7 @@ class Luminosity         is Measure is export {}
 
 #Derived Units
 class Dimensionless      is Measure is export {}
+class Currency           is Measure is export {}
 class SolidAngle         is Measure is export {}
 class Frequency          is Measure is export {}
 class Area               is Measure is export {}
@@ -608,6 +607,10 @@ multi prefix:<♎️>    ( Duration:D $new ) is export { Measure.new: $new }
 multi prefix:<libra> ( Str:D $new )      is export { Measure.new: $new }
 multi prefix:<libra> ( List:D $new )     is export { Measure.new: $new.join(' ') }
 multi prefix:<libra️> ( Duration:D $new ) is export { Measure.new: $new }
+
+multi prefix:<^>     ( Str:D $new )      is export { Measure.new: $new }
+multi prefix:<^>     ( List:D $new )     is export { Measure.new: $new.join(' ') }  #for ^<3 mph>
+multi prefix:<^>     ( Duration:D $new ) is export { Measure.new: $new }
 
 sub infix-prep( $left, $right ) {
     #clone Measure child object (e.g. Distance) as container for result
@@ -783,6 +786,9 @@ sub postfix:<°>         (Real:D $x) is export { do-postfix($x,'°') }
 sub postfix:<°C>        (Real:D $x) is export { do-postfix($x,'°C') }
 sub postfix:<radian>    (Real:D $x) is export { do-postfix($x,'radian') }
 sub postfix:<steradian> (Real:D $x) is export { do-postfix($x,'steradian') }
+
+#| and the dollar... use $ as prefix seems to break stuff
+sub postfix:<$>         (Real:D $x) is export { do-postfix($x,'$') }
 
 #| then put in all the regular combinations programmatically
 #| viz. https://docs.raku.org/language/modules#Exporting_and_selective_importing

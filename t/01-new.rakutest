@@ -56,5 +56,13 @@ my $h-tex = libra '0.001 s';
 is $h-tex, '0.001s',        '$h-tex.libra';
 is $h-tex.WHAT,   Time,     '$h.WHAT';
 
+my $g-tex = ^'5e1 m';
+is $g-tex, '50m',           '$g-tex.libra';
+is $g-tex.WHAT,   Length,   '$g.WHAT';
+
+my $h-tex = ^'0.001 s';
+is $h-tex, '0.001s',        '$h-tex.libra';
+is $h-tex.WHAT,   Time,     '$h.WHAT';
+
 #done-testing
 

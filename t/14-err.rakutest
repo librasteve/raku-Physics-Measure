@@ -48,9 +48,9 @@ is @o2-xs.map( {.Str } ) eq @o2-re, True,                        'option 2';
 #Option 3
 #--------
 my @o3-xs = ();
-@o3-xs.push: ♎️ '12.5 ft ±0.5';
-@o3-xs.push: ♎️ '12.5 ft ±10.5%';
-@o3-xs.push: ♎️ '12.5 ft';
+@o3-xs.push: ^'12.5 ft ±0.5';
+@o3-xs.push: ^'12.5 ft ±10.5%';
+@o3-xs.push: ^'12.5 ft';
 
 my @o3-re = <
 12.5ft ±0.5
