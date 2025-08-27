@@ -3,7 +3,7 @@
 #TESTALL$ prove6 ./t      [from root]
 use lib '../lib';
 use Test;
-plan 21; 
+plan 25;
 
 use Physics::Measure;
 
@@ -56,13 +56,13 @@ my $h-tex = libra '0.001 s';
 is $h-tex, '0.001s',        '$h-tex.libra';
 is $h-tex.WHAT,   Time,     '$h.WHAT';
 
-my $g-tex = ^'5e1 m';
-is $g-tex, '50m',           '$g-tex.libra';
-is $g-tex.WHAT,   Length,   '$g.WHAT';
+my $i-tex = ^'5e1 m';
+is $i-tex, '50m',           '$i-tex.caret';
+is $i-tex.WHAT,   Length,   '$i.WHAT';
 
-my $h-tex = ^'0.001 s';
-is $h-tex, '0.001s',        '$h-tex.libra';
-is $h-tex.WHAT,   Time,     '$h.WHAT';
+my $j-tex = ^'0.001 s';
+is $j-tex, '0.001s',        '$j-tex.varet';
+is $j-tex.WHAT,   Time,     '$j.WHAT';
 
 #done-testing
 
