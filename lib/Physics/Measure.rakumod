@@ -1,4 +1,4 @@
-unit module Physics::Measure:ver<2.0.4>:auth<Steve Roe (librasteve@furnival.net)>;
+unit module Physics::Measure:ver<2.0.5>:auth<Steve Roe (librasteve@furnival.net)>;
 use Physics::Unit;
 use Physics::Error;
 
@@ -335,11 +335,22 @@ class Measure is export {
 		my $ouo = $.units;					        #old unit object
 		my $nuo = Unit.find( $to );			        #new unit object
 
+        my $o-type = $ouo.type;
 		my $n-type = $nuo.type;
 
-        #allow new type to match old eg. Distance ~~ Length
-        if not ::O ~~ ::($n-type) {
+        $o-type = 'Synthetic' if $o-type ~~ /synthetic/;
+        $n-type = 'Synthetic' if $n-type ~~ /synthetic/;
+
+        #allow new type to match old eg. Width ~~ Length if synonym
+        if not ::($o-type) ~~ ::($n-type) {
             die "cannot convert in to different type $n-type"
+        }
+
+        #require exact match if Synthetic
+        if $o-type eq 'Synthetic' && $o-type eq 'Synthetic' {
+            if not $o-type eq $n-type {
+                die "cannot convert in to different Synthetic type $n-type"
+            }
         }
 
 		my $value = ($.value + $ouo.offset) * ($ouo.factor / $nuo.factor) - $nuo.offset;
@@ -588,6 +599,7 @@ class SpecificPower      is Measure is export {}
 class SpecificHeat       is Measure is export {}
 class Irradiance         is Measure is export {}
 class Insolation         is Measure is export {}
+class SpectralFluxDensity is Measure is export {}
 class ThermalResistance  is Measure is export {}
 class ThermalConductance is Measure is export {}
 
