@@ -77,7 +77,7 @@ class Measure is export {
     #### Class Methods ####
 
     #| baby Grammar for initial extraction of definition from Str (value/unit/error)
-    method defn-extract( Measure:U: Str:D $s is rw ) {
+    method defn-extract( Measure:U: Str:D $s ) {
         #handle eg. <45°30′30″>
         #<°> is U+00B0 <′> is U+2032 <″> is U+2033
         if $s ~~ /(\d*)\°(\d*)\′(\d*)\″?/ {
@@ -116,7 +116,8 @@ class Measure is export {
 
         #handle generic case
         else {
-            $s ~~ /^ ( <number> ) \s* ( <-[±]>* ) \s* ( '±' \s* .* )? $/;
+            my $t = $s;    #need writeable container for match
+            $t ~~ /^ ( <number> ) \s* ( <-[±]>* ) \s* ( '±' \s* .* )? $/;
             my $v = +$0;
             my $u = ~$1;
             my $e = $2;
