@@ -1,4 +1,4 @@
-unit module Physics::Measure:ver<2.0.5>:auth<Steve Roe (librasteve@furnival.net)>;
+unit module Physics::Measure:ver<2.0.6>:auth<Steve Roe (librasteve@furnival.net)>;
 use Physics::Unit;
 use Physics::Error;
 
@@ -37,8 +37,8 @@ my regex number {
 ########## Classes & Methods ##########
 
 class Time { ... }
-class Dimensionless { ... }
 class Synthetic {...}
+class Dimensionless { ... }
 
 class Measure is export {
     #Parent class for physical quantities with value, units & error
@@ -92,6 +92,16 @@ class Measure is export {
             say "extracting «$s»: v is $deg°$min′$sec″, u is degrees, e is Any" if $db;
             return($v, 'degrees', Any)
         }
+        #<º> is U+00BA <'> is U+0027 <″> is U+0022
+        if $s ~~ /(\d*)º(\d*)\'(\d*)\"?/ {
+            my $deg where 0 <= * < 360 = $0 % 360;
+            my $min where 0 <= * <  60 = $1 // 0;
+            my $sec where 0 <= * <  60 = $2 // 0;
+            my $v = ( ($deg * 3600) + ($min * 60) + $sec ) / 3600;
+
+            say "extracting «$s»: v is {$deg}º$min′$sec″, u is degrees, e is Any" if $db;
+            return($v, 'degrees', Any)
+        }
 
         #handle hh:mm:ss
         elsif $s ~~ /('-'?)(\d*)\:(\d*)\:(\d*)/ {
@@ -106,7 +116,7 @@ class Measure is export {
             return($v, 'seconds', Any)
         }
 
-#our $number-comma = Nil;    #default off - just pass everything before the space to compiler literal parser
+        #our $number-comma = Nil;    #default off - just pass everything before the space to compiler literal parser
         #handle generic case
         else {
             my $t = $s;                 # need is rw
@@ -770,7 +780,7 @@ multi infix:<!=> ( Measure:D $a, Measure:D $b ) is equiv( &infix:<!=> ) is expor
 
 ##### Postfix Operators #####
 
-#`[[ 
+#`[
 Postfix Operators combine the notions of:
 1. SI Prefixes e.g. c(centi-), k(kilo-) that make compound units such as cm, km, kg  
 2. Raku Postfixes e.g. $l = 42cm; operators which work on the preceding value
@@ -780,7 +790,7 @@ We use the term Postfix to indicate that both concepts are provided by this code
 2. Declaration of the resulting ~540 Unit instances and matching Raku Postfix operators
 
 Now you can simply go 'my $l = 1km;' to construct a new Measure object with value => 1 and units => 'km'
-#]]
+#]
 
 #my %postfix-to-defn = Unit.postfix-to-defn;
 #my %postfix-syns-by-name = Unit.postfix-to-syns;
@@ -795,12 +805,25 @@ sub do-postfix( Real $v, Str $cn ) is export {
 
 #| first a few "non-declining singletons"...
 sub postfix:<°>         (Real:D $x) is export { do-postfix($x,'°') }
+sub postfix:<º>         (Real:D $x) is export { do-postfix($x,'º') }
 sub postfix:<°C>        (Real:D $x) is export { do-postfix($x,'°C') }
+sub postfix:<ºC>        (Real:D $x) is export { do-postfix($x,'ºC') }
+sub postfix:<rad>       (Real:D $x) is export { do-postfix($x,'radian') }
 sub postfix:<radian>    (Real:D $x) is export { do-postfix($x,'radian') }
 sub postfix:<steradian> (Real:D $x) is export { do-postfix($x,'steradian') }
 
-#| and the dollar... use $ as prefix seems to break stuff
-sub postfix:<$>         (Real:D $x) is export { do-postfix($x,'$') }
+#| and the top currencies
+#| Foreign exchange trading volume—According to a March 2025 breakdown,
+#| the most traded currencies are: USD, EUR, JPY, GBP, AUD, CAD, CHF, and CNY
+sub prefix:<US$>        (Real:D $x) is export { do-postfix($x,'USD') }
+sub prefix:<€>          (Real:D $x) is export { do-postfix($x,'EUR') }  #\ both
+sub postfix:<€>         (Real:D $x) is export { do-postfix($x,'EUR') }  #/
+sub prefix:<¥>          (Real:D $x) is export { do-postfix($x,'JPY') }
+sub prefix:<£>          (Real:D $x) is export { do-postfix($x,'GBP') }
+sub prefix:<A$>         (Real:D $x) is export { do-postfix($x,'AUD') }
+sub prefix:<C$>         (Real:D $x) is export { do-postfix($x,'CAD') }
+sub postfix:<SFr>       (Real:D $x) is export { do-postfix($x,'CHF') }
+sub prefix:<CN¥>        (Real:D $x) is export { do-postfix($x,'CNY') }
 
 #| then put in all the regular combinations programmatically
 #| viz. https://docs.raku.org/language/modules#Exporting_and_selective_importing
@@ -810,17 +833,18 @@ my package EXPORT::ALL {
 	}
 }
 
-##### Error ± Operators #####
-# FIXME use % for percent
-sub postfix:<%> ( Real:D $x --> Str ) is export {
-    "$x%"
-}
+##### Percent & Error ± Operators #####
+
+sub postfix:<%>         (Real:D $x) is export { do-postfix($x,'percent') }
+
 multi infix:<±> ( Measure:D $m, Real:D $error --> Measure ) is export {
     $m.error = Error.new( :$error, value => $m.value );
     $m.error.bind-mea-value: $m.value;
     return $m
 }
-multi infix:<±> ( Measure:D $m, Str:D $error --> Measure ) is export {
+
+#Stringify percent to avoid circular dependency
+multi infix:<±> ( Measure:D $m, Str:D() $error --> Measure ) is export {
     $m.error = Error.new( :$error, value => $m.value );
     $m.error.bind-mea-value: $m.value;
     return $m

@@ -43,5 +43,23 @@
         </SOURCES>
       </library>
     </orderEntry>
+    <orderEntry type="module-library">
+      <library name="HTTP::Tiny" type="raku">
+        <CLASSES />
+        <JAVADOC />
+        <SOURCES>
+          <root url="raku://1166071006:HTTP::Tiny!/" />
+        </SOURCES>
+      </library>
+    </orderEntry>
+    <orderEntry type="module-library">
+      <library name="JSON::Fast" type="raku">
+        <CLASSES />
+        <JAVADOC />
+        <SOURCES>
+          <root url="raku://1166071006:JSON::Fast!/" />
+        </SOURCES>
+      </library>
+    </orderEntry>
   </component>
 </module>
