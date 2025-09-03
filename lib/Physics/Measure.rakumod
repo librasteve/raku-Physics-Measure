@@ -26,9 +26,6 @@ constant \isa-length = 'Distance' | 'Breadth' | 'Width' | 'Height' | 'Depth';
 #our $round-val = 0.00000000000000001;  (eg. this is 17 decimal places ~ the limit of Num precision)
 our $round-val = Nil;       #default off - so uses the precision of Error to control value rounding
 
-#use '' to allow as thousands sep / '.' to convert european style decimals
-our $number-comma = Nil;    #default off - just pass everything before the space to compiler literal parser
-
 my regex number {
 	\S+                     #grab chars
 	<?{ +"$/" ~~ Real }>    #assert coerces via '+' to Real
@@ -80,7 +77,7 @@ class Measure is export {
     #### Class Methods ####
 
     #| baby Grammar for initial extraction of definition from Str (value/unit/error)
-    method defn-extract( Measure:U: Str:D $s ) {
+    method defn-extract( Measure:U: Str:D $s is rw ) {
         #handle eg. <45°30′30″>
         #<°> is U+00B0 <′> is U+2032 <″> is U+2033
         if $s ~~ /(\d*)\°(\d*)\′(\d*)\″?/ {
@@ -92,8 +89,9 @@ class Measure is export {
             say "extracting «$s»: v is $deg°$min′$sec″, u is degrees, e is Any" if $db;
             return($v, 'degrees', Any)
         }
+
         #<º> is U+00BA <'> is U+0027 <″> is U+0022
-        if $s ~~ /(\d*)º(\d*)\'(\d*)\"?/ {
+        elsif $s ~~ /(\d*)º(\d*)\'(\d*)\"?/ {
             my $deg where 0 <= * < 360 = $0 % 360;
             my $min where 0 <= * <  60 = $1 // 0;
             my $sec where 0 <= * <  60 = $2 // 0;
@@ -116,12 +114,9 @@ class Measure is export {
             return($v, 'seconds', Any)
         }
 
-        #our $number-comma = Nil;    #default off - just pass everything before the space to compiler literal parser
         #handle generic case
         else {
-            my $t = $s;                 # need is rw
-            $t .= subst(',', $number-comma, :g) with $number-comma;
-            $t ~~ /^ ( <number> ) \s* ( <-[±]>* ) \s* ( '±' \s* .* )? $/;
+            $s ~~ /^ ( <number> ) \s* ( <-[±]>* ) \s* ( '±' \s* .* )? $/;
             my $v = +$0;
             my $u = ~$1;
             my $e = $2;

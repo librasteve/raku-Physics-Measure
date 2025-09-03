@@ -264,15 +264,6 @@ The ① symbol is used to denote Dimensionless units.
     my $v4 = $v2.rebase;                  #5.35 m^3
 ```
 
-# Thousand Separator | Euro Decimal
-
-```raku
-#Set behaviour if number part contains a comma ','
-#use '' to allow as thousands sep / '.' to convert european style decimals
-    $Physics::Measure::number-comma = ''; 
-    my Speed $s2 = ^'24,000 miles per hour'; #24000mph
-```
-
 # Comparison Methods
 
 ```raku
