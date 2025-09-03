@@ -249,7 +249,7 @@ In many cases, coders will want the flexibility of the unit expression parser an
 
 #Use powers & roots with Int or Rat (<1/2>, <1/3> or <1/4>)
     my Volume     $v = $a ** 3;           #79.507 m^3
-    my Length	   $d = $v ** <1/3>;       #0.43 m
+    my Length	  $d = $v ** <1/3>;       #0.43 m
 ```
 The ① symbol is used to denote Dimensionless units.
 
