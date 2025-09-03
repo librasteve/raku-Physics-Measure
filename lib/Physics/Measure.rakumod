@@ -8,8 +8,8 @@ use Physics::Error;
 # use Physics::Measure;      ...10s first-, 1.2s pre- compiled 
 # use Physics::Measure :ALL; ...13s first-, 2.8s pre- compiled 
 
-# speed (2024)
-# use Physics::Measure :ALL; ...5.3s first-, 1.6s pre- compiled
+# speed (2025)
+# use Physics::Measure :ALL; ...1.4ss first-, 1.4s pre- compiled
 
 #This module uses Type Variables such as ::T,::($s) 
 #viz. http://www.jnthn.net/papers/2008-yapc-eu-raku6types.pdf
