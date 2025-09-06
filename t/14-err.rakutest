@@ -121,7 +121,7 @@ my Time $t = Time.new(value => 10, units => 'ms', error => '4.3%');
 is ~$t, '10ms ±0.43',                                            'Time ms';
 is ~( 17 / $t ), '1700Hz ±73.1',                                 'Frequency Hz' ;
 
-is ~( $y / $t ), '0.000125m/s ±0.000011e0',                      'Speed m/s';
+is ~( $y / $t ), '0.000125m/s ±0.000011',                        'Speed m/s';
 
 my Length $w = Length.new(value => 10, units => 'm', error => '2%');
 

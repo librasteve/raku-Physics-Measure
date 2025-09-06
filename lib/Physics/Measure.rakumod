@@ -353,7 +353,7 @@ class Measure is export {
         }
 
         #require exact match if Synthetic
-        if $o-type eq 'Synthetic' && $o-type eq 'Synthetic' {
+        if $o-type eq 'Synthetic' && $n-type eq 'Synthetic' {
             if not $o-type eq $n-type {
                 die "cannot convert in to different Synthetic type $n-type"
             }
@@ -385,13 +385,13 @@ class Measure is export {
 		my @pfixs = %pfix2fact.keys;
 
 		#what is initial prefix factor and base unit?
-		my ( $fact, $base );
+		my ( FatRat() $factor, Str $base );
 		if $afx-defn {
 			$afx-defn ~~ m|(<@pfixs>)(.*)|;
-			$fact = $0.so ?? %pfix2fact{$0} !! 1;   #handle no prefix case
-			$base = $1.so ?? ~$1 !! $afx-defn;      #handle no prefix case
+			$factor = $0.so ?? %pfix2fact{$0} !! 1;   #handle no prefix case
+			$base   = $1.so ?? ~$1 !! $afx-defn;      #handle no prefix case
 		} elsif $base = %abn{$afx-name} {
-			$fact = 1;
+			$factor = 1;
 		} else {
 			warn "Cannot normalize this Unit type";
 			return self;
@@ -399,16 +399,16 @@ class Measure is export {
 
 		my $res = self;
 		# either shift-right
-		while $res.value.abs > 1000 {
-            last if $fact >= 1e24;
-			$fact *= 1000;
-			$res = $res.in: qq|{%fact2pfix{$fact}}$base|;
+		while $res.value.abs >= 1000 {
+            last if $factor >= 1e30;
+			$factor *= 1000;
+			$res = $res.in: qq|{%fact2pfix{$factor}}$base|;
 		}
 		# or shift-left
-		while $res.value.abs < 1 {
-            last if $fact <= 1e-24;
-			$fact /= 1000;
-			$res = $res.in: qq|{%fact2pfix{$fact}}$base|;
+		while $res.value.abs <= 0.1 {
+            last if $factor <= 1e-30;
+			$factor /= 1000;
+			$res = $res.in: qq|{%fact2pfix{$factor}}$base|;
 		}
 		return $res;
 	}
@@ -567,6 +567,7 @@ class Luminosity         is Measure is export {}
 #Derived Units
 class Dimensionless      is Measure is export {}
 class Currency           is Measure is export {}
+class Data               is Measure is export {}
 class SolidAngle         is Measure is export {}
 class Frequency          is Measure is export {}
 class Area               is Measure is export {}
@@ -774,25 +775,26 @@ multi infix:<!=> ( Measure:D $a, Measure:D $b ) is equiv( &infix:<!=> ) is expor
     else { return True; }
 }
 
+
 ##### Postfix Operators #####
 
 #`[
 Postfix Operators combine the notions of:
-1. SI Prefixes e.g. c(centi-), k(kilo-) that make compound units such as cm, km, kg  
-2. Raku Postfixes e.g. $l = 42cm; operators which work on the preceding value
+1. SI Prefixes e.g. c(centi-), k(kilo-) that make compound units such as cm, km, kg
+2. Binary Prefixes e.g. Ki(kibi), Mi(mebi) that make compound units such as Kib, MiB
+3. Custom Raku postfix operators e.g. $l = 42cm; operators which work on the preceding value
 
-We use the term Postfix to indicate that both concepts are provided by this code:
-1. Construction of the cross product of SI Prefixes (20) with ( SI Base (7) + Derived (20) ) Units
-2. Declaration of the resulting ~540 Unit instances and matching Raku Postfix operators
+This code does:
+1. Construction and export of the cross product of SI Prefixes (24) with ( SI Base (7) + Derived (21) ) Units (as ~672 postfix operators)
+2. Construction and export of the cross product of Binary Prefixes with Binary (2) Units
+3. Export of Currency (some prefix, some postfix)
+4. Export of some awkward ones explicitly
 
 Now you can simply go 'my $l = 1km;' to construct a new Measure object with value => 1 and units => 'km'
 #]
 
-#my %postfix-to-defn = Unit.postfix-to-defn;
-#my %postfix-syns-by-name = Unit.postfix-to-syns;
-
-sub do-postfix( Real $v, Str $cn ) is export {
-    my $u = Unit.new( defn => $cn, names => Unit.postfix-to-syns{$cn} );
+sub do-postfix( Real $v, Str $n ) is export {
+    my $u = Unit.new( defn => $n, names => Unit.postfix-to-syns{$n} );
     my $t = $u.type;
     return ::($t).new(value => $v, units => $u);
 }
@@ -821,13 +823,20 @@ sub prefix:<C$>         (Real:D $x) is export { do-postfix($x,'CAD') }
 sub postfix:<SFr>       (Real:D $x) is export { do-postfix($x,'CHF') }
 sub prefix:<CN¥>        (Real:D $x) is export { do-postfix($x,'CNY') }
 
-#| then put in all the regular combinations programmatically
+#| then put in all the prefix-symbol combinations programmatically
 #| viz. https://docs.raku.org/language/modules#Exporting_and_selective_importing
 my package EXPORT::ALL {
+    # regular SI prefixes
 	for Unit.postfix-to-defn.keys -> $u {
         OUR::{'&postfix:<' ~ $u ~ '>'} := sub (Real:D $x) { do-postfix($x,"$u") };
 	}
+
+    # binary prefixes
+    for Unit.binary-to-defn.keys -> $u {
+        OUR::{'&postfix:<' ~ $u ~ '>'} := sub (Real:D $x) { do-postfix($x,"$u") };
+    }
 }
+
 
 ##### Percent & Error ± Operators #####
 

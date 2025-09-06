@@ -7,18 +7,19 @@ plan 6;
 
 use Physics::Measure :ALL;
 
-$Physics::Measure::round-val = 0.00000000000000001;  #17 decimal places ~limit of Num accuracy
+#$Physics::Measure::round-val = 0.00000000000000001;  #17 decimal places ~limit of Num accuracy
 
 my \Em = 9.109_383_7015e-31kg ±0.000_000_0028e-31;
-is ~Em.norm, '0.00091093837015yg ±0.00000000000028',        '± ~Em,norm';
+is ~Em.norm, '0.91093837015rg ±0.00000000028',          '± ~Em,norm';
 
 my \Xl = 9.109_383_7015e-31m ±0.000_000_0028e-31;
-is ~Xl.norm, '0.00000091093837015ym ±0.00000000000000028',  '± ~Xl lower';
+is ~Xl.norm, '0.91093837015qm ±0.00000000028',          '± ~Xl lower';
 
-$Physics::Measure::round-val = 1000000;
+
+$Physics::Measure::round-val = 1000;
 
 my \Xh = 9109_383_7015e30kg ±28e30;
-is ~Xh.norm, '91093837015000000000Yg ±28000000000',          '± ~Xh upper';
+is ~Xh.norm, '91093837015000Qg ±28000',              '± ~Xh upper';
 
 
 $Physics::Measure::round-val = 0.01;
