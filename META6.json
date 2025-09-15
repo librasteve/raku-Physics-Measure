@@ -1,14 +1,15 @@
 {
     "name": "Physics::Measure",
     "description": "Some support for physical measurements.",
-    "version": "2.0.7",
+    "version": "2.0.8",
     "authors": [
         "librasteve"
     ],
     "auth": "zef:librasteve",
     "depends": [
         "Physics::Unit:ver<2+>:api<2>",
-        "Physics::Error"
+        "Physics::Error",
+        "FatRatStr"
     ],
     "build-depends": [],
     "provides": {

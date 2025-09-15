@@ -1,6 +1,9 @@
 unit module Physics::Measure:ver<2.0.7>:auth<Steve Roe (librasteve@furnival.net)>;
 use Physics::Unit;
 use Physics::Error;
+use FatRatStr;
+
+INIT $*RAT-OVERFLOW=FatRat;
 
 #This module needs the export label :ALL to load postfix operators
 
@@ -24,7 +27,7 @@ my $db = 0;					#debug
 constant \isa-length = 'Distance' | 'Breadth' | 'Width' | 'Height' | 'Depth';
 
 #our $round-val = 0.00000000000000001;  (eg. this is 17 decimal places ~ the limit of Num precision)
-our $round-val = Nil;       #default off - so uses the precision of Error to control value rounding
+our $round-val = Nil;       #default off - use precision of Error to control value rounding
 
 my regex number {
 	\S+                     #grab chars
@@ -76,7 +79,7 @@ class Measure is export {
 
     #### Class Methods ####
 
-    #| baby Grammar for initial extraction of definition from Str (value/unit/error)
+    #| baby "Grammars" for initial extraction of definition from Str (value/unit/error)
     method defn-extract( Measure:U: Str:D $s ) {
         #handle eg. <45°30′30″>
         #<°> is U+00B0 <′> is U+2032 <″> is U+2033
@@ -122,6 +125,9 @@ class Measure is export {
             my $u = ~$1;
             my $e = $2;
 
+            # upgrade decimal literals to FatRats (and forget the original Str)
+            $v = $0.Str.FatRatStr.FatRat if $v ~~ Num;
+
             return($v, $u, Any) unless $e;
 
             $e ~~ s/'±'//;
@@ -162,6 +168,7 @@ class Measure is export {
                 $round = $round-val;
                 $error = $error.round($round);
             }
+            say $!value.WHAT;
             my $value = $round ?? $!value.round($round) !! $!value;
             return "{ $value }{ $.units } ±{ $error }"
         } else {
