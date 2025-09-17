@@ -421,7 +421,7 @@ class Measure is export {
             }
 
 		} else {
-			warn "Cannot normalize this Unit type (SI units and prefixes only), maybe you need to .rebase first";
+			warn "Cannot normalize this Unit type (linear SI units and prefixes only), maybe you need to .rebase first";
 			return self;
 		}
 
