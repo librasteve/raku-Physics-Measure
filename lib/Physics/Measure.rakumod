@@ -120,7 +120,7 @@ class Measure is export {
         #handle generic case
         else {
             my $t = $s;    #need writeable container for match
-            $t ~~ /^ ( <number> ) \s* ( <-[±]>* ) \s* ( '±' \s* .* )? $/;
+            $t ~~ /^ ( <number> ) \s* ( <-[±~]>* ) \s* ( <[±~]> \s* .* )? $/;
             my $v = +$0;
             my $u = ~$1;
             my $e = $2;
@@ -130,7 +130,7 @@ class Measure is export {
 
             return($v, $u, Any) unless $e;
 
-            $e ~~ s/'±'//;
+            $e ~~ s/<[±~]>//;
 
             given $e {
                 when /'%'/ {
@@ -164,13 +164,15 @@ class Measure is export {
     method Str {
         with self.error {
             my ( $error, $round ) = self.error.denorm;
+
             if $round-val && $round-val > $round {
                 $round = $round-val;
                 $error = $error.round($round);
             }
-            say $!value.WHAT;
+
             my $value = $round ?? $!value.round($round) !! $!value;
             return "{ $value }{ $.units } ±{ $error }"
+
         } else {
             return "{ $.value-r }{ $.units }"
         }
