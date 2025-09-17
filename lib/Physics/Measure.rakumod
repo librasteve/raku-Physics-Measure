@@ -372,51 +372,76 @@ class Measure is export {
 		::($n-type).new( :$value, units => $nuo, :$error )
 	}
 
-    #| adjust prefix (postfix) to optimize value significance
+    # fixme eject / ignore things unless they have SI prefix
+    # maybe does this already
+
+    #| adjust prefix to optimize value significance
+    #| eg 1000000000m => 1Gm
 	method norm {
-        my %abn = Unit.postfix-to-defn;
+        my %postfix-to-defn := Unit.postfix-to-defn;
 
 		#try to match via unit defn eg. petahertz
-		my $defn = self.units.defn;
-		my $afx-defn = %abn.values.grep(/^ $defn $/).first;
+		my $defn := self.units.defn;
+		my $postfix-from-defn = %postfix-to-defn.values.grep(/^ $defn $/).first;
 
 		#try to match via unit name eg. Hz
-		my $name = self.units.name;
-		my $afx-name = %abn.keys.grep(/^ $name $/ ).first;
+        my $name := self.units.name;
+        my $postfix-from-name = %postfix-to-defn.keys.grep(/^ $name $/ ).first;
 
 		#setup some hashes and arrays
-        my %pfix2fact = Unit.prefix-to-factor;
+        my %prefix-to-factor = Unit.prefix-to-factor;
 
-        my %fact2pfix = %pfix2fact.kv.reverse;
-           %fact2pfix{'1'} = '';                    #plug gap in factors for vanilla base units
-		my @pfixs = %pfix2fact.keys;
+        my %factor-to-prefix = %prefix-to-factor.kv.reverse;
+           %factor-to-prefix{'1'} = '';                    # eg petahertz => peta & hertz#plug gap in factors for vanilla base units
 
-		#what is initial prefix factor and base unit?
+        my @prefixs = %prefix-to-factor.keys;
+
+
+		#gather initial prefix factor and base unit
 		my ( FatRat() $factor, Str $base );
-		if $afx-defn {
-			$afx-defn ~~ m|(<@pfixs>)(.*)|;
-			$factor = $0.so ?? %pfix2fact{$0} !! 1;   #handle no prefix case
-			$base   = $1.so ?? ~$1 !! $afx-defn;      #handle no prefix case
-		} elsif $base = %abn{$afx-name} {
-			$factor = 1;
+
+		with $postfix-from-defn {
+
+            # eg petahertz => peta & hertz
+			$postfix-from-defn ~~ m|(<@prefixs>)(.*)|;
+
+            # remember to handle no prefix case...
+			$factor = $0.so ?? %prefix-to-factor{$0} !! 1;
+			$base   = $1.so ?? ~$1 !! $postfix-from-defn;
+
+		} orwith $postfix-from-name {
+
+            $base = %postfix-to-defn{$_};
+
+            if $base eq 'kilogram' {    #special case kg
+                $base = 'gram';
+                $factor = 1000;
+            } else {
+                $factor = 1;
+            }
+
 		} else {
-			warn "Cannot normalize this Unit type";
+			warn "Cannot normalize this Unit type (SI units and prefixes only), maybe you need to .rebase first";
 			return self;
 		}
 
+        # finally, do the left or right shift
 		my $res = self;
+
 		# either shift-right
 		while $res.value.abs >= 1000 {
             last if $factor >= 1e30;
 			$factor *= 1000;
-			$res = $res.in: qq|{%fact2pfix{$factor}}$base|;
+			$res = $res.in: qq|{%factor-to-prefix{$factor}}$base|;
 		}
+
 		# or shift-left
 		while $res.value.abs <= 0.1 {
             last if $factor <= 1e-30;
 			$factor /= 1000;
-			$res = $res.in: qq|{%fact2pfix{$factor}}$base|;
+			$res = $res.in: qq|{%factor-to-prefix{$factor}}$base|;
 		}
+
 		return $res;
 	}
 

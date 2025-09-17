@@ -3,7 +3,7 @@
 #TESTALL$ prove6 ./t      [from root]
 use lib '../lib';
 use Test;
-plan 6;
+plan 9;
 
 use Physics::Measure :ALL;
 
@@ -15,12 +15,14 @@ is ~Em.norm, '0.91093837015rg ±0.00000000028',          '± ~Em,norm';
 my \Xl = 9.109_383_7015e-31m ±0.000_000_0028e-31;
 is ~Xl.norm, '0.91093837015qm ±0.00000000028',          '± ~Xl lower';
 
+is (^<1 Dalton> .rebase), '0.0000000000000000000000000016605402kg',  '.rebase';
+is (^<1 Dalton> .rebase.norm), '1.6605402yg',           '.rebase.norm';
+
 
 $Physics::Measure::round-val = 1000;
 
 my \Xh = 9109_383_7015e30kg ±28e30;
-is ~Xh.norm, '91093837015000Qg ±28000',              '± ~Xh upper';
-
+is ~Xh.norm, '91093837015000Qg ±28000',                 '± ~Xh upper';
 
 $Physics::Measure::round-val = 0.01;
 
@@ -28,12 +30,14 @@ my $c = ^'299792458 m/s';
 my $ℎ = ^'6.626070015e-34 J.s';
 
 my \λ = 2.5nm; 
-is ~λ, '2.5nm',									'~λ';
+is ~λ, '2.5nm',									        '~λ';
 
 my \ν = $c / λ;  
-is ~ν.norm, '119.92PHz',						'~ν.norm';
+is ~ν.norm, '119.92PHz',						        '~ν.norm';
 
 my \Ep = $ℎ * ν;  
-is ~Ep.norm, '79.46aJ',						    '~Ep.norm';
+is ~Ep.norm, '79.46aJ',						            '~Ep.norm';
+
+is 1000000000km .norm, '1Tm',                           '1Tm.norm';
 
 #done-testing;
