@@ -124,9 +124,9 @@ class Measure is export {
 
             my Real $v = +$0;
             my Str  $u = ~$1;
-            my      $e =  $2;
+            my      $e =  $2 // '';
 
-            # upgrade decimal literals (eg. 1.6602e-17) to FatRats (and forget the original Str)
+            # upgrade decimal literal (eg. 1.6602e-17) to FatRat (and forget the original Str)
             $v = $0.Str.FatRatStr.FatRat if $v ~~ Num;
 
             return($v, $u, Any) unless $e;
