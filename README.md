@@ -3,7 +3,7 @@
 
 # Version 2+
 
-add ^<>
+Note: The caret prefix `^` is now used in place of the libra prefix `♎️` to ease typing. Also the tilde `~` has been added as an alternative to `±` to introduce an Error term.
 
 This version of Physics::Measure has been adapted to work with the new Physics::Unit:ver<2+>:api<2> release.
 
@@ -182,8 +182,9 @@ In many cases, coders will want the flexibility of the unit expression parser an
 ```raku
 #About 230 built in units are included, for example...
     my $v2 = ^<7 yards^3>;          #7 yard^3         (Volume)
-    my $v3 = $v2.in( 'm3' );        #5.352 m^3         (Volume) 
-    my $dsdt = $s / $t;             #0.000106438 m/s^2 (Acceleration)
+    my $v3 = $v2.in( 'm3' );        #5.352 m^3        (Volume) 
+    my $t  = ^<3 s>;                #3 s              (Time)
+    my $ac = $v3 / $t;              #0.000106438 m/s^2 (Acceleration)
     my $sm = ^<70 mph>;             #70 mph           (Speed)
     my $fo = ^<27 kg m / s2>;       #27 N             (Force)
     my $en = ^<26 kg m^2 / s^2>;    #26 J             (Energy)

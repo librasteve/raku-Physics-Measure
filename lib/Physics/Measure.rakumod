@@ -120,12 +120,13 @@ class Measure is export {
         #handle generic case
         else {
             my $t = $s;    #need writeable container for match
-            $t ~~ /^ ( <number> ) \s* ( <-[±~]>* ) \s* ( <[±~]> \s* .* )? $/;
-            my $v = +$0;
-            my $u = ~$1;
-            my $e = $2;
+            $t ~~ /^ ( <number> ) \s* ( <-[±~]>* ) \s* [<[±~]> \s* (.*) ]? $/;
 
-            # upgrade decimal literals to FatRats (and forget the original Str)
+            my Real $v = +$0;
+            my Str  $u = ~$1;
+            my      $e =  $2;
+
+            # upgrade decimal literals (eg. 1.6602e-17) to FatRats (and forget the original Str)
             $v = $0.Str.FatRatStr.FatRat if $v ~~ Num;
 
             return($v, $u, Any) unless $e;
@@ -139,6 +140,7 @@ class Measure is export {
                 }
                 default {
                     $e = +$e if $e ~~ /<number>/;
+                    $e = $e.Str.FatRatStr.FatRat if $e ~~ Num;
                 }
             }
 
@@ -872,9 +874,9 @@ my package EXPORT::ALL {
 }
 
 
-##### Percent & Error ± Operators #####
+##### Percent (%) & Error (±,~) Operators #####
 
-sub postfix:<%>         (Real:D $x) is export { do-postfix($x,'percent') }
+sub postfix:<%> ( Real:D $x ) is export { do-postfix($x,'percent') }
 
 multi infix:<±> ( Measure:D $m, Real:D $error --> Measure ) is export {
     $m.error = Error.new( :$error, value => $m.value );
@@ -884,6 +886,20 @@ multi infix:<±> ( Measure:D $m, Real:D $error --> Measure ) is export {
 
 #Stringify percent to avoid circular dependency
 multi infix:<±> ( Measure:D $m, Str:D() $error --> Measure ) is export {
+    $m.error = Error.new( :$error, value => $m.value );
+    $m.error.bind-mea-value: $m.value;
+    return $m
+}
+
+# iOS and Windoze lack a ± key, so alias ~ for error
+multi infix:<~> ( Measure:D $m, Real:D $error --> Measure ) is export {
+    $m.error = Error.new( :$error, value => $m.value );
+    $m.error.bind-mea-value: $m.value;
+    return $m
+}
+
+#Stringify percent to avoid circular dependency
+multi infix:<~> ( Measure:D $m, Str:D() $error --> Measure ) is export {
     $m.error = Error.new( :$error, value => $m.value );
     $m.error.bind-mea-value: $m.value;
     return $m

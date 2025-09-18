@@ -15,11 +15,15 @@ my @o1-xs = ();
 @o1-xs.push: 12.5nm ± 1;
 @o1-xs.push: 12.5nm ± 10%;
 @o1-xs.push: 12.5nm;
+@o1-xs.push: 12.5nm ~ 1;
+@o1-xs.push: 12.5nm ~ 10%;
 
 my @o1-re = <
 12.5nm ±1
 12.5nm ±1.25
 12.5nm
+12.5nm ±1
+12.5nm ±1.25
 >;
 
 # @o1-xs.map( {.Str.say } );
@@ -30,7 +34,7 @@ is @o1-xs.map( {.Str } ) eq @o1-re, True,                        'option 1';
 my @o2-xs = ();
 @o2-xs.push: Length.new(value => 12.5, units => 'nm');
 @o2-xs.push: Length.new(value => 12.5, units => 'nm', error => 0);
-@o2-xs.push: Length.new(value => 0, units => 'nm', error => 0.5);
+@o2-xs.push: Length.new(value =>  0,   units => 'nm', error => 0.5);
 @o2-xs.push: Length.new(value => 12.5, units => 'nm', error => 0.5);
 @o2-xs.push: Length.new(value => 12.5, units => 'nm', error => '4.3%');
 
@@ -62,8 +66,8 @@ my @o3-re = <
 12.5ft ±1.313
 >;
 
-# @o3-xs.map( { .Str.say } );
-is @o3-xs.map( {.Str } ) eq @o3-re, True,                        'option 3';
+#@o3-xs.map( { .Str.say } );
+is @o3-xs.map( {.Str} ) eq @o3-re, True,                        'option 3';
 
 sub check-monad( $_ ) {
     gather {
