@@ -3,7 +3,7 @@
 
 # Version 2+
 
-Note: The caret prefix `^` is now used in place of the libra prefix `♎️` to ease typing. Also the tilde `~` has been added as an alternative to `±` to introduce an Error term.
+Note: The caret prefix `^` can now used as an alternative to the libra prefix `♎️` to ease typing. Also the tilde `~` has been added as an alternative to `±` to introduce an Error term.
 
 This version of Physics::Measure has been adapted to work with the new Physics::Unit:ver<2+>:api<2> release.
 
