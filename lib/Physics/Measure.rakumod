@@ -1,4 +1,4 @@
-unit module Physics::Measure:ver<2.0.7>:auth<Steve Roe (librasteve@furnival.net)>;
+unit module Physics::Measure:ver<2.0.13>:auth<Steve Roe (librasteve@furnival.net)>;
 use Physics::Unit;
 use Physics::Error;
 use FatRatStr;
@@ -81,6 +81,7 @@ class Measure is export {
 
     #| baby "Grammars" for initial extraction of definition from Str (value/unit/error)
     method defn-extract( Measure:U: Str:D $s ) {
+
         #handle eg. <45°30′30″>
         #<°> is U+00B0 <′> is U+2032 <″> is U+2033
         if $s ~~ /(\d*)\°(\d*)\′(\d*)\″?/ {
@@ -95,6 +96,28 @@ class Measure is export {
 
         #<º> is U+00BA <'> is U+0027 <″> is U+0022
         elsif $s ~~ /(\d*)º(\d*)\'(\d*)\"?/ {
+            my $deg where 0 <= * < 360 = $0 % 360;
+            my $min where 0 <= * <  60 = $1 // 0;
+            my $sec where 0 <= * <  60 = $2 // 0;
+            my $v = ( ($deg * 3600) + ($min * 60) + $sec ) / 3600;
+
+            say "extracting «$s»: v is {$deg}º$min′$sec″, u is degrees, e is Any" if $db;
+            return($v, 'degrees', Any)
+        }
+
+        #<º> is U+00BA <'> is U+0027 <″> is U+0022
+        elsif $s ~~ /(\d*)º(\d*)\'(\d*)\"?/ {
+            my $deg where 0 <= * < 360 = $0 % 360;
+            my $min where 0 <= * <  60 = $1 // 0;
+            my $sec where 0 <= * <  60 = $2 // 0;
+            my $v = ( ($deg * 3600) + ($min * 60) + $sec ) / 3600;
+
+            say "extracting «$s»: v is {$deg}º$min′$sec″, u is degrees, e is Any" if $db;
+            return($v, 'degrees', Any)
+        }
+
+        #<°> is U+00B0 <'> is U+0027 <"> is U+0022
+        elsif $s ~~ /(\d*)\°(\d*)\'(\d*)\"?/ {
             my $deg where 0 <= * < 360 = $0 % 360;
             my $min where 0 <= * <  60 = $1 // 0;
             my $sec where 0 <= * <  60 = $2 // 0;
