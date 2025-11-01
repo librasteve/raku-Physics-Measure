@@ -1,4 +1,4 @@
-unit module Physics::Measure:ver<2.0.13>:auth<Steve Roe (librasteve@furnival.net)>;
+unit module Physics::Measure:ver<2.0.14>:auth<Steve Roe (librasteve@furnival.net)>;
 use Physics::Unit;
 use Physics::Error;
 use FatRatStr;
@@ -182,11 +182,24 @@ class Measure is export {
 
     method Numeric   { $.value }
 
+    sub round-sig(Num() $num --> Num()) {
+        return $num if $num == 0;
+        my $sig = -log10($round-val).round.Int;
+        my $power = floor(log10(abs($num))) - $sig;
+        ($num / 10 ** $power).round * 10 ** $power;
+    }
+
     method value-r   {
-        return( $round-val ?? $.value.round($round-val) !! $.value )
+        if $round-val && $.value < $round-val {
+            # use floating point notation with mantissa of rounded significant digits for small Rats
+            return( $.value.&round-sig )
+        } else {
+            return( $round-val ?? $.value.round($round-val) !! $.value )
+        }
     }
 
     method Str {
+        # use error significant digits to control rounding
         with self.error {
             my ( $error, $round ) = self.error.denorm;
 
@@ -197,7 +210,6 @@ class Measure is export {
 
             my $value = $round ?? $!value.round($round) !! $!value;
             return "{ $value }{ $.units } ±{ $error }"
-
         } else {
             return "{ $.value-r }{ $.units }"
         }
