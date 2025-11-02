@@ -1,4 +1,4 @@
-unit module Physics::Measure:ver<2.0.14>:auth<Steve Roe (librasteve@furnival.net)>;
+unit module Physics::Measure:ver<2.0.15>:auth<Steve Roe (librasteve@furnival.net)>;
 use Physics::Unit;
 use Physics::Error;
 use FatRatStr;
@@ -28,6 +28,7 @@ constant \isa-length = 'Distance' | 'Breadth' | 'Width' | 'Height' | 'Depth';
 
 #our $round-val = 0.00000000000000001;  (eg. this is 17 decimal places ~ the limit of Num precision)
 our $round-val = Nil;       #default off - use precision of Error to control value rounding
+our $round-sig = False;     #default off - apply 1/round-val to truncate sig dits to left of decimal
 
 my regex number {
 	\S+                     #grab chars
@@ -192,6 +193,9 @@ class Measure is export {
     method value-r   {
         if $round-val && $.value < $round-val {
             # use floating point notation with mantissa of rounded significant digits for small Rats
+            return( $.value.&round-sig )
+        } elsif $round-val && $round-sig && $.value > 1 / $round-val {
+            # use floating point notation with mantissa of rounded significant digits for big Rats
             return( $.value.&round-sig )
         } else {
             return( $round-val ?? $.value.round($round-val) !! $.value )
