@@ -1,4 +1,4 @@
-unit module Physics::Measure:ver<2.0.17>:auth<Steve Roe (librasteve@furnival.net)>;
+unit module Physics::Measure:ver<2.0.18>:auth<Steve Roe (librasteve@furnival.net)>;
 use Physics::Unit;
 use Physics::Error;
 use FatRatStr;
@@ -294,6 +294,12 @@ class Measure is export {
     }
     method negate {
         self.value *= -1;
+        #abs error is same
+        return self
+    }
+
+    method abs {
+        self.negate if self.value <0;
         #abs error is same
         return self
     }
