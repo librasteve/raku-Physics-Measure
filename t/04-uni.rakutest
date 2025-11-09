@@ -102,6 +102,7 @@ my $emission = ^ "11 kg.s-1";
 is ~$emission, '11kg.s-1',													'canonical-rt';
 
 #`[FIXME - variable result 11 kg⋅s⁻¹ sometimes]
+# this is due to synthetics just doing passthrough on name...
 # my $emission2 = ^ "11 kg⋅s⁻¹";
 # is ~$emission2, '11kg⋅s⁻¹',												'pretty-rt';
 

@@ -1,4 +1,4 @@
-unit module Physics::Measure:ver<2.0.16>:auth<Steve Roe (librasteve@furnival.net)>;
+unit module Physics::Measure:ver<2.0.17>:auth<Steve Roe (librasteve@furnival.net)>;
 use Physics::Unit;
 use Physics::Error;
 use FatRatStr;
@@ -29,6 +29,7 @@ constant \isa-length = 'Distance' | 'Breadth' | 'Width' | 'Height' | 'Depth';
 #our $round-val = 0.00000000000000001;  (eg. this is 17 decimal places ~ the limit of Num precision)
 our $round-val = Nil;       #default off - use precision of Error to control value rounding
 our $round-sig = False;     #default off - apply 1/round-val to truncate sig dits to left of decimal
+our $round-exp = 1e7;       #values > than this are converted to exponential format
 
 my regex number {
 	\S+                     #grab chars
@@ -153,30 +154,52 @@ class Measure is export {
 
     method Numeric   { $.value }
 
-    sub round-sig(Num() $num --> Num()) {
-        return $num if $num == 0;
-        my $sig = -log10($round-val).round.Int;
-        my $power = floor(log10(abs($num))) - $sig;
-        ($num / 10 ** $power).round * 10 ** $power;
-    }
 
-    method value-r   {
-        if $round-val && $.value < $round-val {
-            # use floating point notation with mantissa of rounded significant digits for small Rats
-            return( $.value.&round-sig )
-        } elsif $round-val && $round-sig && $.value > 1 / $round-val {
-            # use floating point notation with mantissa of rounded significant digits for big Rats
-            return( $.value.&round-sig )
-        } else {
-            return( $round-val ?? $.value.round($round-val) !! $.value )
+    method value-rounded {
+
+        sub sig(--> Int()) {
+            -log10($round-val).round;
+        }
+
+        sub sig-digs(Num() $num --> Num()) {
+            return $num if $num == 0;
+            my $power = floor(log10(abs($num))) - sig;
+            ($num / 10 ** $power).round * 10 ** $power;
+        }
+
+        if $round-val {
+            # round small Rats (eg. Na => 6.022e+23mol)
+            if $.value < $round-val {
+                return( $.value.&sig-digs );
+            }
+
+            # round insignificant digits of large Rats (eg. c => 2.998e+08m/s)
+            elsif $.value > 1 / $round-val && $round-sig {
+
+                # format as exponential if over eg. 1e7
+                if $.value > $round-exp {
+                    return( $.value.&sig-digs.fmt("%.{sig}e") );
+                } else {
+                    return( $.value.&sig-digs );
+                }
+            }
+
+            else {
+                return $.value.round($round-val);
+            }
+        }
+
+        else {
+            return $.value;
         }
     }
 
     method Str {
-        # use error significant digits to control rounding
+        # significant digits of error value control rounding
         with self.error {
             my ( $error, $round ) = self.error.denorm;
 
+            # $Physics::Measure::round-val wins, controls value and error value
             if $round-val && $round-val > $round {
                 $round = $round-val;
                 $error = $error.round($round);
@@ -184,8 +207,11 @@ class Measure is export {
 
             my $value = $round ?? $!value.round($round) !! $!value;
             return "{ $value }{ $.units } ±{ $error }"
-        } else {
-            return "{ $.value-r }{ $.units }"
+        }
+
+        # $Physics::Measure::round-val and round-sig control rounding
+        else {
+            return "{ $.value-rounded }{ $.units }"
         }
     }
     method gist {
@@ -193,11 +219,11 @@ class Measure is export {
     }
     method canonical {
 		my $rebased = $.in($.units.canonical);
-		"{$rebased.value-r} {$.units.canonical}"
+		"{$rebased.value-rounded} {$.units.canonical}"
 	}
     method pretty    {
 		my $rebased = $.in($.units.canonical);
-		"{$rebased.value-r} {$.units.pretty}"
+		"{$rebased.value-rounded} {$.units.pretty}"
 	}
 
 	#### Maths Operations ####
