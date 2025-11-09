@@ -3,7 +3,7 @@
 #TESTALL$ prove6 ./t      [from root]
 use lib '../lib';
 use Test;
-plan 37;
+#plan 39;
 
 use Physics::Measure;
 
@@ -59,28 +59,32 @@ is ~$t10, '2hr',	                                                        '$t.uni
 my Speed $s1;
 my $su1 = Measure.unit-find('m/s');
 $s1 .=new( value => 14, units => $su1 );
-is "$s1", '14m/s',                                                         '$s.named';
+is "$s1", '14m/s',                                                          '$s.named';
 
 my Speed $s2;
 $s2 = $s1;
-is "$s2", '14m/s',                                                         '$s.assign-M';
+is "$s2", '14m/s',                                                          '$s.assign-M';
 my Speed $s3 = ^<17.234 m/s>;
-is "$s3", '17.234m/s',                                                     '$s.assign-S';
+is "$s3", '17.234m/s',                                                      '$s.assign-S';
 
 my Length $d = ^<5e1 m>;      #'50 m'
 $s2 = $d / $t6;
-is "$s2", '1.190476m/s',                                                   'div.mixed';
+is "$s2", '1.190476m/s',                                                    'div.mixed';
 
 my $x = $d * $d;
-is "$x", '2500m^2',                                                        'mul.same';
-is $x.WHAT, (Physics::Measure::Area),                                      'mul.type';
+is "$x", '2500m^2',                                                         'mul.same';
+is $x.WHAT, (Physics::Measure::Area),                                       'mul.type';
 
-my $θ1 = ^ <45°30′30″>;
+my Angle $θ1 = ^<45°30′30″>;
 is "$θ1", <45°30′30″>,														'dms Str';
 my $θ2 = ^ '2.141 radians';
 is "$θ2", '2.141radian',													'radian Str';
 my $θ3 = $θ1 + $θ2;
 ok $θ3.dms( :no-secs ) == (168, 10.71583625055526423),						'add.angles';
+my Angle $θ4 = ^<45º30'30">;
+is "$θ4", $θ1,														        'dms other';
+my Angle $θ5 = ^<45º30'>;
+is "$θ5", <45°30′0″>,											    		'dms nosecs';
 
 $Physics::Measure::round-val = 0.01;
 
@@ -99,7 +103,7 @@ is ~$emission, '11kg.s-1',													'canonical-rt';
 
 #`[FIXME - variable result 11 kg⋅s⁻¹ sometimes]
 # my $emission2 = ^ "11 kg⋅s⁻¹";
-# is ~$emission2, '11kg.s-1',												'pretty-rt';
+# is ~$emission2, '11kg⋅s⁻¹',												'pretty-rt';
 
 my $hms1 = ^<-02:13:22>;
 is $hms1.hms, '- 2 13 22',						                            '.hms';
@@ -109,4 +113,4 @@ ok +$hms1 == -8002,                                                         '+hm
 my $hms2 = ^<427:00:11.11>;
 is ~$hms2, '427:00:11',                                                     'more hours';
 
-#done-testing
+done-testing
