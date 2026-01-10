@@ -659,6 +659,7 @@ class Force              is Measure is export {}
 class Torque             is Measure is export {}
 class Impulse            is Measure is export {}
 class Pressure           is Measure is export {}
+class ArealDensity       is Measure is export {}
 class Density            is Measure is export {}
 class Energy             is Measure is export {}
 class Power              is Measure is export {}
