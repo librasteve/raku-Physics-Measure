@@ -629,7 +629,7 @@ multi atan( Numeric:D $x, Str :$units! ) is export {
 
 ######## Child Classes ########
 
-# FIXME - defile for localization override?
+# FIXME - dehardwire for localization override
 
 class Synthetic          is Measure is export {}
 
@@ -687,6 +687,8 @@ class Insolation         is Measure is export {}
 class SpectralFluxDensity is Measure is export {}
 class ThermalResistance  is Measure is export {}
 class ThermalConductance is Measure is export {}
+class DataRate           is Measure is export {}
+class DataDensity        is Measure is export {}
 
 #Synonyms for Length...
 class Distance           is Length is export {}
