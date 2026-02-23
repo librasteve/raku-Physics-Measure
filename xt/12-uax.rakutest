@@ -3,7 +3,7 @@
 #TESTALL$ prove6 ./t      [from root]
 use lib '../lib';
 use Test;
-plan 22;
+plan 23;
 
 use Physics::Measure :ALL;
 
@@ -21,9 +21,9 @@ my $s = $l/$t;
 is ~$s,'1000000m/s',														'm/s';
 is $s.^name,'Physics::Measure::Speed',										'Speed';
 
-my $f = $l.in: <ft>;
-is ~$f,'3280.839895ft',													    'ft';
-is $f.^name,'Physics::Measure::Length',										'.in';
+my $f1 = $l.in: <ft>;
+is ~$f1,'3280.839895ft',													    'ft';
+is $f1.^name,'Physics::Measure::Length',										'.in';
 
 my $m = 1kg;
 is ~$m,'1kg',																'kg';
@@ -58,5 +58,8 @@ is ~$x,'21.006μl',															'21.006 μl';
 
 my $z = ^'18 μ';
 is ~$z,'18μ',																'18 μ';
+
+my $f2 = 38.9ºC;
+is ~($f2.in: 'ºF'), '102.02°F',                                             '102.02°F';
 
 # done-testing;

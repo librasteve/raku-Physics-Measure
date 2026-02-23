@@ -56,9 +56,9 @@ use Physics::Measure :ALL;
     $dur = $t4.Duration;                #7200
 
 #You can use US dollars ($) as Currency
-    my $m1 = ^<2.141 $>;             #2.141 $
-    my $m2 = 42$;                     #42 $
-    my $m3 = $m1 + $m2;               #44.141 $
+    my $m1 = ^<2.141 $>;                #2.141USD
+    my $m2 = US$42;                     #42USD
+    say $m1 + $m2;                      #44.141USD
 
 #Unit Conversion uses the .in() method - specify the new units as a String
     my Length $df = ^'12.0 feet';
@@ -66,7 +66,7 @@ use Physics::Measure :ALL;
        $dm = $df.in: <m> ;				#alternate form
     my Temperature $deg-c = ^'39 °C';
     my $deg-k = $deg-c.in( 'K' );       #312.15K
-    my $deg-cr = $deg-k.in( '°C' );     #39°C
+    say my $deg-cr = $deg-k.in( '°C' );     #39°C
 #Use arithmetic to get high order or inverse Unit types such as Area, Volume, Frequency, etc.
     my Area		  $x = $a * $a;         #18.49m^2
     say my Speed      $s1 = $a / $t2;       #0.43m/s
@@ -82,10 +82,6 @@ use Physics::Measure :ALL;
     say ~λ.norm;	                    #2.5nm
 #Reset to SI base type with the .rebase() method
     my $v4 = $v2.rebase;                #5.35m^3
-
-#Set behaviour if number part contains a comma ',' 
-    $Physics::Measure::number-comma = ''; #use '' to allow as thousands sep / '.' to convert european style decimals
-    my Speed $s2 = ^'24,000 miles per hour'; #24000mph
 
 #Measures can be compared with $a cmp $b
     my $af = $a.in: 'feet';             #4.3m => 14.108feet

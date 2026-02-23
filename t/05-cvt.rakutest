@@ -71,10 +71,8 @@ is $deg-k2r, '300K',                                                        '$t.
 
 my Temperature $deg-f2 = ^'98.6 °F';
 is $deg-f2, '98.6°F',                                                       '$t.in-F';
-
 my $deg-c2 = $deg-f2.in( '°C' );
 is $deg-c2, '37°C',	                                                        '$t.in-C';
-
 my $deg-f2r = $deg-c2.in( '°F' );
 is $deg-f2r, '98.6°F',                                                      '$t.in-F';
 
