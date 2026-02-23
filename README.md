@@ -227,9 +227,13 @@ In many cases, coders will want the flexibility of the unit expression parser an
 ## Currency
 
 ```raku
-#You can use US dollars ($) as Currency
-    my $m1 = ^<2.141 $>;             #2.141 $
-    my $m2 = 42$;                     #42 $
+#Many popular currencies are provided. Exchange rates are updated on
+Physics::Unit installation. Prefix (& postfix) can be used for the most common
+such as - US$, C$, A$, NZ$, ¥, £ and (€).
+    my $m1 = ^<2.141 USD>;              #2.141USD
+    my $m2 = US$42;                     #42USD
+    my $m3 = £42;                       #42GBP
+    say $m3.in: '€';                    #48.026EUR
 ```
 
 # Unit Conversion
