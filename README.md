@@ -1,6 +1,10 @@
 [![License: Artistic-2.0](https://img.shields.io/badge/License-Artistic%202.0-0298c3.svg)](https://opensource.org/licenses/Artistic-2.0)
 [![raku-physics-measure -> DH](https://github.com/librasteve/raku-Physics-Measure/actions/workflows/measure-weekly.yaml/badge.svg)](https://github.com/librasteve/raku-Physics-Measure/actions/workflows/measure-weekly.yaml)
 
+***THIS SOFTWARE IS PROVDED "AS IS" WITHOUT WARRANTY OR LIABILITY.***
+
+***THIS SOFTWARE IS NOT INTENDED FOR USE IN MISSION CRITICAL APPLICATIONS***
+
 # Version 2+
 
 Note: The caret prefix `^` can now used as an alternative to the libra prefix `♎️` to ease typing. Also the tilde `~` has been added as an alternative to `±` to introduce an Error term.
