@@ -949,4 +949,9 @@ multi infix:<~> ( Measure:D $m, Str:D() $error --> Measure ) is export {
     return $m
 }
 
+#'^<12.5 ft ±3%> .in: <mm>' =>  '^<12.5 ft ±3%> in <mm>'
+multi infix:<in> ( Measure:D $m, Str:D() $target --> Measure ) is export {
+    return $m.in($target)
+}
+
 #EOF
