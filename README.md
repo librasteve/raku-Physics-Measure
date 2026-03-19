@@ -152,7 +152,7 @@ In addition to the SI units listed above, Physics::Measure (and Physics::Unit) o
 ```raku
 my Length $d = Length.new(value => 42, units => 'miles');   say ~$d;         #42 mile
 my Time   $t = Time.new(  value =>  7, units => 'hours');   say ~$t;         #7 hr
-my $s = $d / $t;                                  say ~$s.in('mph');         #6 mph
+my $s = $d / $t;                                  say ~$s in 'mph';          #6 mph
 ```
 
 A flexible unit expression parser is included to cope with textual variants such as ‘miles per hour’ or ‘mph’; or ‘m/s’, ‘ms^-1’, ‘m.s-1’ (the SI derived unit representation) or ‘m⋅s⁻¹’ (the SI recommended string representation, with superscript powers). The unit expression parser decodes a valid unit string into its roots, extracting unit dimensions and inferring the appropriate type.
@@ -186,7 +186,7 @@ In many cases, coders will want the flexibility of the unit expression parser an
 ```raku
 #About 230 built in units are included, for example...
     my $v2 = ^<7 yards^3>;          #7 yard^3         (Volume)
-    my $v3 = $v2.in( 'm3' );        #5.352 m^3        (Volume) 
+    my $v3 = $v2 in 'm3';           #5.352 m^3        (Volume) 
     my $t  = ^<3 s>;                #3 s              (Time)
     my $ac = $v3 / $t;              #0.000106438 m/s^2 (Acceleration)
     my $sm = ^<70 mph>;             #70 mph           (Speed)
@@ -237,19 +237,20 @@ In many cases, coders will want the flexibility of the unit expression parser an
     my $m1 = ^<2.141 USD>;              #2.141USD
     my $m2 = US$42;                     #42USD
     my $m3 = £42;                       #42GBP
-    say $m3.in: '€';                    #48.026EUR
+    say $m3 in '€';                     #48.026EUR
 ```
 
 # Unit Conversion
+Physics::Measure exports the term 'in' as an infix operation for unit conversion.
 
 ```raku
-#Unit Conversion uses the .in() method - specify the new units as a String
+#Unit Conversion uses the in operator - specify the new units as a String
     my Length $df = ^<12.0 feet>;         #12 ft
-    my $dm = $df.in( 'm' );               #3.658 m
-       $dm = $df.in: <m>;                 #alternate form
+    my $dm = $df in 'm';                  #3.658 m
+       $dm = $df in <m>;                  #alternate form
     my Temperature $deg-c = ^<39 °C>;
-    my $deg-k = $deg-c.in( 'K' );         #312.15 K
-    my $deg-cr = $deg-k.in( '°C' );       #39 °C
+    my $deg-k = $deg-c in 'K';            #312.15 K
+    my $deg-cr = $deg-k in '°C';          #39 °C
 
 #Use arithmetic to get high order or inverse Unit types such as Area, Volume, Frequency, etc.
     my Area	      $x = $a * $a;           #18.49 m^2
@@ -277,7 +278,7 @@ The ① symbol is used to denote Dimensionless units.
 
 ```raku
 #Measures can be compared with $a cmp $b
-    my $af = $a.in: 'feet';             #4.3 m => 14.108 feet
+    my $af = $a in 'feet';              #4.3 m => 14.108 feet
     say $af cmp $a;                     #Same
 #Measures can be tested for equality with Numeric ==,!=
     say $af == $a;                      #True
