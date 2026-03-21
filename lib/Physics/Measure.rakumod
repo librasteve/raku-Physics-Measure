@@ -506,7 +506,7 @@ class Measure is export {
             die "Cannot cmp two Measures of different Type!"
         }
         if ! $a.units.same-unit( $b.units ) {
-			say "Converting right hand Measure to cmp!" if $db;
+			say "Converting right hand Measure to cmp." if $db;
 			$an = $a;
 			$bn = $b.in( $a.units )
 		} else {

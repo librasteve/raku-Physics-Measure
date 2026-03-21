@@ -1,0 +1,51 @@
+#!/usr/bin/env raku
+
+use lib '../lib';
+use Test;
+plan 38;
+
+use Physics::Measure :ALL;
+
+is ^<1 half km>,           '1half km',           '^<1 half km>';
+is ^<1 quarter km>,        '1quarter km',        '^<1 quarter km>';
+is ^<1 third km>,          '1third km',          '^<1 third km>';
+is ^<1 fourth km>,         '1fourth km',         '^<1 fourth km>';
+is ^<1 fifth km>,          '1fifth km',          '^<1 fifth km>';
+is ^<1 sixth km>,          '1sixth km',          '^<1 sixth km>';
+is ^<1 seventh km>,        '1seventh km',        '^<1 seventh km>';
+is ^<1 eighth km>,         '1eighth km',         '^<1 eighth km>';
+is ^<1 ninth km>,          '1ninth km',          '^<1 ninth km>';
+is ^<1 tenth km>,          '1tenth km',          '^<1 tenth km>';
+
+is ^<1 thousandth km>,     '1thousandth km',     '^<1 thousandth km>';
+is ^<1 millionth km>,      '1millionth km',      '^<1 millionth km>';
+is ^<1 billionth km>,      '1billionth km',      '^<1 billionth km>';
+is ^<1 trillionth km>,     '1trillionth km',     '^<1 trillionth km>';
+is ^<1 quadrillionth km>,  '1quadrillionth km',  '^<1 quadrillionth km>';
+is ^<1 quintillionth km>,  '1quintillionth km',  '^<1 quintillionth km>';
+is ^<1 sextillionth km>,   '1sextillionth km',   '^<1 sextillionth km>';
+is ^<1 septillionth km>,   '1septillionth km',   '^<1 septillionth km>';
+is ^<1 octillionth km>,    '1octillionth km',    '^<1 octillionth km>';
+is ^<1 nonillionth km>,    '1nonillionth km',    '^<1 nonillionth km>';
+is ^<1 decillionth km>,    '1decillionth km',    '^<1 decillionth km>';
+
+is (^<1 quarter km>).rebase, '250m',  '250m';
+is (^<1 half km>).rebase,           '500m',  '500m';
+is (^<1 quarter km>).rebase,        '250m',  '250m';
+is (^<1 third km>).rebase,          '333.333333m',  '333.333333m';
+is (^<1 fourth km>).rebase,         '250m',  '250m';
+is (^<1 fifth km>).rebase,          '200m',  '200m';
+
+is (^<1 thousandth km>).rebase,     '1m',  '1m';
+is (^<1 millionth km>).rebase,      '0.001m',  '0.001m';
+is (^<1 billionth km>).rebase,      '0.000001m',  '0.000001m';
+is (^<1 trillionth km>).rebase,     '0.000000001m',  '0.000000001m';
+is (^<1 quadrillionth km>).rebase,  '0.000000000001m',  '0.000000000001m';
+is (^<1 quintillionth km>).rebase,  '0.000000000000001m',  '0.000000000000001m';
+is (^<1 sextillionth km>).rebase,   '0.000000000000000001m',  '0.000000000000000001m';
+is (^<1 septillionth km>).rebase,   '0.000000000000000000001m',  '0.000000000000000000001m';
+is (^<1 octillionth km>).rebase,    '0.000000000000000000000001m',  '0.000000000000000000000001m';
+is (^<1 nonillionth km>).rebase,    '0.000000000000000000000000001m',  '0.000000000000000000000000001m';
+is (^<1 decillionth km>).rebase,    '0.000000000000000000000000000001m',  '0.000000000000000000000000000001m';
+
+#done-testing;

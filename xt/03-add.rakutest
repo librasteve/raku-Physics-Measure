@@ -1,6 +1,4 @@
 #!/usr/bin/env raku
-#t/03-add.t 
-#TESTALL$ prove6 ./t      [from root]
 use lib '../lib';
 use Test;
 plan 26;
