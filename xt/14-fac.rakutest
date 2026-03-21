@@ -2,10 +2,11 @@
 
 use lib '../lib';
 use Test;
-plan 38;
+plan 39;
 
 use Physics::Measure :ALL;
 
+#do they parse ok?
 is ^<1 half km>,           '1half km',           '^<1 half km>';
 is ^<1 quarter km>,        '1quarter km',        '^<1 quarter km>';
 is ^<1 third km>,          '1third km',          '^<1 third km>';
@@ -29,7 +30,8 @@ is ^<1 octillionth km>,    '1octillionth km',    '^<1 octillionth km>';
 is ^<1 nonillionth km>,    '1nonillionth km',    '^<1 nonillionth km>';
 is ^<1 decillionth km>,    '1decillionth km',    '^<1 decillionth km>';
 
-is (^<1 quarter km>).rebase, '250m',  '250m';
+#are the values right?
+is (^<1 quarter km>).rebase,        '250m',  '250m';
 is (^<1 half km>).rebase,           '500m',  '500m';
 is (^<1 quarter km>).rebase,        '250m',  '250m';
 is (^<1 third km>).rebase,          '333.333333m',  '333.333333m';
@@ -47,5 +49,8 @@ is (^<1 septillionth km>).rebase,   '0.000000000000000000001m',  '0.000000000000
 is (^<1 octillionth km>).rebase,    '0.000000000000000000000001m',  '0.000000000000000000000001m';
 is (^<1 nonillionth km>).rebase,    '0.000000000000000000000000001m',  '0.000000000000000000000000001m';
 is (^<1 decillionth km>).rebase,    '0.000000000000000000000000000001m',  '0.000000000000000000000000000001m';
+
+#is the 'of a' variant ignored?
+is ^<1 half of a km>,               '1half km',           '^<1 half of a km>';
 
 #done-testing;
