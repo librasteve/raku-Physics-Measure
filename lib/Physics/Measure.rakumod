@@ -707,6 +707,11 @@ multi prefix:<libra> ( Str:D $new )      is export { Measure.new: $new }
 multi prefix:<libra> ( List:D $new )     is export { Measure.new: $new.join(' ') }
 multi prefix:<libra️> ( Duration:D $new ) is export { Measure.new: $new }
 
+# avoid collisions with like `^<1>`, ^<1e0>`, `^<1/2>`
+multi prefix:<^>     ( IntStr:D $new )   is export { die "Error: No units specified" }
+multi prefix:<^>     ( NumStr:D $new )   is export { die "No units specified" }
+multi prefix:<^>     ( Rat:D $new where *.so ) is export { die "No units specified" }  #where is to make this win over Range
+
 multi prefix:<^>     ( Str:D $new )      is export { Measure.new: $new }
 multi prefix:<^>     ( List:D $new )     is export { Measure.new: $new.join(' ') }  #for ^<3 mph>
 multi prefix:<^>     ( Duration:D $new ) is export { Measure.new: $new }
