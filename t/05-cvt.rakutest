@@ -6,9 +6,10 @@ plan 53;
 use Physics::Unit;
 use Physics::Measure;
 
-my $locale = 'imp';        # locale for 'us' or 'imp' gallons, pints, mpg etc.
-$locale = ($_ ~~ /en_US/) ?? 'us' !! 'imp'   with %*ENV<LANG>;
-$locale = ($_ ~~ /en_US/) ?? 'us' !! $locale with %*ENV<RAKULANG>;
+my $locale = 'us';        # locale for 'us' or 'imp' gallons, pints, mpg etc.
+$locale = ($_ ~~ /en_GB/) ?? 'imp' !! $locale  with %*ENV<LANG>;
+$locale = ($_ ~~ /en_GB/) ?? 'imp' !! $locale  with %*ENV<RAKULANG>;
+$locale =  $_                                  with %*ENV<CRAGDOMAIN>;
 
 $Physics::Measure::round-val = 0.000001;
 
