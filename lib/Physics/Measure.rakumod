@@ -12,7 +12,7 @@ INIT $*RAT-OVERFLOW=FatRat;
 # use Physics::Measure :ALL; ...13s first-, 2.8s pre- compiled 
 
 # speed (2025)
-# use Physics::Measure :ALL; ...1.4ss first-, 1.4s pre- compiled
+# use Physics::Measure :ALL; ...1.4s first-, 1.4s pre- compiled
 
 #This module uses Type Variables such as ::T,::($s) 
 #viz. http://www.jnthn.net/papers/2008-yapc-eu-raku6types.pdf
@@ -30,6 +30,9 @@ constant \isa-length = 'Distance' | 'Breadth' | 'Width' | 'Height' | 'Depth';
 our $round-val = Nil;       #default off - use precision of Error to control value rounding
 our $round-sig = False;     #default off - apply 1/round-val to truncate sig dits to left of decimal
 our $round-exp = 1e7;       #values > than this are converted to exponential format
+
+#custom variant of round avoids infecting $x if $scale is Num
+sub m-round($x, $scale) { $x.round($scale.FatRat) }
 
 my regex number {
 	\S+                     #grab chars
@@ -70,16 +73,8 @@ class Measure is export {
     }
     multi method new( Duration:D $d ) {				    say "new from Duration" if $db;
         my $value = +"$d";                              #extract value of Duration in s
-        Time.new( :$value, units => Unit.find('s') )      #error => Any
+        Time.new( :$value, units => Unit.find('s') )    #error => Any
     }
-    method clone( ::T: ) {							    say "cloning " ~ T.^name if $db;
-        T.new: self
-    }
-    method TWEAK {
-        $!error.bind-mea-value: $!value with $!error;
-    }
-
-    #### Class Methods ####
 
     #| baby "Grammars" for initial extraction of definition from Str (value/unit/error)
     method defn-extract( Measure:U: Str:D $s ) {
@@ -112,7 +107,7 @@ class Measure is export {
             return($v, 'seconds', Any)
         }
 
-        #handle generic case
+        #handle generic case ^<42 metres per second ±1>
         else {
             my $t = $s;    #need writeable container for match
             $t ~~ /^ ( <number> ) \s* ( <-[±~]>* ) \s* [<[±~]> \s* (.*) ]? $/;
@@ -121,8 +116,8 @@ class Measure is export {
             my Str  $u = ~$1;
             my      $e =  $2 // '';
 
-            # upgrade decimal literal (eg. 1.6602e-17) to FatRat (and forget the original Str)
-            $v = $0.Str.FatRatStr.FatRat if $v ~~ Num;
+            # upgrade Num literal (eg. 1.6602e-17) to FatRat (and forget the original Str)
+            $v = $0.Str.FatRat if $v ~~ Num;
 
             return($v, $u, Any) unless $e;
 
@@ -135,7 +130,7 @@ class Measure is export {
                 }
                 default {
                     $e = +$e if $e ~~ /<number>/;
-                    $e = $e.Str.FatRatStr.FatRat if $e ~~ Num;
+                    $e = $e.Str.FatRat if $e ~~ Num;
                 }
             }
 
@@ -143,6 +138,15 @@ class Measure is export {
             return($v, $u, $e)
         }
     }
+
+    method clone( ::T: ) {							    say "cloning " ~ T.^name if $db;
+        T.new: self
+    }
+    method TWEAK {
+        $!error.bind-mea-value: $!value with $!error;
+    }
+
+    #### Class Methods ####
 
     #| passthrough of Physics::Unit.find top shorten 'use list'
     method unit-find(Measure:U: $u ) {
@@ -153,7 +157,6 @@ class Measure is export {
     method Real      { $.value }
 
     method Numeric   { $.value }
-
 
     method value-rounded {
 
@@ -185,7 +188,7 @@ class Measure is export {
             }
 
             else {
-                return $.value.round($round-val);
+                return $.value.&m-round($round-val);
             }
         }
 
@@ -198,14 +201,19 @@ class Measure is export {
         # significant digits of error value control rounding
         with self.error {
             my ( $error, $round ) = self.error.denorm;
+            say 42;
 
             # $Physics::Measure::round-val wins, controls value and error value
             if $round-val && $round-val > $round {
                 $round = $round-val;
-                $error = $error.round($round);
+                $error = $error.&m-round($round);
             }
+            say $round;
 
-            my $value = $round ?? $!value.round($round) !! $!value;
+            my $value = $round ?? $!value.&m-round($round) !! $!value;
+            say $value.^name;
+            $value .= Num;
+
             return "{ $value }{ $.units } ±{ $error }"
         }
 
@@ -247,7 +255,7 @@ class Measure is export {
 
             #take larger value as argument for round()
             $!error.add-abs($r.error);
-            $!error.absolute .= round($round);
+            $!error.absolute .= &m-round($round);
         } orwith $r.error {
             $!error = $r.error;
             $!error.bind-mea-value: $!value
@@ -312,7 +320,7 @@ class Measure is export {
         my ( $type, $units ) = $l.units.multiply( $r.units );
 
         my ( $error, $round ) = $l.add-error-rel( $r, $value );
-        $error .= round($round) if $round && $round != 0;
+        $error .= &m-round($round) if $round && $round != 0;
 
         $type = 'Synthetic' if $type ~~ /synthetic/;
         ::($type).new( :$value, :$units, :$error );
@@ -322,7 +330,7 @@ class Measure is export {
         with self.error {
             my $round = self.error.denorm[1];
             self.error.absolute *= $r;
-            self.error.absolute .= round($round);
+            self.error.absolute .= &m-round($round);
         }
         return self
     }
@@ -334,7 +342,7 @@ class Measure is export {
         my ( $type, $units ) = $l.units.divide( $r.units );
 
         my ( $error, $round ) = $l.add-error-rel( $r, $value );
-        $error .= round($round) if $round && $round != 0;
+        $error .= &m-round($round) if $round && $round != 0;
 
         $type = 'Synthetic' if $type ~~ /synthetic/;
         ::($type).new( :$value, :$units, :$error );
@@ -344,7 +352,7 @@ class Measure is export {
         with self.error {
             my $round = self.error.denorm[1];
             self.error.absolute /= $r;
-            self.error.absolute .= round($round);
+            self.error.absolute .= &m-round($round);
         }
         return self
     }
@@ -358,7 +366,7 @@ class Measure is export {
         my ( $type, $units ) = $numerator.divide( $r.units );
 
         my $round = $r.error.denorm[1] with $r.error;
-        my $error = ( $r.error.relative * $value ).round($round) with $r.error;
+        my $error = ( $r.error.relative * $value ).&m-round($round) with $r.error;
 
         $type = 'Synthetic' if $type ~~ /synthetic/;
         ::($type).new( :$value, :$units, :$error );
@@ -377,7 +385,7 @@ class Measure is export {
         my $value = $l.value ** ( 1 / $n );
         my ( $type, $units ) = $.units.root-extract( $n );
         my $round = $l.error.denorm[1] / (10 ** $n) with $l.error;
-        my $error = ( $l.error.relative / $n * $value ).round($round) with $l.error;
+        my $error = ( $l.error.relative / $n * $value ).&m-round($round) with $l.error;
 
         $type = 'Synthetic' if $type ~~ /synthetic/;
         ::($type).new( :$value, :$units, :$error );

@@ -102,11 +102,14 @@ sub check-maths( $x ) {
         take(( $x * $y ).Str);
         take(( 17 * $x ).Str);
         take(( $x / $y ).Str);
-    }
+    }.Array
 }
 
-# say check-maths( @o3-xs[1] ); die;
-my $maths31-re = <
+say @o3-xs[1];   #iamerejh
+say '---';
+say check-maths( @o3-xs[1] );
+say '---';
+my @maths31-res = <
 -12.5ft ±1.313
 12.5ft ±1.313
 3810001250nm ±400202450
@@ -116,12 +119,12 @@ my $maths31-re = <
 12.5ft ±1.313
 -3809998750nm ±400202450
 0ft ±2.626
-4.763e-06m^2 ±0.71e-6
+4.763e-06m^2 ±0.00000071
 212.5ft ±22.321
 3048000① ±451225.92
 >;
 
-is check-maths( @o3-xs[1] ) eq $maths31-re, True,                'maths ok';
+is ( check-maths( @o3-xs[1] ).join(' ') eq @maths31-res.join(' ') ), True,       'maths';
 
 my Time $t = Time.new(value => 10, units => 'ms', error => '4.3%');
 is ~$t, '10ms ±0.43',                                            'Time ms';

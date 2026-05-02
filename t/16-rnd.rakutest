@@ -1,0 +1,38 @@
+#!/usr/bin/env raku
+use lib '../lib';
+use Test;
+
+use Physics::Measure :ALL;
+
+my $Em1 = 9.109_383_701_5e-31kg ±0.000_000_002_8e-31;
+
+say $Em1;
+say $Em1.value.^name;
+is $Em1, '9.1093837015e-31kg ±0.0000000028e-31',                 'precision1';
+
+my \Em2 = 9000kg ±900;
+is ~Em2, '9000kg ±900',                                          'precision2';
+
+my \Em3 = -.09kg ±0.009;
+is ~Em3, '-0.09kg ±0.009',                                       'precision3';
+
+ done-testing;
+
+
+#`[
+# Rounding
+
+## Error Controlled
+
+The precision of the output is controlled by the significant digits of the error.
+
+e.g.
+9.109_383_701_5e-31kg ±0.000_000_002_8e-31  \   same
+9.109_383_701_5e-31kg ±2.8e-40              /
+
+
+=>
+ 9.109_383_701_5e-31kg    ... error is denormalised
+±0.000_000_002_8e-31
+
+#]

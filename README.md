@@ -355,7 +355,22 @@ The family of Physics::Measure, Physics::Unit and Physics::Constants raku module
 
 Any feedback is welcome to librasteve / via the github Issues above.
 
-NB the ♎️ (libra prefix) has been replaced by the ^ (caret prefix) to simplify typing
 
+# Precision Note
+
+In general the value of a Measure (and an Error) is stored in the number type that was declared. For example:
+```raku
+3kg;    #Int
+0.3kg;  #Rat
+3e-2kg  #Num
+```
+
+Measure can work at unlimited precision (value and error stored as type FatRat). Use the caret syntax and express the value (and error if any) in regular Num format. These will be parsed by the FatRatStr module and stored in as FatRats. This is particularly useful with very large or small physical constants where math operations will still correctly round trip.
+```raku
+say  0.1kg + 0.2kg == 0.3kg;                  #True
+say  1e-1kg + 2e-1kg == 3e-1kg;               #False
+say  ^<1e-1 kg> + ^<2e-1 kg> == ^<3e-1 kg>;   #True
+```
 
 Copyright (c) Henley Cloud Consulting Ltd. 2021-2025
+Copyright (c) Stephen Roe 2026
