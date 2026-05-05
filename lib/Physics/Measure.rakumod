@@ -32,7 +32,16 @@ our $round-sig = False;     #default off - apply 1/round-val to truncate sig dit
 our $round-exp = 1e7;       #values > than this are converted to exponential format
 
 #custom variant of round avoids infecting $x if $scale is Num
-sub m-round($x, $scale) { $x.round($scale.FatRat) }
+sub m-round($x, $scale) {
+    say 65, $scale;
+    my $s =  $scale ~~ Num
+        ?? $scale.Str.FatRatStr         # avoid 1e-31.FatRat == 0
+        !! $scale.FatRat.FatRatStr;     # avoid 0.01.Num eq '0.01'
+
+    die "round: scale cannot be zero" if $s == 0;
+
+    $x.round($s)
+}
 
 my regex number {
 	\S+                     #grab chars
@@ -159,11 +168,9 @@ class Measure is export {
     method Numeric   { $.value }
 
     method value-rounded {
-
         sub sig(--> Int()) {
             -log10($round-val).round;
         }
-
         sub sig-digs(Num() $num --> Num()) {
             return $num if $num == 0;
             my $power = floor(log10(abs($num))) - sig;
@@ -200,19 +207,20 @@ class Measure is export {
     method Str {
         # significant digits of error value control rounding
         with self.error {
-            my ( $error, $round ) = self.error.denorm;
-            say 42;
+            my $value = $!value;
+            my ( Str $error, $round ) = self.error.denorm;
 
             # $Physics::Measure::round-val wins, controls value and error value
-            if $round-val && $round-val > $round {
-                $round = $round-val;
-                $error = $error.&m-round($round);
-            }
-            say $round;
+#            if $round-val && $round-val > $round {
+#                $round = $round-val;
+#                $error = $error.&m-round($round);
+#            }
 
-            my $value = $round ?? $!value.&m-round($round) !! $!value;
-            say $value.^name;
-            $value .= Num;
+            if $value ~~ FatRat {
+                $value = FatRatStr.round($value, $round);
+            } else {
+                $value = $round ?? $value.round($round) !! $value;
+            }
 
             return "{ $value }{ $.units } ±{ $error }"
         }
@@ -222,6 +230,72 @@ class Measure is export {
             return "{ $.value-rounded }{ $.units }"
         }
     }
+
+#    method value-rounded {
+#
+#        sub sig(--> Int()) {
+#            -log10($round-val).round;
+#        }
+#
+#        sub sig-digs(Num() $num --> Num()) {
+#            return $num if $num == 0;
+#            my $power = floor(log10(abs($num))) - sig;
+#            ($num / 10 ** $power).round * 10 ** $power;
+#        }
+#
+#        if $round-val {
+#            # round small Rats (eg. Na => 6.022e+23mol)
+#            if $.value < $round-val {
+#                return( $.value.&sig-digs );
+#            }
+#
+#            # round insignificant digits of large Rats (eg. c => 2.998e+08m/s)
+#            elsif $.value > 1 / $round-val && $round-sig {
+#
+#                # format as exponential if over eg. 1e7
+#                if $.value > $round-exp {
+#                    return( $.value.&sig-digs.fmt("%.{sig}e") );
+#                } else {
+#                    return( $.value.&sig-digs );
+#                }
+#            }
+#
+#            else {
+#                return $.value.&m-round($round-val);
+#            }
+#        }
+#
+#        else {
+#            return $.value;
+#        }
+#    }
+#
+#    method Str {
+#        # significant digits of error value control rounding
+#        with self.error {
+#            my ( $error, $round ) = self.error.denorm;
+#            say 42;
+#
+#            # $Physics::Measure::round-val wins, controls value and error value
+#            if $round-val && $round-val > $round {
+#                $round = $round-val;
+#                $error = $error.&m-round($round);
+#            }
+#            say $round;
+#
+#            my $value = $round ?? $!value.&m-round($round) !! $!value;
+#            say $value.^name;
+#            $value .= Num;
+#
+#            return "{ $value }{ $.units } ±{ $error }"
+#        }
+#
+#        # $Physics::Measure::round-val and round-sig control rounding
+#        else {
+#            return "{ $.value-rounded }{ $.units }"
+#        }
+#    }
+
     method gist {
         return self.Str
     }

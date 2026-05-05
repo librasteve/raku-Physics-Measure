@@ -192,7 +192,7 @@ my FuelConsumption $fc1 = ( $vol2 / $dis2 ).in('l/100km');
 is $fc1, '4l/100km',                                                        '$fc1.in-l/100km';
 
 my $d-in = ^<12.5 ft ±3%> in <mm>;
-is ~$d-in, '3810mm ±114.3',                                                 'infix:<in>';
+is ~$d-in, '3.81e+03mm ±0.1143e3',                                           'infix:<in>';
 
 #done-testing;
 

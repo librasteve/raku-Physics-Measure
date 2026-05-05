@@ -3,36 +3,45 @@ use lib '../lib';
 use Test;
 
 use Physics::Measure :ALL;
+use FatRatStr;
 
+sub show($m) {
+#    say $m;
+    dd $m;
+#    say $m.value.^name;
+    say $m.error.absolute.^name;
+    say '---';
+}
+
+#[
 my $Em1 = 9.109_383_701_5e-31kg ±0.000_000_002_8e-31;
+is $Em1, '9.1093837015e-31kg ±0.0000000028e-31',                 'Num/Num';
 
-say $Em1;
-say $Em1.value.^name;
-is $Em1, '9.1093837015e-31kg ±0.0000000028e-31',                 'precision1';
+my $Em2 = ^<9.109_383_701_5e-31 kg ±0.000_000_002_8e-31>;
+is $Em2, '9.1093837015e-31kg ±0.0000000028e-31',                 'FatRat/FatRat';
 
-my \Em2 = 9000kg ±900;
-is ~Em2, '9000kg ±900',                                          'precision2';
+my $Em3 = Mass.new(
+    value => '9.109_383_701_5e-31'.FatRatStr,
+    units => 'kg',
+    error => 0.000_000_002_8e-31,
+    );
+is $Em3, '9.1093837015e-31kg ±0.0000000028e-31',                 'FatRat/Num';
 
-my \Em3 = -.09kg ±0.009;
-is ~Em3, '-0.09kg ±0.009',                                       'precision3';
-
- done-testing;
-
-
-#`[
-# Rounding
-
-## Error Controlled
-
-The precision of the output is controlled by the significant digits of the error.
-
-e.g.
-9.109_383_701_5e-31kg ±0.000_000_002_8e-31  \   same
-9.109_383_701_5e-31kg ±2.8e-40              /
-
-
-=>
- 9.109_383_701_5e-31kg    ... error is denormalised
-±0.000_000_002_8e-31
-
+my $Em4 = Mass.new(
+    value => 9.109_383_701_5e-31,
+    units => 'kg',
+    error => '0.000_000_002_8e-31'.FatRat,
+    );
+is $Em4, '9.1093837015e-31kg ±0.0000000028e-31',                 'Num/FatRat';
 #]
+
+my $Em5 = ^<9.109_383_701_5e-340 kg ±0.000_000_002_8e-340>;
+show $Em5;
+is $Em5, '9.1093837015e-31kg ±0.0000000028e-31',                 'Num/Num';
+#my \Em3 = 9000kg ±900;
+#is ~Em3, '9000kg ±900',                                          'precision2';
+#
+#my \Em4 = -.09kg ±0.009;
+#is ~Em4, '-0.09kg ±0.009',                                       'precision3';
+
+done-testing;
