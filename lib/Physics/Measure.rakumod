@@ -126,14 +126,10 @@ class Measure is export {
             my Str  $u = ~$1;
             my      $e =  $2 // '';
 
-            # upgrade Num literal (eg. 1.6602e-17) to FatRat (and forget the original Str)
+            # upgrade Num literal (eg. 1.6602e-17) to FatRat
             $v = $0.Str.FatRat if $v ~~ Num;
 
             return($v, $u, Any) unless $e;
-
-            $e ~~ s/<[±~]>//;
-
-            die 'error must be [%]number' unless $e ~~ /<number>/;
 
             given $e {
                 when /'%'/ {
@@ -141,7 +137,7 @@ class Measure is export {
                     $e = "$e%";
                 }
                 default {
-                    $e = +$e ~~ Num      #ok even if over/underflowed
+                    $e = +$e ~~ Num         #ok even if over/underflowed
                         ?? $e.Str.FatRat
                         !! +$e;
                 }
@@ -156,7 +152,13 @@ class Measure is export {
         T.new: self
     }
     method TWEAK {
-        $!error.bind-mea-value: $!value with $!error;
+        with $!error {
+            if $!error.absolute == 0 {
+                $!error = Nil       #disallow 0 as an error value
+            } else {
+                $!error.bind-mea-value: $!value;
+            }
+        }
     }
 
     #### Class Methods ####
@@ -209,12 +211,10 @@ class Measure is export {
     }
 
     method Str {
+
         # significant digits of error value control rounding
         with self.error {
-            my $value = $!value;
-            my ( Str $error, $round ) = self.error.denorm;
-
-            say 50, $round;
+            my ( Str $error, $round ) = .denorm;
 
             # $Physics::Measure::round-val wins, controls value and error value
 #            if $round-val && $round-val > $round {
@@ -222,11 +222,29 @@ class Measure is export {
 #                $error = $error.&m-round($round);
 #            }
 
-            if $value ~~ FatRat {
-                $value = FatRatStr.round($value, $round);
-            } else {
-                $value = $round ?? $value.round($round) !! $value;
+            #| value coerced to use FatRatStr.round
+            #| does not affect stored value ....
+            my $value;
+            given $!value {
+                when 1e-4 < *.abs < 1e4 {               # Modest values
+                    $value = $_.Rat
+                }
+                when FatRat {
+                    $value = .FatRatStr
+                }
+                when Num {
+                    $value = .Str.FatRatStr //       # need if over/under-flow
+                             .FatRat.FatRatStr       # need if degenerate (e.g. 1250e0)
+                }
+                when Rat | Int {
+                    $value = .FatRat.FatRatStr
+                }
+                default {
+                    $value = $_
+                }
             }
+
+            $value = $round ?? $value.round($round) !! $value;
 
             return "{ $value }{ $.units } ±{ $error }"
         }
@@ -329,8 +347,8 @@ class Measure is export {
     method add-error-abs( $r ) {
         with $!error {
             #take larger value as argument for round()
-            my $rnd-l = $.error.denorm[1];
-            my $rnd-r = $r.error.denorm[1];
+            my $rnd-l = .denorm[1] with self.error;
+            my $rnd-r = .denorm[1] with $r.error;
             my $round = $rnd-l > $rnd-r ?? $rnd-l !! $rnd-r;
 
             #take larger value as argument for round()
@@ -347,12 +365,12 @@ class Measure is export {
             $err-abs = $!error.add-rel($r.error) * $combined-value;
 
             #take larger value as argument for round()
-            my $rnd-l = $.error.denorm[1];
-            my $rnd-r = $r.error.denorm[1];
+            my $rnd-l = .denorm[1] with self.error;
+            my $rnd-r = .denorm[1] with $r.error;
             $round = $rnd-l > $rnd-r ?? $rnd-l !! $rnd-r
         } orwith $r.error {
             $err-abs = $r.error.relative * $combined-value;
-            $round = $r.error.denorm[1]
+            $round = .denorm[1] with $r.error;
         }
         return ( $err-abs, $round )
     }
@@ -408,7 +426,7 @@ class Measure is export {
     method multiply-const(Real:D $r) {
         self.value *= $r;
         with self.error {
-            my $round = self.error.denorm[1];
+            my $round = .denorm[1] with self.error;
             self.error.absolute *= $r;
             self.error.absolute .= &m-round($round);
         }
@@ -430,7 +448,7 @@ class Measure is export {
     method divide-by-const( Real:D $r ) {
         self.value /= $r;
         with self.error {
-            my $round = self.error.denorm[1];
+            my $round = .denorm[1] with self.error;
             self.error.absolute /= $r;
             self.error.absolute .= &m-round($round);
         }
@@ -445,8 +463,8 @@ class Measure is export {
 
         my ( $type, $units ) = $numerator.divide( $r.units );
 
-        my $round = $r.error.denorm[1] with $r.error;
-        my $error = ( $r.error.relative * $value ).&m-round($round) with $r.error;
+        my $round = .denorm[1] with $r.error;
+        my $error = ( .relative * $value ).&m-round($round) with $r.error;
 
         $type = 'Synthetic' if $type ~~ /synthetic/;
         ::($type).new( :$value, :$units, :$error );
@@ -464,8 +482,8 @@ class Measure is export {
 
         my $value = $l.value ** ( 1 / $n );
         my ( $type, $units ) = $.units.root-extract( $n );
-        my $round = $l.error.denorm[1] / (10 ** $n) with $l.error;
-        my $error = ( $l.error.relative / $n * $value ).&m-round($round) with $l.error;
+        my $round = .denorm[1] / (10 ** $n) with $l.error;
+        my $error = ( .relative / $n * $value ).&m-round($round) with $l.error;
 
         $type = 'Synthetic' if $type ~~ /synthetic/;
         ::($type).new( :$value, :$units, :$error );

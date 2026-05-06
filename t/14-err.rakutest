@@ -24,6 +24,7 @@ my @o1-re = <
 12.5nm ±1.25
 >;
 
+
 # @o1-xs.map( {.Str.say } );
 is @o1-xs.map( {.Str } ) eq @o1-re, True,                        'option 1';
 
@@ -38,7 +39,7 @@ my @o2-xs = ();
 
 my @o2-re = <
 12.5nm
-12.5nm ±0
+12.5nm
 0nm ±0.5
 12.5nm ±0.5
 12.5nm ±0.538
@@ -64,6 +65,7 @@ my @o3-re = <
 12.5ft ±1.313
 >;
 
+#[
 #@o3-xs.map( { .Str.say } );
 is @o3-xs.map( {.Str} ) eq @o3-re, True,                        'option 3';
 
@@ -105,24 +107,26 @@ sub check-maths( $x ) {
     }.Array
 }
 
+#iamerejh - P::E err-mea
+
 my @maths31-res = <
 -12.5ft ±1.313
-12.5ft ±1.313
-3810001250nm ±0.40020245
+ 12.5ft ±1.313
+3.81000125e9nm ±0.40020245e9
 29.5ft ±1.313
 12.3ft ±1.313
 1267nm ±53.75
 12.5ft ±1.313
--3809998750nm ±400202450
+-3.80999875e9nm ±0.40020245e9
 0ft ±2.626
-4.763e-06m^2 ±0.00000071
-212.5ft ±22.321
-3048000① ±451225.92
+4.763e-6m^2 ±0.71e-6
+212.5ft ±0.22321e1
+3.048e6① ±0.45122592e6
 >;
 
 say check-maths( @o3-xs[1] ).join(' ');
 say @maths31-res.join(' ');
-raku -die;
+die;
 
 is ( check-maths( @o3-xs[1] ).join(' ') eq @maths31-res.join(' ') ), True,       'maths';
 
@@ -152,3 +156,4 @@ my \Em3 = -.09kg ±0.009;
 is ~Em3, '-0.09kg ±0.009',                                       'precision3';
 
 # done-testing;
+#]
