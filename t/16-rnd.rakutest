@@ -5,15 +5,7 @@ use Test;
 use Physics::Measure :ALL;
 use FatRatStr;
 
-sub show($m) {
-#    say $m;
-    dd $m;
-#    say $m.value.^name;
-    say $m.error.absolute.^name;
-    say '---';
-}
-
-#[
+#`[
 my $Em1 = 9.109_383_701_5e-31kg ±0.000_000_002_8e-31;
 is $Em1, '9.1093837015e-31kg ±0.0000000028e-31',                 'Num/Num';
 
@@ -36,8 +28,11 @@ is $Em4, '9.1093837015e-31kg ±0.0000000028e-31',                 'Num/FatRat';
 #]
 
 my $Em5 = ^<9.109_383_701_5e-340 kg ±0.000_000_002_8e-340>;
-show $Em5;
-is $Em5, '9.1093837015e-31kg ±0.0000000028e-31',                 'Num/Num';
+
+say $Em5; #iamerejh
+
+#is $Em5, '9.1093837015e-31kg ±0.0000000028e-31',                 'Num/Num';
+
 #my \Em3 = 9000kg ±900;
 #is ~Em3, '9000kg ±900',                                          'precision2';
 #

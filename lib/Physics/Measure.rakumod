@@ -33,12 +33,11 @@ our $round-exp = 1e7;       #values > than this are converted to exponential for
 
 #custom variant of round avoids infecting $x if $scale is Num
 sub m-round($x, $scale) {
-    say 65, $scale;
     my $s =  $scale ~~ Num
         ?? $scale.Str.FatRatStr         # avoid 1e-31.FatRat == 0
         !! $scale.FatRat.FatRatStr;     # avoid 0.01.Num eq '0.01'
 
-    die "round: scale cannot be zero" if $s == 0;
+    die "round: scale cannot be zerox" if $s == 0;
 
     $x.round($s)
 }
@@ -74,10 +73,12 @@ class Measure is export {
     }
     multi method new( Str:D $string ) {					say "new from Str" if $db;
         my ( $value, $units, $error ) = Measure.defn-extract( $string );
+
         $units = Unit.find( $units );
 
         my $type = $units.type || 'Measure';
         $type = 'Synthetic' if $type ~~ /synthetic/;
+
         ::($type).new( :$value, :$units, :$error )
     }
     multi method new( Duration:D $d ) {				    say "new from Duration" if $db;
@@ -132,14 +133,17 @@ class Measure is export {
 
             $e ~~ s/<[±~]>//;
 
+            die 'error must be [%]number' unless $e ~~ /<number>/;
+
             given $e {
                 when /'%'/ {
                     $e ~~ s/'%'//;
-                    $e = "$e%" if $e ~~ /<number>/;
+                    $e = "$e%";
                 }
                 default {
-                    $e = +$e if $e ~~ /<number>/;
-                    $e = $e.Str.FatRat if $e ~~ Num;
+                    $e = +$e ~~ Num      #ok even if over/underflowed
+                        ?? $e.Str.FatRat
+                        !! +$e;
                 }
             }
 
@@ -209,6 +213,8 @@ class Measure is export {
         with self.error {
             my $value = $!value;
             my ( Str $error, $round ) = self.error.denorm;
+
+            say 50, $round;
 
             # $Physics::Measure::round-val wins, controls value and error value
 #            if $round-val && $round-val > $round {
